@@ -121,6 +121,42 @@ body {
     margin-top: 4px;
 }
 
+.nav-back {
+    display: inline-block;
+    margin-top: 12px;
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.nav-back:hover {
+    text-decoration: underline;
+}
+
+.pantheon-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+    width: 100%;
+}
+
+.pantheon-section {
+    margin-bottom: 40px;
+}
+
+.pantheon-section h2 {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #30363d;
+}
+
+.empty-msg {
+    color: #8b949e;
+    text-align: center;
+    grid-column: 1 / -1;
+    padding: 40px;
+}
 /* Classe spécifique pour repérer les cartes possédées */
 .card-item.is-owned {
     border-color: #2ea043;
