@@ -30,6 +30,18 @@ body {
     font-size: 1rem;
 }
 
+.nav-back {
+    display: inline-block;
+    margin-top: 12px;
+    color: #58a6ff;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.nav-back:hover {
+    text-decoration: underline;
+}
+
 /* Hub Grid */
 .hub-container {
     flex: 1;
@@ -75,7 +87,7 @@ body {
     line-height: 1.4;
 }
 
-/* Grilles de cartes (pour pokedex, mew, mewtwo) */
+/* Grilles de cartes (pokedex, mew, mewtwo) */
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -83,6 +95,7 @@ body {
     padding: 24px;
     max-width: 1300px;
     margin: 0 auto;
+    width: 100%;
 }
 
 .card-item {
@@ -99,8 +112,10 @@ body {
 .card-item img {
     width: 100%;
     height: auto;
+    aspect-ratio: 2.5 / 3.5;
     border-radius: 6px;
     object-fit: cover;
+    background-color: #0b0d13;
 }
 
 .card-info {
@@ -121,18 +136,11 @@ body {
     margin-top: 4px;
 }
 
-.nav-back {
-    display: inline-block;
-    margin-top: 12px;
-    color: #58a6ff;
-    text-decoration: none;
-    font-size: 0.9rem;
+.card-item.is-owned {
+    border-color: #2ea043;
 }
 
-.nav-back:hover {
-    text-decoration: underline;
-}
-
+/* Panthéon */
 .pantheon-container {
     max-width: 1300px;
     margin: 0 auto;
@@ -156,8 +164,4 @@ body {
     text-align: center;
     grid-column: 1 / -1;
     padding: 40px;
-}
-/* Classe spécifique pour repérer les cartes possédées */
-.card-item.is-owned {
-    border-color: #2ea043;
 }
