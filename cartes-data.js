@@ -6,7 +6,7 @@ const cartesDatabase = [
         "nom": "Mew",
         "numero": "4",
         "extension": "POP Série 4",
-        "annee": "Inconnue",
+        "annee": "2006",
         "image": "https://assets.tcgdex.net/fr/pop/pop4/4/high.webp"
     },
     {
@@ -16,8 +16,8 @@ const cartesDatabase = [
         "nom": "Mew",
         "numero": "8",
         "extension": "Wizards Black Star Promos",
-        "annee": "Inconnue",
-        "image": null
+        "annee": "2000",
+        "image": "https://product-images.s3.cardmarket.com/51/WP/275427/275427.jpg"
     },
     {
         "id": "dp5-9",
@@ -26,8 +26,8 @@ const cartesDatabase = [
         "nom": "Mewtwo",
         "numero": "9",
         "extension": "Aube Majestueuse",
-        "annee": "Inconnue",
-        "image": null
+        "annee": "2008",
+        "image": "https://product-images.s3.cardmarket.com/51/MD/278058/278058.jpg"
     },
     {
         "id": "basep-9",
@@ -36,8 +36,8 @@ const cartesDatabase = [
         "nom": "Mew",
         "numero": "9",
         "extension": "Wizards Black Star Promos",
-        "annee": "Inconnue",
-        "image": null
+        "annee": "2000",
+        "image": "https://product-images.s3.cardmarket.com/51/WP/275428/275428.jpg"
     },
     {
         "id": "P-A-010",
