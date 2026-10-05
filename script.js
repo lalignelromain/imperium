@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).join('');
         }
 
-        // Rendu Gradées (avec flip card recto/verso si imageBack existe)
+        // Rendu Gradées (badge placé avant le flip-wrapper pour être au-dessus du slab)
         if (gradeesContainer && Array.isArray(pantheonDatabase.gradees)) {
             const gradees = [...pantheonDatabase.gradees].sort((a, b) => (a.annee || 0) - (b.annee || 0));
             gradeesContainer.innerHTML = gradees.length === 0
