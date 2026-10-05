@@ -96,7 +96,7 @@ body {
 
 /* Halos lumineux du Hub */
 
-/* Pokédex : Bi-ton Poké Ball (rouge en haut, blanc/gris en bas) */
+/* Pokédex : Bi-ton Poké Ball */
 .hub-card.pokedex-card {
     border-color: rgba(238, 21, 21, 0.4);
     box-shadow: 0 -8px 25px rgba(238, 21, 21, 0.25), 0 8px 25px rgba(240, 240, 240, 0.18);
@@ -129,7 +129,7 @@ body {
     box-shadow: 0 0 40px rgba(157, 78, 221, 0.55);
 }
 
-/* Panthéon : Charte Master Ball (violet royal et halo magenta) */
+/* Panthéon : Charte Master Ball */
 .hub-card.pantheon-card {
     border-color: rgba(114, 9, 183, 0.5);
     box-shadow: 0 0 25px rgba(114, 9, 183, 0.3), inset 0 0 15px rgba(247, 37, 133, 0.15);
@@ -140,10 +140,10 @@ body {
     box-shadow: 0 0 40px rgba(114, 9, 183, 0.6), 0 0 20px rgba(247, 37, 133, 0.4);
 }
 
-/* Grilles de cartes (Pokédex, Mew, Mewtwo) */
+/* Grilles de cartes (Pokédex, Mew, Mewtwo, Panthéon) */
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     gap: 20px;
     padding: 24px;
     max-width: 1300px;
@@ -160,6 +160,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
     cursor: pointer;
     user-select: none;
     transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
@@ -196,19 +197,18 @@ body {
     margin-top: 4px;
 }
 
-/* Néon Rose pour Mew possédé */
+/* Néons sur cartes possédées */
 .card-item.is-owned.theme-mew {
     border-color: #ff75c3;
     box-shadow: 0 0 14px rgba(255, 117, 195, 0.65), inset 0 0 6px rgba(255, 117, 195, 0.3);
 }
 
-/* Néon Violet pour Mewtwo possédé */
 .card-item.is-owned.theme-mewtwo {
     border-color: #9d4edd;
     box-shadow: 0 0 14px rgba(157, 78, 221, 0.7), inset 0 0 6px rgba(157, 78, 221, 0.3);
 }
 
-/* Panthéon */
+/* Styles spécifiques Panthéon */
 .pantheon-container {
     max-width: 1300px;
     margin: 0 auto;
@@ -225,6 +225,41 @@ body {
     margin-bottom: 16px;
     padding-bottom: 8px;
     border-bottom: 1px solid #30363d;
+}
+
+.pantheon-item {
+    cursor: default;
+    border-color: #30363d;
+}
+
+.pantheon-item:hover {
+    transform: translateY(-3px);
+    border-color: #7209b7;
+    box-shadow: 0 6px 20px rgba(114, 9, 183, 0.35);
+}
+
+/* Adaptation pour les boîtes / items scellés (évite l'écrasement au format carte standard) */
+.pantheon-item.scelle-item img {
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    padding: 6px;
+    background-color: #0b0d13;
+}
+
+/* Badge de gradation (PSA, PCA, BGS...) */
+.grade-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #0d1117;
+    border: 1px solid #f72585;
+    color: #f72585;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
 }
 
 .empty-msg {
