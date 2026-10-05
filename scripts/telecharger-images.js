@@ -8,121 +8,146 @@ if (!fs.existsSync(dossierImages)) {
     fs.mkdirSync(dossierImages, { recursive: true });
 }
 
-async function fetchAvecDelai(url, options = {}, delai = 150) {
-    await new Promise(resolve => setTimeout(resolve, delai));
-    const reponse = await fetch(url, options);
-    if (!reponse.ok) throw new Error(`HTTP ${reponse.status}`);
-    return reponse;
-}
+// Requête fetch sécurisée avec timeout et tentatives de reprise
+async function fetchAvecTimeout(url, options = {}, timeoutMs = 15000, retries = 2) {
+    for (let tentative = 0; tentative <= retries; tentative++) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
 
-// Teste une liste d'URL potentielles et retourne la première qui répond un statut 200 (avec option de récupérer le buffer directement)
-async function testerEtTelechargerUrl(url, cheminDestination) {
-    try {
-        const res = await fetchAvecDelai(url, { method: 'GET' });
-        if (res.ok) {
-            const buffer = Buffer.from(await res.arrayBuffer());
-            // Vérifie que ce n'est pas une page HTML d'erreur 404 (doit faire une taille minimale de fichier image)
-            if (buffer.length > 1000) {
-                fs.writeFileSync(cheminDestination, buffer);
-                return true;
-            }
-        }
-    } catch (e) {
-        // Ignore l'erreur et essaie la suite
-    }
-    return false;
-}
+        try {
+            const reponse = await fetch(url, { ...options, signal: controller.signal });
+            clearTimeout(timer);
 
-async function trouverEtSauvegarderImage(carte, cheminDestination) {
-    const id = carte.id.toLowerCase();
-    const numeroClean = carte.numero.toLowerCase();
-    const extensionSlug = carte.extension.toLowerCase().replace(/[^a-z0-9]/g, '');
-
-    // Liste exhaustive de toutes les stratégies de chemins/API à tester en cascade
-    const strategies = [
-        // 1. Stratégie TCGdex Officiel (Variantes d'endpoints)
-        `https://assets.tcgdex.net/${carte.langue}/cards/${id}/high.webp`,
-        `https://assets.tcgdex.net/${carte.langue}/cartedex/${id}/high.webp`,
-        `https://assets.tcgdex.net/v2/${carte.langue}/cards/${id}`, // Endpoint JSON pour chercher une autre propriété d'image si l'URL de base a changé
-
-        // 2. Stratégie Dépôts GitHub / CDN Open-Source TCGdex (Multi-variantes de dossiers)
-        `https://raw.githubusercontent.com/tcgdex/cards-database/master/assets/${carte.langue}/${extensionSlug}/${numeroClean}/high.webp`,
-        `https://cdn.jsdelivr.net/gh/tcgdex/cards-database@master/assets/${carte.langue}/${extensionSlug}/${numeroClean}/high.webp`,
-        `https://raw.githubusercontent.com/tcgdex/cards-database/master/assets/${carte.langue}/cards/${id}/high.webp`,
-        `https://cdn.jsdelivr.net/gh/tcgdex/cards-database@master/assets/${carte.langue}/cards/${id}/high.webp`,
-
-        // 3. Stratégie alternative basée sur les extensions standardisées
-        `https://assets.tcgdex.net/en/${carte.langue === 'fr' ? 'fr' : 'ja'}/cards/${id}/high.webp`
-    ];
-
-    for (const strat of strategies) {
-        // Si c'est un endpoint JSON TCGdex (stratégie 1 bis)
-        if (strat.includes('/v2/') && !strat.endsWith('.webp')) {
-            try {
-                const resJson = await fetchAvecDelai(strat);
-                const data = await resJson.json();
-                if (data && data.image) {
-                    const imageUrl = `${data.image}/high.webp`;
-                    if (await testerEtTelechargerUrl(imageUrl, cheminDestination)) return true;
+            if (reponse.status === 502 || reponse.status === 504 || reponse.status === 503) {
+                if (tentative < retries) {
+                    await new Promise(res => setTimeout(res, 2000));
+                    continue;
                 }
-            } catch (e) {}
-            continue;
-        }
-
-        // Si c'est une URL d'image directe
-        if (await testerEtTelechargerUrl(strat, cheminDestination)) {
-            return true;
+            }
+            return reponse;
+        } catch (err) {
+            clearTimeout(timer);
+            if (tentative < retries) {
+                await new Promise(res => setTimeout(res, 2000));
+                continue;
+            }
+            throw err;
         }
     }
-
-    return false;
 }
 
-async function lancerChasseUniverselle() {
-    console.log("🚀 Lancement du script de récupération multicouche (Multi-sources & Dépôts)...");
-    
-    const contenuFichier = fs.readFileSync(cheminData, 'utf8');
-    const debutTableau = contenuFichier.indexOf('[');
-    const finTableau = contenuFichier.lastIndexOf(']');
-    
-    if (debutTableau === -1 || finTableau === -1) {
-        console.error("❌ Impossible de lire le tableau dans cartes-data.js.");
+// 1. Tente TCGdex
+async function recupererUrlTcgdex(carte) {
+    try {
+        const res = await fetchAvecTimeout(`https://api.tcgdex.net/v2/${carte.langue}/cards/${carte.id}`, {}, 8000, 1);
+        if (!res.ok) return null;
+        const data = await res.json();
+        if (data && data.image) {
+            return `${data.image}/high.webp`;
+        }
+    } catch {
+        // En cas d'erreur ou d'absence, passe au secours
+    }
+    return null;
+}
+
+// 2. Tente pokemontcg.io en secours (recherche internationale par nom anglais + numéro)
+async function recupererUrlPokemonTcgIo(carte) {
+    try {
+        const nomPokemon = carte.nom.toLowerCase().includes('mewtwo') ? 'Mewtwo' : 'Mew';
+        const numero = carte.numero.replace(/^0+/, ''); // enlève les zéros en tête si besoin
+
+        const query = encodeURIComponent(`name:"${nomPokemon}" number:"${numero}"`);
+        const url = `https://api.pokemontcg.io/v2/cards?q=${query}`;
+
+        const res = await fetchAvecTimeout(url, {}, 15000, 2);
+        if (!res.ok) return null;
+
+        const data = await res.json();
+        if (data && data.data && data.data.length > 0) {
+            // Prend le premier résultat correspondant
+            const match = data.data[0];
+            return match.images.large || match.images.small;
+        }
+    } catch {
+        // Échec réseau ou carte introuvable (japonaise)
+    }
+    return null;
+}
+
+async function executerAspiration() {
+    console.log("🔍 Lecture de cartes-data.js...");
+
+    const contenu = fs.readFileSync(cheminData, 'utf8');
+    const debut = contenu.indexOf('[');
+    const fin = contenu.lastIndexOf(']');
+
+    if (debut === -1 || fin === -1) {
+        console.error("❌ Impossible de trouver le tableau dans cartes-data.js.");
         return;
     }
 
-    const cartes = JSON.parse(contenuFichier.substring(debutTableau, finTableau + 1));
-    const cartesSansImage = cartes.filter(c => !c.image || c.image === null);
-    
-    console.log(`📊 Total des cartes dans la base : ${cartes.length}`);
-    console.log(`🎯 Cartes ciblées par la recherche multicouche : ${cartesSansImage.length}\n`);
+    const cartes = JSON.parse(contenu.substring(debut, fin + 1));
+    const cartesManquantes = cartes.filter(c => !c.image || c.image === null);
 
-    let trouvees = 0;
-    let introuvables = 0;
+    console.log(`📊 Total : ${cartes.length} cartes`);
+    console.log(`🎯 Cartes sans visuel à traiter : ${cartesManquantes.length}\n`);
 
-    for (let i = 0; i < cartesSansImage.length; i++) {
-        const carte = cartesSansImage[i];
-        process.stdout.write(`⏳ [${i + 1}/${cartesSansImage.length}] Test multi-sources pour ${carte.id} (${carte.nom})...\r`);
+    let recuperees = 0;
+    const echecs = [];
 
-        const nomFichierLocal = `${carte.id.replace(/[/\\?%*:|"<>]/g, '_')}.webp`;
-        const cheminLocalComplet = path.join(dossierImages, nomFichierLocal);
+    for (let i = 0; i < cartesManquantes.length; i++) {
+        const carte = cartesManquantes[i];
+        process.stdout.write(`⏳ [${i + 1}/${cartesManquantes.length}] Traitement de ${carte.id} (${carte.nom} #${carte.numero})...\r`);
 
-        const succes = await trouverEtSauvegarderImage(carte, cheminLocalComplet);
+        let urlImage = await recupererUrlTcgdex(carte);
+        let sourceUtilisee = 'TCGdex';
 
-        if (succes) {
-            carte.image = `assets/img/${nomFichierLocal}`;
-            trouvees++;
-        } else {
-            introuvables++;
+        if (!urlImage) {
+            urlImage = await recupererUrlPokemonTcgIo(carte);
+            sourceUtilisee = 'pokemontcg.io';
         }
+
+        if (urlImage) {
+            try {
+                const resImg = await fetchAvecTimeout(urlImage, {}, 15000, 2);
+                if (resImg.ok) {
+                    const extension = urlImage.endsWith('.png') ? 'png' : 'webp';
+                    const nomFichier = `${carte.id.replace(/[/\\?%*:|"<>]/g, '_')}.${extension}`;
+                    const cheminFichier = path.join(dossierImages, nomFichier);
+
+                    const buffer = Buffer.from(await resImg.arrayBuffer());
+                    fs.writeFileSync(cheminFichier, buffer);
+
+                    carte.image = `assets/img/${nomFichier}`;
+                    recuperees++;
+                    console.log(`\n✅ Récupérée via ${sourceUtilisee} : ${carte.id}`);
+                } else {
+                    echecs.push(carte);
+                }
+            } catch {
+                echecs.push(carte);
+            }
+        } else {
+            echecs.push(carte);
+        }
+
+        // Petite temporisation pour respecter les quotas
+        await new Promise(r => setTimeout(r, 600));
     }
 
+    // Réécriture du fichier de données
     const nouveauContenu = `const cartesDatabase = ${JSON.stringify(cartes, null, 4)};\n`;
     fs.writeFileSync(cheminData, nouveauContenu, 'utf8');
 
-    console.log("\n\n✨ Bilan de la chasse multicouche :");
-    console.log(`✅ Images récupérées avec succès et stockées localement : ${trouvees}`);
-    console.log(`❌ Cartes n'ayant répondu sur aucune source : ${introuvables}`);
-    console.log(`💾 Le fichier cartes-data.js a été mis à jour.`);
+    console.log("\n\n🏁 Bilan de l'opération :");
+    console.log(`✅ Images enregistrées dans assets/img/ : ${recuperees}`);
+    console.log(`⚠️ Restant à compléter manuellement : ${echecs.length}`);
+
+    if (echecs.length > 0) {
+        console.log("\n📋 Liste des cartes restantes :");
+        echecs.forEach(c => console.log(` - [${c.id}] ${c.nom} (#${c.numero}) - Set: ${c.extension} (${c.langue})`));
+    }
 }
 
-lancerChasseUniverselle();
+executerAspiration();
