@@ -4,47 +4,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!container || typeof cartesDatabase === 'undefined') return;
 
-    // Dos de cartes par défaut selon la langue
-    const BACK_FR = 'https://images.pokemontcg.io/back/fr.png'; // ou lien d'un dos classique
-    const BACK_JA = 'https://images.pokemontcg.io/back/ja.png';
+    // Récupération des IDs sauvegardés dans le navigateur
+    const STORAGE_KEY = 'imperium_owned_cards';
+    let ownedIds = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
 
-    // Rendu conditionnel selon la page
+    // Synchronisation de l'état initial
+    cartesDatabase.forEach(c => {
+        if (ownedIds.has(c.id)) {
+            c.possedee = true;
+        }
+    });
+
+    const isMewtwo = (nom) => nom.toLowerCase().includes('mewtwo');
+    const isMew = (nom) => nom.toLowerCase().includes('mew') && !isMewtwo(nom);
+
+    // Dos de cartes FR et JA haute qualité sans blocage CORS
+    const BACK_FR = 'https://images.pokemontcg.io/sm1/back_hires.png';
+    const BACK_JA = 'https://archives.bulbagarden.net/media/upload/1/1a/Pokemon_card_back_Japanese.png';
+
+    function getFallbackImage(langue) {
+        return (langue && langue.toLowerCase() === 'ja') ? BACK_JA : BACK_FR;
+    }
+
+    // Filtrage selon la vue
     let cartesAffichees = [];
     if (page === 'pokedex') {
         cartesAffichees = cartesDatabase;
     } else if (page === 'mew') {
-        cartesAffichees = cartesDatabase.filter(c => c.possedee === true && isMew(c.nom));
+        cartesAffichees = cartesDatabase.filter(c => ownedIds.has(c.id) && isMew(c.nom));
     } else if (page === 'mewtwo') {
-        cartesAffichees = cartesDatabase.filter(c => c.possedee === true && isMewtwo(c.nom));
-    }
-
-    function isMewtwo(nom) {
-        return nom.toLowerCase().includes('mewtwo');
-    }
-
-    function isMew(nom) {
-        return nom.toLowerCase().includes('mew') && !isMewtwo(nom);
-    }
-
-    function getFallbackImage(langue) {
-        return langue === 'ja'
-            ? 'https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Pokemon_Trading_Card_Game_cardback.jpg/220px-Pokemon_Trading_Card_Game_cardback.jpg'
-            : 'https://images.pokemontcg.io/sm1/back_hires.png';
+        cartesAffichees = cartesDatabase.filter(c => ownedIds.has(c.id) && isMewtwo(c.nom));
     }
 
     if (cartesAffichees.length === 0) {
-        container.innerHTML = '<p class="empty-msg">Aucune carte trouvée pour cette section.</p>';
+        container.innerHTML = '<p class="empty-msg">Aucune carte possédée pour le moment dans cette section.</p>';
         return;
     }
 
     container.innerHTML = cartesAffichees.map(carte => {
         const theme = isMewtwo(carte.nom) ? 'theme-mewtwo' : 'theme-mew';
-        const ownedClass = carte.possedee ? 'is-owned' : '';
+        const isOwned = ownedIds.has(carte.id) ? 'is-owned' : '';
         const fallback = getFallbackImage(carte.langue);
         const imageSrc = carte.image || fallback;
 
         return `
-            <article class="card-item ${theme} ${ownedClass}" data-id="${carte.id}">
+            <article class="card-item ${theme} ${isOwned}" data-id="${carte.id}">
                 <img src="${imageSrc}" alt="${carte.nom}" loading="lazy" onerror="this.onerror=null; this.src='${fallback}';">
                 <div class="card-info">
                     <p class="card-name">${carte.nom}</p>
@@ -54,44 +58,24 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }).join('');
 
-    // Mode interactif uniquement sur le Pokédex
+    // Interaction uniquement active sur le Pokédex
     if (page === 'pokedex') {
-        // Clic pour basculer possedee: true/false
         container.addEventListener('click', (e) => {
             const cardEl = e.target.closest('.card-item');
             if (!cardEl) return;
 
             const cardId = cardEl.dataset.id;
-            const cardObj = cartesDatabase.find(c => c.id === cardId);
-            if (!cardObj) return;
 
-            cardObj.possedee = !cardObj.possedee;
-            cardEl.classList.toggle('is-owned', cardObj.possedee);
-        });
+            if (ownedIds.has(cardId)) {
+                ownedIds.delete(cardId);
+                cardEl.classList.remove('is-owned');
+            } else {
+                ownedIds.add(cardId);
+                cardEl.classList.add('is-owned');
+            }
 
-        // Bouton flottant pour exporter les données mises à jour
-        const adminBar = document.createElement('div');
-        adminBar.className = 'admin-bar';
-        adminBar.innerHTML = `
-            <span id="owned-count">${cartesDatabase.filter(c => c.possedee).length} possédée(s)</span>
-            <button id="btn-export" class="btn-export">Télécharger cartes-data.js</button>
-        `;
-        document.body.appendChild(adminBar);
-
-        container.addEventListener('click', () => {
-            const count = cartesDatabase.filter(c => c.possedee).length;
-            document.getElementById('owned-count').textContent = `${count} possédée(s)`;
-        });
-
-        document.getElementById('btn-export').addEventListener('click', () => {
-            const fileContent = 'const cartesDatabase = ' + JSON.stringify(cartesDatabase, null, 4) + ';\n';
-            const blob = new Blob([fileContent], { type: 'application/javascript' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'cartes-data.js';
-            a.click();
-            URL.revokeObjectURL(url);
+            // Sauvegarde instantanée et transparente
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([...ownedIds]));
         });
     }
 });
