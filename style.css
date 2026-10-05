@@ -107,6 +107,13 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-item:hover {
+    transform: translateY(-3px);
 }
 
 .card-item img {
@@ -136,8 +143,16 @@ body {
     margin-top: 4px;
 }
 
-.card-item.is-owned {
-    border-color: #2ea043;
+/* Néon Rose pour Mew possédé */
+.card-item.is-owned.theme-mew {
+    border-color: #ff75c3;
+    box-shadow: 0 0 14px rgba(255, 117, 195, 0.65), inset 0 0 6px rgba(255, 117, 195, 0.3);
+}
+
+/* Néon Violet pour Mewtwo possédé */
+.card-item.is-owned.theme-mewtwo {
+    border-color: #9d4edd;
+    box-shadow: 0 0 14px rgba(157, 78, 221, 0.7), inset 0 0 6px rgba(157, 78, 221, 0.3);
 }
 
 /* Panthéon */
@@ -164,4 +179,41 @@ body {
     text-align: center;
     grid-column: 1 / -1;
     padding: 40px;
+}
+
+/* Barre flottante d'export (Pokédex) */
+.admin-bar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #161b22;
+    border: 1px solid #30363d;
+    padding: 12px 18px;
+    border-radius: 30px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    z-index: 100;
+}
+
+.admin-bar span {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.btn-export {
+    background: #238636;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-export:hover {
+    background: #2ea043;
 }
