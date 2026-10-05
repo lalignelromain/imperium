@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (typeof pantheonDatabase === 'undefined') return;
 
-        // Rendu Scellés
+        // Rendu Scellés (avec classe scelle-item pour le bon ratio d'image)
         if (scellesContainer && Array.isArray(pantheonDatabase.scelles)) {
             const scelles = [...pantheonDatabase.scelles].sort((a, b) => (a.annee || 0) - (b.annee || 0));
             scellesContainer.innerHTML = scelles.length === 0
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const imageSrc = item.image || fallback;
                     const dateAffichage = item.dateSortie || item.annee || '';
                     return `
-                        <article class="card-item pantheon-item">
+                        <article class="card-item pantheon-item scelle-item">
                             <img src="${imageSrc}" alt="${item.nom}" loading="lazy" onerror="this.onerror=null; this.src='${fallback}';">
                             <div class="card-info">
                                 <p class="card-name">${item.nom}</p>
