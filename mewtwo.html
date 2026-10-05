@@ -2,17 +2,22 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Pokédex - Mewtwo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mewtwo — Imperium</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <header>
-        <h1>Pokédex Mewtwo</h1>
-        <nav><a href="index.html">Accueil</a> | <a href="mew.html">Mew</a> | <a href="mewtwo.html">Mewtwo</a></nav>
+<body data-page="mewtwo">
+
+    <header class="header-main">
+        <h1>Mewtwo</h1>
+        <p class="subtitle">Collection personnelle</p>
+        <a href="index.html" class="nav-back">← Retour au Hub</a>
     </header>
+
     <main>
-        <div id="card-grid"></div>
+        <div id="cards-container" class="cards-grid"></div>
     </main>
+
     <script src="cartes-data.js"></script>
     <script src="script.js"></script>
 </body>
