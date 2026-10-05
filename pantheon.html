@@ -4,31 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panthéon — Imperium</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=3">
 </head>
-<body>
+<body data-page="pantheon">
 
     <header class="header-main">
         <h1>Panthéon</h1>
-        <p class="subtitle">Items d'exception</p>
+        <p class="subtitle">Scellés & Cartes gradées</p>
         <a href="index.html" class="nav-back">← Retour au Hub</a>
     </header>
 
     <main class="pantheon-container">
         <section class="pantheon-section">
             <h2>Items scellés</h2>
-            <div id="scelles-container" class="cards-grid">
-                <!-- Emplacement prévu pour les displays, coffrets et boosters -->
-            </div>
+            <div id="scelles-container" class="cards-grid"></div>
         </section>
 
         <section class="pantheon-section">
             <h2>Cartes gradées</h2>
-            <div id="gradees-container" class="cards-grid">
-                <!-- Emplacement prévu pour les boîtiers gradés -->
-            </div>
+            <div id="gradees-container" class="cards-grid"></div>
         </section>
     </main>
 
+    <script src="pantheon-data.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
