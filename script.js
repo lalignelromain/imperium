@@ -18,9 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const isMewtwo = (nom) => nom.toLowerCase().includes('mewtwo');
     const isMew = (nom) => nom.toLowerCase().includes('mew') && !isMewtwo(nom);
 
-    // Dos de cartes FR et JA haute qualité sans blocage CORS
-    const BACK_FR = 'https://images.pokemontcg.io/sm1/back_hires.png';
-    const BACK_JA = 'https://archives.bulbagarden.net/media/upload/1/1a/Pokemon_card_back_Japanese.png';
+    // Dos de cartes FR et JA 
+    const BACK_FR = 'back-fr.png';
+    const BACK_JA = 'back-ja.png';
 
     function getFallbackImage(langue) {
         return (langue && langue.toLowerCase() === 'ja') ? BACK_JA : BACK_FR;
