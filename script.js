@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (typeof pantheonDatabase === 'undefined') return;
 
-        // Rendu Scellés (avec classe scelle-item pour le bon ratio d'image)
+        // Rendu Scellés
         if (scellesContainer && Array.isArray(pantheonDatabase.scelles)) {
             const scelles = [...pantheonDatabase.scelles].sort((a, b) => (a.annee || 0) - (b.annee || 0));
             scellesContainer.innerHTML = scelles.length === 0
@@ -121,21 +121,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).join('');
         }
 
-        // Rendu Gradées
+        // Rendu Gradées (avec flip card recto/verso si imageBack existe)
         if (gradeesContainer && Array.isArray(pantheonDatabase.gradees)) {
             const gradees = [...pantheonDatabase.gradees].sort((a, b) => (a.annee || 0) - (b.annee || 0));
             gradeesContainer.innerHTML = gradees.length === 0
                 ? '<p class="empty-msg">Aucune carte gradée enregistrée.</p>'
                 : gradees.map(item => {
                     const fallback = getFallbackImage(item.langue);
-                    const imageSrc = item.image || fallback;
+                    const frontSrc = item.imageFront || item.image || fallback;
+                    const backSrc = item.imageBack || fallback;
+                    const hasFlip = Boolean(item.imageBack);
+
+                    const visualBlock = hasFlip ? `
+                        <div class="flip-wrapper">
+                            <div class="flip-inner">
+                                <div class="flip-front">
+                                    <img src="${frontSrc}" alt="${item.nom} - Recto" loading="lazy" onerror="this.onerror=null; this.src='${fallback}';">
+                                </div>
+                                <div class="flip-back">
+                                    <img src="${backSrc}" alt="${item.nom} - Verso" loading="lazy" onerror="this.onerror=null; this.src='${fallback}';">
+                                </div>
+                            </div>
+                        </div>
+                    ` : `
+                        <img src="${frontSrc}" alt="${item.nom}" loading="lazy" onerror="this.onerror=null; this.src='${fallback}';">
+                    `;
+
                     return `
-                        <article class="card-item pantheon-item">
-                            <div class="grade-badge">${item.societe} ${item.note}</div>
-                            <img src="${imageSrc}" alt="${item.nom}" loading="lazy" onerror="this.onerror=null; this.src='${fallback}';">
+                        <article class="card-item pantheon-item gradee-item">
+                            <div class="grade-badge">${item.societe} · ${item.note}</div>
+                            ${visualBlock}
                             <div class="card-info">
                                 <p class="card-name">${item.nom}</p>
-                                <p class="card-meta">#${item.numero} · ${item.extension} (${item.annee || ''})</p>
+                                <p class="card-meta">${item.extension} · ${item.numero} (${item.annee || ''})</p>
                             </div>
                         </article>
                     `;
