@@ -125,51 +125,51 @@ body {
 }
 
 /* ==========================================
-   HALOS LUMINEUX DU HUB
+   HALOS LUMINEUX DU HUB (NOUVELLES COULEURS)
 ========================================== */
 
-/* 1. Pokédex : Bi-ton Poké Ball */
+/* 1. Pokédex : Rouge Poké Ball classique (#FF0000) */
 .hub-card.pokedex-card {
-    border-color: rgba(238, 21, 21, 0.4);
-    box-shadow: 0 -10px 30px -5px rgba(238, 21, 21, 0.35), 0 10px 30px -5px rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 0, 0, 0.4);
+    box-shadow: 0 0 25px rgba(255, 0, 0, 0.2);
 }
 
 .hub-card.pokedex-card:hover {
-    border-color: rgba(255, 60, 60, 0.9);
-    box-shadow: 0 -16px 45px rgba(238, 21, 21, 0.55), 0 16px 45px rgba(255, 255, 255, 0.3);
+    border-color: #ff0000;
+    box-shadow: 0 0 45px rgba(255, 0, 0, 0.55), inset 0 0 15px rgba(255, 0, 0, 0.15);
 }
 
-/* 2. Mew : Halo Rose Psychique */
+/* 2. Mew : Rose Pâle / Bubblegum (#FEA6CA) */
 .hub-card.mew-card {
-    border-color: rgba(255, 117, 195, 0.35);
-    box-shadow: 0 0 35px rgba(255, 117, 195, 0.22);
+    border-color: rgba(254, 166, 202, 0.4);
+    box-shadow: 0 0 25px rgba(254, 166, 202, 0.2);
 }
 
 .hub-card.mew-card:hover {
-    border-color: #ff75c3;
-    box-shadow: 0 0 50px rgba(255, 117, 195, 0.55), inset 0 0 25px rgba(255, 117, 195, 0.12);
+    border-color: #fea6ca;
+    box-shadow: 0 0 45px rgba(254, 166, 202, 0.55), inset 0 0 15px rgba(254, 166, 202, 0.15);
 }
 
-/* 3. Mewtwo : Halo Violet Puissance */
+/* 3. Mewtwo : Violet Master Ball (#7A429C) */
 .hub-card.mewtwo-card {
-    border-color: rgba(157, 78, 221, 0.35);
-    box-shadow: 0 0 35px rgba(157, 78, 221, 0.22);
+    border-color: rgba(122, 66, 156, 0.4);
+    box-shadow: 0 0 25px rgba(122, 66, 156, 0.2);
 }
 
 .hub-card.mewtwo-card:hover {
-    border-color: #a855f7;
-    box-shadow: 0 0 50px rgba(168, 85, 247, 0.55), inset 0 0 25px rgba(168, 85, 247, 0.12);
+    border-color: #7a429c;
+    box-shadow: 0 0 45px rgba(122, 66, 156, 0.6), inset 0 0 15px rgba(122, 66, 156, 0.2);
 }
 
-/* 4. Panthéon : Charte Master Ball (Violet profond & Magenta néon) */
+/* 4. Panthéon : Or Luxe Ball / Honor Ball (#D4AF37) */
 .hub-card.pantheon-card {
-    border-color: rgba(114, 9, 183, 0.45);
-    box-shadow: 0 0 35px rgba(114, 9, 183, 0.3), inset 0 0 20px rgba(247, 37, 133, 0.1);
+    border-color: rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
 }
 
 .hub-card.pantheon-card:hover {
-    border-color: #f72585;
-    box-shadow: 0 0 50px rgba(114, 9, 183, 0.65), 0 0 30px rgba(247, 37, 133, 0.4), inset 0 0 30px rgba(247, 37, 133, 0.2);
+    border-color: #d4af37;
+    box-shadow: 0 0 45px rgba(212, 175, 55, 0.6), inset 0 0 20px rgba(212, 175, 55, 0.2);
 }
 
 /* ==========================================
@@ -233,13 +233,13 @@ body {
 
 /* Néons sur cartes possédées */
 .card-item.is-owned.theme-mew {
-    border-color: #ff75c3;
-    box-shadow: 0 0 14px rgba(255, 117, 195, 0.65), inset 0 0 6px rgba(255, 117, 195, 0.3);
+    border-color: #fea6ca;
+    box-shadow: 0 0 14px rgba(254, 166, 202, 0.7), inset 0 0 6px rgba(254, 166, 202, 0.3);
 }
 
 .card-item.is-owned.theme-mewtwo {
-    border-color: #9d4edd;
-    box-shadow: 0 0 14px rgba(157, 78, 221, 0.7), inset 0 0 6px rgba(157, 78, 221, 0.3);
+    border-color: #7a429c;
+    box-shadow: 0 0 14px rgba(122, 66, 156, 0.75), inset 0 0 6px rgba(122, 66, 156, 0.35);
 }
 
 /* Styles Panthéon */
@@ -268,8 +268,8 @@ body {
 
 .pantheon-item:hover {
     transform: translateY(-4px);
-    border-color: #7209b7;
-    box-shadow: 0 8px 24px rgba(114, 9, 183, 0.35);
+    border-color: #d4af37;
+    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
 }
 
 .pantheon-item.scelle-item img {
@@ -326,19 +326,20 @@ body {
     transform: rotateY(180deg);
 }
 
+/* Badge de gradation */
 .grade-badge {
     position: static;
     margin-bottom: 12px;
     display: inline-block;
-    background: rgba(247, 37, 133, 0.12);
-    border: 1px solid #f72585;
-    color: #ff75c3;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid #d4af37;
+    color: #d4af37;
     font-weight: 700;
     font-size: 0.78rem;
     padding: 4px 14px;
     border-radius: 20px;
     letter-spacing: 0.5px;
-    box-shadow: 0 0 10px rgba(247, 37, 133, 0.2);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
 .empty-msg {
