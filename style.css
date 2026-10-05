@@ -42,7 +42,7 @@ body {
     text-decoration: underline;
 }
 
-/* Hub Grid */
+/* Hub d'accueil : aligné sur une seule ligne */
 .hub-container {
     flex: 1;
     display: flex;
@@ -52,28 +52,35 @@ body {
 }
 
 .hub-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 24px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
     width: 100%;
-    max-width: 1000px;
+    max-width: 1200px;
+    justify-content: center;
+    align-items: stretch;
+    overflow-x: auto;
+    padding: 20px 10px;
 }
 
 .hub-card {
+    flex: 1 1 0;
+    min-width: 220px;
     background: #161b22;
     border: 1px solid #30363d;
     border-radius: 12px;
-    padding: 32px 24px;
+    padding: 32px 20px;
     text-decoration: none;
     color: inherit;
     text-align: center;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .hub-card:hover {
-    transform: translateY(-4px);
-    border-color: #58a6ff;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    transform: translateY(-5px);
 }
 
 .hub-card h2 {
@@ -87,7 +94,53 @@ body {
     line-height: 1.4;
 }
 
-/* Grilles de cartes (pokedex, mew, mewtwo) */
+/* Halos lumineux du Hub */
+
+/* Pokédex : Bi-ton Poké Ball (rouge en haut, blanc/gris en bas) */
+.hub-card.pokedex-card {
+    border-color: rgba(238, 21, 21, 0.4);
+    box-shadow: 0 -8px 25px rgba(238, 21, 21, 0.25), 0 8px 25px rgba(240, 240, 240, 0.18);
+}
+
+.hub-card.pokedex-card:hover {
+    border-color: #ee1515;
+    box-shadow: 0 -12px 35px rgba(238, 21, 21, 0.5), 0 12px 35px rgba(255, 255, 255, 0.35);
+}
+
+/* Mew : Halo doux rose */
+.hub-card.mew-card {
+    border-color: rgba(255, 117, 195, 0.4);
+    box-shadow: 0 0 25px rgba(255, 117, 195, 0.25);
+}
+
+.hub-card.mew-card:hover {
+    border-color: #ff75c3;
+    box-shadow: 0 0 40px rgba(255, 117, 195, 0.55);
+}
+
+/* Mewtwo : Halo doux violet */
+.hub-card.mewtwo-card {
+    border-color: rgba(157, 78, 221, 0.4);
+    box-shadow: 0 0 25px rgba(157, 78, 221, 0.25);
+}
+
+.hub-card.mewtwo-card:hover {
+    border-color: #9d4edd;
+    box-shadow: 0 0 40px rgba(157, 78, 221, 0.55);
+}
+
+/* Panthéon : Charte Master Ball (violet royal et halo magenta) */
+.hub-card.pantheon-card {
+    border-color: rgba(114, 9, 183, 0.5);
+    box-shadow: 0 0 25px rgba(114, 9, 183, 0.3), inset 0 0 15px rgba(247, 37, 133, 0.15);
+}
+
+.hub-card.pantheon-card:hover {
+    border-color: #f72585;
+    box-shadow: 0 0 40px rgba(114, 9, 183, 0.6), 0 0 20px rgba(247, 37, 133, 0.4);
+}
+
+/* Grilles de cartes (Pokédex, Mew, Mewtwo) */
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -179,41 +232,4 @@ body {
     text-align: center;
     grid-column: 1 / -1;
     padding: 40px;
-}
-
-/* Barre flottante d'export (Pokédex) */
-.admin-bar {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #161b22;
-    border: 1px solid #30363d;
-    padding: 12px 18px;
-    border-radius: 30px;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-    z-index: 100;
-}
-
-.admin-bar span {
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.btn-export {
-    background: #238636;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    padding: 8px 16px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-
-.btn-export:hover {
-    background: #2ea043;
 }
