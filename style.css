@@ -6,7 +6,10 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background-color: #07080b;
+    background-color: #050608;
+    background-image: 
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(130, 150, 190, 0.15), transparent),
+        radial-gradient(circle at 50% 60%, #0d1117 0%, #050608 100%);
     color: #e6edf3;
     min-height: 100vh;
     display: flex;
@@ -16,7 +19,28 @@ body {
 }
 
 /* ==========================================
-   FILIGRANES D'ARRIÈRE-PLAN (MEW & MEWTWO)
+   ANIMATIONS DE FLOTTAISON PSYCHIQUE
+========================================== */
+@keyframes floatMew {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-14px) rotate(1deg);
+    }
+}
+
+@keyframes floatMewtwo {
+    0%, 100% {
+        transform: translateY(-50%) scale(1);
+    }
+    50% {
+        transform: translateY(calc(-50% - 16px)) scale(1.01);
+    }
+}
+
+/* ==========================================
+   FILIGRANES D'ARRIÈRE-PLAN
 ========================================== */
 .bg-watermark {
     position: fixed;
@@ -27,25 +51,27 @@ body {
 }
 
 .bg-mew {
-    bottom: 20px;
-    left: 20px;
-    width: min(340px, 26vw);
-    max-height: 50vh;
-    opacity: 0.35;
-    filter: drop-shadow(0 0 25px rgba(254, 166, 202, 0.4));
+    bottom: 24px;
+    left: 24px;
+    width: min(360px, 28vw);
+    max-height: 52vh;
+    opacity: 0.38;
+    filter: drop-shadow(0 0 30px rgba(254, 166, 202, 0.45));
+    animation: floatMew 6s ease-in-out infinite;
 }
 
 .bg-mewtwo {
-    bottom: 20px;
-    right: 20px;
-    width: min(360px, 28vw);
-    max-height: 60vh;
-    opacity: 0.35;
-    filter: drop-shadow(0 0 30px rgba(122, 66, 156, 0.45));
+    top: 50%;
+    right: 24px;
+    width: min(390px, 30vw);
+    max-height: 64vh;
+    opacity: 0.38;
+    filter: drop-shadow(0 0 35px rgba(122, 66, 156, 0.5));
+    animation: floatMewtwo 7.5s ease-in-out infinite;
 }
 
 /* ==========================================
-   EN-TÊTE COMMUN
+   EN-TÊTE
 ========================================== */
 .header-main {
     text-align: center;
@@ -54,42 +80,43 @@ body {
     z-index: 1;
 }
 
-/* Titre principal : Alu brossé */
+/* Titre principal : Alu brossé en relief */
 .header-main h1 {
-    font-size: 3.2rem;
+    font-size: 3.4rem;
     font-weight: 900;
-    letter-spacing: 8px;
+    letter-spacing: 10px;
     text-transform: uppercase;
     display: inline-block;
     background: linear-gradient(
         135deg, 
-        #a6afb8 0%, 
+        #9ba3ad 0%, 
         #ffffff 25%, 
-        #7d8691 45%, 
-        #d1d8e0 55%, 
-        #5e6570 75%, 
+        #6e7782 45%, 
+        #c8d0d8 55%, 
+        #4e545d 75%, 
         #eef2f5 100%
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 18px rgba(255, 255, 255, 0.12));
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 24px rgba(255, 255, 255, 0.15));
 }
 
 .subtitle {
     color: #8b949e;
-    margin-top: 12px;
-    font-size: 1.05rem;
-    letter-spacing: 2px;
-    font-weight: 400;
+    margin-top: 14px;
+    font-size: 0.95rem;
+    letter-spacing: 3px;
+    font-weight: 500;
     text-transform: uppercase;
 }
 
 .nav-back {
     display: inline-block;
-    margin-top: 16px;
+    margin-top: 18px;
     color: #58a6ff;
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
+    letter-spacing: 0.5px;
     transition: color 0.2s ease;
 }
 
@@ -99,14 +126,14 @@ body {
 }
 
 /* ==========================================
-   HUB D'ACCUEIL (VITRINE CENTRÉE)
+   HUB D'ACCUEIL (VITRINES SUSPENDUES)
 ========================================== */
 .hub-container {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 24px 80px;
+    padding: 30px 24px 70px;
     position: relative;
     z-index: 1;
 }
@@ -116,7 +143,7 @@ body {
     flex-direction: row;
     gap: 24px;
     width: 100%;
-    max-width: 1240px;
+    max-width: 1260px;
     justify-content: center;
     align-items: stretch;
     padding: 10px;
@@ -124,15 +151,20 @@ body {
 
 .hub-card {
     flex: 1 1 0;
-    min-width: 230px;
-    max-width: 290px;
-    min-height: 280px;
-    background: linear-gradient(180deg, rgba(19, 23, 31, 0.85) 0%, rgba(10, 13, 18, 0.95) 100%);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    min-width: 220px;
+    max-width: 285px;
+    min-height: 290px;
+    background: linear-gradient(
+        165deg, 
+        rgba(255, 255, 255, 0.05) 0%, 
+        rgba(15, 18, 24, 0.72) 40%, 
+        rgba(7, 9, 13, 0.94) 100%
+    );
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 18px;
-    padding: 40px 24px;
+    padding: 44px 22px;
     text-decoration: none;
     color: inherit;
     text-align: center;
@@ -142,72 +174,96 @@ body {
     align-items: center;
     position: relative;
     overflow: hidden;
-    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
+/* Liseré supérieur néon */
 .hub-card::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    border-radius: 2px;
+    transition: left 0.35s ease, right 0.35s ease, box-shadow 0.35s ease;
 }
 
 .hub-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-10px) scale(1.02);
+}
+
+.hub-card:hover::before {
+    left: 0;
+    right: 0;
 }
 
 .hub-card h2 {
-    font-size: 1.6rem;
+    font-size: 1.65rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     margin-bottom: 14px;
     color: #ffffff;
 }
 
 .hub-card p {
-    color: #949ea8;
-    font-size: 0.92rem;
-    line-height: 1.5;
+    color: #8f9aa5;
+    font-size: 0.9rem;
+    line-height: 1.55;
 }
 
-/* Halos lumineux spécifiques du Hub */
+/* Halos & néons spécifiques */
 .hub-card.pokedex-card {
-    border-color: rgba(255, 0, 0, 0.4);
-    box-shadow: 0 0 25px rgba(255, 0, 0, 0.2);
+    border-color: rgba(255, 0, 0, 0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 0, 0, 0.15);
+}
+.hub-card.pokedex-card::before {
+    background: #ff0000;
+    box-shadow: 0 0 12px #ff0000;
 }
 .hub-card.pokedex-card:hover {
     border-color: #ff0000;
-    box-shadow: 0 0 45px rgba(255, 0, 0, 0.55), inset 0 0 15px rgba(255, 0, 0, 0.15);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 45px rgba(255, 0, 0, 0.55), inset 0 0 15px rgba(255, 0, 0, 0.12);
 }
 
 .hub-card.mew-card {
-    border-color: rgba(254, 166, 202, 0.4);
-    box-shadow: 0 0 25px rgba(254, 166, 202, 0.2);
+    border-color: rgba(254, 166, 202, 0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(254, 166, 202, 0.15);
+}
+.hub-card.mew-card::before {
+    background: #fea6ca;
+    box-shadow: 0 0 12px #fea6ca;
 }
 .hub-card.mew-card:hover {
     border-color: #fea6ca;
-    box-shadow: 0 0 45px rgba(254, 166, 202, 0.55), inset 0 0 15px rgba(254, 166, 202, 0.15);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 45px rgba(254, 166, 202, 0.55), inset 0 0 15px rgba(254, 166, 202, 0.12);
 }
 
 .hub-card.mewtwo-card {
-    border-color: rgba(122, 66, 156, 0.4);
-    box-shadow: 0 0 25px rgba(122, 66, 156, 0.2);
+    border-color: rgba(122, 66, 156, 0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(122, 66, 156, 0.18);
+}
+.hub-card.mewtwo-card::before {
+    background: #7a429c;
+    box-shadow: 0 0 12px #7a429c;
 }
 .hub-card.mewtwo-card:hover {
     border-color: #7a429c;
-    box-shadow: 0 0 45px rgba(122, 66, 156, 0.6), inset 0 0 15px rgba(122, 66, 156, 0.2);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 50px rgba(122, 66, 156, 0.65), inset 0 0 15px rgba(122, 66, 156, 0.18);
 }
 
 .hub-card.pantheon-card {
-    border-color: rgba(212, 175, 55, 0.4);
-    box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 175, 55, 0.18);
+}
+.hub-card.pantheon-card::before {
+    background: #d4af37;
+    box-shadow: 0 0 12px #d4af37;
 }
 .hub-card.pantheon-card:hover {
     border-color: #d4af37;
-    box-shadow: 0 0 45px rgba(212, 175, 55, 0.6), inset 0 0 20px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9), 0 0 50px rgba(212, 175, 55, 0.65), inset 0 0 18px rgba(212, 175, 55, 0.18);
 }
 
 /* ==========================================
@@ -226,8 +282,8 @@ body {
 }
 
 .card-item {
-    background: #161b22;
-    border: 1px solid #30363d;
+    background: #141820;
+    border: 1px solid #2d333b;
     border-radius: 12px;
     padding: 14px;
     text-align: center;
@@ -282,9 +338,7 @@ body {
     box-shadow: 0 0 14px rgba(122, 66, 156, 0.75), inset 0 0 6px rgba(122, 66, 156, 0.35);
 }
 
-/* ==========================================
-   SECTIONS LINGUISTIQUES (FR / JP)
-========================================== */
+/* Sections linguistiques FR / JP */
 .collection-container {
     max-width: 1300px;
     margin: 0 auto;
@@ -328,12 +382,12 @@ body {
     font-size: 1.4rem;
     margin-bottom: 16px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #30363d;
+    border-bottom: 1px solid #2d333b;
 }
 
 .pantheon-item {
     cursor: default;
-    border-color: #30363d;
+    border-color: #2d333b;
 }
 
 .pantheon-item:hover {
@@ -349,7 +403,6 @@ body {
     background-color: #0b0d13;
 }
 
-/* Boîtier 3D pivotant */
 .flip-wrapper {
     width: 100%;
     aspect-ratio: 2.5 / 3.7;
