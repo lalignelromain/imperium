@@ -7,7 +7,7 @@ const pantheonDatabase = {
             annee: 2024,
             dateSortie: "01/2024",
             langue: "fr",
-            image: "./assets/img/etb-pal.png"
+            image: "./scripts/assets/img/etb-pal.png"
         }
     ],
     gradees: [
@@ -20,8 +20,8 @@ const pantheonDatabase = {
             langue: "ja",
             societe: "CollectAura",
             note: "10 Gem Mint",
-            imageFront: "./assets/img/mew-baba-01.png",
-            imageBack: "./assets/img/mew-baba-02.png"
+            imageFront: "./scripts/assets/img/mew-baba-01.png",
+            imageBack: "./scripts/assets/img/mew-baba-02.png"
         }
     ]
 };
