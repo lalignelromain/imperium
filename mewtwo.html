@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mewtwo — Imperium</title>
-    <link rel="stylesheet" href="style.css">
+    <title>IMPERIUM - Collection Mewtwo</title>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body data-page="mewtwo">
+<body>
+    <img src="assets/img/mew.png" alt="" class="bg-watermark bg-mew">
+    <img src="assets/img/mewtwo.png" alt="" class="bg-watermark bg-mewtwo">
 
     <header class="header-main">
         <h1>Mewtwo</h1>
-        <p class="subtitle">Collection personnelle</p>
         <a href="index.html" class="nav-back">← Retour au Hub</a>
     </header>
 
-    <main>
-        <div id="cards-container" class="cards-grid"></div>
+    <main class="collection-container">
+        <!-- Ta grille JS s'injectera ici -->
+        <div class="cards-grid" id="mewtwo-grid"></div>
     </main>
 
-    <script src="cartes-data.js"></script>
-    <script src="script.js"></script>
+    <script src="assets/js/cartes-data.js"></script>
+    <script src="assets/js/script.js"></script>
 </body>
 </html>

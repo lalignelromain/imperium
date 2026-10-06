@@ -3,30 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panthéon — Imperium</title>
-    <link rel="stylesheet" href="style.css?v=3">
+    <title>IMPERIUM - Panthéon</title>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body data-page="pantheon">
+<body>
+    <img src="assets/img/mew.png" alt="" class="bg-watermark bg-mew">
+    <img src="assets/img/mewtwo.png" alt="" class="bg-watermark bg-mewtwo">
 
     <header class="header-main">
         <h1>Panthéon</h1>
-        <p class="subtitle">Scellés & Cartes gradées</p>
         <a href="index.html" class="nav-back">← Retour au Hub</a>
     </header>
 
     <main class="pantheon-container">
-        <section class="pantheon-section">
-            <h2>Items scellés</h2>
-            <div id="scelles-container" class="cards-grid"></div>
+        <!-- Section Scellés gérée par JS ou en dur -->
+        <section class="pantheon-section" id="scelles-section">
+            <h2>Items Scellés</h2>
+            <div class="cards-grid" id="scelles-grid"></div>
         </section>
 
-        <section class="pantheon-section">
-            <h2>Cartes gradées</h2>
-            <div id="gradees-container" class="cards-grid"></div>
+        <!-- Section Gradées gérée par JS ou en dur -->
+        <section class="pantheon-section" id="gradees-section">
+            <h2>Cartes Gradées</h2>
+            <div class="cards-grid" id="gradees-grid"></div>
         </section>
     </main>
 
-    <script src="pantheon-data.js"></script>
-    <script src="script.js"></script>
+    <script src="assets/js/pantheon-data.js"></script>
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
