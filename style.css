@@ -49,27 +49,27 @@ body {
     user-select: none;
     z-index: 0;
     object-fit: contain;
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, black 15%);
+    mask-image: linear-gradient(to top, transparent 0%, black 15%);
 }
 
-/* Mew calé en bas à gauche */
 .bg-mew {
-    bottom: 24px;
-    left: 28px;
-    width: min(380px, 28vw);
-    max-height: 56vh;
-    opacity: 0.42;
+    bottom: 0;
+    left: clamp(10px, 3vw, 40px);
+    width: min(380px, 26vw);
+    max-height: 55vh;
+    opacity: 0.35;
     filter: drop-shadow(0 0 35px rgba(254, 166, 202, 0.45));
     animation: floatMew 6s ease-in-out infinite;
 }
 
-/* Mewtwo repositionné sans rognage sur l'aura */
 .bg-mewtwo {
-    top: 52%;
-    right: clamp(16px, 3.5vw, 60px);
+    top: 50%;
+    right: clamp(10px, 3vw, 40px);
     transform: translateY(-50%);
-    width: min(440px, 32vw);
-    max-height: 72vh;
-    opacity: 0.42;
+    width: min(420px, 28vw);
+    max-height: 70vh;
+    opacity: 0.35;
     filter: drop-shadow(0 0 40px rgba(122, 66, 156, 0.5));
     animation: floatMewtwo 7.5s ease-in-out infinite;
 }
@@ -84,12 +84,11 @@ body {
     z-index: 1;
 }
 
-/* Titre monumental : Alu brossé usiné */
 .header-main h1 {
     font-size: clamp(3.6rem, 5.8vw, 5.2rem);
     font-weight: 900;
     letter-spacing: 14px;
-    text-indent: 14px; /* compense l'espacement pour un centrage optique parfait */
+    text-indent: 14px;
     text-transform: uppercase;
     display: inline-block;
     background: linear-gradient(
@@ -135,7 +134,7 @@ body {
 }
 
 /* ==========================================
-   HUB D'ACCUEIL (VITRINES SUSPENDUES)
+   HUB D'ACCUEIL (EFFET PURE GLASS)
 ========================================== */
 .hub-container {
     flex: 1;
@@ -163,15 +162,23 @@ body {
     min-width: 220px;
     max-width: 290px;
     min-height: 300px;
+    
+    /* Le secret du vrai verre : ultra transparent avec un reflet clair */
     background: linear-gradient(
-        165deg, 
-        rgba(255, 255, 255, 0.07) 0%, 
-        rgba(17, 21, 29, 0.75) 38%, 
-        rgba(7, 9, 14, 0.96) 100%
+        135deg, 
+        rgba(255, 255, 255, 0.12) 0%, 
+        rgba(255, 255, 255, 0.02) 40%, 
+        rgba(0, 0, 0, 0.2) 100%
     );
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    
+    /* Arêtes lumineuses pour le relief */
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    
     border-radius: 20px;
     padding: 46px 22px;
     text-decoration: none;
@@ -184,12 +191,12 @@ body {
     position: relative;
     overflow: hidden;
     box-shadow: 
-        0 25px 50px rgba(0, 0, 0, 0.8), 
-        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+        0 25px 45px rgba(0, 0, 0, 0.5), 
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
-/* Reflet métallique biseauté au sommet */
+/* Reflet métallique supérieur allégé pour matcher le verre */
 .hub-card::before {
     content: '';
     position: absolute;
@@ -216,65 +223,44 @@ body {
     letter-spacing: 1px;
     margin-bottom: 14px;
     color: #ffffff;
+    /* Ombre sous le texte pour qu'il reste lisible sur du verre */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .hub-card p {
-    color: #8f9aa5;
+    color: #a4b1be;
     font-size: 0.9rem;
     line-height: 1.55;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-/* Halos & néons spécifiques */
-.hub-card.pokedex-card {
-    border-color: rgba(255, 0, 0, 0.32);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75), 0 0 25px rgba(255, 0, 0, 0.16);
-}
-.hub-card.pokedex-card::before {
-    background: #ff0000;
-    box-shadow: 0 0 14px #ff0000;
-}
+/* Halos & néons (ils prennent le relais sur les bordures au survol) */
+.hub-card.pokedex-card { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 0, 0, 0.12); }
+.hub-card.pokedex-card::before { background: #ff0000; box-shadow: 0 0 14px #ff0000; }
 .hub-card.pokedex-card:hover {
-    border-color: #ff0000;
-    box-shadow: 0 28px 55px rgba(0, 0, 0, 0.95), 0 0 50px rgba(255, 0, 0, 0.6), inset 0 0 18px rgba(255, 0, 0, 0.15);
+    border-color: rgba(255, 0, 0, 0.5);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 45px rgba(255, 0, 0, 0.5), inset 0 0 15px rgba(255, 0, 0, 0.15);
 }
 
-.hub-card.mew-card {
-    border-color: rgba(254, 166, 202, 0.32);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75), 0 0 25px rgba(254, 166, 202, 0.16);
-}
-.hub-card.mew-card::before {
-    background: #fea6ca;
-    box-shadow: 0 0 14px #fea6ca;
-}
+.hub-card.mew-card { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(254, 166, 202, 0.12); }
+.hub-card.mew-card::before { background: #fea6ca; box-shadow: 0 0 14px #fea6ca; }
 .hub-card.mew-card:hover {
-    border-color: #fea6ca;
-    box-shadow: 0 28px 55px rgba(0, 0, 0, 0.95), 0 0 50px rgba(254, 166, 202, 0.6), inset 0 0 18px rgba(254, 166, 202, 0.15);
+    border-color: rgba(254, 166, 202, 0.5);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 45px rgba(254, 166, 202, 0.5), inset 0 0 15px rgba(254, 166, 202, 0.15);
 }
 
-.hub-card.mewtwo-card {
-    border-color: rgba(122, 66, 156, 0.32);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75), 0 0 25px rgba(122, 66, 156, 0.2);
-}
-.hub-card.mewtwo-card::before {
-    background: #7a429c;
-    box-shadow: 0 0 14px #7a429c;
-}
+.hub-card.mewtwo-card { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(122, 66, 156, 0.12); }
+.hub-card.mewtwo-card::before { background: #7a429c; box-shadow: 0 0 14px #7a429c; }
 .hub-card.mewtwo-card:hover {
-    border-color: #7a429c;
-    box-shadow: 0 28px 55px rgba(0, 0, 0, 0.95), 0 0 55px rgba(122, 66, 156, 0.7), inset 0 0 18px rgba(122, 66, 156, 0.2);
+    border-color: rgba(122, 66, 156, 0.5);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 45px rgba(122, 66, 156, 0.6), inset 0 0 15px rgba(122, 66, 156, 0.2);
 }
 
-.hub-card.pantheon-card {
-    border-color: rgba(212, 175, 55, 0.32);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75), 0 0 25px rgba(212, 175, 55, 0.2);
-}
-.hub-card.pantheon-card::before {
-    background: #d4af37;
-    box-shadow: 0 0 14px #d4af37;
-}
+.hub-card.pantheon-card { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.12); }
+.hub-card.pantheon-card::before { background: #d4af37; box-shadow: 0 0 14px #d4af37; }
 .hub-card.pantheon-card:hover {
-    border-color: #d4af37;
-    box-shadow: 0 28px 55px rgba(0, 0, 0, 0.95), 0 0 55px rgba(212, 175, 55, 0.7), inset 0 0 20px rgba(212, 175, 55, 0.2);
+    border-color: rgba(212, 175, 55, 0.5);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 45px rgba(212, 175, 55, 0.6), inset 0 0 18px rgba(212, 175, 55, 0.2);
 }
 
 /* ==========================================
