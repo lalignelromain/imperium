@@ -15,42 +15,39 @@ body {
     overflow-x: hidden;
 }
 
-/* Filigranes d'arrière-plan */
-body::before {
-    content: '';
+/* ==========================================
+   FILIGRANES D'ARRIÈRE-PLAN
+========================================== */
+.bg-watermark {
     position: fixed;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    max-height: 75vh;
+    width: auto;
+    object-fit: contain;
+}
+
+.bg-mew {
     bottom: 0;
-    left: 20px;
-    width: 380px;
-    height: 480px;
-    background-image: url('mew.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: bottom left;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.22;
-    filter: drop-shadow(0 0 30px rgba(254, 166, 202, 0.35));
+    left: 0;
+    width: min(420px, 32vw);
+    opacity: 0.28;
+    filter: drop-shadow(0 0 30px rgba(254, 166, 202, 0.45));
 }
 
-body::after {
-    content: '';
-    position: fixed;
+.bg-mewtwo {
     top: 50%;
-    right: 20px;
+    right: 0;
     transform: translateY(-50%);
-    width: 420px;
-    height: 520px;
-    background-image: url('mewtwo.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center right;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.22;
-    filter: drop-shadow(0 0 35px rgba(122, 66, 156, 0.4));
+    width: min(460px, 34vw);
+    opacity: 0.28;
+    filter: drop-shadow(0 0 35px rgba(122, 66, 156, 0.5));
 }
 
+/* ==========================================
+   EN-TÊTE COMMUN
+========================================== */
 .header-main {
     text-align: center;
     padding: 60px 20px 24px;
@@ -58,7 +55,7 @@ body::after {
     z-index: 1;
 }
 
-/* Titre Alu brossé */
+/* Titre principal : Alu brossé */
 .header-main h1 {
     font-size: 3.2rem;
     font-weight: 900;
@@ -94,13 +91,17 @@ body::after {
     color: #58a6ff;
     text-decoration: none;
     font-size: 0.95rem;
+    transition: color 0.2s ease;
 }
 
 .nav-back:hover {
+    color: #79b8ff;
     text-decoration: underline;
 }
 
-/* Hub d'accueil */
+/* ==========================================
+   HUB D'ACCUEIL (VITRINE CENTRÉE)
+========================================== */
 .hub-container {
     flex: 1;
     display: flex;
@@ -141,7 +142,18 @@ body::after {
     justify-content: center;
     align-items: center;
     position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.hub-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
 }
 
 .hub-card:hover {
@@ -151,6 +163,7 @@ body::after {
 .hub-card h2 {
     font-size: 1.6rem;
     font-weight: 700;
+    letter-spacing: 0.5px;
     margin-bottom: 14px;
     color: #ffffff;
 }
@@ -161,7 +174,7 @@ body::after {
     line-height: 1.5;
 }
 
-/* Halos lumineux spécifiques */
+/* Halos lumineux spécifiques du Hub */
 .hub-card.pokedex-card {
     border-color: rgba(255, 0, 0, 0.4);
     box-shadow: 0 0 25px rgba(255, 0, 0, 0.2);
@@ -198,7 +211,9 @@ body::after {
     box-shadow: 0 0 45px rgba(212, 175, 55, 0.6), inset 0 0 20px rgba(212, 175, 55, 0.2);
 }
 
-/* Grilles & Cartes */
+/* ==========================================
+   GRILLES DE CARTES & SECTIONS
+========================================== */
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -257,6 +272,7 @@ body::after {
     margin-top: 4px;
 }
 
+/* Néons sur cartes possédées */
 .card-item.is-owned.theme-mew {
     border-color: #fea6ca;
     box-shadow: 0 0 14px rgba(254, 166, 202, 0.7), inset 0 0 6px rgba(254, 166, 202, 0.3);
@@ -267,7 +283,9 @@ body::after {
     box-shadow: 0 0 14px rgba(122, 66, 156, 0.75), inset 0 0 6px rgba(122, 66, 156, 0.35);
 }
 
-/* Sections linguistiques FR / JP */
+/* ==========================================
+   SECTIONS LINGUISTIQUES (FR / JP)
+========================================== */
 .collection-container {
     max-width: 1300px;
     margin: 0 auto;
@@ -291,7 +309,9 @@ body::after {
     letter-spacing: 1px;
 }
 
-/* Panthéon */
+/* ==========================================
+   PANTHÉON (ITEMS SCELLÉS & CARTES GRADÉES)
+========================================== */
 .pantheon-container {
     max-width: 1300px;
     margin: 0 auto;
@@ -330,6 +350,7 @@ body::after {
     background-color: #0b0d13;
 }
 
+/* Boîtier 3D pivotant */
 .flip-wrapper {
     width: 100%;
     aspect-ratio: 2.5 / 3.7;
