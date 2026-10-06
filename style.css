@@ -6,35 +6,74 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    background: radial-gradient(circle at 50% 20%, #161b26 0%, #0b0d13 70%, #07080b 100%);
+    background-color: #07080b;
     color: #e6edf3;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Poké Ball stylisée en filigrane sombre en arrière-plan */
+body::before {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    width: min(850px, 90vw);
+    height: min(850px, 90vw);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.04;
+    background: 
+        /* Bouton central */
+        radial-gradient(circle at center, transparent 40px, #ffffff 41px, #ffffff 58px, transparent 60px),
+        radial-gradient(circle at center, #ffffff 25px, transparent 27px),
+        /* Ligne de séparation médiane */
+        linear-gradient(to bottom, transparent calc(50% - 10px), #ffffff calc(50% - 10px), #ffffff calc(50% + 10px), transparent calc(50% + 10px)),
+        /* Anneau extérieur */
+        radial-gradient(circle at center, transparent 46%, #ffffff 46.5%, #ffffff 50%, transparent 50.5%);
+    filter: blur(1px);
 }
 
 .header-main {
     text-align: center;
-    padding: 60px 20px 20px;
+    padding: 60px 20px 24px;
+    position: relative;
+    z-index: 1;
 }
 
+/* Titre principal : Effet Aluminium brossé */
 .header-main h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    letter-spacing: 6px;
+    font-size: 3.2rem;
+    font-weight: 900;
+    letter-spacing: 8px;
     text-transform: uppercase;
-    background: linear-gradient(180deg, #ffffff 30%, #8b949e 100%);
+    display: inline-block;
+    background: linear-gradient(
+        135deg, 
+        #a6afb8 0%, 
+        #ffffff 25%, 
+        #7d8691 45%, 
+        #d1d8e0 55%, 
+        #5e6570 75%, 
+        #eef2f5 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 10px rgba(255, 255, 255, 0.15));
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 18px rgba(255, 255, 255, 0.12));
 }
 
 .subtitle {
     color: #8b949e;
-    margin-top: 10px;
+    margin-top: 12px;
     font-size: 1.05rem;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     font-weight: 400;
+    text-transform: uppercase;
 }
 
 .nav-back {
@@ -60,6 +99,8 @@ body {
     align-items: center;
     justify-content: center;
     padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
 }
 
 .hub-grid {
@@ -78,9 +119,9 @@ body {
     min-width: 230px;
     max-width: 290px;
     min-height: 280px;
-    background: linear-gradient(180deg, rgba(22, 27, 34, 0.85) 0%, rgba(13, 17, 23, 0.95) 100%);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: linear-gradient(180deg, rgba(19, 23, 31, 0.85) 0%, rgba(10, 13, 18, 0.95) 100%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 18px;
     padding: 40px 24px;
@@ -125,7 +166,7 @@ body {
 }
 
 /* ==========================================
-   HALOS LUMINEUX DU HUB (NOUVELLES COULEURS)
+   HALOS LUMINEUX DU HUB
 ========================================== */
 
 /* 1. Pokédex : Rouge Poké Ball classique (#FF0000) */
@@ -139,7 +180,7 @@ body {
     box-shadow: 0 0 45px rgba(255, 0, 0, 0.55), inset 0 0 15px rgba(255, 0, 0, 0.15);
 }
 
-/* 2. Mew : Rose Pâle / Bubblegum (#FEA6CA) */
+/* 2. Mew : Rose Bubblegum (#FEA6CA) */
 .hub-card.mew-card {
     border-color: rgba(254, 166, 202, 0.4);
     box-shadow: 0 0 25px rgba(254, 166, 202, 0.2);
@@ -161,7 +202,7 @@ body {
     box-shadow: 0 0 45px rgba(122, 66, 156, 0.6), inset 0 0 15px rgba(122, 66, 156, 0.2);
 }
 
-/* 4. Panthéon : Or Luxe Ball / Honor Ball (#D4AF37) */
+/* 4. Panthéon : Or Luxe Ball (#D4AF37) */
 .hub-card.pantheon-card {
     border-color: rgba(212, 175, 55, 0.4);
     box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
@@ -183,6 +224,8 @@ body {
     max-width: 1300px;
     margin: 0 auto;
     width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 .card-item {
@@ -248,6 +291,8 @@ body {
     margin: 0 auto;
     padding: 0 20px 40px;
     width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 .pantheon-section {
