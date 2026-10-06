@@ -23,21 +23,13 @@ body {
    ANIMATIONS DE FLOTTAISON PSYCHIQUE
 ========================================== */
 @keyframes floatMew {
-    0%, 100% {
-        transform: translateY(0px) rotate(0deg);
-    }
-    50% {
-        transform: translateY(-16px) rotate(1.2deg);
-    }
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-16px) rotate(1.2deg); }
 }
 
 @keyframes floatMewtwo {
-    0%, 100% {
-        transform: translateY(-50%) scale(1);
-    }
-    50% {
-        transform: translateY(calc(-50% - 18px)) scale(1.015);
-    }
+    0%, 100% { transform: translateY(-50%) scale(1); }
+    50% { transform: translateY(calc(-50% - 18px)) scale(1.015); }
 }
 
 /* ==========================================
@@ -49,6 +41,7 @@ body {
     user-select: none;
     z-index: 0;
     object-fit: contain;
+    /* Fondu vers le bas pour fondre les Pokémon dans le sol noir */
     -webkit-mask-image: linear-gradient(to top, transparent 0%, black 15%);
     mask-image: linear-gradient(to top, transparent 0%, black 15%);
 }
@@ -84,6 +77,7 @@ body {
     z-index: 1;
 }
 
+/* Titre monumental : Alu brossé usiné */
 .header-main h1 {
     font-size: clamp(3.6rem, 5.8vw, 5.2rem);
     font-weight: 900;
@@ -103,9 +97,7 @@ body {
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: 
-        drop-shadow(0 4px 8px rgba(0, 0, 0, 0.98)) 
-        drop-shadow(0 0 32px rgba(255, 255, 255, 0.22));
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 32px rgba(255, 255, 255, 0.22));
 }
 
 .subtitle {
@@ -134,7 +126,7 @@ body {
 }
 
 /* ==========================================
-   HUB D'ACCUEIL (EFFET PURE GLASS)
+   HUB D'ACCUEIL (EFFET PREMIUM GLASS LUXE)
 ========================================== */
 .hub-container {
     flex: 1;
@@ -149,38 +141,36 @@ body {
 .hub-grid {
     display: flex;
     flex-direction: row;
-    gap: 24px;
+    gap: 28px; /* Un peu plus d'espace pour que les halos respirent */
     width: 100%;
-    max-width: 1280px;
+    max-width: 1300px;
     justify-content: center;
     align-items: stretch;
     padding: 10px;
 }
 
+/* Configuration des couleurs par thème via variables CSS */
+.hub-card.pokedex-card  { --th-color: #ff3333; --th-glow: rgba(255, 51, 51, 0.45); }
+.hub-card.mew-card      { --th-color: #fea6ca; --th-glow: rgba(254, 166, 202, 0.45); }
+.hub-card.mewtwo-card   { --th-color: #a858d4; --th-glow: rgba(168, 88, 212, 0.45); }
+.hub-card.pantheon-card { --th-color: #e5c05c; --th-glow: rgba(229, 192, 92, 0.45); }
+
 .hub-card {
     flex: 1 1 0;
-    min-width: 220px;
-    max-width: 290px;
-    min-height: 300px;
+    min-width: 230px;
+    max-width: 300px;
+    min-height: 320px;
     
-    /* Le secret du vrai verre : ultra transparent avec un reflet clair */
-    background: linear-gradient(
-        135deg, 
-        rgba(255, 255, 255, 0.12) 0%, 
-        rgba(255, 255, 255, 0.02) 40%, 
-        rgba(0, 0, 0, 0.2) 100%
-    );
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    /* Fond de verre extrêmement épuré */
+    background: rgba(12, 15, 22, 0.45);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     
-    /* Arêtes lumineuses pour le relief */
-    border-top: 1px solid rgba(255, 255, 255, 0.25);
-    border-left: 1px solid rgba(255, 255, 255, 0.15);
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    /* Bordure subtile de base */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px; /* Plus arrondi pour un look premium */
     
-    border-radius: 20px;
-    padding: 46px 22px;
+    padding: 50px 24px;
     text-decoration: none;
     color: inherit;
     text-align: center;
@@ -190,81 +180,82 @@ body {
     align-items: center;
     position: relative;
     overflow: hidden;
+    
+    /* Effet 3D du verre : Ombre portée + Biseau lumineux en haut + Biseau sombre en bas */
     box-shadow: 
-        0 25px 45px rgba(0, 0, 0, 0.5), 
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+        0 25px 50px rgba(0, 0, 0, 0.7), 
+        inset 0 1px 1px rgba(255, 255, 255, 0.25),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+        
+    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Reflet métallique supérieur allégé pour matcher le verre */
+/* Aura de lumière interne (Le secret du look luxueux) */
 .hub-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 20%;
-    right: 20%;
-    height: 2px;
-    border-radius: 2px;
-    transition: left 0.35s ease, right 0.35s ease, box-shadow 0.35s ease;
+    top: 0; left: 0; right: 0; bottom: 0;
+    /* Gradient radial aux couleurs de la carte */
+    background: radial-gradient(circle at 50% 0%, var(--th-color), transparent 60%);
+    opacity: 0.04;
+    transform: translateY(-20px);
+    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: 0;
 }
 
-.hub-card:hover {
-    transform: translateY(-12px) scale(1.025);
-}
-
-.hub-card:hover::before {
-    left: 0;
-    right: 0;
+/* Les contenus de la carte passent au-dessus de l'aura */
+.hub-card h2, .hub-card p {
+    position: relative;
+    z-index: 1;
 }
 
 .hub-card h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    margin-bottom: 14px;
-    color: #ffffff;
-    /* Ombre sous le texte pour qu'il reste lisible sur du verre */
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+    /* Dégradé Argenté sur le texte */
+    background: linear-gradient(135deg, #ffffff 0%, #9ca7b3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.9));
+    transition: transform 0.3s ease;
 }
 
 .hub-card p {
-    color: #a4b1be;
-    font-size: 0.9rem;
-    line-height: 1.55;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    color: #94a3b3;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    font-weight: 500;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* Halos & néons (ils prennent le relais sur les bordures au survol) */
-.hub-card.pokedex-card { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 0, 0, 0.12); }
-.hub-card.pokedex-card::before { background: #ff0000; box-shadow: 0 0 14px #ff0000; }
-.hub-card.pokedex-card:hover {
-    border-color: rgba(255, 0, 0, 0.5);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 45px rgba(255, 0, 0, 0.5), inset 0 0 15px rgba(255, 0, 0, 0.15);
+/* --- RÉACTION AU SURVOL --- */
+.hub-card:hover {
+    transform: translateY(-14px) scale(1.02);
+    /* Le contour prend la couleur du thème */
+    border-color: var(--th-color);
+    box-shadow: 
+        0 35px 65px rgba(0, 0, 0, 0.9),    /* Ombre plus profonde */
+        0 0 50px var(--th-glow),           /* Halo extérieur fluo */
+        inset 0 1px 1px var(--th-color),   /* Accroche lumière colorée en haut */
+        inset 0 0 30px var(--th-glow);     /* Lueur interne près des bords */
 }
 
-.hub-card.mew-card { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(254, 166, 202, 0.12); }
-.hub-card.mew-card::before { background: #fea6ca; box-shadow: 0 0 14px #fea6ca; }
-.hub-card.mew-card:hover {
-    border-color: rgba(254, 166, 202, 0.5);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 45px rgba(254, 166, 202, 0.5), inset 0 0 15px rgba(254, 166, 202, 0.15);
+/* L'aura interne s'allume et descend au survol */
+.hub-card:hover::before {
+    opacity: 0.25;
+    transform: translateY(0);
 }
 
-.hub-card.mewtwo-card { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(122, 66, 156, 0.12); }
-.hub-card.mewtwo-card::before { background: #7a429c; box-shadow: 0 0 14px #7a429c; }
-.hub-card.mewtwo-card:hover {
-    border-color: rgba(122, 66, 156, 0.5);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 45px rgba(122, 66, 156, 0.6), inset 0 0 15px rgba(122, 66, 156, 0.2);
+.hub-card:hover h2 {
+    transform: scale(1.03);
 }
 
-.hub-card.pantheon-card { box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.12); }
-.hub-card.pantheon-card::before { background: #d4af37; box-shadow: 0 0 14px #d4af37; }
-.hub-card.pantheon-card:hover {
-    border-color: rgba(212, 175, 55, 0.5);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 45px rgba(212, 175, 55, 0.6), inset 0 0 18px rgba(212, 175, 55, 0.2);
-}
 
 /* ==========================================
-   GRILLES DE CARTES & SECTIONS
+   GRILLES DE CARTES & SECTIONS (POKÉDEX & COLLECTION)
 ========================================== */
 .cards-grid {
     display: grid;
