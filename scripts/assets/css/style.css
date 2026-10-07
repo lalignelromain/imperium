@@ -181,7 +181,7 @@ body.mode-edition .header-main h1 {
 .hub-card.pantheon-card   { --th-color: #e5c05c; --th-glow: rgba(229, 192, 92, 0.45); }
 .hub-card.mew-card        { --th-color: #fea6ca; --th-glow: rgba(254, 166, 202, 0.45); }
 .hub-card.mewtwo-card     { --th-color: #a858d4; --th-glow: rgba(168, 88, 212, 0.45); }
-.hub-card.chroniques-card { --th-color: #10b981; --th-glow: rgba(168, 185, 129, 0.45); }
+.hub-card.chroniques-card { --th-color: #10b981; --th-glow: rgba(16, 185, 129, 0.45); }
 .hub-card.odyssee-card    { --th-color: #00d2ff; --th-glow: rgba(0, 210, 255, 0.45); }
 
 .hub-card.pokedex-card {
@@ -867,7 +867,7 @@ body.mode-art-pur .pocket::before {
     letter-spacing: 0.5px;
 }
 
-/* Dimensions des formats */
+/* Dimensions des formats standards */
 .duo-box .pocket { width: clamp(140px, 18vw, 220px); }
 .trio-box .pocket { width: clamp(110px, 14vw, 190px); }
 .quad-box .pocket { width: clamp(120px, 15vw, 180px); }
@@ -886,26 +886,42 @@ body.mode-art-pur .pocket::before {
     width: fit-content;
 }
 
-/* Format vertical des cartes LÉGENDE (HGSS) : Moitié Haute empilée sur Moitié Basse */
+/* ====================================================================
+   FORMAT CARTES LÉGENDE (HGSS) : OPTION 2
+   Debout côte à côte en Classeur -> Pivoté à 90° en Art Pur
+==================================================================== */
 .legend-box {
     display: flex !important;
-    flex-direction: column !important;
+    flex-direction: row !important;
     justify-content: center;
     align-items: center;
     width: fit-content;
     margin: 0 auto;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+                gap 0.3s ease, 
+                margin 0.3s ease;
 }
 
+/* Mode Classeur : 2 pochettes portrait côte à côte */
 body.mode-classeur .legend-box {
     gap: 12px;
+    transform: none;
+    margin: 0 auto;
 }
 
+body.mode-classeur .legend-box .pocket {
+    width: clamp(140px, 18vw, 210px);
+}
+
+/* Mode Art Pur : fusion bord à bord et rotation à 90° dans le sens de l'art */
 body.mode-art-pur .legend-box {
     gap: 0 !important;
+    transform: rotate(90deg);
+    margin: 60px auto;
 }
 
-.legend-box .pocket {
-    width: clamp(160px, 20vw, 240px);
+body.mode-art-pur .legend-box .pocket {
+    width: clamp(140px, 18vw, 210px);
 }
 
 /* ====================================================================
@@ -1165,7 +1181,12 @@ body.mode-art-pur .legend-box {
     .trio-box .pocket { width: 102px; }
     .quad-box .pocket { width: 130px; }
     .nine-box .pocket { width: 95px; }
-    .legend-box .pocket { width: 145px; }
+
+    /* Ajustement responsive pour la rotation mobile */
+    .legend-box .pocket { width: 125px; }
+    body.mode-art-pur .legend-box {
+        margin: 45px auto;
+    }
 
     .scene-title {
         font-size: 0.95rem;
