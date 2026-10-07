@@ -954,6 +954,155 @@ body.mode-art-pur .legend-box {
 }
 
 /* ====================================================================
+   MODULE MASTER SET EV 5 (FORCES TEMPORELLES)
+==================================================================== */
+
+/* Hub Card pleine largeur */
+.hub-card.masterset-card {
+    grid-column: 1 / -1 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 18px 30px !important;
+    gap: 24px;
+    background: linear-gradient(135deg, rgba(10, 18, 30, 0.85) 0%, rgba(26, 10, 24, 0.85) 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.hub-card.masterset-card::before {
+    background: radial-gradient(circle at 12% 50%, rgba(0, 240, 255, 0.22), transparent 55%),
+                radial-gradient(circle at 88% 50%, rgba(255, 0, 128, 0.22), transparent 55%) !important;
+}
+
+.hub-card.masterset-card:hover {
+    border-color: #00f0ff !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85), 
+                0 0 35px rgba(0, 240, 255, 0.35),
+                0 0 35px rgba(255, 0, 128, 0.25) !important;
+}
+
+.masterset-card .hub-card-content {
+    text-align: left;
+}
+
+.masterset-card h2 {
+    font-size: 1.35rem;
+    margin-bottom: 2px;
+}
+
+.masterset-card p {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+/* Jauge de progression sur la Hub Card */
+.hub-progress-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    min-width: 240px;
+    z-index: 2;
+}
+
+.hub-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hub-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #00f0ff, #ff0080);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hub-progress-text {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+}
+
+/* En-tête & Barre globale sur master-set.html */
+.master-header-progress {
+    max-width: 520px;
+    margin: 18px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.master-progress-bar {
+    width: 100%;
+    height: 12px;
+    background: rgba(14, 18, 26, 0.8);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+    padding: 2px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.master-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #00f0ff 0%, #a855f7 50%, #ff0080 100%);
+    border-radius: 15px;
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.9);
+    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.master-progress-stats {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #cbd5e1;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Grille et état de sélection des cartes */
+.theme-masterset .card-item {
+    cursor: pointer !important;
+}
+
+.theme-masterset .card-item.not-owned {
+    opacity: 0.38;
+    filter: grayscale(85%);
+}
+
+.theme-masterset .card-item.is-owned {
+    opacity: 1;
+    filter: none;
+    border-color: #00f0ff;
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.6), inset 0 0 6px rgba(0, 240, 255, 0.3);
+}
+
+/* Adaptation smartphone */
+@media (max-width: 767px) {
+    .hub-card.masterset-card {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+        padding: 16px !important;
+    }
+    .masterset-card .hub-card-content {
+        text-align: center !important;
+    }
+    .hub-progress-wrapper {
+        min-width: 100% !important;
+        align-items: center !important;
+    }
+}
+
+/* ====================================================================
    RESPONSIVE / MEDIA QUERIES
 ==================================================================== */
 
