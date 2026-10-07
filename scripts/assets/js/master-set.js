@@ -1,6 +1,4 @@
-const docRef = db.collection("collections").doc("masterset_ev05");
-
-// Génération du Master Set (162 régulières + 56 secrètes + 4 promos Stamped)
+// Master Set EV05 : 162 régulières + 56 secrètes + 4 promos Stamped (222 au total)
 const EV5_CARDS = [
     ...Array.from({ length: 218 }, (_, i) => {
         const num = String(i + 1).padStart(3, '0');
@@ -12,14 +10,16 @@ const EV5_CARDS = [
             img: `https://assets.tcgdex.net/fr/sv/sv05/${num}/high.webp`
         };
     }),
-    { id: "ev05_stamp_koraidon_pc", number: "PROMO", name: "Koraidon (Pokémon Center Stamp)", img: "https://assets.tcgdex.net/fr/sv/svp/113/high.webp" },
-    { id: "ev05_stamp_miraidon_pc", number: "PROMO", name: "Miraidon (Pokémon Center Stamp)", img: "https://assets.tcgdex.net/fr/sv/svp/114/high.webp" },
+    { id: "ev05_stamp_koraidon_pc", number: "PROMO", name: "Koraidon (Pokémon Center)", img: "https://assets.tcgdex.net/fr/sv/svp/113/high.webp" },
+    { id: "ev05_stamp_miraidon_pc", number: "PROMO", name: "Miraidon (Pokémon Center)", img: "https://assets.tcgdex.net/fr/sv/svp/114/high.webp" },
     { id: "ev05_stamp_prerelease_1", number: "STAFF", name: "Rugit-Lune (Avant-première)", img: "https://assets.tcgdex.net/fr/sv/svp/115/high.webp" },
     { id: "ev05_stamp_prerelease_2", number: "STAFF", name: "Garde-de-Fer (Avant-première)", img: "https://assets.tcgdex.net/fr/sv/svp/116/high.webp" }
 ];
 
 let ownedCards = new Set();
+let docRef = null;
 
+// 1. Rendu direct de la grille
 function renderGrid() {
     const grid = document.getElementById("master-grid");
     if (!grid) return;
@@ -35,6 +35,7 @@ function renderGrid() {
     `).join('');
 }
 
+// 2. Bascule d'état au clic
 window.toggleCard = function(cardId) {
     if (ownedCards.has(cardId)) {
         ownedCards.delete(cardId);
@@ -44,7 +45,15 @@ window.toggleCard = function(cardId) {
     
     updateUI();
     updateProgress();
-    docRef.set({ owned: Array.from(ownedCards) }, { merge: true });
+    
+    // Sauvegarde locale instantanée
+    localStorage.setItem("ev5_owned_cards", JSON.stringify(Array.from(ownedCards)));
+
+    // Sauvegarde distante si Firebase est actif
+    if (docRef) {
+        docRef.set({ owned: Array.from(ownedCards) }, { merge: true })
+            .catch(err => console.error("Erreur Firebase Firestore:", err));
+    }
 };
 
 function updateUI() {
@@ -71,17 +80,41 @@ function updateProgress() {
     const text = document.getElementById("master-progress-text");
     if (fill) fill.style.width = `${percent}%`;
     if (text) text.innerText = `${current} / ${total} CARTES • ${percent}%`;
+    
+    // Cache de progression pour le Hub
+    localStorage.setItem("ev5_progress_cache", JSON.stringify({ current, total, percent }));
 }
 
-// Synchronisation Firebase en temps réel
-docRef.onSnapshot((doc) => {
-    if (doc.exists && doc.data().owned) {
-        ownedCards = new Set(doc.data().owned);
-    } else {
-        ownedCards = new Set();
+// 3. Initialisation au chargement de la page
+document.addEventListener("DOMContentLoaded", () => {
+    // Restaure le cache local immédiatement
+    const localData = localStorage.getItem("ev5_owned_cards");
+    if (localData) {
+        try {
+            ownedCards = new Set(JSON.parse(localData));
+        } catch(e) {}
     }
-    updateUI();
-    updateProgress();
-});
 
-renderGrid();
+    // Affiche les cartes sans attendre
+    renderGrid();
+    updateProgress();
+
+    // Connexion Firebase sécurisée
+    if (typeof db !== "undefined") {
+        try {
+            docRef = db.collection("collections").doc("masterset_ev05");
+            docRef.onSnapshot((doc) => {
+                if (doc.exists && doc.data().owned) {
+                    ownedCards = new Set(doc.data().owned);
+                    localStorage.setItem("ev5_owned_cards", JSON.stringify(Array.from(ownedCards)));
+                    updateUI();
+                    updateProgress();
+                }
+            });
+        } catch (e) {
+            console.warn("Connexion Firestore en attente :", e);
+        }
+    } else {
+        console.warn("Objet 'db' non trouvé. Vérifiez l'inclusion du script Firebase config.");
+    }
+});
