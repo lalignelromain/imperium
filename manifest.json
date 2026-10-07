@@ -1,18 +1,23 @@
 {
   "name": "Mewthology",
   "short_name": "Mewthology",
-  "description": "Vitrine de collection Mew & Mewtwo",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "orientation": "any",
   "background_color": "#050608",
   "theme_color": "#050608",
   "icons": [
     {
-      "src": "./scripts/assets/img/favicon.png",
-      "sizes": "192x192 512x512",
+      "src": "./favicon.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "./favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
