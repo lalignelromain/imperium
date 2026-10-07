@@ -317,3 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAdminTrigger();
     initFirestoreSync();
 });
+// 11. ENREGISTREMENT DU SERVICE WORKER (PWA)
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.error("SW error:", err));
+}
