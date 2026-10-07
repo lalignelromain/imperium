@@ -25,7 +25,7 @@ body {
 }
 
 /* ==========================================
-   ANIMATIONS DE FLOTTAISON PSYCHIQUE
+   ANIMATIONS PSYCHIQUES
 ========================================== */
 @keyframes floatMew {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -35,6 +35,15 @@ body {
 @keyframes floatMewtwo {
     0%, 100% { transform: translateY(-50%) scale(1); }
     50% { transform: translateY(calc(-50% - 18px)) scale(1.015); }
+}
+
+@keyframes pulseGold {
+    0%, 100% {
+        filter: drop-shadow(0 0 14px rgba(229, 192, 92, 0.7)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.95));
+    }
+    50% {
+        filter: drop-shadow(0 0 28px rgba(229, 192, 92, 1)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.95));
+    }
 }
 
 /* ==========================================
@@ -90,6 +99,9 @@ body {
     text-indent: 8px;
     text-transform: uppercase;
     display: inline-block;
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
     background: linear-gradient(
         135deg, 
         #8a94a2 0%, 
@@ -103,6 +115,13 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.98)) drop-shadow(0 0 32px rgba(255, 255, 255, 0.22));
+    transition: filter 0.3s ease;
+}
+
+/* EFFET GLOW DORÉ QUAND CONNECTÉ EN MODE ÉDITION */
+body.mode-edition .header-main h1 {
+    -webkit-text-stroke: 1.2px #e5c05c;
+    animation: pulseGold 2.8s ease-in-out infinite;
 }
 
 .subtitle {
@@ -131,7 +150,7 @@ body {
 }
 
 /* ==========================================
-   HUB D'ACCUEIL (VITRINE 4 CARTES)
+   HUB D'ACCUEIL (4 SECTIONS)
 ========================================== */
 .hub-container {
     flex: 1;
@@ -245,7 +264,7 @@ body {
 }
 
 /* ==========================================
-   GRILLES DE CARTES (POKÉDEX & COLLECTIONS)
+   GRILLES DE CARTES & ÉTATS DE POSSESSION
 ========================================== */
 .collection-container {
     max-width: 1300px;
@@ -254,7 +273,6 @@ body {
     width: 100%;
     position: relative;
     z-index: 1;
-    box-sizing: border-box;
 }
 
 .cards-grid {
@@ -267,7 +285,6 @@ body {
     width: 100%;
     position: relative;
     z-index: 1;
-    box-sizing: border-box;
 }
 
 .card-item {
@@ -280,14 +297,19 @@ body {
     flex-direction: column;
     align-items: center;
     position: relative;
-    cursor: pointer;
+    cursor: default; /* Visiteur : inactif */
     user-select: none;
-    box-sizing: border-box;
+    -webkit-user-select: none;
     overflow: hidden;
     transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
-.card-item:hover {
+/* En mode édition : les cartes deviennent interactives */
+body.mode-edition .card-item {
+    cursor: pointer;
+}
+
+body.mode-edition .card-item:hover {
     transform: translateY(-4px);
 }
 
@@ -323,13 +345,9 @@ body {
     text-overflow: ellipsis;
 }
 
-/* Bascule grisée / néon */
+/* Statuts d'affichage */
 .card-item.not-owned {
     opacity: 0.55;
-}
-
-.card-item.not-owned:hover {
-    opacity: 0.85;
 }
 
 .card-item.is-owned {
@@ -346,27 +364,53 @@ body {
     box-shadow: 0 0 14px rgba(122, 66, 156, 0.75), inset 0 0 6px rgba(122, 66, 156, 0.35);
 }
 
-/* Bouton flottant pour exporter la collection */
-.btn-export-floating {
+/* ==========================================
+   DOCK FLOTTANT EN VERRE (GLASS PILL)
+========================================== */
+.floating-dock {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #1f6feb;
-    color: #fff;
-    border: none;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(12, 15, 22, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 30px;
-    padding: 10px 18px;
-    font-size: 0.82rem;
-    font-weight: 600;
-    cursor: pointer;
-    z-index: 999;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-    transition: background 0.2s ease, transform 0.2s ease;
+    padding: 6px 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    z-index: 1000;
 }
 
-.btn-export-floating:hover {
-    background: #388bfd;
-    transform: scale(1.04);
+.dock-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b3;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.dock-btn:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+}
+
+.dock-btn-lock {
+    color: #e5c05c !important;
+}
+
+.dock-btn-lock:hover {
+    background-color: rgba(229, 192, 92, 0.15) !important;
 }
 
 /* ==========================================
@@ -433,7 +477,7 @@ body {
 }
 
 /* ====================================================================
-   RESPONSIVE / MEDIA QUERIES
+   RESPONSIVE
 ==================================================================== */
 
 /* --- 1. PC PORTABLES (1025px à 1650px) --- */
@@ -517,7 +561,7 @@ body {
     }
 }
 
-/* --- 3. SMARTPHONES (<= 767px) - CORRECTION DE COUPE --- */
+/* --- 3. SMARTPHONES (<= 767px) --- */
 @media (max-width: 767px) {
     .header-main {
         padding: 35px 12px 15px;
@@ -555,21 +599,18 @@ body {
         border-radius: 16px;
     }
 
-    /* Grille 2 colonnes strictement contenue à 100% de l'écran */
     .collection-container {
         width: 100% !important;
         max-width: 100% !important;
         padding: 0 10px 30px !important;
-        box-sizing: border-box !important;
     }
 
     .cards-grid {
         display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important; /* minmax(0, 1fr) empêche tout débordement */
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 8px !important;
         padding: 8px 0 !important;
         width: 100% !important;
-        box-sizing: border-box !important;
     }
 
     .card-item {
@@ -577,7 +618,6 @@ body {
         border-radius: 8px !important;
         min-width: 0 !important;
         width: 100% !important;
-        box-sizing: border-box !important;
     }
 
     .card-item img {
@@ -612,10 +652,15 @@ body {
         right: -20px;
     }
 
-    .btn-export-floating {
-        bottom: 12px;
-        right: 12px;
-        font-size: 0.75rem;
-        padding: 8px 14px;
+    .floating-dock {
+        bottom: 16px;
+        right: 50%;
+        transform: translateX(50%);
+        padding: 4px 8px;
+    }
+
+    .dock-btn {
+        width: 34px;
+        height: 34px;
     }
 }
