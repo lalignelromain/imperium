@@ -887,7 +887,7 @@ body.mode-art-pur .pocket::before {
 }
 
 /* ====================================================================
-   FRESQUE 9 CASES : PLAQUE ACRYLIQUE DÉTOURÉE (732x951 PNG)
+   FRESQUE 9 CASES : CALIBRAGE PRÉCIS SUR LES ENCOCHES ACRYLIQUES
 ==================================================================== */
 body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
     display: grid !important;
@@ -903,9 +903,9 @@ body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
     background-repeat: no-repeat !important;
     background-color: transparent !important;
 
-    /* Marges relatives basées sur les vis et le pourtour de la plaque */
-    padding: 7.2% 6.8% 7.5% 6.8% !important;
-    column-gap: 2.8% !important;
+    /* Haut (remonté à 4.8%) / Droite (5.2%) / Bas (8.8%) / Gauche (5.2%) */
+    padding: 4.8% 5.2% 8.8% 5.2% !important;
+    column-gap: 2.6% !important;
     row-gap: 2.2% !important;
 
     border-radius: 12px !important;
@@ -913,14 +913,13 @@ body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9) !important;
 }
 
-/* Chaque carte remplit rigoureusement son encoche taillée dans le plexiglas */
 body.theme-odyssee.mode-art-pur .nine-box .pocket {
     width: 100% !important;
     height: 100% !important;
     max-width: none !important;
     border-radius: 4px !important;
     overflow: hidden !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45) !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45) !important;
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
