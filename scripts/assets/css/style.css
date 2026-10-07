@@ -1160,3 +1160,14 @@ body.mode-art-pur .pocket::before {
         padding: 0 10px;
     }
 }
+
+/* Format vertical spécifique aux cartes LÉGENDE (HGSS) */
+.legend-box {
+    display: flex !important;
+    flex-direction: column !important;
+    width: fit-content;
+}
+
+.legend-box .pocket {
+    width: clamp(140px, 18vw, 220px);
+}
