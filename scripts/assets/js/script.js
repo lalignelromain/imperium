@@ -165,7 +165,6 @@ function renderCollection(pokemonName, containerId) {
 function renderPantheon() {
     if (typeof pantheonDatabase === 'undefined') return;
 
-    // Items scellés
     const scellesContainer = document.getElementById('scelles-grid');
     if (scellesContainer && pantheonDatabase.scelles) {
         scellesContainer.innerHTML = pantheonDatabase.scelles.map(item => `
@@ -180,7 +179,6 @@ function renderPantheon() {
         `).join('');
     }
 
-    // Cartes gradées avec double face et retournement 3D
     const gradeesContainer = document.getElementById('gradees-grid');
     if (gradeesContainer && pantheonDatabase.gradees) {
         gradeesContainer.innerHTML = '';
@@ -206,7 +204,6 @@ function renderPantheon() {
                 </div>
             `;
 
-            // Interaction tactile sur mobile
             cardDiv.addEventListener('click', () => {
                 const isDesktopHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
                 if (!isDesktopHover) {
@@ -214,7 +211,6 @@ function renderPantheon() {
                 }
             });
 
-            // Sécurité desktop
             cardDiv.addEventListener('mouseleave', () => {
                 cardDiv.classList.remove('is-flipped');
             });
@@ -231,7 +227,7 @@ function updateAllViews() {
     renderPantheon();
 }
 
-// 7. DOCK FLOTTANT EN VERRE
+// 7. DOCK FLOTTANT
 function setupDock() {
     if (document.getElementById('floating-dock')) return;
 
@@ -263,7 +259,7 @@ function setupDock() {
     });
 }
 
-// 8. DÉCLENCHEUR DU MODE ÉDITION (Double-clic & Appui long sur le titre)
+// 8. DÉCLENCHEUR DU MODE ÉDITION
 function setupAdminTrigger() {
     const title = document.querySelector('.header-main h1');
     if (!title) return;
@@ -323,7 +319,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(err => console.error("SW error:", err));
 }
 
-// 12. PROGRESSION MASTER SET EV5 SUR LE HUB (Total 367)
+// 12. PROGRESSION MASTER SET EV5 SUR LE HUB (ANTI-ÉCRASEMENT)
 function initEV5ProgressHub() {
     const fill = document.getElementById("ev5-hub-progress-fill");
     const text = document.getElementById("ev5-hub-progress-text");
@@ -331,7 +327,7 @@ function initEV5ProgressHub() {
 
     const TOTAL_MASTERSET = 367;
 
-    // 1. Lecture instantanée depuis le cache local
+    // 1. Affiche immédiatement depuis le cache local sans attendre le réseau
     const cached = localStorage.getItem("ev5_progress_cache");
     if (cached) {
         try {
@@ -341,16 +337,17 @@ function initEV5ProgressHub() {
         } catch (e) {}
     }
 
-    // 2. Synchronisation Firebase temps réel (sur la collection 'vitrine')
+    // 2. Synchronisation Firebase : met à jour SEULEMENT si des cartes sont trouvées
     if (typeof db !== "undefined" && db) {
         db.collection("vitrine").doc("masterset_ev05").onSnapshot((doc) => {
-            let current = 0;
-            if (doc.exists && doc.data().owned) {
-                current = doc.data().owned.length;
+            if (doc.exists && doc.data() && Array.isArray(doc.data().owned) && doc.data().owned.length > 0) {
+                const current = doc.data().owned.length;
+                const percent = Math.min(100, Math.round((current / TOTAL_MASTERSET) * 100));
+                fill.style.width = `${percent}%`;
+                text.innerText = `${current} / ${TOTAL_MASTERSET} • ${percent}%`;
             }
-            const percent = Math.min(100, Math.round((current / TOTAL_MASTERSET) * 100));
-            fill.style.width = `${percent}%`;
-            text.innerText = `${current} / ${TOTAL_MASTERSET} • ${percent}%`;
+        }, (err) => {
+            console.warn("Écoute EV05 Hub en attente :", err);
         });
     }
 }
