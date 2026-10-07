@@ -34,7 +34,6 @@ let isEditMode = false;
 // 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL
 function initFirestoreSync() {
     if (!docRef) {
-        // Fallback si Firebase non chargé
         localCollection = typeof CARTES_POSSEDEES !== 'undefined' ? new Set(CARTES_POSSEDEES) : new Set();
         updateAllViews();
         return;
@@ -94,7 +93,6 @@ function renderPokedex() {
             </div>
         `;
 
-        // Interaction active uniquement en mode édition
         cardDiv.addEventListener('click', () => {
             if (!isEditMode) return;
 
@@ -208,9 +206,17 @@ function renderPantheon() {
                 </div>
             `;
 
-            // Bascule au toucher sur smartphone ou clic
+            // Interaction tactile sur mobile uniquement
             cardDiv.addEventListener('click', () => {
-                cardDiv.classList.toggle('is-flipped');
+                const isDesktopHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+                if (!isDesktopHover) {
+                    cardDiv.classList.toggle('is-flipped');
+                }
+            });
+
+            // Sécurité desktop : réinitialise si le curseur quitte la carte
+            cardDiv.addEventListener('mouseleave', () => {
+                cardDiv.classList.remove('is-flipped');
             });
 
             gradeesContainer.appendChild(cardDiv);
@@ -262,10 +268,8 @@ function setupAdminTrigger() {
     const title = document.querySelector('.header-main h1');
     if (!title) return;
 
-    // Sur PC : Double-clic
     title.addEventListener('dblclick', triggerLogin);
 
-    // Sur Smartphone : Appui long (1,5 seconde)
     let pressTimer;
     title.addEventListener('touchstart', () => {
         pressTimer = setTimeout(() => {
