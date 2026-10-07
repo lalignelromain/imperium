@@ -887,7 +887,7 @@ body.mode-art-pur .pocket::before {
 }
 
 /* ====================================================================
-   FRESQUE 9 CASES : CADRE ACRYLIQUE AJUSTÉ (BACKGROUND-SIZE SCALÉ)
+   FRESQUE 9 CASES : CADRE ACRYLIQUE DÉFINITIF (VALEURS CALIBRÉES)
 ==================================================================== */
 body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
     display: grid !important;
@@ -898,16 +898,15 @@ body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
     margin: 0 auto !important;
 
     background-image: url('../img/zenith-tableau.png') !important;
-    /* Largeur 99% / Hauteur 91% : compresse l'image pour faire correspondre les encoches */
-    background-size: 99% 91% !important;
+    background-size: 100% 100% !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
     background-color: transparent !important;
 
-    /* Marges équilibrées */
-    padding: 4.8% 5% 5.2% 5% !important;
-    column-gap: 2.8% !important;
-    row-gap: 4.4% !important;
+    /* Tes réglages validés dans l'inspecteur */
+    padding: 7% 5% 8% 5% !important;
+    column-gap: 6.8% !important;
+    row-gap: 6.4% !important;
 
     border-radius: 12px !important;
     border: none !important;
