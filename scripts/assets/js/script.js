@@ -321,3 +321,36 @@ document.addEventListener('DOMContentLoaded', () => {
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(err => console.error("SW error:", err));
 }
+
+// Mise à jour de la jauge Master Set EV5 sur le Hub
+function initEV5ProgressHub() {
+    const fill = document.getElementById("ev5-hub-progress-fill");
+    const text = document.getElementById("ev5-hub-progress-text");
+    if (!fill || !text) return;
+
+    // 1. Affiche immédiatement depuis le cache sans attendre le réseau
+    const cached = localStorage.getItem("ev5_progress_cache");
+    if (cached) {
+        try {
+            const data = JSON.parse(cached);
+            fill.style.width = `${data.percent}%`;
+            text.innerText = `${data.current} / ${data.total} • ${data.percent}%`;
+        } catch (e) {}
+    }
+
+    // 2. Synchronisation Firebase en direct si disponible
+    if (typeof db !== "undefined") {
+        db.collection("collections").doc("masterset_ev05").onSnapshot((doc) => {
+            const total = 222;
+            let current = 0;
+            if (doc.exists && doc.data().owned) {
+                current = doc.data().owned.length;
+            }
+            const percent = Math.min(100, Math.round((current / total) * 100));
+            fill.style.width = `${percent}%`;
+            text.innerText = `${current} / ${total} • ${percent}%`;
+        });
+    }
+}
+
+document.addEventListener("DOMContentLoaded", initEV5ProgressHub);
