@@ -887,33 +887,50 @@ body.mode-art-pur .pocket::before {
 }
 
 /* ====================================================================
-   FRESQUE 9 CASES : CADRE D'EXPOSITION EXTENDED ART (PHOTO 2)
+   FRESQUE 9 CASES : CALIBRAGE PRÉCIS SUR LE CADRE ACRYLIQUE
 ==================================================================== */
+body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
+    /* 1. Verrouillage des proportions du tableau d'exposition */
+    width: min(92vw, 520px) !important;
+    aspect-ratio: 4 / 5.1 !important;
+    
+    /* 2. Image de fond plaquée sans déformation */
+    background-color: transparent !important;
+    background-image: url('../img/odyssee/zenith-supreme-fresque.jpg') !important;
+    background-size: 100% 100% !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
 
-/* Mode Art Pur pour la 9-box : Cadre d'art vitrine avec fond étendu */
-body.mode-art-pur .nine-box {
-    background-color: #0b1118;
-    background-image: url('../img/zenith-supreme-fresque.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    padding: clamp(16px, 2.5vw, 28px) !important;
-    gap: clamp(8px, 1.2vw, 14px) !important;
-    border-radius: 20px !important;
-    border: 1px solid rgba(255, 255, 255, 0.22) !important;
-    box-shadow: 
-        0 30px 70px rgba(0, 0, 0, 0.95), 
-        0 0 35px rgba(0, 210, 255, 0.25),
-        inset 0 1px 1px rgba(255, 255, 255, 0.4),
-        inset 0 0 40px rgba(0, 0, 0, 0.6) !important;
+    /* 3. Marges calculées sur les bords du cadre et du mur */
+    padding: 14% 17% 13% 17% !important;
+    column-gap: 3.6% !important;
+    row-gap: 3% !important;
+    
+    /* 4. Grille stricte 3x3 */
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-rows: repeat(3, 1fr) !important;
+    box-sizing: border-box !important;
+    border: none !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9) !important;
 }
 
-/* Les 9 cartes flottent dans le tableau avec ombre portée douce */
-body.mode-art-pur .nine-box .pocket {
-    border-radius: 8px !important;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.75) !important;
+/* 5. Chaque carte remplit exactement son encoche acrylique */
+body.theme-odyssee.mode-art-pur .nine-box .pocket {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    border-radius: 6px !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45) !important;
     overflow: hidden !important;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+body.theme-odyssee.mode-art-pur .nine-box .pocket img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
+    border-radius: 5px !important;
 }
 
 /* ====================================================================
