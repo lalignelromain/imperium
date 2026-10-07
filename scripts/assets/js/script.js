@@ -31,7 +31,7 @@ const ADMIN_EMAIL = "romainlal76@gmail.com";
 let localCollection = new Set();
 let isEditMode = false;
 
-// 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL
+// 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL (MEW & MEWTWO)
 function initFirestoreSync() {
     if (!docRef) {
         localCollection = typeof CARTES_POSSEDEES !== 'undefined' ? new Set(CARTES_POSSEDEES) : new Set();
@@ -180,7 +180,7 @@ function renderPantheon() {
         `).join('');
     }
 
-    // Cartes gradées avec double face et retournement 3D
+    // Cartes gradées 3D
     const gradeesContainer = document.getElementById('gradees-grid');
     if (gradeesContainer && pantheonDatabase.gradees) {
         gradeesContainer.innerHTML = '';
@@ -206,7 +206,6 @@ function renderPantheon() {
                 </div>
             `;
 
-            // Interaction tactile sur mobile uniquement
             cardDiv.addEventListener('click', () => {
                 const isDesktopHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
                 if (!isDesktopHover) {
@@ -214,7 +213,6 @@ function renderPantheon() {
                 }
             });
 
-            // Sécurité desktop : réinitialise si le curseur quitte la carte
             cardDiv.addEventListener('mouseleave', () => {
                 cardDiv.classList.remove('is-flipped');
             });
@@ -231,7 +229,7 @@ function updateAllViews() {
     renderPantheon();
 }
 
-// 7. DOCK FLOTTANT EN VERRE
+// 7. DOCK FLOTTANT
 function setupDock() {
     if (document.getElementById('floating-dock')) return;
 
@@ -263,7 +261,7 @@ function setupDock() {
     });
 }
 
-// 8. DÉCLENCHEUR DU MODE ÉDITION (Double-clic & Appui long sur le titre)
+// 8. DÉCLENCHEUR DU MODE ÉDITION (Admin login)
 function setupAdminTrigger() {
     const title = document.querySelector('.header-main h1');
     if (!title) return;
@@ -317,41 +315,40 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAdminTrigger();
     initFirestoreSync();
 });
+
 // 11. ENREGISTREMENT DU SERVICE WORKER (PWA)
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(err => console.error("SW error:", err));
 }
 
-// Mise à jour de la jauge Master Set EV5 sur le Hub
+// 12. PROGRESSION MASTER SET EV5 SUR LE HUB (Total 367)
 function initEV5ProgressHub() {
     const fill = document.getElementById("ev5-hub-progress-fill");
     const text = document.getElementById("ev5-hub-progress-text");
     if (!fill || !text) return;
 
-    // Total par défaut avec reverses (162 régulières + 141 reverses + 56 secrètes + 4 promos)
-    let totalCards = 363;
+    const TOTAL_MASTERSET = 367;
 
-    // 1. Affiche immédiatement depuis le cache sans attendre le réseau
+    // 1. Rendu instantané depuis le cache
     const cached = localStorage.getItem("ev5_progress_cache");
     if (cached) {
         try {
             const data = JSON.parse(cached);
-            if (data.total) totalCards = data.total;
             fill.style.width = `${data.percent}%`;
-            text.innerText = `${data.current} / ${data.total} • ${data.percent}%`;
+            text.innerText = `${data.current} / ${data.total || TOTAL_MASTERSET} • ${data.percent}%`;
         } catch (e) {}
     }
 
-    // 2. Synchronisation Firebase en direct si disponible
-    if (typeof db !== "undefined") {
+    // 2. Synchronisation Firebase en direct
+    if (typeof db !== "undefined" && db) {
         db.collection("collections").doc("masterset_ev05").onSnapshot((doc) => {
             let current = 0;
             if (doc.exists && doc.data().owned) {
                 current = doc.data().owned.length;
             }
-            const percent = Math.min(100, Math.round((current / totalCards) * 100));
+            const percent = Math.min(100, Math.round((current / TOTAL_MASTERSET) * 100));
             fill.style.width = `${percent}%`;
-            text.innerText = `${current} / ${totalCards} • ${percent}%`;
+            text.innerText = `${current} / ${TOTAL_MASTERSET} • ${percent}%`;
         });
     }
 }
