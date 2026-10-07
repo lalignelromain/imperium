@@ -887,45 +887,47 @@ body.mode-art-pur .pocket::before {
 }
 
 /* ====================================================================
-   FRESQUE 9 CASES : RETOUR AUX BONNES PROPORTIONS (CADRE ACRYLIQUE)
+   FRESQUE 9 CASES : PLAQUE ACRYLIQUE DÉTOURÉE (732x951 PNG)
 ==================================================================== */
 body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
     display: grid !important;
-    grid-template-columns: repeat(3, auto) !important;
-    width: fit-content !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-rows: repeat(3, 1fr) !important;
+    width: min(92vw, 540px) !important;
+    aspect-ratio: 732 / 951 !important;
     margin: 0 auto !important;
-    
-    /* <-- Remets ici ton chemin qui fonctionnait sur la capture précédente */
-    background-image: url('../img/zenith-supreme-fresque.jpg') !important;
+
+    background-image: url('../img/zenith-tableau.png') !important;
     background-size: 100% 100% !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
     background-color: transparent !important;
-    
-    /* Marges calibrées pour s'aligner sur les encoches du plexiglas */
-    padding: clamp(34px, 7vw, 56px) clamp(22px, 4.5vw, 36px) clamp(28px, 5.5vw, 44px) clamp(22px, 4.5vw, 36px) !important;
-    gap: clamp(5px, 1.1vw, 8px) clamp(6px, 1.3vw, 10px) !important;
-    
-    border-radius: 14px !important;
+
+    /* Marges relatives basées sur les vis et le pourtour de la plaque */
+    padding: 7.2% 6.8% 7.5% 6.8% !important;
+    column-gap: 2.8% !important;
+    row-gap: 2.2% !important;
+
+    border-radius: 12px !important;
     border: none !important;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9) !important;
 }
 
-/* Verrouillage strict des cartes : ratio officiel 2.5 / 3.5 non déformable */
+/* Chaque carte remplit rigoureusement son encoche taillée dans le plexiglas */
 body.theme-odyssee.mode-art-pur .nine-box .pocket {
-    width: clamp(75px, 10.5vw, 110px) !important;
-    aspect-ratio: 2.5 / 3.5 !important;
-    height: auto !important;
-    border-radius: 5px !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    border-radius: 4px !important;
     overflow: hidden !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
 body.theme-odyssee.mode-art-pur .nine-box .pocket img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important;
+    object-fit: fill !important;
     display: block !important;
 }
 /* ====================================================================
