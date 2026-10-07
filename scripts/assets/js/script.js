@@ -1,5 +1,5 @@
 /* ====================================================================
-   MEWTHOLOGY - MOTEUR CLOUD FIRESTORE & INTERACTION
+   MEWTHOLOGY - MOTEUR PRINCIPAL & SYNCHRONISATION FIREBASE
 ==================================================================== */
 
 // 1. CONFIGURATION & INITIALISATION FIREBASE
@@ -12,24 +12,38 @@ const firebaseConfig = {
     appId: "1:416428446683:web:12abb86abd6df36b6c8dfe"
 };
 
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+let auth = null;
+let db = null;
+let docRef = null;
+
+if (typeof firebase !== 'undefined') {
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    auth = firebase.auth();
+    db = firebase.firestore();
+    docRef = db.collection('vitrine').doc('cartes');
+}
+
 const ADMIN_EMAIL = "romainlal76@gmail.com";
 
 // État local en mémoire
 let localCollection = new Set();
 let isEditMode = false;
 
-// 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL (Document unique = quotas protégés)
-const docRef = db.collection('vitrine').doc('cartes');
-
+// 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL
 function initFirestoreSync() {
+    if (!docRef) {
+        // Fallback si Firebase non chargé
+        localCollection = typeof CARTES_POSSEDEES !== 'undefined' ? new Set(CARTES_POSSEDEES) : new Set();
+        updateAllViews();
+        return;
+    }
+
     docRef.onSnapshot(doc => {
         if (doc.exists && doc.data().ids) {
             localCollection = new Set(doc.data().ids);
         } else {
-            // Initialisation avec la liste du code si la base est encore vierge
             localCollection = typeof CARTES_POSSEDEES !== 'undefined' ? new Set(CARTES_POSSEDEES) : new Set();
         }
         updateAllViews();
@@ -38,9 +52,8 @@ function initFirestoreSync() {
     });
 }
 
-// Sauvegarde dans Firestore (accessible uniquement si authentifié)
 function saveToCloud() {
-    if (!isEditMode) return;
+    if (!isEditMode || !docRef) return;
     docRef.set({
         ids: Array.from(localCollection),
         derniereMaj: firebase.firestore.FieldValue.serverTimestamp()
@@ -58,7 +71,7 @@ function resolveImg(path, langue) {
     return path;
 }
 
-// 4. RENDU POKÉDEX (POKÉDEX GLOBAL)
+// 4. RENDU POKÉDEX GLOBAL
 function renderPokedex() {
     const container = document.getElementById('pokedex-grid') || document.getElementById('card-grid');
     if (!container || typeof cartesDatabase === 'undefined') return;
@@ -81,7 +94,7 @@ function renderPokedex() {
             </div>
         `;
 
-        // Clic actif seulement en mode édition
+        // Interaction active uniquement en mode édition
         cardDiv.addEventListener('click', () => {
             if (!isEditMode) return;
 
@@ -102,7 +115,7 @@ function renderPokedex() {
     });
 }
 
-// 5. RENDU COLLECTIONS DÉDIÉES (MEW / MEWTWO)
+// 5. RENDU COLLECTIONS DÉDIÉES (MEW & MEWTWO)
 function renderCollection(pokemonName, containerId) {
     const container = document.getElementById(containerId);
     if (!container || typeof cartesDatabase === 'undefined') return;
@@ -150,10 +163,11 @@ function renderCollection(pokemonName, containerId) {
     container.innerHTML = html;
 }
 
-// 6. RENDU PANTHÉON
+// 6. RENDU PANTHÉON (ITEMS SCELLÉS & CARTES GRADÉES 3D)
 function renderPantheon() {
     if (typeof pantheonDatabase === 'undefined') return;
 
+    // Items scellés
     const scellesContainer = document.getElementById('scelles-grid');
     if (scellesContainer && pantheonDatabase.scelles) {
         scellesContainer.innerHTML = pantheonDatabase.scelles.map(item => `
@@ -168,18 +182,39 @@ function renderPantheon() {
         `).join('');
     }
 
+    // Cartes gradées avec double face et retournement 3D
     const gradeesContainer = document.getElementById('gradees-grid');
     if (gradeesContainer && pantheonDatabase.gradees) {
-        gradeesContainer.innerHTML = pantheonDatabase.gradees.map(item => `
-            <div class="pantheon-item item-gradee">
+        gradeesContainer.innerHTML = '';
+        pantheonDatabase.gradees.forEach(item => {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'pantheon-item gradee-item';
+
+            cardDiv.innerHTML = `
                 <div class="grade-badge">${item.societe} - ${item.note}</div>
-                <img src="${resolveImg(item.imageFront, item.langue)}" alt="${item.nom}" loading="lazy">
+                <div class="flip-wrapper">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            <img src="${resolveImg(item.imageFront, item.langue)}" alt="${item.nom} Recto" loading="lazy">
+                        </div>
+                        <div class="flip-back">
+                            <img src="${resolveImg(item.imageBack, item.langue)}" alt="${item.nom} Verso" loading="lazy">
+                        </div>
+                    </div>
+                </div>
                 <div class="item-info">
                     <h4>${item.nom}</h4>
                     <p style="font-size: 12px; color: #aaa;">${item.extension} (${item.numero})</p>
                 </div>
-            </div>
-        `).join('');
+            `;
+
+            // Bascule au toucher sur smartphone ou clic
+            cardDiv.addEventListener('click', () => {
+                cardDiv.classList.toggle('is-flipped');
+            });
+
+            gradeesContainer.appendChild(cardDiv);
+        });
     }
 }
 
@@ -190,7 +225,7 @@ function updateAllViews() {
     renderPantheon();
 }
 
-// 7. GESTION DU DOCK FLOTTANT & AUTHENTIFICATION
+// 7. DOCK FLOTTANT EN VERRE
 function setupDock() {
     if (document.getElementById('floating-dock')) return;
 
@@ -218,11 +253,11 @@ function setupDock() {
     });
 
     document.getElementById('dock-btn-lock').addEventListener('click', () => {
-        auth.signOut();
+        if (auth) auth.signOut();
     });
 }
 
-// 8. DÉCLENCHEUR INVISIBLE DU MODE ÉDITION SUR LE TITRE (Double-clic & Long press)
+// 8. DÉCLENCHEUR DU MODE ÉDITION (Double-clic & Appui long sur le titre)
 function setupAdminTrigger() {
     const title = document.querySelector('.header-main h1');
     if (!title) return;
@@ -230,9 +265,9 @@ function setupAdminTrigger() {
     // Sur PC : Double-clic
     title.addEventListener('dblclick', triggerLogin);
 
-    // Sur Mobile : Pression longue (1,5 seconde)
+    // Sur Smartphone : Appui long (1,5 seconde)
     let pressTimer;
-    title.addEventListener('touchstart', (e) => {
+    title.addEventListener('touchstart', () => {
         pressTimer = setTimeout(() => {
             triggerLogin();
         }, 1500);
@@ -248,29 +283,31 @@ function setupAdminTrigger() {
 }
 
 function triggerLogin() {
-    if (isEditMode) return;
+    if (isEditMode || !auth) return;
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider).catch(err => {
-        console.error("Erreur de connexion :", err);
+        console.error("Erreur d'authentification Google :", err);
     });
 }
 
-// 9. SURVEILLANCE DE L'ÉTAT D'AUTHENTIFICATION GOOGLE
-auth.onAuthStateChanged(user => {
-    const lockBtn = document.getElementById('dock-btn-lock');
+// 9. ÉCOUTE DE L'AUTHENTIFICATION
+if (auth) {
+    auth.onAuthStateChanged(user => {
+        const lockBtn = document.getElementById('dock-btn-lock');
 
-    if (user && user.email === ADMIN_EMAIL) {
-        isEditMode = true;
-        document.body.classList.add('mode-edition');
-        if (lockBtn) lockBtn.style.display = 'flex';
-    } else {
-        isEditMode = false;
-        document.body.classList.remove('mode-edition');
-        if (lockBtn) lockBtn.style.display = 'none';
-    }
-});
+        if (user && user.email === ADMIN_EMAIL) {
+            isEditMode = true;
+            document.body.classList.add('mode-edition');
+            if (lockBtn) lockBtn.style.display = 'flex';
+        } else {
+            isEditMode = false;
+            document.body.classList.remove('mode-edition');
+            if (lockBtn) lockBtn.style.display = 'none';
+        }
+    });
+}
 
-// 10. LANCEMENT AU CHARGEMENT
+// 10. LANCEMENT AU CHARGEMENT DU DOM
 document.addEventListener('DOMContentLoaded', () => {
     setupDock();
     setupAdminTrigger();
