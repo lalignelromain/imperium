@@ -887,7 +887,7 @@ body.mode-art-pur .pocket::before {
 }
 
 /* ====================================================================
-   FRESQUE 9 CASES : CALIBRAGE PRÉCIS SUR LES ENCOCHES ACRYLIQUES
+   FRESQUE 9 CASES : CADRE ACRYLIQUE CALIBRÉ (732x951 PNG)
 ==================================================================== */
 body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
     display: grid !important;
@@ -903,23 +903,24 @@ body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
     background-repeat: no-repeat !important;
     background-color: transparent !important;
 
-    /* Haut (remonté à 4.8%) / Droite (5.2%) / Bas (8.8%) / Gauche (5.2%) */
-    padding: 4.8% 5.2% 8.8% 5.2% !important;
-    column-gap: 2.6% !important;
-    row-gap: 2.2% !important;
+    /* Marges et écartements alignés sur les découpes */
+    padding: 4.2% 5.2% 5.8% 5.2% !important;
+    column-gap: 2.8% !important;
+    row-gap: 4.6% !important;
 
     border-radius: 12px !important;
     border: none !important;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9) !important;
 }
 
+/* Chaque carte épouse rigoureusement son emplacement */
 body.theme-odyssee.mode-art-pur .nine-box .pocket {
     width: 100% !important;
     height: 100% !important;
     max-width: none !important;
     border-radius: 4px !important;
     overflow: hidden !important;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45) !important;
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
 }
 
