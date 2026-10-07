@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mewthology</title>
+
+    <!-- PWA & Métadonnées Mobiles -->
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#050608">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -11,32 +13,61 @@
     <meta name="apple-mobile-web-app-title" content="Mewthology">
     <link rel="apple-touch-icon" href="./favicon.png">
     <link rel="icon" type="image/png" href="./favicon.png">
+
+    <!-- Feuilles de style -->
     <link rel="stylesheet" href="./scripts/assets/css/style.css">
+
+    <!-- SDK Firebase Compat -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
-    <!-- Filigranes d'arrière-plan -->
-    <img src="./scripts/assets/img/mew.png" alt="" class="bg-watermark bg-mew">
-    <img src="./scripts/assets/img/mewtwo.png" alt="" class="bg-watermark bg-mewtwo">
 
+    <!-- Filigranes d'arrière-plan interactifs -->
+    <img src="./scripts/assets/img/mew.png" alt="Mew" class="bg-watermark bg-mew">
+    <img src="./scripts/assets/img/mewtwo.png" alt="Mewtwo" class="bg-watermark bg-mewtwo">
+
+    <!-- En-tête Principal -->
+    <header class="header-main">
+        <h1>Mewthology</h1>
+        <p class="subtitle">Archives & Collections</p>
+    </header>
+
+    <!-- Hub de Navigation 2 + 4 -->
     <main class="hub-container">
-        <div class="hub-grid">
+        <nav class="hub-grid" aria-label="Navigation principale">
+            <!-- NIVEAU 1 : ARCHIVES & PRESTIGE (2 GRANDES CARTES) -->
             <a href="pokedex.html" class="hub-card pokedex-card">
                 <h2>Pokédex</h2>
-                <p>Base de données globale</p>
-            </a>
-            <a href="mew.html" class="hub-card mew-card">
-                <h2>Mew</h2>
-                <p>Collection personnelle</p>
-            </a>
-            <a href="mewtwo.html" class="hub-card mewtwo-card">
-                <h2>Mewtwo</h2>
-                <p>Collection personnelle</p>
+                <p>Répertoire Global</p>
             </a>
             <a href="pantheon.html" class="hub-card pantheon-card">
                 <h2>Panthéon</h2>
-                <p>Items scellés & Cartes gradées</p>
+                <p>Scellés & Gradées</p>
             </a>
-        </div>
+
+            <!-- NIVEAU 2 : COLLECTIONS THÉMATIQUES (4 CARTES EN LIGNE) -->
+            <a href="mew.html" class="hub-card mew-card">
+                <h2>Mew</h2>
+                <p>Collection Dédiée</p>
+            </a>
+            <a href="mewtwo.html" class="hub-card mewtwo-card">
+                <h2>Mewtwo</h2>
+                <p>Collection Dédiée</p>
+            </a>
+            <a href="chroniques.html" class="hub-card chroniques-card">
+                <h2>Chroniques</h2>
+                <p>L'Art Caché</p>
+            </a>
+            <a href="odyssee.html" class="hub-card odyssee-card">
+                <h2>Odyssée</h2>
+                <p>Grands Formats</p>
+            </a>
+        </nav>
     </main>
+
+    <!-- Moteur Principal & Service Worker -->
+    <script src="./scripts/assets/js/script.js"></script>
 </body>
 </html>
