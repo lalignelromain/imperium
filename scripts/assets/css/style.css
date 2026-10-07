@@ -887,7 +887,7 @@ body.mode-art-pur .pocket::before {
 }
 
 /* ====================================================================
-   FRESQUE 9 CASES : CADRE ACRYLIQUE CALIBRÉ (732x951 PNG)
+   FRESQUE 9 CASES : CADRE ACRYLIQUE AJUSTÉ (BACKGROUND-SIZE SCALÉ)
 ==================================================================== */
 body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
     display: grid !important;
@@ -898,22 +898,22 @@ body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
     margin: 0 auto !important;
 
     background-image: url('../img/zenith-tableau.png') !important;
-    background-size: 100% 100% !important;
-    background-position: center !important;
+    /* Largeur 99% / Hauteur 91% : compresse l'image pour faire correspondre les encoches */
+    background-size: 99% 91% !important;
+    background-position: center center !important;
     background-repeat: no-repeat !important;
     background-color: transparent !important;
 
-    /* Marges et écartements alignés sur les découpes */
-    padding: 4.2% 5.2% 5.8% 5.2% !important;
+    /* Marges équilibrées */
+    padding: 4.8% 5% 5.2% 5% !important;
     column-gap: 2.8% !important;
-    row-gap: 4.6% !important;
+    row-gap: 4.4% !important;
 
     border-radius: 12px !important;
     border: none !important;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9) !important;
 }
 
-/* Chaque carte épouse rigoureusement son emplacement */
 body.theme-odyssee.mode-art-pur .nine-box .pocket {
     width: 100% !important;
     height: 100% !important;
