@@ -59,7 +59,7 @@ body {
 }
 
 /* ==========================================
-   FILIGRANES D'ARRIÈRE-PLAN
+   FILIGRANES D'ARRIÈRE-PLAN (DESKTOP)
 ========================================== */
 .bg-watermark {
     position: fixed;
@@ -213,7 +213,6 @@ body.mode-edition .header-main h1 {
     transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Lueur ambiante interne */
 .hub-card::before {
     content: '';
     position: absolute;
@@ -226,7 +225,7 @@ body.mode-edition .header-main h1 {
     z-index: 0;
 }
 
-/* Onde Psychique (Anneau émetteur) */
+/* Onde Psychique */
 .hub-card::after {
     content: '';
     position: absolute;
@@ -271,7 +270,6 @@ body.mode-edition .header-main h1 {
     display: block;
 }
 
-/* Survol PC : Déclenchement de l'Onde Psychique */
 @media (hover: hover) and (pointer: fine) {
     .hub-card:hover {
         transform: translateY(-8px) scale(1.02);
@@ -446,7 +444,7 @@ body.mode-edition .card-item:hover {
 }
 
 /* ==========================================
-   PANTHÉON & RETOURNEMENT 3D CALIBRÉ
+   PANTHÉON & RETOURNEMENT 3D DÉTOURÉ
 ========================================== */
 .pantheon-container {
     max-width: 1300px;
@@ -703,6 +701,29 @@ body.mode-edition .card-item:hover {
         margin-top: 6px;
     }
 
+    /* Filigranes Pokémon repositionnés et entiers */
+    .bg-watermark {
+        opacity: 0.18;
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
+
+    .bg-mew {
+        width: 115px;
+        max-height: 25vh;
+        left: 8px;
+        bottom: 50px;
+    }
+
+    .bg-mewtwo {
+        width: 125px;
+        max-height: 28vh;
+        right: 8px;
+        top: 18%;
+        transform: translateY(0);
+    }
+
+    /* Hub Mobile : Titres seuls */
     .hub-container {
         padding: 20px 16px 40px;
     }
@@ -731,11 +752,11 @@ body.mode-edition .card-item:hover {
         margin-bottom: 0;
     }
 
-    /* Sous-titres masqués sur mobile */
     .hub-card p {
         display: none !important;
     }
 
+    /* Grilles de cartes */
     .collection-container {
         width: 100% !important;
         max-width: 100% !important;
@@ -773,20 +794,6 @@ body.mode-edition .card-item:hover {
     .card-meta {
         font-size: 0.62rem;
         margin-top: 2px;
-    }
-
-    .bg-watermark {
-        opacity: 0.1;
-    }
-
-    .bg-mew {
-        width: 140px;
-        left: -20px;
-    }
-
-    .bg-mewtwo {
-        width: 160px;
-        right: -20px;
     }
 
     .pantheon-item {
