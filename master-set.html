@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mewthology — Master Set Forces Temporelles</title>
     
-     <!-- PWA & Métadonnées Mobiles -->
+    <!-- PWA & Métadonnées -->
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#050608">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0a0e17">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Mewthology">
-    <link rel="apple-touch-icon" href="./favicon.png">
-    <link rel="icon" type="image/png" href="./favicon.png">
     
-    <link rel="stylesheet" href="scripts/assets/css/style.css">
+    <link rel="stylesheet" href="./scripts/assets/css/style.css">
+    
+    <!-- SDKs Firebase Compat -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -25,25 +25,31 @@
         <h1>Master Set EV 5</h1>
         <p class="subtitle">Forces Temporelles</p>
         
+        <!-- Jauge de progression sous le titre -->
         <div class="master-header-progress">
             <div class="master-progress-bar">
                 <div class="master-progress-fill" id="master-progress-fill"></div>
             </div>
-            <div class="master-progress-stats" id="master-progress-text">0 / 222 • 0%</div>
+            <div class="master-progress-stats" id="master-progress-text">0 / 367 CARTES • 0%</div>
         </div>
     </header>
 
     <main class="collection-container">
+        <!-- Grille du classeur -->
         <div class="cards-grid" id="master-grid"></div>
     </main>
 
+    <!-- Navigation flottante -->
     <nav class="floating-dock">
         <a href="index.html" class="dock-btn" title="Retour au Hub">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
         </a>
     </nav>
 
-    <script src="scripts/assets/js/firebase-config.js"></script>
-    <script src="scripts/assets/js/master-set.js"></script>
+    <!-- 1. Ton moteur principal (initialise Firebase et connecte Firestore) -->
+    <script src="./scripts/assets/js/script.js"></script>
+
+    <!-- 2. La logique Master Set EV05 -->
+    <script src="./scripts/assets/js/master-set.js"></script>
 </body>
 </html>
