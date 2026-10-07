@@ -2,9 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initChroniques();
 });
 
-/**
- * Génère le DOM de l'ensemble des sections et scènes de Chroniques
- */
 function initChroniques() {
     const container = document.getElementById("chroniques-content");
     if (!container || typeof CHRONIQUES_SECTIONS === "undefined") return;
@@ -34,9 +31,15 @@ function initChroniques() {
                 html += `
                     <div class="pocket" title="${carte.nom} (${carte.numero})">
                         <img src="${carte.image}" 
+                             data-fallback="${carte.fallback || ''}"
                              alt="${carte.nom}" 
                              loading="lazy" 
-                             onerror="this.style.opacity='0.25'; this.alt='Illustration indisponible';">
+                             onerror="handleImageError(this)">
+                        <div class="pocket-placeholder" style="display: none;">
+                            <span class="placeholder-name">${carte.nom}</span>
+                            <span class="placeholder-icon">🎴</span>
+                            <span class="placeholder-num">${carte.numero}</span>
+                        </div>
                     </div>
                 `;
             });
@@ -55,9 +58,21 @@ function initChroniques() {
 }
 
 /**
- * Bascule entre le mode Classeur physique et le mode Art Pur (fusion bord à bord)
- * @param {'classeur'|'art'} mode 
+ * Gère le repli d'image : tente l'API miroir de secours, sinon affiche le placeholder
  */
+function handleImageError(img) {
+    const fallback = img.getAttribute("data-fallback");
+    if (fallback && img.src !== fallback) {
+        img.src = fallback;
+    } else {
+        img.style.display = "none";
+        const placeholder = img.nextElementSibling;
+        if (placeholder) {
+            placeholder.style.display = "flex";
+        }
+    }
+}
+
 function setChroniquesMode(mode) {
     const btnClasseur = document.getElementById("btn-classeur");
     const btnArt = document.getElementById("btn-art");
