@@ -8,25 +8,25 @@ const CHRONIQUES_SECTIONS = [
                 titre: "La Branche des Cheniti",
                 extension: "Diamant & Perle : Merveilles Secrètes (2007)",
                 type: "trio",
-                description: "Les trois cartes communes, placées côte à côte, forment une seule et même branche d'arbre en panorama.",
+                description: "Les trois cartes communes, placées côte à côte, forment une seule et même branche d'arbre en panorama continu.",
                 cartes: [
                     { 
                         nom: "Cheniti Cape Plante", 
-                        numero: "45/132", 
-                        image: "https://assets.tcgdex.net/fr/dp/dp3/45/high.webp",
-                        fallback: "https://images.pokemontcg.io/dp3/45_hires.png"
+                        numero: "78/132", 
+                        image: "https://assets.tcgdex.net/fr/dp/dp3/78/high.webp",
+                        fallback: "https://images.pokemontcg.io/dp3/78_hires.png"
                     },
                     { 
                         nom: "Cheniti Cape Sable", 
-                        numero: "46/132", 
-                        image: "https://assets.tcgdex.net/fr/dp/dp3/46/high.webp",
-                        fallback: "https://images.pokemontcg.io/dp3/46_hires.png"
+                        numero: "79/132", 
+                        image: "https://assets.tcgdex.net/fr/dp/dp3/79/high.webp",
+                        fallback: "https://images.pokemontcg.io/dp3/79_hires.png"
                     },
                     { 
                         nom: "Cheniti Cape Déchet", 
-                        numero: "47/132", 
-                        image: "https://assets.tcgdex.net/fr/dp/dp3/47/high.webp",
-                        fallback: "https://images.pokemontcg.io/dp3/47_hires.png"
+                        numero: "80/132", 
+                        image: "https://assets.tcgdex.net/fr/dp/dp3/80/high.webp",
+                        fallback: "https://images.pokemontcg.io/dp3/80_hires.png"
                     }
                 ]
             },
@@ -35,7 +35,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "Le Courant Électrique",
                 extension: "XY : Poings Furieux (2014)",
                 type: "duo",
-                description: "Les éclairs projetés par les deux Pokémon se rejoignent parfaitement au centre lorsque les cartes sont réunies.",
+                description: "Les arcs électriques projetés par Posipi (vers la droite) et Négapi (vers la gauche) se connectent parfaitement au centre.",
                 cartes: [
                     { 
                         nom: "Posipi", 
@@ -56,19 +56,19 @@ const CHRONIQUES_SECTIONS = [
                 titre: "Le Face-à-Face",
                 extension: "EX : Tempête de Sable (2003)",
                 type: "duo",
-                description: "Les deux ennemis naturels se font face dans le même désert. L'arrière-plan des deux cartes s'accorde en symétrie.",
+                description: "Les deux ennemis jurés se toisent dans le même canyon désertique. Leurs postures et le décor rocheux se répondent en miroir.",
                 cartes: [
                     { 
                         nom: "Séviper", 
-                        numero: "73/100", 
-                        image: "https://assets.tcgdex.net/fr/ex/ex2/73/high.webp",
-                        fallback: "https://images.pokemontcg.io/ex2/73_hires.png"
+                        numero: "23/100", 
+                        image: "https://assets.tcgdex.net/fr/ex/ex2/23/high.webp",
+                        fallback: "https://images.pokemontcg.io/ex2/23_hires.png"
                     },
                     { 
                         nom: "Mangriff", 
-                        numero: "84/100", 
-                        image: "https://assets.tcgdex.net/fr/ex/ex2/84/high.webp",
-                        fallback: "https://images.pokemontcg.io/ex2/84_hires.png"
+                        numero: "24/100", 
+                        image: "https://assets.tcgdex.net/fr/ex/ex2/24/high.webp",
+                        fallback: "https://images.pokemontcg.io/ex2/24_hires.png"
                     }
                 ]
             },
@@ -77,7 +77,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "L'Aura Cosmique",
                 extension: "EX : Gardiens de Cristal (2006)",
                 type: "duo",
-                description: "L'aura d'énergie lunaire et solaire entourant les deux Pokémon se complète une fois les cartes juxtaposées.",
+                description: "L'énergie cosmique bleue et dorée enveloppant les deux corps astraux forme un halo complet une fois les cartes côte à côte.",
                 cartes: [
                     { 
                         nom: "Séléroc", 
@@ -104,7 +104,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "Le Vol de la Baie",
                 extension: "XY : Ciel Rugissant (2015)",
                 type: "duo",
-                description: "Miaouss poursuit avec colère Sepiatop qui vient de lui dérober sa baie. La carte Sepiatop montre la même course-poursuite vue de face.",
+                description: "Champ / Contrechamp : Miaouss poursuit en hurlant Sepiatop qui s'enfuit avec sa baie. Sepiatop montre la fuite vue de face.",
                 cartes: [
                     { 
                         nom: "Miaouss", 
@@ -125,7 +125,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "L'Amitié dans la Ruelle",
                 extension: "XY : Rupture Turbo (2016)",
                 type: "duo",
-                description: "Sur la première carte, Miamiasme est poursuivi. Sur la seconde, on découvre qu'ils sont en réalité en train de jouer ensemble dans la ruelle sombre.",
+                description: "Même ruelle sombre : sur la première carte, Miamiasme semble pourchassé. Sur la seconde, on découvre qu'ils jouent en fait ensemble.",
                 cartes: [
                     { 
                         nom: "Miamiasme", 
@@ -146,7 +146,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "La Bagarre de Rue",
                 extension: "Épée & Bouclier : Clash des Rebelles (2020)",
                 type: "duo",
-                description: "Caninos aboie agressivement dans la ruelle, tandis que Miamiasme fuit terrifié par ces mêmes aboiements.",
+                description: "Dans la même rue pavée, Caninos aboie violemment vers la droite, tandis que Miamiasme fuit terrorisé vers la gauche.",
                 cartes: [
                     { 
                         nom: "Caninos", 
@@ -167,7 +167,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "La Balade Nocturne",
                 extension: "XY : Forces Fantômes (2014)",
                 type: "duo",
-                description: "Les deux Pokémon errent dans la même allée lugubre et apparaissent mutuellement en arrière-plan de leurs illustrations respectives.",
+                description: "Dans le même sous-bois violet, les deux spectres apparaissent mutuellement au second plan de leurs illustrations respectives.",
                 cartes: [
                     { 
                         nom: "Statitik", 
@@ -188,7 +188,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "L'Abri dans la Grotte",
                 extension: "Soleil & Lune : Destinées Occultes (2019)",
                 type: "duo",
-                description: "Les compères de la Team Rocket sont réunis dans la même caverne, la réverbération des torches attestant de leur face-à-face.",
+                description: "Les deux fidèles de la Team Rocket réfugiés dans la même caverne, éclairés par la même torche vacillante.",
                 cartes: [
                     { 
                         nom: "Abo", 
@@ -209,7 +209,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "Rencontre Aquatique",
                 extension: "XY : Offensive Vapeur (2016)",
                 type: "duo",
-                description: "Perspective sous-marine contre vue aérienne : Moustillon observe la surface pendant qu'Arakdo patine sur l'onde au même endroit.",
+                description: "Double perspective : Moustillon nage sous l'eau et observe la surface, où Arakdo glisse sur l'onde au même moment.",
                 cartes: [
                     { 
                         nom: "Moustillon", 
@@ -230,7 +230,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "Le Blizzard",
                 extension: "Épée & Bouclier : Règne de Glace (2021)",
                 type: "duo",
-                description: "Dans une violente tempête de neige, Polagriffe veille sur le jeune Grelaçon, immortalisé sous deux angles de caméra complémentaires.",
+                description: "Dans une tempête de glace polaire, Polagriffe protège le jeune Grelaçon, représenté sous deux angles de vue opposés.",
                 cartes: [
                     { 
                         nom: "Polagriffe", 
@@ -257,7 +257,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "La Chute des Baies",
                 extension: "Épée & Bouclier : Set de Base (2020)",
                 type: "duo",
-                description: "Rongourmand accumule des baies dans sa réserve. Sur l'illustration de son évolution, la branche rompt sous son excès de poids.",
+                description: "Séquence narrative : Rongourmand empile ses baies dans l'arbre. Sur Rongrigou, la branche a cédé sous son poids et il s'écrase par terre.",
                 cartes: [
                     { 
                         nom: "Rongourmand", 
@@ -278,7 +278,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "Le Voyage sur le Dos",
                 extension: "XY : Ciel Rugissant (2015)",
                 type: "duo",
-                description: "Frison galope à travers les plaines. Sur la carte de Natu, on découvre que le petit oiseau fait tout le périple installé entre ses cornes.",
+                description: "Frison galope à travers les steppes. Sur la carte de Natu, on découvre que l'oisillon voyage en réalité perché entre ses cornes.",
                 cartes: [
                     { 
                         nom: "Natu", 
@@ -299,7 +299,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "L'Ascension Végétale",
                 extension: "Épée & Bouclier : Évolution Céleste (2021)",
                 type: "trio",
-                description: "L'angle de vue s'élève d'une carte à l'autre : Granivol au ras du sol fleuri, Floravol s'élevant dans la brise, et Cotovol naviguant au sommet des nuages.",
+                description: "Élévation progressive de la caméra : Granivol est au ras de la prairie, Floravol s'élève au-dessus des collines, et Cotovol plane au milieu des nuages.",
                 cartes: [
                     { 
                         nom: "Granivol", 
