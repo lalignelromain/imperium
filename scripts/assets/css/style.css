@@ -156,7 +156,7 @@ body.mode-edition .header-main h1 {
 }
 
 /* ==========================================
-   HUB D'ACCUEIL (GRAND ÉCRAN DESKTOP)
+   HUB D'ACCUEIL (DESKTOP - GRILLE 2 + 4)
 ========================================== */
 .hub-container {
     flex: 1;
@@ -170,27 +170,43 @@ body.mode-edition .header-main h1 {
 }
 
 .hub-grid {
-    display: flex;
-    flex-direction: row;
-    gap: clamp(14px, 1.8vw, 26px);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(14px, 1.8vw, 24px);
     width: 100%;
-    max-width: 1150px;
-    justify-content: center;
-    align-items: stretch;
+    max-width: 1100px;
     padding: 10px;
     transition: all 0.3s ease;
 }
 
-.hub-card.pokedex-card  { --th-color: #ff3333; --th-glow: rgba(255, 51, 51, 0.45); }
-.hub-card.mew-card      { --th-color: #fea6ca; --th-glow: rgba(254, 166, 202, 0.45); }
-.hub-card.mewtwo-card   { --th-color: #a858d4; --th-glow: rgba(168, 88, 212, 0.45); }
-.hub-card.pantheon-card { --th-color: #e5c05c; --th-glow: rgba(229, 192, 92, 0.45); }
+/* Couleurs Thématiques des Cartes */
+.hub-card.pokedex-card    { --th-color: #ff3333; --th-glow: rgba(255, 51, 51, 0.45); }
+.hub-card.pantheon-card   { --th-color: #e5c05c; --th-glow: rgba(229, 192, 92, 0.45); }
+.hub-card.mew-card        { --th-color: #fea6ca; --th-glow: rgba(254, 166, 202, 0.45); }
+.hub-card.mewtwo-card     { --th-color: #a858d4; --th-glow: rgba(168, 88, 212, 0.45); }
+.hub-card.chroniques-card { --th-color: #10b981; --th-glow: rgba(16, 185, 129, 0.45); }
+.hub-card.odyssee-card    { --th-color: #00d2ff; --th-glow: rgba(0, 210, 255, 0.45); }
+
+/* Niveau 1 : Pokédex et Panthéon prennent 2 colonnes chacun */
+.hub-card.pokedex-card {
+    grid-column: 1 / 3;
+}
+
+.hub-card.pantheon-card {
+    grid-column: 3 / 5;
+}
+
+/* Niveau 2 : Mew, Mewtwo, Chroniques, Odyssée prennent 1 colonne chacun */
+.hub-card.mew-card,
+.hub-card.mewtwo-card,
+.hub-card.chroniques-card,
+.hub-card.odyssee-card {
+    grid-column: span 1;
+}
 
 .hub-card {
-    flex: 1 1 0;
-    min-width: 0;
-    max-width: 260px;
-    min-height: 150px;
+    width: 100%;
+    min-height: 140px;
     background: rgba(12, 15, 22, 0.5);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
@@ -250,7 +266,7 @@ body.mode-edition .header-main h1 {
 }
 
 .hub-card h2 {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
     font-weight: 800;
     letter-spacing: 1.2px;
     margin-bottom: 6px;
@@ -604,13 +620,13 @@ body.mode-edition .card-item:hover {
     }
 
     .hub-grid {
-        max-width: min(58vw, 840px);
-        gap: 12px;
+        max-width: 860px;
+        gap: 14px;
         padding: 5px;
     }
 
     .hub-card {
-        min-height: 135px;
+        min-height: 130px;
         padding: 18px 14px;
         border-radius: 18px;
     }
@@ -647,15 +663,25 @@ body.mode-edition .card-item:hover {
     .hub-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        max-width: 520px;
+        max-width: 540px;
         gap: 16px;
+    }
+
+    /* 1 colonne par carte sur tablette (grille 2x3) */
+    .hub-card.pokedex-card,
+    .hub-card.pantheon-card,
+    .hub-card.mew-card,
+    .hub-card.mewtwo-card,
+    .hub-card.chroniques-card,
+    .hub-card.odyssee-card {
+        grid-column: span 1;
     }
 
     .hub-card {
         min-width: auto;
         max-width: 100%;
-        min-height: 130px;
-        padding: 20px 16px;
+        min-height: 120px;
+        padding: 18px 14px;
         border-radius: 20px;
     }
 
@@ -701,7 +727,7 @@ body.mode-edition .card-item:hover {
         margin-top: 6px;
     }
 
-    /* Filigranes Pokémon repositionnés et entiers */
+    /* Filigranes Pokémon repositionnés & entiers */
     .bg-watermark {
         opacity: 0.18;
         -webkit-mask-image: none;
@@ -723,7 +749,7 @@ body.mode-edition .card-item:hover {
         transform: translateY(0);
     }
 
-    /* Hub Mobile : Titres seuls */
+    /* Hub Mobile : Disposition verticale en colonne unique */
     .hub-container {
         padding: 20px 16px 40px;
     }
@@ -741,7 +767,7 @@ body.mode-edition .card-item:hover {
     .hub-card {
         min-width: 100%;
         max-width: 100%;
-        min-height: 60px;
+        min-height: 56px;
         padding: 14px 18px;
         border-radius: 16px;
     }
