@@ -52,7 +52,6 @@ function renderPokedex() {
         cardDiv.style.cursor = 'pointer';
 
         cardDiv.innerHTML = `
-            <div class="card-status-badge">${isOwned ? '✓ Possédée' : '+ Ajouter'}</div>
             <img src="${resolveImg(carte.image, carte.langue)}" alt="${carte.nom} ${carte.numero}" loading="lazy">
             <div class="card-info">
                 <div class="card-name">${carte.nom}</div>
@@ -60,13 +59,11 @@ function renderPokedex() {
             </div>
         `;
 
-        // Clic sur la carte : ajoute ou retire de ta collection perso
+        // Clic sur la carte : bascule visuelle directe grisé / néon
         cardDiv.addEventListener('click', () => {
             const nowOwned = toggleCard(carte.id);
             cardDiv.classList.toggle('is-owned', nowOwned);
             cardDiv.classList.toggle('not-owned', !nowOwned);
-            const badge = cardDiv.querySelector('.card-status-badge');
-            if (badge) badge.textContent = nowOwned ? '✓ Possédée' : '+ Ajouter';
         });
 
         container.appendChild(cardDiv);
@@ -84,8 +81,8 @@ function renderCollection(pokemonName, containerId) {
     if (cartesPossedees.length === 0) {
         container.innerHTML = `
             <div style="text-align: center; padding: 40px; color: #888; width: 100%;">
-                <p>Aucune carte ${pokemonName === 'mew' ? 'Mew' : 'Mewtwo'} dans ta collection pour l'instant.</p>
-                <a href="pokedex.html" style="color: #ff77a9; text-decoration: underline;">Accéder au Pokédex pour cocher tes cartes</a>
+                <p>Aucune carte ${pokemonName === 'mew' ? 'Mew' : 'Mewtwo'} dans votre collection pour l'instant.</p>
+                <a href="pokedex.html" style="color: #ff77a9; text-decoration: underline;">Accéder au Pokédex pour cocher vos cartes</a>
             </div>
         `;
         return;
@@ -164,15 +161,8 @@ function renderPantheon() {
 
 // 6. INITIALISATION AUTOMATIQUE
 document.addEventListener('DOMContentLoaded', () => {
-    // Si on est sur pokedex.html
     renderPokedex();
-
-    // Si on est sur mew.html
     renderCollection('mew', 'mew-grid');
-
-    // Si on est sur mewtwo.html
     renderCollection('mewtwo', 'mewtwo-grid');
-
-    // Si on est sur pantheon.html
     renderPantheon();
 });
