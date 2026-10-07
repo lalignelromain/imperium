@@ -1,14 +1,14 @@
 // ====================================================================
-// MASTER SET EV05 : FORCES TEMPORELLES (SYNCHRO FIRESTORE BLINDÉE)
+// MASTER SET EV05 : FORCES TEMPORELLES (STOCKAGE DANS VITRINE/CARTES)
 // ====================================================================
 
-// Cartes sans version Reverse (10 Pokémon-ex + 7 HIGH-TECH)
+// Numéros sans version Reverse (10 Pokémon-ex + 7 HIGH-TECH)
 const NO_REVERSE_SET = new Set([
     "012", "025", "035", "038", "060", "081", "099", "104", "108", "123",
     "141", "149", "152", "153", "154", "157", "158"
 ]);
 
-// 222 cartes de base + secrètes + promos
+// 222 références du set
 const EV5_CARDS = [
     ...Array.from({ length: 218 }, (_, i) => {
         const num = String(i + 1).padStart(3, '0');
@@ -31,7 +31,14 @@ const EV5_CARDS = [
 const TOTAL_COLLECTIBLE = EV5_CARDS.reduce((sum, c) => sum + (c.hasReverse ? 2 : 1), 0); // 367
 
 let ownedCards = new Set();
-let ev5DocRef = null;
+
+function getDbInstance() {
+    if (typeof db !== "undefined" && db) return db;
+    if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0) {
+        return firebase.firestore();
+    }
+    return null;
+}
 
 function renderGrid() {
     const grid = document.getElementById("master-grid");
@@ -83,33 +90,30 @@ window.toggleVariant = function(variantId) {
     updateUI();
     updateProgress();
 
-    // 1. Sauvegarde locale immédiate
+    // Cache local immédiat
     localStorage.setItem("ev5_owned_cards", JSON.stringify(Array.from(ownedCards)));
 
-    // 2. Envoi Firestore
-    pushToFirestore();
+    // Sauvegarde Cloud dans vitrine/cartes (champ ev05)
+    saveToFirestore();
 };
 
-function pushToFirestore() {
-    if (!ev5DocRef && typeof db !== "undefined" && db) {
-        ev5DocRef = db.collection("vitrine").doc("masterset_ev05");
-    }
+function saveToFirestore() {
+    const firestore = getDbInstance();
+    if (!firestore) return;
 
-    if (ev5DocRef) {
-        ev5DocRef.set({ 
-            owned: Array.from(ownedCards),
-            derniereMaj: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true })
-        .then(() => {
-            console.log("✓ Cloud Firebase mis à jour :", ownedCards.size, "cartes");
-        })
-        .catch(err => {
-            console.error("Erreur Firebase Firestore :", err);
-            if (err.code === "permission-denied") {
-                alert("Écriture refusée par Firebase : faites un double-clic (ou appui long) sur le titre 'Master Set EV 5' pour vous connecter avec votre compte admin.");
-            }
-        });
-    }
+    firestore.collection("vitrine").doc("cartes").set({
+        ev05: Array.from(ownedCards),
+        derniereMaj: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true })
+    .then(() => {
+        console.log("✓ EV05 enregistré dans Firestore :", ownedCards.size);
+    })
+    .catch(err => {
+        console.error("Erreur Firestore :", err);
+        if (err.code === "permission-denied") {
+            alert("Action refusée : connectez-vous avec un double-clic (ou appui long) sur le titre.");
+        }
+    });
 }
 
 function updateUI() {
@@ -163,9 +167,8 @@ function migrateLegacyIds() {
     return changed;
 }
 
-// Initialisation intelligente sans perte de données
 function initMasterSet() {
-    // 1. Restauration prioritaire depuis le stockage local du navigateur
+    // 1. Chargement du cache local
     const localData = localStorage.getItem("ev5_owned_cards");
     if (localData) {
         try {
@@ -180,31 +183,27 @@ function initMasterSet() {
     renderGrid();
     updateProgress();
 
-    // 2. Connexion Firestore
-    if (typeof db !== "undefined" && db) {
-        ev5DocRef = db.collection("vitrine").doc("masterset_ev05");
-        
-        ev5DocRef.onSnapshot((doc) => {
-            if (doc.exists && doc.data() && Array.isArray(doc.data().owned) && doc.data().owned.length > 0) {
-                // Si Firestore possède des données : fusion avec le local (aucune perte)
-                const cloudCards = doc.data().owned;
-                ownedCards = new Set([...ownedCards, ...cloudCards]);
-                migrateLegacyIds();
-
-                localStorage.setItem("ev5_owned_cards", JSON.stringify(Array.from(ownedCards)));
-                updateUI();
-                updateProgress();
-            } else if (ownedCards.size > 0) {
-                // Firestore est vide mais le PC a des cartes locales : envoi immédiat vers Firestore !
-                console.log("Initialisation de Firestore avec les données locales du PC...");
-                pushToFirestore();
-            }
-        }, (err) => {
-            console.error("Erreur lecture Firestore EV05 :", err);
-        });
-    } else {
+    // 2. Écoute Firestore sur vitrine/cartes
+    const firestore = getDbInstance();
+    if (!firestore) {
         setTimeout(initMasterSet, 250);
+        return;
     }
+
+    firestore.collection("vitrine").doc("cartes").onSnapshot((doc) => {
+        if (doc.exists && doc.data() && Array.isArray(doc.data().ev05)) {
+            ownedCards = new Set(doc.data().ev05);
+            migrateLegacyIds();
+            localStorage.setItem("ev5_owned_cards", JSON.stringify(Array.from(ownedCards)));
+            updateUI();
+            updateProgress();
+        } else if (ownedCards.size > 0) {
+            // Si le cloud n'a pas encore le champ ev05 mais qu'on a des cartes en local
+            saveToFirestore();
+        }
+    }, (err) => {
+        console.error("Erreur lecture Firestore EV05 :", err);
+    });
 }
 
 document.addEventListener("DOMContentLoaded", initMasterSet);
