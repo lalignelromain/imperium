@@ -265,7 +265,7 @@ body {
     position: relative;
     cursor: pointer;
     user-select: none;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
 .card-item:hover {
@@ -299,30 +299,19 @@ body {
     margin-top: 4px;
 }
 
-/* Badges d'état collection */
-.card-status-badge {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    background: rgba(10, 12, 16, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #aaa;
-    font-size: 0.72rem;
-    padding: 3px 8px;
-    border-radius: 20px;
-    z-index: 2;
-    pointer-events: none;
-    transition: all 0.2s ease;
+/* États de possession & néons */
+.card-item.not-owned {
+    opacity: 0.6;
 }
 
-.card-item.is-owned .card-status-badge {
-    background: #238636;
-    border-color: #2ea043;
-    color: #fff;
-    font-weight: 600;
+.card-item.not-owned:hover {
+    opacity: 0.9;
 }
 
-/* Néons cartes possédées */
+.card-item.is-owned {
+    opacity: 1;
+}
+
 .card-item.is-owned.theme-mew {
     border-color: #fea6ca;
     box-shadow: 0 0 14px rgba(254, 166, 202, 0.7), inset 0 0 6px rgba(254, 166, 202, 0.3);
@@ -331,14 +320,6 @@ body {
 .card-item.is-owned.theme-mewtwo {
     border-color: #7a429c;
     box-shadow: 0 0 14px rgba(122, 66, 156, 0.75), inset 0 0 6px rgba(122, 66, 156, 0.35);
-}
-
-.card-item.not-owned {
-    opacity: 0.6;
-}
-
-.card-item.not-owned:hover {
-    opacity: 0.9;
 }
 
 /* Structure des conteneurs collection */
@@ -578,7 +559,6 @@ body {
 
 /* --- 3. SMARTPHONES (<= 767px) --- */
 @media (max-width: 767px) {
-    /* En-tête compact sans étirement latéral */
     .header-main {
         padding: 40px 16px 15px;
     }
@@ -642,7 +622,7 @@ body {
         transform: none;
     }
 
-    /* Calibrage des pages Mew & Mewtwo sur mobile */
+    /* Calibrage des collections Mew & Mewtwo sur mobile */
     .collection-container {
         width: 92%;
         max-width: 440px;
