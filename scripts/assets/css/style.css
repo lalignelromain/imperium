@@ -144,7 +144,7 @@ body.mode-edition .header-main h1 {
 }
 
 /* ==========================================
-   HUB D'ACCUEIL (VITRINE 4 CARTES)
+   HUB D'ACCUEIL (VITRINE ÉPURÉE - TITRES SEULS)
 ========================================== */
 .hub-container {
     flex: 1;
@@ -178,13 +178,13 @@ body.mode-edition .header-main h1 {
     flex: 1 1 0;
     min-width: 0;
     max-width: 260px;
-    min-height: 280px;
+    min-height: 190px;
     background: rgba(12, 15, 22, 0.45);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 24px;
-    padding: 40px 18px;
+    padding: 30px 18px;
     text-decoration: none;
     color: inherit;
     text-align: center;
@@ -213,16 +213,13 @@ body.mode-edition .header-main h1 {
     z-index: 0;
 }
 
-.hub-card h2, .hub-card p {
-    position: relative;
-    z-index: 1;
-}
-
 .hub-card h2 {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
     font-weight: 800;
     letter-spacing: 1.2px;
-    margin-bottom: 12px;
+    margin: 0;
+    position: relative;
+    z-index: 1;
     background: linear-gradient(135deg, #ffffff 0%, #9ca7b3 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -230,16 +227,13 @@ body.mode-edition .header-main h1 {
     transition: transform 0.3s ease;
 }
 
+/* Sous-titres retirés pour un rendu épuré */
 .hub-card p {
-    color: #94a3b3;
-    font-size: 0.85rem;
-    line-height: 1.5;
-    font-weight: 500;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    display: none !important;
 }
 
 .hub-card:hover {
-    transform: translateY(-14px) scale(1.02);
+    transform: translateY(-12px) scale(1.02);
     border-color: var(--th-color);
     box-shadow: 
         0 35px 65px rgba(0, 0, 0, 0.9), 
@@ -254,7 +248,7 @@ body.mode-edition .header-main h1 {
 }
 
 .hub-card:hover h2 {
-    transform: scale(1.03);
+    transform: scale(1.04);
 }
 
 /* ==========================================
@@ -406,7 +400,7 @@ body.mode-edition .card-item:hover {
 }
 
 /* ==========================================
-   PANTHÉON & 3D FLIP CARTES GRADÉES
+   PANTHÉON & RETOURNEMENT 3D TRANSPARENT
 ========================================== */
 .pantheon-container {
     max-width: 1300px;
@@ -439,13 +433,15 @@ body.mode-edition .card-item:hover {
     width: 240px;
 }
 
+/* Items scellés sans cadre noir artificiel */
 .pantheon-item.item-scelle img {
     width: 100%;
     height: 220px;
     object-fit: contain;
-    border-radius: 6px;
-    background-color: #0b0d13;
-    padding: 4px;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
 }
 
 .grade-badge {
@@ -462,7 +458,7 @@ body.mode-edition .card-item:hover {
     box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
-/* Structure Flip 3D */
+/* Retournement 3D détouré pour les cartes gradées */
 .gradee-item {
     cursor: pointer;
     user-select: none;
@@ -489,12 +485,10 @@ body.mode-edition .card-item:hover {
     will-change: transform;
 }
 
-/* Bascule active via classe (Mobile Tap) */
 .gradee-item.is-flipped .flip-inner {
     transform: rotateY(180deg);
 }
 
-/* Survol PC uniquement : actif uniquement sur souris/trackpad réels */
 @media (hover: hover) and (pointer: fine) {
     .pantheon-item:hover {
         transform: translateY(-4px);
@@ -518,16 +512,22 @@ body.mode-edition .card-item:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: transparent;
     transform: rotateY(0deg);
 }
 
+/* Contour transparent et ombre portée réelle sur le boîtier */
 .flip-front img, .flip-back img {
-    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
     height: 100%;
     object-fit: contain;
-    border-radius: 6px;
-    background-color: #0b0d13;
-    padding: 4px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.75));
     pointer-events: none;
 }
 
@@ -552,20 +552,13 @@ body.mode-edition .card-item:hover {
     }
 
     .hub-card {
-        min-height: 230px;
-        padding: 26px 12px;
+        min-height: 160px;
+        padding: 24px 12px;
         border-radius: 18px;
     }
 
     .hub-card h2 {
         font-size: 1.15rem;
-        margin-bottom: 6px;
-        letter-spacing: 0.8px;
-    }
-
-    .hub-card p {
-        font-size: 0.72rem;
-        line-height: 1.35;
     }
 
     .bg-mew {
@@ -595,8 +588,8 @@ body.mode-edition .card-item:hover {
     .hub-card {
         min-width: auto;
         max-width: 100%;
-        min-height: 220px;
-        padding: 32px 18px;
+        min-height: 140px;
+        padding: 24px 16px;
         border-radius: 20px;
     }
 
@@ -638,7 +631,7 @@ body.mode-edition .card-item:hover {
         margin-top: 6px;
     }
 
-    /* Cartes Hub adaptées au mobile */
+    /* Cartes Hub épurées sur mobile */
     .hub-container {
         padding: 20px 16px 40px;
     }
@@ -656,20 +649,14 @@ body.mode-edition .card-item:hover {
     .hub-card {
         min-width: 100%;
         max-width: 100%;
-        min-height: auto;
-        padding: 18px 16px;
-        border-radius: 18px;
+        min-height: 64px;
+        padding: 16px 20px;
+        border-radius: 16px;
     }
 
     .hub-card h2 {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
         letter-spacing: 1px;
-        margin-bottom: 6px;
-    }
-
-    .hub-card p {
-        font-size: 0.78rem;
-        line-height: 1.4;
     }
 
     /* Grilles de cartes */
