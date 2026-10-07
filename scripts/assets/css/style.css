@@ -867,7 +867,7 @@ body.mode-art-pur .pocket::before {
     letter-spacing: 0.5px;
 }
 
-/* Dimensions des formats standards */
+/* Dimensions des formats */
 .duo-box .pocket { width: clamp(140px, 18vw, 220px); }
 .trio-box .pocket { width: clamp(110px, 14vw, 190px); }
 .quad-box .pocket { width: clamp(120px, 15vw, 180px); }
@@ -887,8 +887,74 @@ body.mode-art-pur .pocket::before {
 }
 
 /* ====================================================================
-   FORMAT CARTES LÉGENDE (HGSS) : OPTION 2
-   Debout côte à côte en Classeur -> Pivoté à 90° en Art Pur
+   GRIGNOTAGE DES BORDURES INTÉRIEURES : FRESQUE 9-BOX (ZÉNITH SUPRÊME)
+   Rogne les bordures internes en Mode Art Pur pour un tableau continu
+==================================================================== */
+body.mode-art-pur .nine-box .pocket {
+    overflow: hidden !important;
+    border-radius: 0 !important;
+}
+
+body.mode-art-pur .nine-box .pocket img {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 1. Riolu (Haut Gauche) -> Rogne bas & droite */
+body.mode-art-pur .nine-box .pocket:nth-child(1) img {
+    transform-origin: top left;
+    transform: scale(1.06);
+}
+
+/* 2. Tylton (Haut Milieu) -> Rogne bas, gauche & droite */
+body.mode-art-pur .nine-box .pocket:nth-child(2) img {
+    transform-origin: top center;
+    transform: scaleX(1.08) scaleY(1.06);
+}
+
+/* 3. Skelénox (Haut Droite) -> Rogne bas & gauche */
+body.mode-art-pur .nine-box .pocket:nth-child(3) img {
+    transform-origin: top right;
+    transform: scale(1.06);
+}
+
+/* 4. Keunotor (Milieu Gauche) -> Rogne haut, bas & droite */
+body.mode-art-pur .nine-box .pocket:nth-child(4) img {
+    transform-origin: center left;
+    transform: scaleX(1.06) scaleY(1.08);
+}
+
+/* 5. Pikachu (Centre Parfait) -> Rogne les 4 côtés */
+body.mode-art-pur .nine-box .pocket:nth-child(5) img {
+    transform-origin: center center;
+    transform: scale(1.09);
+}
+
+/* 6. Tortipouss (Milieu Droite) -> Rogne haut, bas & gauche */
+body.mode-art-pur .nine-box .pocket:nth-child(6) img {
+    transform-origin: center right;
+    transform: scaleX(1.06) scaleY(1.08);
+}
+
+/* 7. Paras (Bas Gauche) -> Rogne haut & droite */
+body.mode-art-pur .nine-box .pocket:nth-child(7) img {
+    transform-origin: bottom left;
+    transform: scale(1.06);
+}
+
+/* 8. Medhyèna (Bas Milieu) -> Rogne haut, gauche & droite */
+body.mode-art-pur .nine-box .pocket:nth-child(8) img {
+    transform-origin: bottom center;
+    transform: scaleX(1.08) scaleY(1.06);
+}
+
+/* 9. Wattouat (Bas Droite) -> Rogne haut & gauche */
+body.mode-art-pur .nine-box .pocket:nth-child(9) img {
+    transform-origin: bottom right;
+    transform: scale(1.06);
+}
+
+/* ====================================================================
+   CARTES LÉGENDE HGSS (PRÉSENTATION CÔTE À CÔTE STABLE)
 ==================================================================== */
 .legend-box {
     display: flex !important;
@@ -897,30 +963,17 @@ body.mode-art-pur .pocket::before {
     align-items: center;
     width: fit-content;
     margin: 0 auto;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
-                gap 0.3s ease, 
-                margin 0.3s ease;
 }
 
-/* Mode Classeur : 2 pochettes portrait côte à côte */
 body.mode-classeur .legend-box {
     gap: 12px;
-    transform: none;
-    margin: 0 auto;
 }
 
-body.mode-classeur .legend-box .pocket {
-    width: clamp(140px, 18vw, 210px);
-}
-
-/* Mode Art Pur : fusion bord à bord et rotation à 90° dans le sens de l'art */
 body.mode-art-pur .legend-box {
     gap: 0 !important;
-    transform: rotate(90deg);
-    margin: 60px auto;
 }
 
-body.mode-art-pur .legend-box .pocket {
+.legend-box .pocket {
     width: clamp(140px, 18vw, 210px);
 }
 
@@ -1181,12 +1234,7 @@ body.mode-art-pur .legend-box .pocket {
     .trio-box .pocket { width: 102px; }
     .quad-box .pocket { width: 130px; }
     .nine-box .pocket { width: 95px; }
-
-    /* Ajustement responsive pour la rotation mobile */
-    .legend-box .pocket { width: 125px; }
-    body.mode-art-pur .legend-box {
-        margin: 45px auto;
-    }
+    .legend-box .pocket { width: 130px; }
 
     .scene-title {
         font-size: 0.95rem;
