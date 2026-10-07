@@ -162,7 +162,7 @@ const cartesDatabase = [
 
 // Fonction pour générer le HTML d'une carte
 function createCardHTML(carte) {
-    // Si l'image est absente, on met un dos de carte générique
+    // Si l'image est absente, on utilise le chemin exact scripts/assets/img/...
     const imgSrc = carte.image ? carte.image : (carte.langue === 'ja' ? 'scripts/assets/img/back-ja.png' : 'scripts/assets/img/back-fr.png');
     // On ajoute une classe de thème en fonction du Pokémon pour l'effet fluo au survol
     const themeClass = carte.pokemon === 'mew' ? 'theme-mew' : 'theme-mewtwo';
