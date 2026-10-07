@@ -60,36 +60,36 @@ const CHRONIQUES_SECTIONS = [
                 cartes: [
                     { 
                         nom: "Séviper", 
-                        numero: "23/100", 
-                        image: "https://assets.tcgdex.net/fr/ex/ex2/23/high.webp",
-                        fallback: "https://images.pokemontcg.io/ex2/23_hires.png"
+                        numero: "73/100", 
+                        image: "https://assets.tcgdex.net/fr/ex/ex2/73/high.webp",
+                        fallback: "https://images.pokemontcg.io/ex2/73_hires.png"
                     },
                     { 
                         nom: "Mangriff", 
-                        numero: "24/100", 
-                        image: "https://assets.tcgdex.net/fr/ex/ex2/24/high.webp",
-                        fallback: "https://images.pokemontcg.io/ex2/24_hires.png"
+                        numero: "27/100", 
+                        image: "https://assets.tcgdex.net/fr/ex/ex2/27/high.webp",
+                        fallback: "https://images.pokemontcg.io/ex2/27_hires.png"
                     }
                 ]
             },
             {
-                id: "seleroc-solaroc-ex",
+                id: "seleroc-solaroc",
                 titre: "L'Aura Cosmique",
-                extension: "EX : Gardiens de Cristal (2006)",
+                extension: "Soleil & Lune : Éclipse Cosmique (2019)",
                 type: "duo",
-                description: "L'énergie cosmique bleue et dorée enveloppant les deux corps astraux forme un halo complet une fois les cartes côte à côte.",
+                description: "L'aura d'énergie lunaire et solaire entourant les deux Pokémon s'assemble pour former un cercle complet une fois les cartes réunies.",
                 cartes: [
                     { 
                         nom: "Séléroc", 
-                        numero: "37/100", 
-                        image: "https://assets.tcgdex.net/fr/ex/ex14/37/high.webp",
-                        fallback: "https://images.pokemontcg.io/ex14/37_hires.png"
+                        numero: "104/236", 
+                        image: "https://assets.tcgdex.net/fr/sm/sm12/104/high.webp",
+                        fallback: "https://images.pokemontcg.io/sm12/104_hires.png"
                     },
                     { 
                         nom: "Solaroc", 
-                        numero: "41/100", 
-                        image: "https://assets.tcgdex.net/fr/ex/ex14/41/high.webp",
-                        fallback: "https://images.pokemontcg.io/ex14/41_hires.png"
+                        numero: "105/236", 
+                        image: "https://assets.tcgdex.net/fr/sm/sm12/105/high.webp",
+                        fallback: "https://images.pokemontcg.io/sm12/105_hires.png"
                     }
                 ]
             }
@@ -128,16 +128,16 @@ const CHRONIQUES_SECTIONS = [
                 description: "Même ruelle sombre : sur la première carte, Miamiasme semble pourchassé. Sur la seconde, on découvre qu'ils jouent en fait ensemble.",
                 cartes: [
                     { 
-                        nom: "Miamiasme", 
-                        numero: "65/122", 
-                        image: "https://assets.tcgdex.net/fr/xy/xy9/65/high.webp",
-                        fallback: "https://images.pokemontcg.io/xy9/65_hires.png"
-                    },
-                    { 
                         nom: "Brocélôme", 
                         numero: "55/122", 
                         image: "https://assets.tcgdex.net/fr/xy/xy9/55/high.webp",
                         fallback: "https://images.pokemontcg.io/xy9/55_hires.png"
+                    },
+                    { 
+                        nom: "Miamiasme", 
+                        numero: "56/122", 
+                        image: "https://assets.tcgdex.net/fr/xy/xy9/56/high.webp",
+                        fallback: "https://images.pokemontcg.io/xy9/56_hires.png"
                     }
                 ]
             },
@@ -230,7 +230,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "Le Blizzard",
                 extension: "Épée & Bouclier : Règne de Glace (2021)",
                 type: "duo",
-                description: "Dans une tempête de glace polaire, Polagriffe protège le jeune Grelaçon, représenté sous deux angles de vue opposés.",
+                description: "Dans une tempête de glace polaire, Polagriffe veille sur le jeune Grelaçon, visible sous deux angles de vue opposés.",
                 cartes: [
                     { 
                         nom: "Polagriffe", 
@@ -240,9 +240,9 @@ const CHRONIQUES_SECTIONS = [
                     },
                     { 
                         nom: "Grelaçon", 
-                        numero: "042/198", 
-                        image: "https://assets.tcgdex.net/fr/swsh/swsh6/042/high.webp",
-                        fallback: "https://images.pokemontcg.io/swsh6/42_hires.png"
+                        numero: "044/198", 
+                        image: "https://assets.tcgdex.net/fr/swsh/swsh6/044/high.webp",
+                        fallback: "https://images.pokemontcg.io/swsh6/44_hires.png"
                     }
                 ]
             }
@@ -257,19 +257,19 @@ const CHRONIQUES_SECTIONS = [
                 titre: "La Chute des Baies",
                 extension: "Épée & Bouclier : Set de Base (2020)",
                 type: "duo",
-                description: "Séquence narrative : Rongourmand empile ses baies dans l'arbre. Sur Rongrigou, la branche a cédé sous son poids et il s'écrase par terre.",
+                description: "Séquence narrative : Rongourmand stocke ses baies dans l'arbre. Sur Rongrigou, la branche a cédé sous son poids et il s'écrase par terre.",
                 cartes: [
                     { 
                         nom: "Rongourmand", 
-                        numero: "153/202", 
-                        image: "https://assets.tcgdex.net/fr/swsh/swsh1/153/high.webp",
-                        fallback: "https://images.pokemontcg.io/swsh1/153_hires.png"
+                        numero: "151/202", 
+                        image: "https://assets.tcgdex.net/fr/swsh/swsh1/151/high.webp",
+                        fallback: "https://images.pokemontcg.io/swsh1/151_hires.png"
                     },
                     { 
                         nom: "Rongrigou", 
-                        numero: "154/202", 
-                        image: "https://assets.tcgdex.net/fr/swsh/swsh1/154/high.webp",
-                        fallback: "https://images.pokemontcg.io/swsh1/154_hires.png"
+                        numero: "152/202", 
+                        image: "https://assets.tcgdex.net/fr/swsh/swsh1/152/high.webp",
+                        fallback: "https://images.pokemontcg.io/swsh1/152_hires.png"
                     }
                 ]
             },
@@ -278,7 +278,7 @@ const CHRONIQUES_SECTIONS = [
                 titre: "Le Voyage sur le Dos",
                 extension: "XY : Ciel Rugissant (2015)",
                 type: "duo",
-                description: "Frison galope à travers les steppes. Sur la carte de Natu, on découvre que l'oisillon voyage en réalité perché entre ses cornes.",
+                description: "Frison galope à travers les steppes. Sur la carte de Natu, on découvre que l'oisillon voyage perché entre ses cornes.",
                 cartes: [
                     { 
                         nom: "Natu", 
@@ -288,9 +288,9 @@ const CHRONIQUES_SECTIONS = [
                     },
                     { 
                         nom: "Frison", 
-                        numero: "68/108", 
-                        image: "https://assets.tcgdex.net/fr/xy/xy6/68/high.webp",
-                        fallback: "https://images.pokemontcg.io/xy6/68_hires.png"
+                        numero: "83/108", 
+                        image: "https://assets.tcgdex.net/fr/xy/xy6/83/high.webp",
+                        fallback: "https://images.pokemontcg.io/xy6/83_hires.png"
                     }
                 ]
             },
