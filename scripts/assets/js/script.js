@@ -328,11 +328,15 @@ function initEV5ProgressHub() {
     const text = document.getElementById("ev5-hub-progress-text");
     if (!fill || !text) return;
 
+    // Total par défaut avec reverses (162 régulières + 141 reverses + 56 secrètes + 4 promos)
+    let totalCards = 363;
+
     // 1. Affiche immédiatement depuis le cache sans attendre le réseau
     const cached = localStorage.getItem("ev5_progress_cache");
     if (cached) {
         try {
             const data = JSON.parse(cached);
+            if (data.total) totalCards = data.total;
             fill.style.width = `${data.percent}%`;
             text.innerText = `${data.current} / ${data.total} • ${data.percent}%`;
         } catch (e) {}
@@ -341,14 +345,13 @@ function initEV5ProgressHub() {
     // 2. Synchronisation Firebase en direct si disponible
     if (typeof db !== "undefined") {
         db.collection("collections").doc("masterset_ev05").onSnapshot((doc) => {
-            const total = 222;
             let current = 0;
             if (doc.exists && doc.data().owned) {
                 current = doc.data().owned.length;
             }
-            const percent = Math.min(100, Math.round((current / total) * 100));
+            const percent = Math.min(100, Math.round((current / totalCards) * 100));
             fill.style.width = `${percent}%`;
-            text.innerText = `${current} / ${total} • ${percent}%`;
+            text.innerText = `${current} / ${totalCards} • ${percent}%`;
         });
     }
 }
