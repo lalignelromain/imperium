@@ -81,7 +81,7 @@ body {
     animation: floatMewtwo 7.5s ease-in-out infinite;
 }
 
-/* MASQUAGE AUTOMATIQUE DES POKÉMON HORS INDEX */
+/* Masquage des Pokémon hors accueil */
 body:has(.collection-container) .bg-watermark,
 body:has(.pantheon-container) .bg-watermark {
     display: none !important;
@@ -124,7 +124,6 @@ body:has(.pantheon-container) .bg-watermark {
     transition: filter 0.3s ease;
 }
 
-/* Effet Glow doré en mode édition */
 body.mode-edition .header-main h1 {
     -webkit-text-stroke: 1.2px #e5c05c;
     animation: pulseGold 2.8s ease-in-out infinite;
@@ -140,7 +139,6 @@ body.mode-edition .header-main h1 {
     opacity: 0.85;
 }
 
-/* Ancien lien retour masqué au profit du dock */
 .nav-back {
     display: none !important;
 }
@@ -340,7 +338,6 @@ body.mode-edition .card-item:hover {
     text-overflow: ellipsis;
 }
 
-/* Statuts d'affichage */
 .card-item.not-owned {
     opacity: 0.55;
 }
@@ -438,14 +435,8 @@ body.mode-edition .card-item:hover {
     padding: 16px;
     text-align: center;
     cursor: default;
-    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     width: 240px;
-}
-
-.pantheon-item:hover {
-    transform: translateY(-4px);
-    border-color: #d4af37;
-    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
 }
 
 .pantheon-item.item-scelle img {
@@ -471,9 +462,11 @@ body.mode-edition .card-item:hover {
     box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
-/* RETOURNEMENT 3D */
+/* Structure Flip 3D */
 .gradee-item {
-    cursor: pointer !important;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .flip-wrapper {
@@ -492,11 +485,26 @@ body.mode-edition .card-item:hover {
     text-align: center;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    will-change: transform;
 }
 
-.gradee-item:hover .flip-inner,
+/* Bascule active via classe (Mobile Tap) */
 .gradee-item.is-flipped .flip-inner {
     transform: rotateY(180deg);
+}
+
+/* Survol PC uniquement : actif uniquement sur souris/trackpad réels */
+@media (hover: hover) and (pointer: fine) {
+    .pantheon-item:hover {
+        transform: translateY(-4px);
+        border-color: #d4af37;
+        box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
+    }
+
+    .gradee-item:hover .flip-inner {
+        transform: rotateY(180deg);
+    }
 }
 
 .flip-front, .flip-back {
@@ -510,6 +518,7 @@ body.mode-edition .card-item:hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    transform: rotateY(0deg);
 }
 
 .flip-front img, .flip-back img {
@@ -519,6 +528,7 @@ body.mode-edition .card-item:hover {
     border-radius: 6px;
     background-color: #0b0d13;
     padding: 4px;
+    pointer-events: none;
 }
 
 .flip-back {
@@ -628,15 +638,18 @@ body.mode-edition .card-item:hover {
         margin-top: 6px;
     }
 
+    /* Cartes Hub adaptées au mobile */
     .hub-container {
-        padding: 25px 14px 40px;
+        padding: 20px 16px 40px;
     }
 
     .hub-grid {
         display: flex;
         flex-direction: column;
-        max-width: 320px;
-        gap: 14px;
+        width: 100%;
+        max-width: 360px;
+        margin: 0 auto;
+        gap: 12px;
         padding: 0;
     }
 
@@ -644,10 +657,22 @@ body.mode-edition .card-item:hover {
         min-width: 100%;
         max-width: 100%;
         min-height: auto;
-        padding: 20px 14px;
-        border-radius: 16px;
+        padding: 18px 16px;
+        border-radius: 18px;
     }
 
+    .hub-card h2 {
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+    }
+
+    .hub-card p {
+        font-size: 0.78rem;
+        line-height: 1.4;
+    }
+
+    /* Grilles de cartes */
     .collection-container {
         width: 100% !important;
         max-width: 100% !important;
