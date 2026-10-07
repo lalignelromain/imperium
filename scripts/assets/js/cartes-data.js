@@ -1,5 +1,5 @@
 /* ====================================================================
-   BASE DE DONNÉES IMPERIUM (Mew & Mewtwo)
+   BASE DE DONNÉES MEWTHOLOGY (Mew & Mewtwo)
 ==================================================================== */
 const cartesDatabase = [
     { "id": "pop4-4", "pokemon": "mew", "langue": "fr", "nom": "Mew", "numero": "4", "extension": "POP Série 4", "annee": "2006", "image": "https://assets.tcgdex.net/fr/pop/pop4/4/high.webp" },
@@ -155,55 +155,3 @@ const cartesDatabase = [
     { "id": "E1-086", "pokemon": "mewtwo", "langue": "ja", "nom": "mewtwo", "numero": "086", "extension": "基本拡張パック", "annee": "Inconnue", "image": null },
     { "id": "E1-118", "pokemon": "mewtwo", "langue": "ja", "nom": "mewtwo", "numero": "118", "extension": "基本拡張パック", "annee": "Inconnue", "image": null }
 ];
-
-/* ====================================================================
-   FONCTIONS DE RENDU (INJECTION DANS LE HTML)
-==================================================================== */
-
-// Fonction pour générer le HTML d'une carte
-function createCardHTML(carte) {
-    // Si l'image est absente, on utilise le chemin exact scripts/assets/img/...
-    const imgSrc = carte.image ? carte.image : (carte.langue === 'ja' ? 'scripts/assets/img/back-ja.png' : 'scripts/assets/img/back-fr.png');
-    // On ajoute une classe de thème en fonction du Pokémon pour l'effet fluo au survol
-    const themeClass = carte.pokemon === 'mew' ? 'theme-mew' : 'theme-mewtwo';
-
-    return `
-        <div class="card-item is-owned ${themeClass}">
-            <img src="${imgSrc}" alt="${carte.nom} ${carte.numero}" loading="lazy">
-            <div class="card-info">
-                <div class="card-name">${carte.nom}</div>
-                <div class="card-meta">${carte.extension} - #${carte.numero}</div>
-            </div>
-        </div>
-    `;
-}
-
-// Fonction pour filtrer et afficher les cartes selon la page
-function renderCards() {
-    // 1. Pokédex global (Toutes les cartes)
-    const pokedexGrid = document.getElementById('pokedex-grid');
-    if (pokedexGrid) {
-        let html = '';
-        cartesDatabase.forEach(carte => { html += createCardHTML(carte); });
-        pokedexGrid.innerHTML = html;
-    }
-
-    // 2. Collection Mew
-    const mewGrid = document.getElementById('mew-grid');
-    if (mewGrid) {
-        let html = '';
-        cartesDatabase.filter(c => c.pokemon === 'mew').forEach(carte => { html += createCardHTML(carte); });
-        mewGrid.innerHTML = html;
-    }
-
-    // 3. Collection Mewtwo
-    const mewtwoGrid = document.getElementById('mewtwo-grid');
-    if (mewtwoGrid) {
-        let html = '';
-        cartesDatabase.filter(c => c.pokemon === 'mewtwo').forEach(carte => { html += createCardHTML(carte); });
-        mewtwoGrid.innerHTML = html;
-    }
-}
-
-// Exécution au chargement de la page
-document.addEventListener('DOMContentLoaded', renderCards);
