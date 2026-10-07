@@ -882,6 +882,7 @@ body.mode-art-pur .pocket::before {
 .quad-box .pocket { width: clamp(120px, 15vw, 180px); }
 .nine-box .pocket { width: clamp(80px, 10vw, 130px); }
 
+/* Formats en grille */
 .quad-box {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr);
@@ -892,6 +893,17 @@ body.mode-art-pur .pocket::before {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr);
     width: fit-content;
+}
+
+/* Format vertical spécifique aux cartes LÉGENDE (HGSS) */
+.legend-box {
+    display: flex !important;
+    flex-direction: column !important;
+    width: fit-content;
+}
+
+.legend-box .pocket {
+    width: clamp(140px, 18vw, 220px);
 }
 
 /* ====================================================================
@@ -1011,6 +1023,7 @@ body.mode-art-pur .pocket::before {
         margin-top: 6px;
     }
 
+    /* Filigranes Pokémon repositionnés : Mew et Mewtwo encadrent le haut */
     .bg-watermark {
         opacity: 0.18;
         -webkit-mask-image: none;
@@ -1021,7 +1034,8 @@ body.mode-art-pur .pocket::before {
         width: 115px;
         max-height: 25vh;
         left: 8px;
-        bottom: 50px;
+        top: 18%;
+        bottom: auto;
     }
 
     .bg-mewtwo {
@@ -1032,6 +1046,7 @@ body.mode-art-pur .pocket::before {
         transform: translateY(0);
     }
 
+    /* Hub Mobile : Disposition verticale en colonne unique */
     .hub-container {
         padding: 20px 16px 40px;
     }
@@ -1064,6 +1079,7 @@ body.mode-art-pur .pocket::before {
         display: none !important;
     }
 
+    /* Grilles de cartes standards */
     .collection-container {
         width: 100% !important;
         max-width: 100% !important;
@@ -1121,6 +1137,7 @@ body.mode-art-pur .pocket::before {
         height: 34px;
     }
 
+    /* Optimisations Mobiles pour Chroniques & Odyssée */
     .mode-switcher-container {
         top: 10px;
         margin-bottom: 24px;
@@ -1150,6 +1167,7 @@ body.mode-art-pur .pocket::before {
     .trio-box .pocket { width: 102px; }
     .quad-box .pocket { width: 130px; }
     .nine-box .pocket { width: 95px; }
+    .legend-box .pocket { width: 140px; }
 
     .scene-title {
         font-size: 0.95rem;
@@ -1159,15 +1177,4 @@ body.mode-art-pur .pocket::before {
         font-size: 0.76rem;
         padding: 0 10px;
     }
-}
-
-/* Format vertical spécifique aux cartes LÉGENDE (HGSS) */
-.legend-box {
-    display: flex !important;
-    flex-direction: column !important;
-    width: fit-content;
-}
-
-.legend-box .pocket {
-    width: clamp(140px, 18vw, 220px);
 }
