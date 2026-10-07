@@ -46,6 +46,18 @@ body {
     }
 }
 
+/* Onde de choc télépathique circulaire */
+@keyframes psychicWave {
+    0% {
+        transform: scale(0.3);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(8.5);
+        opacity: 0;
+    }
+}
+
 /* ==========================================
    FILIGRANES D'ARRIÈRE-PLAN
 ========================================== */
@@ -144,7 +156,7 @@ body.mode-edition .header-main h1 {
 }
 
 /* ==========================================
-   HUB D'ACCUEIL (DESKTOP AVEC SOUS-TITRES)
+   HUB D'ACCUEIL (GRAND ÉCRAN DESKTOP)
 ========================================== */
 .hub-container {
     flex: 1;
@@ -160,7 +172,7 @@ body.mode-edition .header-main h1 {
 .hub-grid {
     display: flex;
     flex-direction: row;
-    gap: clamp(14px, 1.8vw, 28px);
+    gap: clamp(14px, 1.8vw, 26px);
     width: 100%;
     max-width: 1150px;
     justify-content: center;
@@ -178,13 +190,13 @@ body.mode-edition .header-main h1 {
     flex: 1 1 0;
     min-width: 0;
     max-width: 260px;
-    min-height: 280px;
-    background: rgba(12, 15, 22, 0.45);
+    min-height: 150px;
+    background: rgba(12, 15, 22, 0.5);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    padding: 40px 18px;
+    border-radius: 22px;
+    padding: 22px 18px;
     text-decoration: none;
     color: inherit;
     text-align: center;
@@ -195,34 +207,54 @@ body.mode-edition .header-main h1 {
     position: relative;
     overflow: hidden;
     box-shadow: 
-        0 25px 50px rgba(0, 0, 0, 0.7), 
+        0 20px 45px rgba(0, 0, 0, 0.75), 
         inset 0 1px 1px rgba(255, 255, 255, 0.25), 
         inset 0 -1px 2px rgba(0, 0, 0, 0.5);
-    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Lueur ambiante interne */
 .hub-card::before {
     content: '';
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle at 50% 0%, var(--th-color), transparent 60%);
-    opacity: 0.04;
-    transform: translateY(-20px);
-    transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    background: radial-gradient(circle at 50% 0%, var(--th-color), transparent 65%);
+    opacity: 0.05;
+    transform: translateY(-15px);
+    transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
     z-index: 0;
 }
 
-.hub-card h2, .hub-card p {
-    position: relative;
+/* Onde Psychique (Anneau émetteur) */
+.hub-card::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30px;
+    height: 30px;
+    margin-top: -15px;
+    margin-left: -15px;
+    border-radius: 50%;
+    border: 2px solid var(--th-color);
+    box-shadow: 0 0 14px var(--th-color);
+    opacity: 0;
+    transform: scale(0.2);
+    pointer-events: none;
     z-index: 1;
 }
 
+.hub-card h2, .hub-card p {
+    position: relative;
+    z-index: 2;
+}
+
 .hub-card h2 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 800;
     letter-spacing: 1.2px;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
     background: linear-gradient(135deg, #ffffff 0%, #9ca7b3 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -232,30 +264,37 @@ body.mode-edition .header-main h1 {
 
 .hub-card p {
     color: #94a3b3;
-    font-size: 0.85rem;
-    line-height: 1.5;
+    font-size: 0.82rem;
+    line-height: 1.35;
     font-weight: 500;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     display: block;
 }
 
-.hub-card:hover {
-    transform: translateY(-14px) scale(1.02);
-    border-color: var(--th-color);
-    box-shadow: 
-        0 35px 65px rgba(0, 0, 0, 0.9), 
-        0 0 50px var(--th-glow), 
-        inset 0 1px 1px var(--th-color), 
-        inset 0 0 30px var(--th-glow);
-}
+/* Survol PC : Déclenchement de l'Onde Psychique */
+@media (hover: hover) and (pointer: fine) {
+    .hub-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        border-color: var(--th-color);
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.85), 
+            0 0 35px var(--th-glow), 
+            inset 0 1px 1px var(--th-color), 
+            inset 0 0 20px var(--th-glow);
+    }
 
-.hub-card:hover::before {
-    opacity: 0.25;
-    transform: translateY(0);
-}
+    .hub-card:hover::before {
+        opacity: 0.2;
+        transform: translateY(0);
+    }
 
-.hub-card:hover h2 {
-    transform: scale(1.03);
+    .hub-card:hover::after {
+        animation: psychicWave 1.4s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+    }
+
+    .hub-card:hover h2 {
+        transform: scale(1.03);
+    }
 }
 
 /* ==========================================
@@ -464,7 +503,6 @@ body.mode-edition .card-item:hover {
     box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
-/* Structure 3D calibrée aux dimensions du slab */
 .gradee-item {
     cursor: pointer;
     user-select: none;
@@ -574,20 +612,20 @@ body.mode-edition .card-item:hover {
     }
 
     .hub-card {
-        min-height: 230px;
-        padding: 26px 12px;
+        min-height: 135px;
+        padding: 18px 14px;
         border-radius: 18px;
     }
 
     .hub-card h2 {
         font-size: 1.15rem;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
         letter-spacing: 0.8px;
     }
 
     .hub-card p {
         font-size: 0.72rem;
-        line-height: 1.35;
+        line-height: 1.3;
         display: block;
     }
 
@@ -612,14 +650,14 @@ body.mode-edition .card-item:hover {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         max-width: 520px;
-        gap: 18px;
+        gap: 16px;
     }
 
     .hub-card {
         min-width: auto;
         max-width: 100%;
-        min-height: 220px;
-        padding: 32px 18px;
+        min-height: 130px;
+        padding: 20px 16px;
         border-radius: 20px;
     }
 
@@ -665,7 +703,6 @@ body.mode-edition .card-item:hover {
         margin-top: 6px;
     }
 
-    /* Cartes Hub : titres seuls */
     .hub-container {
         padding: 20px 16px 40px;
     }
@@ -683,8 +720,8 @@ body.mode-edition .card-item:hover {
     .hub-card {
         min-width: 100%;
         max-width: 100%;
-        min-height: 64px;
-        padding: 16px 20px;
+        min-height: 60px;
+        padding: 14px 18px;
         border-radius: 16px;
     }
 
@@ -694,11 +731,11 @@ body.mode-edition .card-item:hover {
         margin-bottom: 0;
     }
 
+    /* Sous-titres masqués sur mobile */
     .hub-card p {
         display: none !important;
     }
 
-    /* Grilles de cartes */
     .collection-container {
         width: 100% !important;
         max-width: 100% !important;
