@@ -8,7 +8,7 @@ const NO_REVERSE_SET = new Set([
     "141", "149", "152", "153", "154", "157", "158"
 ]);
 
-// Construction des 222 références du set
+// 222 cartes de base + secrètes + promos
 const EV5_CARDS = [
     ...Array.from({ length: 218 }, (_, i) => {
         const num = String(i + 1).padStart(3, '0');
@@ -28,20 +28,11 @@ const EV5_CARDS = [
     { id: "ev05_stamp_prerelease_2", number: "STAFF", name: "Garde-de-Fer (Avant-première)", img: "https://assets.tcgdex.net/fr/sv/svp/116/high.webp", hasReverse: false }
 ];
 
-// Total absolu : 367 cartes
+// Total exact : 367 versions réelles à collectionner
 const TOTAL_COLLECTIBLE = EV5_CARDS.reduce((sum, c) => sum + (c.hasReverse ? 2 : 1), 0);
 
 let ownedCards = new Set();
-let ev5FirestoreDoc = null; // Nom unique évitant le conflit avec script.js
-
-// Récupération universelle de Firestore
-function getMasterDb() {
-    if (typeof db !== "undefined" && db) return db;
-    if (typeof firebase !== "undefined" && firebase.apps && firebase.apps.length > 0) {
-        return firebase.firestore();
-    }
-    return null;
-}
+let ev5DocRef = null;
 
 // Rendu HTML du classeur virtuel
 function renderGrid() {
@@ -84,7 +75,7 @@ function renderGrid() {
     }).join('');
 }
 
-// Clic et sauvegarde Cloud
+// Clic : bascule d'état et écriture Firestore
 window.toggleVariant = function(variantId) {
     if (ownedCards.has(variantId)) {
         ownedCards.delete(variantId);
@@ -98,25 +89,22 @@ window.toggleVariant = function(variantId) {
     // Cache local immédiat
     localStorage.setItem("ev5_owned_cards", JSON.stringify(Array.from(ownedCards)));
 
-    // Sauvegarde Cloud permanente
-    if (!ev5FirestoreDoc) {
-        const fdb = getMasterDb();
-        if (fdb) ev5FirestoreDoc = fdb.collection("collections").doc("masterset_ev05");
+    // Connexion Firestore si pas encore attachée
+    if (!ev5DocRef && typeof db !== "undefined" && db) {
+        ev5DocRef = db.collection("vitrine").doc("masterset_ev05");
     }
 
-    if (ev5FirestoreDoc) {
-        ev5FirestoreDoc.set({ 
+    if (ev5DocRef) {
+        ev5DocRef.set({ 
             owned: Array.from(ownedCards),
             derniereMaj: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge: true })
         .then(() => {
-            console.log("✓ Synchronisation Cloud EV05 réussie");
+            console.log("✓ Cloud Firebase mis à jour");
         })
         .catch(err => {
             console.error("Erreur Firebase Firestore :", err);
-            if (err.code === 'permission-denied') {
-                alert("Action refusée : Connectez-vous en mode admin (maintien sur le titre) pour synchroniser vos modifications.");
-            }
+            alert("Erreur Firebase (" + err.code + ") : connectez-vous avec un appui long sur le titre pour autoriser l'écriture.");
         });
     }
 };
@@ -172,41 +160,39 @@ function migrateLegacyIds() {
     return changed;
 }
 
-// Initialisation et synchronisation temps réel
+// Initialisation et écoute temps réel
 function initMasterSet() {
-    // 1. Charge d'abord le cache pour un affichage instantané
+    // 1. Restauration cache local immédiat
     const localData = localStorage.getItem("ev5_owned_cards");
     if (localData) {
         try {
             ownedCards = new Set(JSON.parse(localData));
             migrateLegacyIds();
-        } catch (e) {}
+        } catch(e) {}
     }
 
     renderGrid();
     updateProgress();
 
-    // 2. Connexion Firestore
-    const fdb = getMasterDb();
-    if (!fdb) {
-        setTimeout(initMasterSet, 250);
-        return;
-    }
-
-    ev5FirestoreDoc = fdb.collection("collections").doc("masterset_ev05");
-    ev5FirestoreDoc.onSnapshot((doc) => {
-        if (doc.exists && doc.data().owned) {
-            ownedCards = new Set(doc.data().owned);
-            if (migrateLegacyIds()) {
-                ev5FirestoreDoc.set({ owned: Array.from(ownedCards) }, { merge: true });
+    // 2. Synchronisation Firebase (collection 'vitrine')
+    if (typeof db !== "undefined" && db) {
+        ev5DocRef = db.collection("vitrine").doc("masterset_ev05");
+        ev5DocRef.onSnapshot((doc) => {
+            if (doc.exists && doc.data().owned) {
+                ownedCards = new Set(doc.data().owned);
+                if (migrateLegacyIds()) {
+                    ev5DocRef.set({ owned: Array.from(ownedCards) }, { merge: true });
+                }
+                localStorage.setItem("ev5_owned_cards", JSON.stringify(Array.from(ownedCards)));
+                updateUI();
+                updateProgress();
             }
-            localStorage.setItem("ev5_owned_cards", JSON.stringify(Array.from(ownedCards)));
-            updateUI();
-            updateProgress();
-        }
-    }, (err) => {
-        console.error("Erreur d'écoute Firestore EV05 :", err);
-    });
+        }, (err) => {
+            console.error("Erreur lecture Firestore EV05 :", err);
+        });
+    } else {
+        setTimeout(initMasterSet, 200);
+    }
 }
 
 document.addEventListener("DOMContentLoaded", initMasterSet);
