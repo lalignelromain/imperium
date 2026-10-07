@@ -1103,6 +1103,82 @@ body.mode-art-pur .legend-box {
 }
 
 /* ====================================================================
+   PASTILLES ET VARIANTES DU MASTER SET (OPTION A)
+==================================================================== */
+.theme-masterset .variant-pills {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 8px;
+    width: 100%;
+}
+
+.theme-masterset .pill-btn {
+    flex: 1;
+    max-width: 78px;
+    padding: 3px 0;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.theme-masterset .pill-btn:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+}
+
+/* Pastille Normale cochée (Cyan) */
+.theme-masterset .pill-btn.pill-reg.active {
+    background: rgba(0, 240, 255, 0.2);
+    border-color: #00f0ff;
+    color: #00f0ff;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+/* Pastille Reverse cochée (Magenta) */
+.theme-masterset .pill-btn.pill-rev.active {
+    background: rgba(255, 0, 128, 0.2);
+    border-color: #ff0080;
+    color: #ff0080;
+    box-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
+}
+
+/* Pastille Unique cochée (Violet néon) */
+.theme-masterset .pill-btn.pill-unique.active {
+    background: rgba(168, 85, 247, 0.25);
+    border-color: #a855f7;
+    color: #e9d5ff;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+}
+
+/* États globaux de la carte */
+.theme-masterset .card-item.status-none {
+    opacity: 0.35;
+    filter: grayscale(80%);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.theme-masterset .card-item.status-partial {
+    opacity: 0.85;
+    filter: grayscale(20%);
+    border-color: rgba(0, 240, 255, 0.4);
+}
+
+.theme-masterset .card-item.status-complete {
+    opacity: 1;
+    filter: none;
+    border-color: #00f0ff;
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.45);
+}
+
+/* ====================================================================
    RESPONSIVE / MEDIA QUERIES
 ==================================================================== */
 
