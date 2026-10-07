@@ -887,52 +887,47 @@ body.mode-art-pur .pocket::before {
 }
 
 /* ====================================================================
-   FRESQUE 9 CASES : CALIBRAGE PRÉCIS SUR LE CADRE ACRYLIQUE
+   FRESQUE 9 CASES : RETOUR AUX BONNES PROPORTIONS (CADRE ACRYLIQUE)
 ==================================================================== */
 body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
-    /* 1. Verrouillage des proportions du tableau d'exposition */
-    width: min(92vw, 520px) !important;
-    aspect-ratio: 4 / 5.1 !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, auto) !important;
+    width: fit-content !important;
+    margin: 0 auto !important;
     
-    /* 2. Image de fond plaquée sans déformation */
-    background-color: transparent !important;
-    background-image: url('../img/odyssee/zenith-supreme-fresque.jpg') !important;
+    /* <-- Remets ici ton chemin qui fonctionnait sur la capture précédente */
+    background-image: url('../img/zenith-supreme-fresque.jpg') !important;
     background-size: 100% 100% !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-
-    /* 3. Marges calculées sur les bords du cadre et du mur */
-    padding: 14% 17% 13% 17% !important;
-    column-gap: 3.6% !important;
-    row-gap: 3% !important;
+    background-color: transparent !important;
     
-    /* 4. Grille stricte 3x3 */
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    grid-template-rows: repeat(3, 1fr) !important;
-    box-sizing: border-box !important;
+    /* Marges calibrées pour s'aligner sur les encoches du plexiglas */
+    padding: clamp(34px, 7vw, 56px) clamp(22px, 4.5vw, 36px) clamp(28px, 5.5vw, 44px) clamp(22px, 4.5vw, 36px) !important;
+    gap: clamp(5px, 1.1vw, 8px) clamp(6px, 1.3vw, 10px) !important;
+    
+    border-radius: 14px !important;
     border: none !important;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9) !important;
 }
 
-/* 5. Chaque carte remplit exactement son encoche acrylique */
+/* Verrouillage strict des cartes : ratio officiel 2.5 / 3.5 non déformable */
 body.theme-odyssee.mode-art-pur .nine-box .pocket {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: none !important;
-    border-radius: 6px !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45) !important;
+    width: clamp(75px, 10.5vw, 110px) !important;
+    aspect-ratio: 2.5 / 3.5 !important;
+    height: auto !important;
+    border-radius: 5px !important;
     overflow: hidden !important;
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
 body.theme-odyssee.mode-art-pur .nine-box .pocket img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: fill !important;
-    border-radius: 5px !important;
+    object-fit: cover !important;
+    display: block !important;
 }
-
 /* ====================================================================
    CARTES LÉGENDE HGSS : PRÉSENTATION CÔTE À CÔTE STABLE
 ==================================================================== */
