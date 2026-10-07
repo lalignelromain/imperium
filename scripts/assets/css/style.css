@@ -893,7 +893,7 @@ body.mode-art-pur .pocket::before {
 /* Mode Art Pur pour la 9-box : Cadre d'art vitrine avec fond étendu */
 body.mode-art-pur .nine-box {
     background-color: #0b1118;
-    background-image: url('../assets/img/zenith-supreme-fresque.jpg');
+    background-image: url('../img/zenith-supreme-fresque.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
