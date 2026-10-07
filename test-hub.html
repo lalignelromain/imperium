@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laboratoire d'effets - Hub Cards</title>
+    <link rel="stylesheet" href="./scripts/assets/css/style.css">
+    <style>
+        body { padding: 40px 20px; align-items: center; }
+        .lab-container { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; max-width: 1200px; }
+        .lab-card { min-height: 160px; padding: 24px 20px; }
+
+        /* EFFET 1 : Reflet Holographique (Sweep) */
+        .effect-holo { overflow: hidden; position: relative; }
+        .effect-holo::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -60%;
+            width: 20%; height: 200%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.35), transparent);
+            transform: rotate(30deg);
+            transition: none;
+            pointer-events: none;
+        }
+        .effect-holo:hover::after {
+            left: 140%;
+            transition: left 0.75s ease-in-out;
+        }
+
+        /* EFFET 2 : Liseré Laser Inférieur */
+        .effect-line h2::after {
+            content: '';
+            display: block;
+            width: 40px; height: 2px;
+            margin: 8px auto 0;
+            background: var(--th-color);
+            box-shadow: 0 0 8px var(--th-glow);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .effect-line:hover h2::after { transform: scaleX(1); }
+
+        /* EFFET 3 : Cœur Psychique Pulsant */
+        .effect-core { transition: background 0.4s ease, border-color 0.4s ease; }
+        .effect-core:hover {
+            background: radial-gradient(circle at center, var(--th-glow) 0%, rgba(12, 15, 22, 0.7) 70%);
+        }
+
+        /* EFFET 4 : Titre Teinté Métallique */
+        .effect-title:hover h2 {
+            background: linear-gradient(135deg, #ffffff 0%, var(--th-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 12px var(--th-glow));
+        }
+    </style>
+</head>
+<body>
+    <div class="lab-container">
+        <!-- 1 -->
+        <div class="hub-card pokedex-card lab-card effect-holo">
+            <h2>Holo Sweep</h2>
+            <p>Reflet oblique</p>
+        </div>
+        <!-- 2 -->
+        <div class="hub-card mew-card lab-card effect-line">
+            <h2>Laser Bar</h2>
+            <p>Liseré néon inférieur</p>
+        </div>
+        <!-- 3 -->
+        <div class="hub-card mewtwo-card lab-card effect-core">
+            <h2>Core Glow</h2>
+            <p>Aura centrale interne</p>
+        </div>
+        <!-- 4 -->
+        <div class="hub-card pantheon-card lab-card effect-title">
+            <h2>Chrome Teinté</h2>
+            <p>Dégradé métal coloré</p>
+        </div>
+    </div>
+</body>
+</html>
