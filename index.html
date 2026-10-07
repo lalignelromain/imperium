@@ -84,21 +84,5 @@
 
     <!-- Moteur Principal & Service Worker -->
     <script src="./scripts/assets/js/script.js"></script>
-    <script>
-    // Écoute temps réel de la progression EV5 pour le Hub
-    db.collection("collections").doc("masterset_ev05").onSnapshot((doc) => {
-        const total = 222; // 218 cartes + 4 stamped
-        let current = 0;
-        if (doc.exists && doc.data().owned) {
-            current = doc.data().owned.length;
-        }
-        const percent = Math.min(100, Math.round((current / total) * 100));
-        
-        const fill = document.getElementById("ev5-hub-progress-fill");
-        const text = document.getElementById("ev5-hub-progress-text");
-        if (fill) fill.style.width = `${percent}%`;
-        if (text) text.innerText = `${current} / ${total} • ${percent}%`;
-    });
-</script>
 </body>
 </html>
