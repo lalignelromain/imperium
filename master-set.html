@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mewthology — Master Set Forces Temporelles</title>
+    <link rel="stylesheet" href="scripts/assets/css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+</head>
+<body class="theme-masterset">
+
+    <header class="header-main">
+        <h1>Master Set EV 5</h1>
+        <p class="subtitle">Forces Temporelles</p>
+        
+        <div class="master-header-progress">
+            <div class="master-progress-bar">
+                <div class="master-progress-fill" id="master-progress-fill"></div>
+            </div>
+            <div class="master-progress-stats" id="master-progress-text">0 / 222 • 0%</div>
+        </div>
+    </header>
+
+    <main class="collection-container">
+        <div class="cards-grid" id="master-grid"></div>
+    </main>
+
+    <nav class="floating-dock">
+        <a href="index.html" class="dock-btn" title="Retour au Hub">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        </a>
+    </nav>
+
+    <script src="scripts/assets/js/firebase-config.js"></script>
+    <script src="scripts/assets/js/master-set.js"></script>
+</body>
+</html>
