@@ -31,7 +31,7 @@ const ADMIN_EMAIL = "romainlal76@gmail.com";
 let localCollection = new Set();
 let isEditMode = false;
 
-// 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL
+// 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL (MEW & MEWTWO)
 function initFirestoreSync() {
     if (!docRef) {
         localCollection = typeof CARTES_POSSEDEES !== 'undefined' ? new Set(CARTES_POSSEDEES) : new Set();
@@ -56,7 +56,7 @@ function saveToCloud() {
     docRef.set({
         ids: Array.from(localCollection),
         derniereMaj: firebase.firestore.FieldValue.serverTimestamp()
-    }).catch(err => {
+    }, { merge: true }).catch(err => {
         console.error("Erreur d'écriture Firestore :", err);
         alert("Action refusée : vérifiez vos droits d'administration.");
     });
@@ -165,6 +165,7 @@ function renderCollection(pokemonName, containerId) {
 function renderPantheon() {
     if (typeof pantheonDatabase === 'undefined') return;
 
+    // Items scellés
     const scellesContainer = document.getElementById('scelles-grid');
     if (scellesContainer && pantheonDatabase.scelles) {
         scellesContainer.innerHTML = pantheonDatabase.scelles.map(item => `
@@ -179,6 +180,7 @@ function renderPantheon() {
         `).join('');
     }
 
+    // Cartes gradées
     const gradeesContainer = document.getElementById('gradees-grid');
     if (gradeesContainer && pantheonDatabase.gradees) {
         gradeesContainer.innerHTML = '';
@@ -227,7 +229,7 @@ function updateAllViews() {
     renderPantheon();
 }
 
-// 7. DOCK FLOTTANT
+// 7. DOCK FLOTTANT EN VERRE
 function setupDock() {
     if (document.getElementById('floating-dock')) return;
 
@@ -319,7 +321,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(err => console.error("SW error:", err));
 }
 
-// 12. PROGRESSION MASTER SET EV5 SUR LE HUB (ANTI-ÉCRASEMENT)
+// 12. PROGRESSION MASTER SET EV5 SUR LE HUB (CIBLAGE DU CHAMP EV05)
 function initEV5ProgressHub() {
     const fill = document.getElementById("ev5-hub-progress-fill");
     const text = document.getElementById("ev5-hub-progress-text");
@@ -327,7 +329,7 @@ function initEV5ProgressHub() {
 
     const TOTAL_MASTERSET = 367;
 
-    // 1. Affiche immédiatement depuis le cache local sans attendre le réseau
+    // 1. Rendu instantané depuis le cache local
     const cached = localStorage.getItem("ev5_progress_cache");
     if (cached) {
         try {
@@ -337,17 +339,17 @@ function initEV5ProgressHub() {
         } catch (e) {}
     }
 
-    // 2. Synchronisation Firebase : met à jour SEULEMENT si des cartes sont trouvées
+    // 2. Synchronisation Firebase temps réel sur vitrine/cartes (champ ev05)
     if (typeof db !== "undefined" && db) {
-        db.collection("vitrine").doc("masterset_ev05").onSnapshot((doc) => {
-            if (doc.exists && doc.data() && Array.isArray(doc.data().owned) && doc.data().owned.length > 0) {
-                const current = doc.data().owned.length;
+        db.collection("vitrine").doc("cartes").onSnapshot((doc) => {
+            if (doc.exists && doc.data() && Array.isArray(doc.data().ev05)) {
+                const current = doc.data().ev05.length;
                 const percent = Math.min(100, Math.round((current / TOTAL_MASTERSET) * 100));
                 fill.style.width = `${percent}%`;
                 text.innerText = `${current} / ${TOTAL_MASTERSET} • ${percent}%`;
             }
         }, (err) => {
-            console.warn("Écoute EV05 Hub en attente :", err);
+            console.warn("Écoute EV05 Hub :", err);
         });
     }
 }
