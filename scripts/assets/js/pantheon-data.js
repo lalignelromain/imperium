@@ -59,7 +59,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-tin-mew",
-            nom: "#07# Mini-Tin<br><small style=\"font-size: 0.82em; font-weight: normal; opacity: 0.85;\">Illustration Mew Jour</small>",
+            nom: "#07# Mini-Tin<br>Illustration Mew Jour",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
@@ -67,7 +67,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-tin-mewtwo",
-            nom: "#08# Mini-Tin<br><small style=\"font-size: 0.82em; font-weight: normal; opacity: 0.85;\">Illustration Mewtwo Nuit</small>",
+            nom: "#08# Mini-Tin<br>Illustration Mewtwo Nuit",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
