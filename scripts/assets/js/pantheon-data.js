@@ -1,11 +1,17 @@
 /* ====================================================================
-   BASE DE DONNÉES PANTHÉON (Items scellés & Cartes gradées)
+   MEWTHOLOGY - BASE DE DONNÉES DU PANTHÉON
+   Fichier : scripts/assets/js/pantheon-data.js
+   Description : Items scellés (avec balise de tri #XX#) & Cartes gradées 3D
 ==================================================================== */
+
 const pantheonDatabase = {
+    // ----------------------------------------------------------------
+    // 1. ITEMS SCELLÉS (Le tag #XX# définit l'ordre d'apparition)
+    // ----------------------------------------------------------------
     scelles: [
         {
             id: "scelle-etb-paldea",
-            nom: "Coffret Dresseur D'Élite (ETB)",
+            nom: "#01# Coffret Dresseur D'Élite (ETB)",
             extension: "Destinées de Paldéa (EV 4.5)",
             annee: 2024,
             langue: "fr",
@@ -13,7 +19,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-artset-blister",
-            nom: "Blister (Art-set)",
+            nom: "#02# Blister (Art-set)",
             extension: "Étincelles Déferlantes (EV 8)",
             annee: 2024,
             langue: "fr",
@@ -21,31 +27,23 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-etb-ave",
-            nom: "Coffret Dresseur D'Élite (ETB)",
+            nom: "#03# Coffret Dresseur D'Élite (ETB)",
             extension: "Aventures Ensemble (EV 9)",
             annee: 2025,
             langue: "fr",
             image: "./scripts/assets/img/etb-ave.png"
         },
         {
-            id: "scelle-tin-mew",
-            nom: "Mini-Tin (Illustration Mew Jour)",
+            id: "scelle-coffret-jour",
+            nom: "#04# Coffret Journée Pokémon 2026",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
-            image: "./scripts/assets/img/tin-mew.png"
-        },
-        {
-            id: "scelle-tin-mewtwo",
-            nom: "Mini-Tin (Illustration Mewtwo Nuit)",
-            extension: "Collection Anniversaire 30 ans",
-            annee: 2026,
-            langue: "fr",
-            image: "./scripts/assets/img/tin-mewtwo.png"
+            image: "./scripts/assets/img/coffret-jour.png"
         },
         {
             id: "scelle-etb-30",
-            nom: "Coffret Dresseur D'Élite (ETB)",
+            nom: "#05# Coffret Dresseur D'Élite (ETB)",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
@@ -53,29 +51,41 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-coffret-cla",
-            nom: "Coffret Classeur",
+            nom: "#06# Coffret Classeur",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
             image: "./scripts/assets/img/coffret-cla.png"
         },
         {
-            id: "scelle-coffret-jour",
-            nom: "Coffret Journée Pokémon 2026",
+            id: "scelle-tin-mew",
+            nom: "#07# Mini-Tin (Illustration Mew Jour)",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
-            image: "./scripts/assets/img/coffret-jour.png"
+            image: "./scripts/assets/img/tin-mew.png"
+        },
+        {
+            id: "scelle-tin-mewtwo",
+            nom: "#08# Mini-Tin (Illustration Mewtwo Nuit)",
+            extension: "Collection Anniversaire 30 ans",
+            annee: 2026,
+            langue: "fr",
+            image: "./scripts/assets/img/tin-mewtwo.png"
         },
         {
             id: "scelle-bundle-30",
-            nom: "Coffret Bundle",
+            nom: "#09# Coffret Bundle",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
             image: "./scripts/assets/img/bundle-30.jpg"
         }
     ],
+
+    // ----------------------------------------------------------------
+    // 2. CARTES GRADÉES (Double face & retournement tactile / survol)
+    // ----------------------------------------------------------------
     gradees: [
         {
             id: "gradee-mew-babanuki",
