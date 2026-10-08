@@ -161,24 +161,36 @@ function renderCollection(pokemonName, containerId) {
     container.innerHTML = html;
 }
 
-// 6. RENDU PANTHÉON (ITEMS SCELLÉS & CARTES GRADÉES 3D)
+// 6. RENDU PANTHÉON (ITEMS SCELLÉS AVEC TRI #XX# & CARTES GRADÉES 3D)
 function renderPantheon() {
     if (typeof pantheonDatabase === 'undefined') return;
 
+    // Items scellés : tri numérique intelligent via balise #XX#
     const scellesContainer = document.getElementById('scelles-grid');
     if (scellesContainer && pantheonDatabase.scelles) {
-        scellesContainer.innerHTML = pantheonDatabase.scelles.map(item => `
-            <div class="pantheon-item item-scelle">
-                <img src="${resolveImg(item.image, item.langue)}" alt="${item.nom}" loading="lazy">
-                <div class="item-info">
-                    <h4>${item.nom}</h4>
-                    <p style="font-size: 12px; color: #aaa;">${item.extension}</p>
-                    <p style="font-size: 11px; color: #666;">${item.annee} • ${item.langue.toUpperCase()}</p>
+        const scellesTries = [...pantheonDatabase.scelles].sort((a, b) => {
+            const numA = parseInt((a.nom.match(/#(\d+)#/) || [])[1], 10) || 999;
+            const numB = parseInt((b.nom.match(/#(\d+)#/) || [])[1], 10) || 999;
+            return numA - numB;
+        });
+
+        scellesContainer.innerHTML = scellesTries.map(item => {
+            const nomAffiche = item.nom.replace(/#\d+#\s*/, '');
+
+            return `
+                <div class="pantheon-item item-scelle">
+                    <img src="${resolveImg(item.image, item.langue)}" alt="${nomAffiche}" loading="lazy">
+                    <div class="item-info">
+                        <h4>${nomAffiche}</h4>
+                        <p style="font-size: 12px; color: #aaa;">${item.extension}</p>
+                        <p style="font-size: 11px; color: #666;">${item.annee} • ${item.langue.toUpperCase()}</p>
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
+    // Cartes gradées : double face et retournement 3D
     const gradeesContainer = document.getElementById('gradees-grid');
     if (gradeesContainer && pantheonDatabase.gradees) {
         gradeesContainer.innerHTML = '';
@@ -204,6 +216,7 @@ function renderPantheon() {
                 </div>
             `;
 
+            // Interaction tactile sur mobile uniquement
             cardDiv.addEventListener('click', () => {
                 const isDesktopHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
                 if (!isDesktopHover) {
@@ -211,6 +224,7 @@ function renderPantheon() {
                 }
             });
 
+            // Réinitialisation desktop si le curseur sort
             cardDiv.addEventListener('mouseleave', () => {
                 cardDiv.classList.remove('is-flipped');
             });
@@ -259,7 +273,7 @@ function setupDock() {
     });
 }
 
-// 8. DÉCLENCHEUR DU MODE ÉDITION
+// 8. DÉCLENCHEUR DU MODE ÉDITION (Double-clic & Appui long sur le titre)
 function setupAdminTrigger() {
     const title = document.querySelector('.header-main h1');
     if (!title) return;
