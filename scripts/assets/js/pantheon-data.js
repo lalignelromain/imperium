@@ -51,7 +51,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-coffret-cla",
-            nom: "#06# Coffret Classeur",
+            nom: "#09# Coffret Classeur",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
@@ -59,7 +59,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-tin-mew",
-            nom: "#07# Mini-Tin (Illustration Mew Jour)",
+            nom: "#07# Mini-Tin<br><small style=\"font-size: 0.82em; font-weight: normal; opacity: 0.85;\">Illustration Mew Jour</small>",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
@@ -67,7 +67,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-tin-mewtwo",
-            nom: "#08# Mini-Tin (Illustration Mewtwo Nuit)",
+            nom: "#08# Mini-Tin<br><small style=\"font-size: 0.82em; font-weight: normal; opacity: 0.85;\">Illustration Mewtwo Nuit</small>",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
@@ -75,7 +75,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-bundle-30",
-            nom: "#09# Coffret Bundle",
+            nom: "#06# Coffret Bundle",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
