@@ -165,7 +165,6 @@ function renderCollection(pokemonName, containerId) {
 function renderPantheon() {
     if (typeof pantheonDatabase === 'undefined') return;
 
-    // Items scellés
     const scellesContainer = document.getElementById('scelles-grid');
     if (scellesContainer && pantheonDatabase.scelles) {
         scellesContainer.innerHTML = pantheonDatabase.scelles.map(item => `
@@ -180,7 +179,6 @@ function renderPantheon() {
         `).join('');
     }
 
-    // Cartes gradées
     const gradeesContainer = document.getElementById('gradees-grid');
     if (gradeesContainer && pantheonDatabase.gradees) {
         gradeesContainer.innerHTML = '';
@@ -321,13 +319,13 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(err => console.error("SW error:", err));
 }
 
-// 12. PROGRESSION MASTER SET EV5 SUR LE HUB (CIBLAGE DU CHAMP EV05)
+// 12. PROGRESSION MASTER SET EV5 SUR LE HUB (TOTAL DE 363)
 function initEV5ProgressHub() {
     const fill = document.getElementById("ev5-hub-progress-fill");
     const text = document.getElementById("ev5-hub-progress-text");
     if (!fill || !text) return;
 
-    const TOTAL_MASTERSET = 367;
+    const TOTAL_MASTERSET = 363;
 
     // 1. Rendu instantané depuis le cache local
     const cached = localStorage.getItem("ev5_progress_cache");
