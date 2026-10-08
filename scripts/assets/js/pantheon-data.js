@@ -8,9 +8,72 @@ const pantheonDatabase = {
             nom: "Coffret Dresseur D'Élite (ETB)",
             extension: "Destinées de Paldéa (EV 4.5)",
             annee: 2024,
-            dateSortie: "01/2024",
             langue: "fr",
             image: "./scripts/assets/img/etb-pal.png"
+        },
+        {
+            id: "scelle-artset-blister",
+            nom: "Blister (Art-set)",
+            extension: "Étincelles Déferlantes (EV 8)",
+            annee: 2024,
+            langue: "fr",
+            image: "./scripts/assets/img/artset-blister.png"
+        },
+        {
+            id: "scelle-etb-ave",
+            nom: "Coffret Dresseur D'Élite (ETB)",
+            extension: "Aventures Ensemble (EV 9)",
+            annee: 2025,
+            langue: "fr",
+            image: "./scripts/assets/img/etb-ave.png"
+        },
+        {
+            id: "scelle-tin-mew",
+            nom: "Mini-Tin (Illustration Mew Jour)",
+            extension: "Collection Anniversaire 30 ans",
+            annee: 2026,
+            langue: "fr",
+            image: "./scripts/assets/img/tin-mew.png"
+        },
+        {
+            id: "scelle-tin-mewtwo",
+            nom: "Mini-Tin (Illustration Mewtwo Nuit)",
+            extension: "Collection Anniversaire 30 ans",
+            annee: 2026,
+            langue: "fr",
+            image: "./scripts/assets/img/tin-mewtwo.png"
+        },
+        {
+            id: "scelle-etb-30",
+            nom: "Coffret Dresseur D'Élite (ETB)",
+            extension: "Collection Anniversaire 30 ans",
+            annee: 2026,
+            langue: "fr",
+            image: "./scripts/assets/img/etb-30.png"
+        },
+        {
+            id: "scelle-coffret-cla",
+            nom: "Coffret Classeur",
+            extension: "Collection Anniversaire 30 ans",
+            annee: 2026,
+            langue: "fr",
+            image: "./scripts/assets/img/coffret-cla.png"
+        },
+        {
+            id: "scelle-coffret-jour",
+            nom: "Coffret Journée Pokémon 2026",
+            extension: "Collection Anniversaire 30 ans",
+            annee: 2026,
+            langue: "fr",
+            image: "./scripts/assets/img/coffret-jour.png"
+        },
+        {
+            id: "scelle-bundle-30",
+            nom: "Coffret Bundle",
+            extension: "Collection Anniversaire 30 ans",
+            annee: 2026,
+            langue: "fr",
+            image: "./scripts/assets/img/bundle-30.jpg"
         }
     ],
     gradees: [
