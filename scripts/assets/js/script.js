@@ -29,7 +29,7 @@ const ADMIN_EMAIL = "romainlal76@gmail.com";
 
 // État local en mémoire
 let localCollection = new Set();
-let cardLangs = {}; // Structure: { [cardId]: { fr: boolean, jp: boolean } }
+let cardLangs = {}; // Structure : { [cardId]: { fr: boolean, jp: boolean } }
 let hallOfFameData = {
     mew: [],
     mewtwo: []
@@ -129,7 +129,7 @@ function renderPokedex() {
     });
 }
 
-// 5. RENDU DU CLASSEUR VAULT X 4x3 & DU HALL OF FAME
+// 5. RENDU DU CLASSEUR VAULT X 4x3 & DU HALL OF FAME PSA
 function renderBinderView(pokemonName) {
     const binderContainer = document.getElementById('binder-deck');
     const psaContainer = document.getElementById('psa-wall');
@@ -146,7 +146,15 @@ function renderBinderView(pokemonName) {
             const card = cardId ? cartesPossedees.find(c => c.id === cardId) : null;
 
             if (card) {
-                const yearPrefix = (card.annee && card.annee !== "Inconnue") ? `${card.annee} ` : '';
+                // Élimine toute mention "Inconnue" pour respecter le label PSA
+                const hasValidYear = card.annee && String(card.annee).toLowerCase() !== "inconnue";
+                const lineSet = hasValidYear 
+                    ? `${card.annee} POKÉMON ${card.extension.toUpperCase()}`
+                    : `POKÉMON ${card.extension.toUpperCase()}`;
+
+                const lineSub = (card.spec || card.rarete || card.rarity || card.extension || 'OFFICIAL ARCHIVE').toUpperCase();
+                const cardNum = card.numero ? String(card.numero).replace(/^#/, '') : 'PROMO';
+                const certCode = card.cert || `2735808${i + 1}`;
                 const displayImg = resolveImg(card.imageFr || card.image, card.langue);
 
                 psaHTML += `
@@ -154,21 +162,21 @@ function renderBinderView(pokemonName) {
                         <div class="psa-label-card">
                             <div class="psa-upper-block">
                                 <div class="psa-left-text">
-                                    <span class="psa-row-set">${yearPrefix}POKÉMON ${card.extension.toUpperCase()}</span>
+                                    <span class="psa-row-set">${lineSet}</span>
                                     <span class="psa-row-name">${card.nom.toUpperCase()}</span>
-                                    <span class="psa-row-sub">${(card.extension || 'OFFICIAL ARCHIVE').toUpperCase()}</span>
+                                    <span class="psa-row-sub">${lineSub}</span>
                                 </div>
                                 <div class="psa-right-text">
-                                    <span class="psa-card-number">${card.numero}</span>
+                                    <span class="psa-card-number">${cardNum}</span>
                                     <span class="psa-grade-title">AUTHENTIC</span>
                                     <span class="psa-grade-value">A</span>
                                 </div>
                             </div>
                             <div class="psa-lower-block">
                                 <div class="psa-barcode-svg"></div>
-                                <span class="psa-cert-code">7193028${i}</span>
+                                <span class="psa-cert-code">${certCode}</span>
                             </div>
-                            <div class="psa-foil-seal"></div>
+                            <div class="psa-foil-seal" title="PSA Lighthouse Security"></div>
                         </div>
                         <div class="psa-card-chamber">
                             <img src="${displayImg}" alt="${card.nom}" loading="lazy">
@@ -190,7 +198,9 @@ function renderBinderView(pokemonName) {
 
     // --- B. RENDU DU CLASSEUR VAULT X (PLANCHE 4x3) ---
     const totalCountEl = document.getElementById('total-count-text');
-    if (totalCountEl) totalCountEl.innerText = `${cartesPossedees.length} cartes en classeur`;
+    if (totalCountEl) {
+        totalCountEl.innerText = `${cartesPossedees.length} cartes en classeur`;
+    }
 
     if (cartesPossedees.length === 0) {
         binderContainer.innerHTML = `
@@ -249,11 +259,13 @@ function renderBinderView(pokemonName) {
                 <div class="vaultx-pocket ${inHof ? 'in-hof' : ''}" id="pocket-${c.id}">
                     ${pocketContent}
 
+                    <!-- Sélecteur FR / JP en Mode Édition -->
                     <div class="lang-toggles">
                         <button type="button" class="lang-btn ${userLang.fr ? 'active' : ''}" onclick="event.stopPropagation(); toggleCardLang('${c.id}', 'fr')">FR</button>
                         <button type="button" class="lang-btn ${userLang.jp ? 'active' : ''}" onclick="event.stopPropagation(); toggleCardLang('${c.id}', 'jp')">JP</button>
                     </div>
 
+                    <!-- Épingle Hall of Fame -->
                     <button type="button" class="hof-pin-btn" title="Épingler au Hall of Fame" onclick="event.stopPropagation(); toggleHofSlot('${pokemonName}', '${c.id}')">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     </button>
@@ -282,7 +294,6 @@ window.toggleCardLang = function(cardId, lang) {
 
     cardLangs[cardId][lang] = !cardLangs[cardId][lang];
 
-    // Si aucune langue cochée, la carte est retirée de la collection
     if (!cardLangs[cardId].fr && !cardLangs[cardId].jp) {
         localCollection.delete(cardId);
         delete cardLangs[cardId];
