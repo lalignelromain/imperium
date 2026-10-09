@@ -11,15 +11,15 @@ const odysseeDatabase = [
     format: "nine-box",
     desc: "Les 9 cartes s'assemblent pour former un panorama forestier continu.",
     cartes: [
-      { id: "swsh12pt5gg-GG47", set: "swsh12pt5gg", num: "GG47", nom: "Sorcilence VMAX", file: "zenith-gg47.png" },
-      { id: "swsh12pt5gg-GG48", set: "swsh12pt5gg", num: "GG48", nom: "Zacian V", file: "zenith-gg48.png" },
-      { id: "swsh12pt5gg-GG49", set: "swsh12pt5gg", num: "GG49", nom: "Drascore V", file: "zenith-gg49.png" },
-      { id: "swsh12pt5gg-GG50", set: "swsh12pt5gg", num: "GG50", nom: "Darkrai VSTAR", file: "zenith-gg50.png" },
-      { id: "swsh12pt5gg-GG51", set: "swsh12pt5gg", num: "GG51", nom: "Clamiral de Hisui V", file: "zenith-gg51.png" },
-      { id: "swsh12pt5gg-GG52", set: "swsh12pt5gg", num: "GG52", nom: "Clamiral de Hisui VSTAR", file: "zenith-gg52.png" },
-      { id: "swsh12pt5gg-GG53", set: "swsh12pt5gg", num: "GG53", nom: "Hoopa V", file: "zenith-gg53.png" },
-      { id: "swsh12pt5gg-GG54", set: "swsh12pt5gg", num: "GG54", nom: "Zamazenta V", file: "zenith-gg54.png" },
-      { id: "swsh12pt5gg-GG55", set: "swsh12pt5gg", num: "GG55", nom: "Regigigas VSTAR", file: "zenith-gg55.png" }
+      { id: "riolu-gg", nom: "Riolu", extension: "Zénith Suprême", num: "GG47", file: "zenith-riolu.png" },
+      { id: "tylton-gg", nom: "Tylton", extension: "Zénith Suprême", num: "GG48", file: "zenith-tylton.png" },
+      { id: "amagara-gg", nom: "Amagara", extension: "Zénith Suprême", num: "GG49", file: "zenith-amagara.png" },
+      { id: "pikachu-gg", nom: "Pikachu", extension: "Zénith Suprême", num: "GG50", file: "zenith-pikachu.png" },
+      { id: "tortipouss-gg", nom: "Tortipouss", extension: "Zénith Suprême", num: "GG51", file: "zenith-tortipouss.png" },
+      { id: "laporeille-gg", nom: "Laporeille", extension: "Zénith Suprême", num: "GG52", file: "zenith-laporeille.png" },
+      { id: "manglouton-gg", nom: "Manglouton", extension: "Zénith Suprême", num: "GG53", file: "zenith-manglouton.png" },
+      { id: "keunotor-gg", nom: "Keunotor", extension: "Zénith Suprême", num: "GG54", file: "zenith-keunotor.png" },
+      { id: "brindibou-gg", nom: "Brindibou", extension: "Zénith Suprême", num: "GG55", file: "zenith-brindibou.png" }
     ]
   },
   {
@@ -29,22 +29,22 @@ const odysseeDatabase = [
     format: "quad",
     desc: "Fresque cosmique de 4 cartes Secrètes Gold.",
     cartes: [
-      { id: "swsh12pt5gg-GG67", set: "swsh12pt5gg", num: "GG67", nom: "Palkia Originel VSTAR", file: "palkia-gg67.png" },
-      { id: "swsh12pt5gg-GG68", set: "swsh12pt5gg", num: "GG68", nom: "Dialga Originel VSTAR", file: "dialga-gg68.png" },
-      { id: "swsh12pt5gg-GG69", set: "swsh12pt5gg", num: "GG69", nom: "Giratina VSTAR", file: "giratina-gg69.png" },
-      { id: "swsh12pt5gg-GG70", set: "swsh12pt5gg", num: "GG70", nom: "Arceus VSTAR", file: "arceus-gg70.png" }
+      { id: "palkia-gg67", nom: "Palkia Originel VSTAR", extension: "Zénith Suprême", num: "GG67", file: "palkia-gg67.png" },
+      { id: "dialga-gg68", nom: "Dialga Originel VSTAR", extension: "Zénith Suprême", num: "GG68", file: "dialga-gg68.png" },
+      { id: "giratina-gg69", nom: "Giratina VSTAR", extension: "Zénith Suprême", num: "GG69", file: "giratina-gg69.png" },
+      { id: "arceus-gg70", nom: "Arceus VSTAR", extension: "Zénith Suprême", num: "GG70", file: "arceus-gg70.png" }
     ]
   },
   {
     id: "oiseaux-legendaires-trio",
     titre: "Trio des Oiseaux",
-    extension: "WotC Black Star Promo",
+    extension: "Promo Black Star",
     format: "trio",
     desc: "Les trois cartes placées côte à côte partagent le même ciel.",
     cartes: [
-      { id: "basep-21", set: "basep", num: "21", nom: "Sulfura", file: "sulfura-p21.png" },
-      { id: "basep-22", set: "basep", num: "22", nom: "Artikodin", file: "artikodin-p22.png" },
-      { id: "basep-23", set: "basep", num: "23", nom: "Électhor", file: "electhor-p23.png" }
+      { id: "sulfura-p21", nom: "Sulfura", extension: "Promo", num: "21", file: "sulfura-p21.png" },
+      { id: "artikodin-p22", nom: "Artikodin", extension: "Promo", num: "22", file: "artikodin-p22.png" },
+      { id: "electhor-p23", nom: "Électhor", extension: "Promo", num: "23", file: "electhor-p23.png" }
     ]
   },
   {
@@ -54,10 +54,10 @@ const odysseeDatabase = [
     format: "quad",
     desc: "Les halos spatiaux se prolongent d'une carte à l'autre.",
     cartes: [
-      { id: "dp5-1", set: "dp5", num: "1", nom: "Deoxys Normal", file: "deoxys-normal-1.png" },
-      { id: "dp5-2", set: "dp5", num: "2", nom: "Deoxys Attaque", file: "deoxys-attaque-2.png" },
-      { id: "dp5-3", set: "dp5", num: "3", nom: "Deoxys Défense", file: "deoxys-defense-3.png" },
-      { id: "dp5-4", set: "dp5", num: "4", nom: "Deoxys Vitesse", file: "deoxys-vitesse-4.png" }
+      { id: "deoxys-1", nom: "Deoxys", extension: "Aube Majestueuse", num: "1", file: "deoxys-normal-1.png" },
+      { id: "deoxys-2", nom: "Deoxys", extension: "Aube Majestueuse", num: "2", file: "deoxys-attaque-2.png" },
+      { id: "deoxys-3", nom: "Deoxys", extension: "Aube Majestueuse", num: "3", file: "deoxys-defense-3.png" },
+      { id: "deoxys-4", nom: "Deoxys", extension: "Aube Majestueuse", num: "4", file: "deoxys-vitesse-4.png" }
     ]
   },
   {
@@ -67,9 +67,9 @@ const odysseeDatabase = [
     format: "trio",
     desc: "Les trois cartes forment une seule branche d'arbre en panorama.",
     cartes: [
-      { id: "dp3-45", set: "dp3", num: "45", nom: "Cheniti Cape Plante", file: "cheniti-plante-45.png" },
-      { id: "dp3-46", set: "dp3", num: "46", nom: "Cheniti Cape Sable", file: "cheniti-sable-46.png" },
-      { id: "dp3-47", set: "dp3", num: "47", nom: "Cheniti Cape Déchet", file: "cheniti-dechet-47.png" }
+      { id: "cheniti-45", nom: "Cheniti Cape Plante", extension: "Merveilles Secrètes", num: "45", file: "cheniti-plante-45.png" },
+      { id: "cheniti-46", nom: "Cheniti Cape Sable", extension: "Merveilles Secrètes", num: "46", file: "cheniti-sable-46.png" },
+      { id: "cheniti-47", nom: "Cheniti Cape Déchet", extension: "Merveilles Secrètes", num: "47", file: "cheniti-dechet-47.png" }
     ]
   },
   {
@@ -79,63 +79,63 @@ const odysseeDatabase = [
     format: "duo",
     desc: "Les éclairs projetés se rejoignent parfaitement au centre.",
     cartes: [
-      { id: "xy3-31", set: "xy3", num: "31", nom: "Posipi", file: "posipi-xy3-31.png" },
-      { id: "xy3-32", set: "xy3", num: "32", nom: "Négapi", file: "negapi-xy3-32.png" }
+      { id: "posipi-xy3-31", nom: "Posipi", extension: "Poings Furieux", num: "31", file: "posipi-xy3-31.png" },
+      { id: "negapi-xy3-32", nom: "Négapi", extension: "Poings Furieux", num: "32", file: "negapi-xy3-32.png" }
     ]
   },
   {
     id: "seviper-mangriff-face",
     titre: "Le Face-à-Face",
-    extension: "EX Tempête de Sable",
+    extension: "Tempête de Sable",
     format: "duo",
     desc: "Les deux ennemis naturels se font face dans le même désert.",
     cartes: [
-      { id: "ex2-73", set: "ex2", num: "73", nom: "Séviper", file: "seviper-ex2-73.png" },
-      { id: "ex2-84", set: "ex2", num: "84", nom: "Mangriff", file: "mangriff-ex2-84.png" }
+      { id: "seviper-ex2-73", nom: "Séviper", extension: "Tempête de Sable", num: "73", file: "seviper-ex2-73.png" },
+      { id: "mangriff-ex2-84", nom: "Mangriff", extension: "Tempête de Sable", num: "84", file: "mangriff-ex2-84.png" }
     ]
   },
   {
     id: "seleroc-solaroc-aura",
     titre: "L'Aura Cosmique",
-    extension: "EX Gardiens de Cristal",
+    extension: "Gardiens de Cristal",
     format: "duo",
     desc: "L'aura d'énergie qui entoure les deux Pokémon se complète.",
     cartes: [
-      { id: "ex14-37", set: "ex14", num: "37", nom: "Séléroc", file: "seleroc-ex14-37.png" },
-      { id: "ex14-41", set: "ex14", num: "41", nom: "Solaroc", file: "solaroc-ex14-41.png" }
+      { id: "seleroc-ex14-37", nom: "Séléroc", extension: "Gardiens de Cristal", num: "37", file: "seleroc-ex14-37.png" },
+      { id: "solaroc-ex14-41", nom: "Solaroc", extension: "Gardiens de Cristal", num: "41", file: "solaroc-ex14-41.png" }
     ]
   },
   {
     id: "double-crise-duo",
     titre: "Double Crise",
-    extension: "Team Aqua vs Team Magma",
+    extension: "Double Danger",
     format: "duo",
     desc: "Leurs attaques élémentaires se heurtent au centre.",
     cartes: [
-      { id: "dc1-14", set: "dc1", num: "14", nom: "Kyogre de la Team Aqua", file: "kyogre-dc1-14.png" },
-      { id: "dc1-15", set: "dc1", num: "15", nom: "Groudon de la Team Magma", file: "groudon-dc1-15.png" }
+      { id: "kyogre-dc1-14", nom: "Kyogre de la Team Aqua", extension: "Double Danger", num: "14", file: "kyogre-dc1-14.png" },
+      { id: "groudon-dc1-15", nom: "Groudon de la Team Magma", extension: "Double Danger", num: "15", file: "groudon-dc1-15.png" }
     ]
   },
   {
     id: "hgss-hooh",
     titre: "Ho-Oh LÉGENDE",
-    extension: "HeartGold & SoulSilver",
+    extension: "HeartGold SoulSilver",
     format: "legend",
     desc: "Assemblage de la moitié haute et basse de Ho-Oh.",
     cartes: [
-      { id: "hgss1-111", set: "hgss1", num: "111", nom: "Ho-Oh LÉGENDE (Haut)", file: "hooh-legend-haut.png" },
-      { id: "hgss1-112", set: "hgss1", num: "112", nom: "Ho-Oh LÉGENDE (Bas)", file: "hooh-legend-bas.png" }
+      { id: "hooh-111", nom: "Ho-Oh LÉGENDE", extension: "HeartGold SoulSilver", num: "111", file: "hooh-legend-haut.png" },
+      { id: "hooh-112", nom: "Ho-Oh LÉGENDE", extension: "HeartGold SoulSilver", num: "112", file: "hooh-legend-bas.png" }
     ]
   },
   {
     id: "hgss-lugia",
     titre: "Lugia LÉGENDE",
-    extension: "HeartGold & SoulSilver",
+    extension: "HeartGold SoulSilver",
     format: "legend",
     desc: "Assemblage de la moitié haute et basse de Lugia.",
     cartes: [
-      { id: "hgss1-113", set: "hgss1", num: "113", nom: "Lugia LÉGENDE (Haut)", file: "lugia-legend-haut.png" },
-      { id: "hgss1-114", set: "hgss1", num: "114", nom: "Lugia LÉGENDE (Bas)", file: "lugia-legend-bas.png" }
+      { id: "lugia-113", nom: "Lugia LÉGENDE", extension: "HeartGold SoulSilver", num: "113", file: "lugia-legend-haut.png" },
+      { id: "lugia-114", nom: "Lugia LÉGENDE", extension: "HeartGold SoulSilver", num: "114", file: "lugia-legend-bas.png" }
     ]
   },
   {
@@ -145,8 +145,8 @@ const odysseeDatabase = [
     format: "legend",
     desc: "Moitiés haute et basse.",
     cartes: [
-      { id: "hgss2-90", set: "hgss2", num: "90", nom: "Entei & Raikou LÉGENDE (Haut)", file: "entei-raikou-haut.png" },
-      { id: "hgss2-91", set: "hgss2", num: "91", nom: "Entei & Raikou LÉGENDE (Bas)", file: "entei-raikou-bas.png" }
+      { id: "entei-raikou-90", nom: "Entei & Raikou LÉGENDE", extension: "Déchaînement", num: "90", file: "entei-raikou-haut.png" },
+      { id: "entei-raikou-91", nom: "Entei & Raikou LÉGENDE", extension: "Déchaînement", num: "91", file: "entei-raikou-bas.png" }
     ]
   },
   {
@@ -156,8 +156,8 @@ const odysseeDatabase = [
     format: "legend",
     desc: "Moitiés haute et basse.",
     cartes: [
-      { id: "hgss2-92", set: "hgss2", num: "92", nom: "Raikou & Suicune LÉGENDE (Haut)", file: "raikou-suicune-haut.png" },
-      { id: "hgss2-93", set: "hgss2", num: "93", nom: "Raikou & Suicune LÉGENDE (Bas)", file: "raikou-suicune-bas.png" }
+      { id: "raikou-suicune-92", nom: "Raikou & Suicune LÉGENDE", extension: "Déchaînement", num: "92", file: "raikou-suicune-haut.png" },
+      { id: "raikou-suicune-93", nom: "Raikou & Suicune LÉGENDE", extension: "Déchaînement", num: "93", file: "raikou-suicune-bas.png" }
     ]
   },
   {
@@ -167,8 +167,8 @@ const odysseeDatabase = [
     format: "legend",
     desc: "Moitiés haute et basse.",
     cartes: [
-      { id: "hgss2-94", set: "hgss2", num: "94", nom: "Suicune & Entei LÉGENDE (Haut)", file: "suicune-entei-haut.png" },
-      { id: "hgss2-95", set: "hgss2", num: "95", nom: "Suicune & Entei LÉGENDE (Bas)", file: "suicune-entei-bas.png" }
+      { id: "suicune-entei-94", nom: "Suicune & Entei LÉGENDE", extension: "Déchaînement", num: "94", file: "suicune-entei-haut.png" },
+      { id: "suicune-entei-95", nom: "Suicune & Entei LÉGENDE", extension: "Déchaînement", num: "95", file: "suicune-entei-bas.png" }
     ]
   },
   {
@@ -178,8 +178,8 @@ const odysseeDatabase = [
     format: "legend",
     desc: "Moitiés haute et basse.",
     cartes: [
-      { id: "hgss3-87", set: "hgss3", num: "87", nom: "Kyogre & Groudon LÉGENDE (Haut)", file: "kyogre-groudon-haut.png" },
-      { id: "hgss3-88", set: "hgss3", num: "88", nom: "Kyogre & Groudon LÉGENDE (Bas)", file: "kyogre-groudon-bas.png" }
+      { id: "kyogre-groudon-87", nom: "Kyogre & Groudon LÉGENDE", extension: "Indomptable", num: "87", file: "kyogre-groudon-haut.png" },
+      { id: "kyogre-groudon-88", nom: "Kyogre & Groudon LÉGENDE", extension: "Indomptable", num: "88", file: "kyogre-groudon-bas.png" }
     ]
   },
   {
@@ -189,8 +189,8 @@ const odysseeDatabase = [
     format: "legend",
     desc: "Moitiés haute et basse.",
     cartes: [
-      { id: "hgss3-89", set: "hgss3", num: "89", nom: "Rayquaza & Deoxys LÉGENDE (Haut)", file: "rayquaza-deoxys-haut.png" },
-      { id: "hgss3-90", set: "hgss3", num: "90", nom: "Rayquaza & Deoxys LÉGENDE (Bas)", file: "rayquaza-deoxys-bas.png" }
+      { id: "rayquaza-deoxys-89", nom: "Rayquaza & Deoxys LÉGENDE", extension: "Indomptable", num: "89", file: "rayquaza-deoxys-haut.png" },
+      { id: "rayquaza-deoxys-90", nom: "Rayquaza & Deoxys LÉGENDE", extension: "Indomptable", num: "90", file: "rayquaza-deoxys-bas.png" }
     ]
   },
   {
@@ -200,8 +200,8 @@ const odysseeDatabase = [
     format: "legend",
     desc: "Moitiés haute et basse.",
     cartes: [
-      { id: "hgss4-99", set: "hgss4", num: "99", nom: "Darkrai & Cresselia LÉGENDE (Haut)", file: "darkrai-cresselia-haut.png" },
-      { id: "hgss4-100", set: "hgss4", num: "100", nom: "Darkrai & Cresselia LÉGENDE (Bas)", file: "darkrai-cresselia-bas.png" }
+      { id: "darkrai-cresselia-99", nom: "Darkrai & Cresselia LÉGENDE", extension: "Triomphe", num: "99", file: "darkrai-cresselia-haut.png" },
+      { id: "darkrai-cresselia-100", nom: "Darkrai & Cresselia LÉGENDE", extension: "Triomphe", num: "100", file: "darkrai-cresselia-bas.png" }
     ]
   },
   {
@@ -211,8 +211,8 @@ const odysseeDatabase = [
     format: "legend",
     desc: "Moitiés haute et basse.",
     cartes: [
-      { id: "hgss4-101", set: "hgss4", num: "101", nom: "Dialga & Palkia LÉGENDE (Haut)", file: "dialga-palkia-haut.png" },
-      { id: "hgss4-102", set: "hgss4", num: "102", nom: "Dialga & Palkia LÉGENDE (Bas)", file: "dialga-palkia-bas.png" }
+      { id: "dialga-palkia-101", nom: "Dialga & Palkia LÉGENDE", extension: "Triomphe", num: "101", file: "dialga-palkia-haut.png" },
+      { id: "dialga-palkia-102", nom: "Dialga & Palkia LÉGENDE", extension: "Triomphe", num: "102", file: "dialga-palkia-bas.png" }
     ]
   }
 ];
@@ -222,13 +222,13 @@ const chroniquesDatabase = [
   {
     id: "tarsal-famille-trio",
     titre: "La Famille (L'histoire d'une vie)",
-    extension: "Écarlate & Violet",
+    extension: "Écarlate et Violet",
     format: "trio",
     desc: "L'histoire d'une famille de l'emménagement à la vieillesse.",
     cartes: [
-      { id: "sv1-211", set: "sv1", num: "211", nom: "Tarsal", file: "tarsal-sv1-211.png" },
-      { id: "sv1-212", set: "sv1", num: "212", nom: "Kirlia", file: "kirlia-sv1-212.png" },
-      { id: "sv1-245", set: "sv1", num: "245", nom: "Gardevoir ex", file: "gardevoir-sv1-245.png" }
+      { id: "tarsal-211", nom: "Tarsal", extension: "Écarlate et Violet", num: "211", file: "tarsal-sv1-211.png" },
+      { id: "kirlia-212", nom: "Kirlia", extension: "Écarlate et Violet", num: "212", file: "kirlia-sv1-212.png" },
+      { id: "gardevoir-245", nom: "Gardevoir ex", extension: "Écarlate et Violet", num: "245", file: "gardevoir-sv1-245.png" }
     ]
   },
   {
@@ -238,9 +238,9 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "L'évolution technologique dans la chambre d'un développeur.",
     cartes: [
-      { id: "sv4-142", set: "sv4", num: "142", nom: "Porygon", file: "porygon-sv4-142.png" },
-      { id: "sv4-143", set: "sv4", num: "143", nom: "Porygon2", file: "porygon2-sv4-143.png" },
-      { id: "sv4-144", set: "sv4", num: "144", nom: "Porygon-Z", file: "porygonz-sv4-144.png" }
+      { id: "porygon-142", nom: "Porygon", extension: "Faille Paradoxe", num: "142", file: "porygon-sv4-142.png" },
+      { id: "porygon2-143", nom: "Porygon2", extension: "Faille Paradoxe", num: "143", file: "porygon2-sv4-143.png" },
+      { id: "porygonz-144", nom: "Porygon-Z", extension: "Faille Paradoxe", num: "144", file: "porygonz-sv4-144.png" }
     ]
   },
   {
@@ -250,9 +250,9 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "Un enfant grandit, se marie et devient père avec son Pokémon.",
     cartes: [
-      { id: "bw11-RC5", set: "bw11", num: "RC5", nom: "Gruikui", file: "gruikui-rc5.png" },
-      { id: "bw11-RC6", set: "bw11", num: "RC6", nom: "Grotichon", file: "grotichon-rc6.png" },
-      { id: "bw11-RC7", set: "bw11", num: "RC7", nom: "Roitiflam", file: "roitiflam-rc7.png" }
+      { id: "gruikui-rc5", nom: "Gruikui", extension: "Guerriers Mythiques", num: "RC5", file: "gruikui-rc5.png" },
+      { id: "grotichon-rc6", nom: "Grotichon", extension: "Guerriers Mythiques", num: "RC6", file: "grotichon-rc6.png" },
+      { id: "roitiflam-rc7", nom: "Roitiflam", extension: "Guerriers Mythiques", num: "RC7", file: "roitiflam-rc7.png" }
     ]
   },
   {
@@ -262,9 +262,9 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "Un enfant déguisé en Salamèche grandit pour voler avec son partenaire.",
     cartes: [
-      { id: "g1-RC3", set: "g1", num: "RC3", nom: "Salamèche", file: "salameche-rc3.png" },
-      { id: "g1-RC4", set: "g1", num: "RC4", nom: "Reptincel", file: "reptincel-rc4.png" },
-      { id: "g1-RC5", set: "g1", num: "RC5", nom: "Dracaufeu", file: "dracaufeu-rc5.png" }
+      { id: "salameche-rc3", nom: "Salamèche", extension: "Générations", num: "RC3", file: "salameche-rc3.png" },
+      { id: "reptincel-rc4", nom: "Reptincel", extension: "Générations", num: "RC4", file: "reptincel-rc4.png" },
+      { id: "dracaufeu-rc5", nom: "Dracaufeu", extension: "Générations", num: "RC5", file: "dracaufeu-rc5.png" }
     ]
   },
   {
@@ -274,9 +274,9 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "Le Pokémon grandit dans une chambre qui vieillit avec lui.",
     cartes: [
-      { id: "sv2-057", set: "sv2", num: "057", nom: "Frigodo", file: "frigodo-sv2-057.png" },
-      { id: "sv2-058", set: "sv2", num: "058", nom: "Cryodo", file: "cryodo-sv2-058.png" },
-      { id: "sv2-210", set: "sv2", num: "210", nom: "Glaivodo", file: "glaivodo-sv2-210.png" }
+      { id: "frigodo-057", nom: "Frigodo", extension: "Évolutions à Paldéa", num: "057", file: "frigodo-sv2-057.png" },
+      { id: "cryodo-058", nom: "Cryodo", extension: "Évolutions à Paldéa", num: "058", file: "cryodo-sv2-058.png" },
+      { id: "glaivodo-210", nom: "Glaivodo", extension: "Évolutions à Paldéa", num: "210", file: "glaivodo-sv2-210.png" }
     ]
   },
   {
@@ -286,9 +286,9 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "La complicité grandissante avec son dresseur au fil des années.",
     cartes: [
-      { id: "sv2-196", set: "sv2", num: "196", nom: "Poussacha", file: "poussacha-sv2-196.png" },
-      { id: "sv2-197", set: "sv2", num: "197", nom: "Matourgeon", file: "matourgeon-sv2-197.png" },
-      { id: "sv2-256", set: "sv2", num: "256", nom: "Miascarade ex", file: "miascarade-sv2-256.png" }
+      { id: "poussacha-196", nom: "Poussacha", extension: "Évolutions à Paldéa", num: "196", file: "poussacha-sv2-196.png" },
+      { id: "matourgeon-197", nom: "Matourgeon", extension: "Évolutions à Paldéa", num: "197", file: "matourgeon-sv2-197.png" },
+      { id: "miascarade-256", nom: "Miascarade ex", extension: "Évolutions à Paldéa", num: "256", file: "miascarade-sv2-256.png" }
     ]
   },
   {
@@ -298,9 +298,9 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "Un Pokémon timide devenant un puissant chanteur d'opéra.",
     cartes: [
-      { id: "sv2-201", set: "sv2", num: "201", nom: "Chochodile", file: "chochodile-sv2-201.png" },
-      { id: "sv2-202", set: "sv2", num: "202", nom: "Crocogril", file: "crocogril-sv2-202.png" },
-      { id: "sv2-258", set: "sv2", num: "258", nom: "Flâmigator ex", file: "flamigator-sv2-258.png" }
+      { id: "chochodile-201", nom: "Chochodile", extension: "Évolutions à Paldéa", num: "201", file: "chochodile-sv2-201.png" },
+      { id: "crocogril-202", nom: "Crocogril", extension: "Évolutions à Paldéa", num: "202", file: "crocogril-sv2-202.png" },
+      { id: "flamigator-258", nom: "Flâmigator ex", extension: "Évolutions à Paldéa", num: "258", file: "flamigator-sv2-258.png" }
     ]
   },
   {
@@ -310,9 +310,9 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "L'évolution à travers la canopée et la forêt.",
     cartes: [
-      { id: "sv3pt5-166", set: "sv3pt5", num: "166", nom: "Bulbizarre", file: "bulbizarre-151-166.png" },
-      { id: "sv3pt5-167", set: "sv3pt5", num: "167", nom: "Herbizarre", file: "herbizarre-151-167.png" },
-      { id: "sv3pt5-198", set: "sv3pt5", num: "198", nom: "Florizarre ex", file: "florizarre-151-198.png" }
+      { id: "bulbizarre-166", nom: "Bulbizarre", extension: "151", num: "166", file: "bulbizarre-151-166.png" },
+      { id: "herbizarre-167", nom: "Herbizarre", extension: "151", num: "167", file: "herbizarre-151-167.png" },
+      { id: "florizarre-198", nom: "Florizarre ex", extension: "151", num: "198", file: "florizarre-151-198.png" }
     ]
   },
   {
@@ -322,9 +322,9 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "L'évolution à travers les canyons jusqu'au vol au-dessus du monde.",
     cartes: [
-      { id: "sv3pt5-168", set: "sv3pt5", num: "168", nom: "Salamèche", file: "salameche-151-168.png" },
-      { id: "sv3pt5-169", set: "sv3pt5", num: "169", nom: "Reptincel", file: "reptincel-151-169.png" },
-      { id: "sv3pt5-199", set: "sv3pt5", num: "199", nom: "Dracaufeu ex", file: "dracaufeu-151-199.png" }
+      { id: "salameche-168", nom: "Salamèche", extension: "151", num: "168", file: "salameche-151-168.png" },
+      { id: "reptincel-169", nom: "Reptincel", extension: "151", num: "169", file: "reptincel-151-169.png" },
+      { id: "dracaufeu-199", nom: "Dracaufeu ex", extension: "151", num: "199", file: "dracaufeu-151-199.png" }
     ]
   },
   {
@@ -334,9 +334,9 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "L'évolution des profondeurs vers la surface.",
     cartes: [
-      { id: "sv3pt5-170", set: "sv3pt5", num: "170", nom: "Carapuce", file: "carapuce-151-170.png" },
-      { id: "sv3pt5-171", set: "sv3pt5", num: "171", nom: "Carabaffe", file: "carabaffe-151-171.png" },
-      { id: "sv3pt5-200", set: "sv3pt5", num: "200", nom: "Tortank ex", file: "tortank-151-200.png" }
+      { id: "carapuce-170", nom: "Carapuce", extension: "151", num: "170", file: "carapuce-151-170.png" },
+      { id: "carabaffe-171", nom: "Carabaffe", extension: "151", num: "171", file: "carabaffe-151-171.png" },
+      { id: "tortank-200", nom: "Tortank ex", extension: "151", num: "200", file: "tortank-151-200.png" }
     ]
   },
   {
@@ -346,9 +346,9 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "Parcours nocturne et espiègle dans les rues illuminées.",
     cartes: [
-      { id: "sv5-177", set: "sv5", num: "177", nom: "Fantominus", file: "fantominus-sv5-177.png" },
-      { id: "sv5-178", set: "sv5", num: "178", nom: "Spectrum", file: "spectrum-sv5-178.png" },
-      { id: "sv5-208", set: "sv5", num: "208", nom: "Ectoplasma ex", file: "ectoplasma-sv5-208.png" }
+      { id: "fantominus-177", nom: "Fantominus", extension: "Forces Temporelles", num: "177", file: "fantominus-sv5-177.png" },
+      { id: "spectrum-178", nom: "Spectrum", extension: "Forces Temporelles", num: "178", file: "spectrum-sv5-178.png" },
+      { id: "ectoplasma-208", nom: "Ectoplasma ex", extension: "Forces Temporelles", num: "208", file: "ectoplasma-sv5-208.png" }
     ]
   },
   {
@@ -358,9 +358,9 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "La foule s'amasse pour un concert au fil des cartes.",
     cartes: [
-      { id: "sv4pt5-073", set: "sv4pt5", num: "073", nom: "Pohm", file: "pohm-sv4pt5-073.png" },
-      { id: "sv4pt5-074", set: "sv4pt5", num: "074", nom: "Pohmotte", file: "pohmotte-sv4pt5-074.png" },
-      { id: "sv4pt5-075", set: "sv4pt5", num: "075", nom: "Pohmarmotte", file: "pohmarmotte-sv4pt5-075.png" }
+      { id: "pohm-073", nom: "Pohm", extension: "Destinées de Paldéa", num: "073", file: "pohm-sv4pt5-073.png" },
+      { id: "pohmotte-074", nom: "Pohmotte", extension: "Destinées de Paldéa", num: "074", file: "pohmotte-sv4pt5-074.png" },
+      { id: "pohmarmotte-075", nom: "Pohmarmotte", extension: "Destinées de Paldéa", num: "075", file: "pohmarmotte-sv4pt5-075.png" }
     ]
   },
   {
@@ -370,9 +370,9 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "Progression mystique dans la brume.",
     cartes: [
-      { id: "sv6pt5-068", set: "sv6pt5", num: "068", nom: "Skelénox", file: "skelenox-sv6pt5-068.png" },
-      { id: "sv6pt5-069", set: "sv6pt5", num: "069", nom: "Téraclope", file: "teraclope-sv6pt5-069.png" },
-      { id: "sv6pt5-070", set: "sv6pt5", num: "070", nom: "Noctunoir", file: "noctunoir-sv6pt5-070.png" }
+      { id: "skelenox-068", nom: "Skelénox", extension: "Fable Nébuleuse", num: "068", file: "skelenox-sv6pt5-068.png" },
+      { id: "teraclope-069", nom: "Téraclope", extension: "Fable Nébuleuse", num: "069", file: "teraclope-sv6pt5-069.png" },
+      { id: "noctunoir-070", nom: "Noctunoir", extension: "Fable Nébuleuse", num: "070", file: "noctunoir-sv6pt5-070.png" }
     ]
   },
   {
@@ -382,20 +382,20 @@ const chroniquesDatabase = [
     format: "trio",
     desc: "Le point de vue s'élève : du sol vers les nuages.",
     cartes: [
-      { id: "swsh7-002", set: "swsh7", num: "002", nom: "Granivol", file: "granivol-swsh7-002.png" },
-      { id: "swsh7-003", set: "swsh7", num: "003", nom: "Floravol", file: "floravol-swsh7-003.png" },
-      { id: "swsh7-004", set: "swsh7", num: "004", nom: "Cotovol", file: "cotovol-swsh7-004.png" }
+      { id: "granivol-002", nom: "Granivol", extension: "Évolution Céleste", num: "002", file: "granivol-swsh7-002.png" },
+      { id: "floravol-003", nom: "Floravol", extension: "Évolution Céleste", num: "003", file: "floravol-swsh7-003.png" },
+      { id: "cotovol-004", nom: "Cotovol", extension: "Évolution Céleste", num: "004", file: "cotovol-swsh7-004.png" }
     ]
   },
   {
     id: "rongourmand-chute-duo",
     titre: "La Chute des Baies",
-    extension: "Épée & Bouclier",
+    extension: "Épée et Bouclier",
     format: "duo",
     desc: "Rongourmand stocke des baies, mais la branche cède sous son poids.",
     cartes: [
-      { id: "swsh1-153", set: "swsh1", num: "153", nom: "Rongourmand", file: "rongourmand-swsh1-153.png" },
-      { id: "swsh1-154", set: "swsh1", num: "154", nom: "Rongrigou", file: "rongrigou-swsh1-154.png" }
+      { id: "rongourmand-153", nom: "Rongourmand", extension: "Épée et Bouclier", num: "153", file: "rongourmand-swsh1-153.png" },
+      { id: "rongrigou-154", nom: "Rongrigou", extension: "Épée et Bouclier", num: "154", file: "rongrigou-swsh1-154.png" }
     ]
   },
   {
@@ -405,8 +405,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "Vue de l'intérieur vs Vue de l'extérieur.",
     cartes: [
-      { id: "sv4-193", set: "sv4", num: "193", nom: "Posipi", file: "posipi-sv4-193.png" },
-      { id: "sv4-194", set: "sv4", num: "194", nom: "Négapi", file: "negapi-sv4-194.png" }
+      { id: "posipi-193", nom: "Posipi", extension: "Faille Paradoxe", num: "193", file: "posipi-sv4-193.png" },
+      { id: "negapi-194", nom: "Négapi", extension: "Faille Paradoxe", num: "194", file: "negapi-sv4-194.png" }
     ]
   },
   {
@@ -416,8 +416,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "Le même combat vu depuis chacun des deux adversaires.",
     cartes: [
-      { id: "sv4-187", set: "sv4", num: "187", nom: "Mite-de-Fer", file: "mite-fer-sv4-187.png" },
-      { id: "sv4-203", set: "sv4", num: "203", nom: "Rampe-Ailes", file: "rampe-ailes-sv4-203.png" }
+      { id: "mite-fer-187", nom: "Mite-de-Fer", extension: "Faille Paradoxe", num: "187", file: "mite-fer-sv4-187.png" },
+      { id: "rampe-ailes-203", nom: "Rampe-Ailes", extension: "Faille Paradoxe", num: "203", file: "rampe-ailes-sv4-203.png" }
     ]
   },
   {
@@ -427,8 +427,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "Caninos et Lithia se prennent mutuellement en photo.",
     cartes: [
-      { id: "sv6-181", set: "sv6", num: "181", nom: "Caninos de Hisui", file: "caninos-sv6-181.png" },
-      { id: "sv6-207", set: "sv6", num: "207", nom: "Lithia", file: "lithia-sv6-207.png" }
+      { id: "caninos-181", nom: "Caninos de Hisui", extension: "Mascarade Crépusculaire", num: "181", file: "caninos-sv6-181.png" },
+      { id: "lithia-207", nom: "Lithia", extension: "Mascarade Crépusculaire", num: "207", file: "lithia-sv6-207.png" }
     ]
   },
   {
@@ -438,8 +438,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "Le même paysage immortalisé à différentes saisons.",
     cartes: [
-      { id: "sv5-165", set: "sv5", num: "165", nom: "Vivaldaim", file: "vivaldaim-sv5-165.png" },
-      { id: "sv5-166", set: "sv5", num: "166", nom: "Haydaim", file: "haydaim-sv5-166.png" }
+      { id: "vivaldaim-165", nom: "Vivaldaim", extension: "Forces Temporelles", num: "165", file: "vivaldaim-sv5-165.png" },
+      { id: "haydaim-166", nom: "Haydaim", extension: "Forces Temporelles", num: "166", file: "haydaim-sv5-166.png" }
     ]
   },
   {
@@ -449,8 +449,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "Les deux Pokémon combattant dos à dos.",
     cartes: [
-      { id: "swsh12pt5gg-GG11", set: "swsh12pt5gg", num: "GG11", nom: "Séléroc", file: "seleroc-gg11.png" },
-      { id: "swsh12pt5gg-GG15", set: "swsh12pt5gg", num: "GG15", nom: "Solaroc", file: "solaroc-gg15.png" }
+      { id: "seleroc-gg11", nom: "Séléroc", extension: "Zénith Suprême", num: "GG11", file: "seleroc-gg11.png" },
+      { id: "solaroc-gg15", nom: "Solaroc", extension: "Zénith Suprême", num: "GG15", file: "solaroc-gg15.png" }
     ]
   },
   {
@@ -460,8 +460,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "La course-poursuite vue sous deux angles opposés.",
     cartes: [
-      { id: "xy6-67", set: "xy6", num: "67", nom: "Miaouss", file: "miaouss-xy6-67.png" },
-      { id: "xy6-45", set: "xy6", num: "45", nom: "Sepiatop", file: "sepiatop-xy6-45.png" }
+      { id: "miaouss-67", nom: "Miaouss", extension: "Ciel Rugissant", num: "67", file: "miaouss-xy6-67.png" },
+      { id: "sepiatop-45", nom: "Sepiatop", extension: "Ciel Rugissant", num: "45", file: "sepiatop-xy6-45.png" }
     ]
   },
   {
@@ -471,8 +471,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "Natu perché sur les cornes de Frison en pleine course.",
     cartes: [
-      { id: "xy6-28", set: "xy6", num: "28", nom: "Natu", file: "natu-xy6-28.png" },
-      { id: "xy6-68", set: "xy6", num: "68", nom: "Frison", file: "frison-xy6-68.png" }
+      { id: "natu-28", nom: "Natu", extension: "Ciel Rugissant", num: "28", file: "natu-xy6-28.png" },
+      { id: "frison-68", nom: "Frison", extension: "Ciel Rugissant", num: "68", file: "frison-xy6-68.png" }
     ]
   },
   {
@@ -482,8 +482,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "Vue sous-marine vs vue aérienne d'une même rencontre.",
     cartes: [
-      { id: "xy11-13", set: "xy11", num: "13", nom: "Arakdo", file: "arakdo-xy11-13.png" },
-      { id: "xy11-30", set: "xy11", num: "30", nom: "Moustillon", file: "moustillon-xy11-30.png" }
+      { id: "arakdo-13", nom: "Arakdo", extension: "Offensive Vapeur", num: "13", file: "arakdo-xy11-13.png" },
+      { id: "moustillon-30", nom: "Moustillon", extension: "Offensive Vapeur", num: "30", file: "moustillon-xy11-30.png" }
     ]
   },
   {
@@ -493,8 +493,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "D'une fuite craintive à une partie de jeu dans la ruelle.",
     cartes: [
-      { id: "xy9-55", set: "xy9", num: "55", nom: "Brocélôme", file: "brocelome-xy9-55.png" },
-      { id: "xy9-65", set: "xy9", num: "65", nom: "Miamiasme", file: "miamiasme-xy9-65.png" }
+      { id: "brocelome-55", nom: "Brocélôme", extension: "Rupture Turbo", num: "55", file: "brocelome-xy9-55.png" },
+      { id: "miamiasme-65", nom: "Miamiasme", extension: "Rupture Turbo", num: "65", file: "miamiasme-xy9-65.png" }
     ]
   },
   {
@@ -504,8 +504,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "Caninos aboie dans la rue tandis que Miamiasme fuit terrifié.",
     cartes: [
-      { id: "swsh2-027", set: "swsh2", num: "027", nom: "Caninos", file: "caninos-swsh2-027.png" },
-      { id: "swsh2-117", set: "swsh2", num: "117", nom: "Miamiasme", file: "miamiasme-swsh2-117.png" }
+      { id: "caninos-027", nom: "Caninos", extension: "Clash des Rebelles", num: "027", file: "caninos-swsh2-027.png" },
+      { id: "miamiasme-117", nom: "Miamiasme", extension: "Clash des Rebelles", num: "117", file: "miamiasme-swsh2-117.png" }
     ]
   },
   {
@@ -515,8 +515,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "Les deux Pokémon apparaissent mutuellement en arrière-plan.",
     cartes: [
-      { id: "xy4-26", set: "xy4", num: "26", nom: "Statitik", file: "statitik-xy4-26.png" },
-      { id: "xy4-44", set: "xy4", num: "44", nom: "Pitrouille", file: "pitrouille-xy4-44.png" }
+      { id: "statitik-26", nom: "Statitik", extension: "Forces Fantômes", num: "26", file: "statitik-xy4-26.png" },
+      { id: "pitrouille-44", nom: "Pitrouille", extension: "Forces Fantômes", num: "44", file: "pitrouille-xy4-44.png" }
     ]
   },
   {
@@ -526,8 +526,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "Les deux Pokémon de la Team Rocket face à face dans la même grotte.",
     cartes: [
-      { id: "sm115-25", set: "sm115", num: "25", nom: "Abo", file: "abo-sm115-25.png" },
-      { id: "sm115-28", set: "sm115", num: "28", nom: "Smogo", file: "smogo-sm115-28.png" }
+      { id: "abo-25", nom: "Abo", extension: "Destinées Occultes", num: "25", file: "abo-sm115-25.png" },
+      { id: "smogo-28", nom: "Smogo", extension: "Destinées Occultes", num: "28", file: "smogo-sm115-28.png" }
     ]
   },
   {
@@ -537,8 +537,8 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "Polagriffe protège Grelaçon, vu sous deux angles différents.",
     cartes: [
-      { id: "swsh6-042", set: "swsh6", num: "042", nom: "Grelaçon", file: "grelacon-swsh6-042.png" },
-      { id: "swsh6-043", set: "swsh6", num: "043", nom: "Polagriffe", file: "polagriffe-swsh6-043.png" }
+      { id: "grelacon-042", nom: "Grelaçon", extension: "Règne de Glace", num: "042", file: "grelacon-swsh6-042.png" },
+      { id: "polagriffe-043", nom: "Polagriffe", extension: "Règne de Glace", num: "043", file: "polagriffe-swsh6-043.png" }
     ]
   }
 ];
@@ -547,7 +547,6 @@ function getSceneCardPath(file) {
   return `./assets/cards/chroniques/${file}`;
 }
 
-// Compatibilité double : Navigateur (window) + Node.js (CommonJS)
 if (typeof window !== 'undefined') {
   window.odysseeDatabase = odysseeDatabase;
   window.chroniquesDatabase = chroniquesDatabase;
