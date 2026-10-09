@@ -9,7 +9,7 @@ const firebaseConfig = {
     projectId: "mewthology",
     storageBucket: "mewthology.firebasestorage.app",
     messagingSenderId: "416428446683",
-    app appId: "1:416428446683:web:12abb86abd6df36b6c8dfe"
+    appId: "1:416428446683:web:12abb86abd6df36b6c8dfe"
 };
 
 let auth = null;
@@ -219,7 +219,6 @@ function renderBinderView(pokemonName) {
             `;
         });
 
-        // Complète la grille 4x3 par des pochettes transparentes hachurées si la page est incomplète
         const emptySlots = CARDS_PER_PAGE - pageCards.length;
         for (let e = 0; e < emptySlots; e++) {
             pageHTML += `<div class="vaultx-pocket is-empty"></div>`;
@@ -308,7 +307,6 @@ function renderLegacyCollection(pokemonName, containerId) {
 function renderPantheon() {
     if (typeof pantheonDatabase === 'undefined') return;
 
-    // Items scellés : tri numérique intelligent via balise #XX#
     const scellesContainer = document.getElementById('scelles-grid');
     if (scellesContainer && pantheonDatabase.scelles) {
         const scellesTries = [...pantheonDatabase.scelles].sort((a, b) => {
@@ -333,7 +331,6 @@ function renderPantheon() {
         }).join('');
     }
 
-    // Cartes gradées : double face et retournement 3D
     const gradeesContainer = document.getElementById('gradees-grid');
     if (gradeesContainer && pantheonDatabase.gradees) {
         gradeesContainer.innerHTML = '';
@@ -359,7 +356,6 @@ function renderPantheon() {
                 </div>
             `;
 
-            // Interaction tactile sur mobile uniquement
             cardDiv.addEventListener('click', () => {
                 const isDesktopHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
                 if (!isDesktopHover) {
@@ -367,7 +363,6 @@ function renderPantheon() {
                 }
             });
 
-            // Réinitialisation desktop si le curseur sort
             cardDiv.addEventListener('mouseleave', () => {
                 cardDiv.classList.remove('is-flipped');
             });
@@ -380,14 +375,12 @@ function renderPantheon() {
 function updateAllViews() {
     renderPokedex();
 
-    // Rendu spécifique Binder Vault X & Hall of Fame (mew.html ou mewtwo.html)
     if (document.getElementById('binder-deck')) {
         const isMewtwo = document.body.classList.contains('theme-mewtwo') ||
                          (document.title && document.title.toLowerCase().includes('mewtwo'));
         renderBinderView(isMewtwo ? 'mewtwo' : 'mew');
     }
 
-    // Maintien du rendu des grilles traditionnelles
     renderLegacyCollection('mew', 'mew-grid');
     renderLegacyCollection('mewtwo', 'mewtwo-grid');
 
@@ -495,7 +488,6 @@ function initEV5ProgressHub() {
 
     const TOTAL_MASTERSET = 363;
 
-    // 1. Rendu instantané depuis le cache local
     const cached = localStorage.getItem("ev5_progress_cache");
     if (cached) {
         try {
@@ -505,7 +497,6 @@ function initEV5ProgressHub() {
         } catch (e) {}
     }
 
-    // 2. Synchronisation Firebase temps réel sur vitrine/cartes (champ ev05)
     if (typeof db !== "undefined" && db) {
         db.collection("vitrine").doc("cartes").onSnapshot((doc) => {
             if (doc.exists && doc.data() && Array.isArray(doc.data().ev05)) {
