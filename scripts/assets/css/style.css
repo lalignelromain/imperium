@@ -1831,3 +1831,50 @@ body.mode-edition .hof-pin-btn {
         border-radius: 8px;
     }
 }
+
+/* ====================================================================
+   FINITION MEWTWO : T-MET 01 • TITANE SOMBRE ANODISÉ
+==================================================================== */
+body.theme-mewtwo .psa-slab:hover {
+    box-shadow: 0 30px 55px rgba(0, 0, 0, 0.95), 0 0 18px rgba(168, 85, 247, 0.45);
+}
+
+/* Baguette PSA Titane Métallique Biseautée */
+body.theme-mewtwo .psa-label-card {
+    border: 4px solid #3f3f46;
+    border-image: linear-gradient(
+        135deg, 
+        #a1a1aa 0%, 
+        #27272a 25%, 
+        #52525b 50%, 
+        #18181b 75%, 
+        #71717a 100%
+    ) 1;
+}
+
+body.theme-mewtwo .psa-slab.is-empty {
+    border-color: rgba(168, 85, 247, 0.3);
+}
+
+body.theme-mewtwo .vaultx-pocket:hover {
+    border-color: rgba(168, 85, 247, 0.5);
+}
+
+/* Boutons d'interaction teintés violet psychique */
+body.theme-mewtwo .flip-btn-trigger:hover {
+    background: rgba(168, 85, 247, 0.9);
+    border-color: #a855f7;
+    color: #fff;
+}
+
+body.theme-mewtwo .lang-btn.active {
+    background: #a855f7;
+    border-color: #a855f7;
+    color: #fff;
+}
+
+body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn {
+    background: #a855f7;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
+}
