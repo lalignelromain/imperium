@@ -33,10 +33,10 @@
     <!-- Commande Bascule Flottante -->
     <div class="mode-switcher-container">
         <div class="mode-switcher" role="tablist" aria-label="Mode d'affichage">
-            <button type="button" class="switch-btn active" id="btn-classeur" onclick="setOdysseeMode('classeur')">
+            <button type="button" class="switch-btn active" id="btn-classeur">
                 📁 Mode Classeur
             </button>
-            <button type="button" class="switch-btn" id="btn-art" onclick="setOdysseeMode('art')">
+            <button type="button" class="switch-btn" id="btn-art">
                 ✨ Mode Art Pur
             </button>
         </div>
@@ -44,14 +44,13 @@
 
     <!-- Conteneur d'affichage des Grands Puzzles & Récits -->
     <main class="collection-container odyssee-container">
-        <div id="odyssee-content" class="binder-page">
-            <!-- Injecté dynamiquement par odyssee.js -->
+        <div id="odyssee-container" class="binder-page">
+            <!-- Injecté dynamiquement par script.js -->
         </div>
     </main>
 
-    <!-- Données & Moteurs -->
-    <script src="./scripts/assets/data/odyssee-data.js"></script>
+    <!-- Données & Moteur Principal -->
+    <script src="./scripts/assets/js/tableaux-data.js"></script>
     <script src="./scripts/assets/js/script.js"></script>
-    <script src="./scripts/assets/js/odyssee.js"></script>
 </body>
 </html>
