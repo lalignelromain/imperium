@@ -35,6 +35,7 @@ let hallOfFameData = {
     mewtwo: []
 };
 let isEditMode = false;
+let isPureArtMode = false; // Bascule Classeur vs Art Pur pour Odyssée & Chroniques
 
 // 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL (POSSESSION, LANGUES & HOF)
 function initFirestoreSync() {
@@ -413,6 +414,97 @@ function renderPantheon() {
     }
 }
 
+// 8. RENDU DES SCÈNES & TABLEAUX (ODYSSÉE & CHRONIQUES)
+function renderScenes(container, database) {
+    if (!container || !database || !Array.isArray(database)) return;
+
+    container.innerHTML = '';
+
+    database.forEach(scene => {
+        const sceneEl = document.createElement('section');
+        sceneEl.className = `scene-frame format-${scene.format} ${isPureArtMode ? 'mode-art-pur' : 'mode-classeur'}`;
+
+        const metaEl = document.createElement('div');
+        metaEl.className = 'scene-meta';
+        metaEl.innerHTML = `
+            <h2 class="scene-title">${scene.titre}</h2>
+            <span class="scene-sub">${scene.extension || ''} ${scene.desc ? '— ' + scene.desc : ''}</span>
+        `;
+
+        const gridEl = document.createElement('div');
+        gridEl.className = `scene-grid grid-${scene.format}`;
+
+        scene.cartes.forEach(carte => {
+            const cardBox = document.createElement('div');
+            cardBox.className = 'scene-card-slot';
+
+            const img = document.createElement('img');
+            const imgPath = typeof getSceneCardPath === 'function'
+                ? getSceneCardPath(carte.file)
+                : `./assets/cards/chroniques/${carte.file}`;
+
+            img.src = imgPath;
+            img.alt = `${carte.nom} (#${carte.num})`;
+            img.loading = 'lazy';
+            img.className = 'scene-card-img';
+
+            // Emplacement élégant si le fichier est absent
+            img.onerror = () => {
+                cardBox.classList.add('is-missing');
+                cardBox.innerHTML = `<span class="missing-label">${carte.nom}<br>#${carte.num}</span>`;
+            };
+
+            cardBox.appendChild(img);
+            gridEl.appendChild(cardBox);
+        });
+
+        sceneEl.appendChild(metaEl);
+        sceneEl.appendChild(gridEl);
+        container.appendChild(sceneEl);
+    });
+}
+
+function initTableauxView() {
+    const odysseeContainer = document.getElementById('odyssee-container') || document.getElementById('odyssee-grid');
+    const chroniquesContainer = document.getElementById('chroniques-container') || document.getElementById('chroniques-grid');
+    const genericContainer = document.getElementById('scenes-container') || document.getElementById('scenes-grid');
+
+    let activeContainer = null;
+    let activeData = null;
+
+    if (odysseeContainer && typeof odysseeDatabase !== 'undefined') {
+        activeContainer = odysseeContainer;
+        activeData = odysseeDatabase;
+    } else if (chroniquesContainer && typeof chroniquesDatabase !== 'undefined') {
+        activeContainer = chroniquesContainer;
+        activeData = chroniquesDatabase;
+    } else if (genericContainer) {
+        const isOdyssee = document.body.classList.contains('theme-odyssee') || 
+                          (document.title && (document.title.toLowerCase().includes('odyssée') || document.title.toLowerCase().includes('odyssee')));
+        activeContainer = genericContainer;
+        activeData = isOdyssee 
+            ? (typeof odysseeDatabase !== 'undefined' ? odysseeDatabase : null)
+            : (typeof chroniquesDatabase !== 'undefined' ? chroniquesDatabase : null);
+    }
+
+    if (!activeContainer || !activeData) return;
+
+    // Raccordement du commutateur Mode Classeur / Mode Art Pur
+    const toggleBtn = document.getElementById('btn-toggle-view') || document.getElementById('btn-mode-art');
+    if (toggleBtn && !toggleBtn.dataset.bound) {
+        toggleBtn.dataset.bound = 'true';
+        toggleBtn.addEventListener('click', () => {
+            isPureArtMode = !isPureArtMode;
+            toggleBtn.textContent = isPureArtMode ? 'Mode Classeur' : 'Mode Art Pur';
+            toggleBtn.classList.toggle('active', isPureArtMode);
+            renderScenes(activeContainer, activeData);
+        });
+    }
+
+    renderScenes(activeContainer, activeData);
+}
+
+// 9. MISE À JOUR GLOBALE DE TOUTES LES VUES
 function updateAllViews() {
     renderPokedex();
 
@@ -425,9 +517,10 @@ function updateAllViews() {
     renderLegacyCollection('mew', 'mew-grid');
     renderLegacyCollection('mewtwo', 'mewtwo-grid');
     renderPantheon();
+    initTableauxView();
 }
 
-// 8. DOCK FLOTTANT EN VERRE
+// 10. DOCK FLOTTANT EN VERRE
 function setupDock() {
     if (document.getElementById('floating-dock')) return;
 
@@ -452,7 +545,7 @@ function setupDock() {
     document.getElementById('dock-btn-lock').addEventListener('click', () => { if (auth) auth.signOut(); });
 }
 
-// 9. DÉCLENCHEUR DU MODE ÉDITION
+// 11. DÉCLENCHEUR DU MODE ÉDITION
 function setupAdminTrigger() {
     const title = document.querySelector('.header-main h1');
     if (!title) return;
@@ -489,18 +582,7 @@ if (auth) {
     });
 }
 
-// 10. LANCEMENT AU CHARGEMENT DU DOM
-document.addEventListener('DOMContentLoaded', () => {
-    setupDock();
-    setupAdminTrigger();
-    initFirestoreSync();
-});
-
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(err => console.error("SW error:", err));
-}
-
-// 11. PROGRESSION MASTER SET EV5 SUR LE HUB (TOTAL 363)
+// 12. PROGRESSION MASTER SET EV5 SUR LE HUB (TOTAL 363)
 function initEV5ProgressHub() {
     const fill = document.getElementById("ev5-hub-progress-fill");
     const text = document.getElementById("ev5-hub-progress-text");
@@ -528,4 +610,15 @@ function initEV5ProgressHub() {
     }
 }
 
-document.addEventListener("DOMContentLoaded", initEV5ProgressHub);
+// 13. LANCEMENT AU CHARGEMENT DU DOM
+document.addEventListener('DOMContentLoaded', () => {
+    setupDock();
+    setupAdminTrigger();
+    initFirestoreSync();
+    initEV5ProgressHub();
+    initTableauxView();
+});
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.error("SW error:", err));
+}
