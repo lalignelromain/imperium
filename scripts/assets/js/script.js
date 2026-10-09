@@ -448,7 +448,7 @@ function renderScenes(container, database) {
             img.loading = 'lazy';
             img.className = 'scene-card-img';
 
-            // Emplacement élégant si le fichier est absent
+            // Remplacement visuel si le fichier est manquant
             img.onerror = () => {
                 cardBox.classList.add('is-missing');
                 cardBox.innerHTML = `<span class="missing-label">${carte.nom}<br>#${carte.num}</span>`;
@@ -465,8 +465,8 @@ function renderScenes(container, database) {
 }
 
 function initTableauxView() {
-    const odysseeContainer = document.getElementById('odyssee-container') || document.getElementById('odyssee-grid');
-    const chroniquesContainer = document.getElementById('chroniques-container') || document.getElementById('chroniques-grid');
+    const odysseeContainer = document.getElementById('odyssee-container') || document.getElementById('odyssee-content') || document.getElementById('odyssee-grid');
+    const chroniquesContainer = document.getElementById('chroniques-container') || document.getElementById('chroniques-content') || document.getElementById('chroniques-grid');
     const genericContainer = document.getElementById('scenes-container') || document.getElementById('scenes-grid');
 
     let activeContainer = null;
@@ -489,7 +489,33 @@ function initTableauxView() {
 
     if (!activeContainer || !activeData) return;
 
-    // Raccordement du commutateur Mode Classeur / Mode Art Pur
+    // Gestion de la paire de boutons (#btn-classeur et #btn-art)
+    const btnClasseur = document.getElementById('btn-classeur');
+    const btnArt = document.getElementById('btn-art');
+
+    if (btnClasseur && btnArt && !btnClasseur.dataset.bound) {
+        btnClasseur.dataset.bound = 'true';
+
+        btnClasseur.addEventListener('click', () => {
+            isPureArtMode = false;
+            btnClasseur.classList.add('active');
+            btnArt.classList.remove('active');
+            document.body.classList.add('mode-classeur');
+            document.body.classList.remove('mode-art-pur');
+            renderScenes(activeContainer, activeData);
+        });
+
+        btnArt.addEventListener('click', () => {
+            isPureArtMode = true;
+            btnArt.classList.add('active');
+            btnClasseur.classList.remove('active');
+            document.body.classList.add('mode-art-pur');
+            document.body.classList.remove('mode-classeur');
+            renderScenes(activeContainer, activeData);
+        });
+    }
+
+    // Repli : bouton unique bascule (#btn-toggle-view ou #btn-mode-art)
     const toggleBtn = document.getElementById('btn-toggle-view') || document.getElementById('btn-mode-art');
     if (toggleBtn && !toggleBtn.dataset.bound) {
         toggleBtn.dataset.bound = 'true';
@@ -497,12 +523,21 @@ function initTableauxView() {
             isPureArtMode = !isPureArtMode;
             toggleBtn.textContent = isPureArtMode ? 'Mode Classeur' : 'Mode Art Pur';
             toggleBtn.classList.toggle('active', isPureArtMode);
+            document.body.classList.toggle('mode-art-pur', isPureArtMode);
+            document.body.classList.toggle('mode-classeur', !isPureArtMode);
             renderScenes(activeContainer, activeData);
         });
     }
 
     renderScenes(activeContainer, activeData);
 }
+
+// Fonctions globales de rétro-compatibilité
+window.setChroniquesMode = function(mode) {
+    const btn = mode === 'art' ? document.getElementById('btn-art') : document.getElementById('btn-classeur');
+    if (btn) btn.click();
+};
+window.setOdysseeMode = window.setChroniquesMode;
 
 // 9. MISE À JOUR GLOBALE DE TOUTES LES VUES
 function updateAllViews() {
