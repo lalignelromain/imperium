@@ -7,84 +7,113 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
 
-// Importation compatible CommonJS depuis tableaux-data.js
 const { odysseeDatabase, chroniquesDatabase } = require('./tableaux-data.js');
 
-// Destination locale : assets/cards/chroniques à la racine du projet
 const ROOT_DIR = path.resolve(__dirname, '../../../');
 const DEST_DIR = path.join(ROOT_DIR, 'assets', 'cards', 'chroniques');
 
 if (!fs.existsSync(DEST_DIR)) {
   fs.mkdirSync(DEST_DIR, { recursive: true });
-  console.log(`[INIT] Dossier créé : ${DEST_DIR}`);
 }
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-async function fetchImageBuffer(url) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`HTTP ${response.status}`);
-  const arrayBuffer = await response.arrayBuffer();
-  return Buffer.from(arrayBuffer);
+const HEADERS = {
+  'User-Agent': 'MewthologyCollector/1.0 (Mozilla/5.0 Windows NT 10.0; Win64; x64)'
+};
+
+async function searchPokepediaFile(query) {
+  const url = `https://www.pokepedia.fr/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srnamespace=6&format=json`;
+  const res = await fetch(url, { headers: HEADERS });
+  if (!res.ok) return null;
+  const data = await res.json();
+  const hits = data?.query?.search;
+  if (!hits || hits.length === 0) return null;
+
+  const valid = hits.find(h => /\.(png|jpe?g|webp)$/i.test(h.title));
+  return valid ? valid.title : hits[0].title;
 }
 
-function getRemoteUrl(card) {
-  return `https://assets.tcgdex.net/fr/${card.set}/${card.num}/high.webp`;
+async function getPokepediaImageUrl(fileTitle) {
+  const url = `https://www.pokepedia.fr/api.php?action=query&titles=${encodeURIComponent(fileTitle)}&prop=imageinfo&iiprop=url&format=json`;
+  const res = await fetch(url, { headers: HEADERS });
+  if (!res.ok) return null;
+  const data = await res.json();
+  const pages = data?.query?.pages;
+  if (!pages) return null;
+  const firstId = Object.keys(pages)[0];
+  return pages[firstId]?.imageinfo?.[0]?.url || null;
 }
 
-function getFallbackUrl(card) {
-  return `https://images.pokemontcg.io/${card.set}/${card.num}_hires.png`;
+async function downloadBinary(url) {
+  const res = await fetch(url, { headers: HEADERS });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const ab = await res.arrayBuffer();
+  return Buffer.from(ab);
 }
 
-async function downloadCard(card) {
+async function resolveAndDownloadCard(card) {
   const localFilePath = path.join(DEST_DIR, card.file);
 
-  if (fs.existsSync(localFilePath)) {
-    console.log(`[SKIP] Déjà présent : ${card.file} (${card.nom})`);
+  const queries = [
+    `Carte ${card.nom} ${card.extension} ${card.num}`,
+    `Carte ${card.nom} ${card.extension}`,
+    `Carte ${card.nom} ${card.num}`,
+    `Carte ${card.nom}`,
+    `${card.nom} ${card.num}`
+  ];
+
+  let fileTitle = null;
+  for (const q of queries) {
+    fileTitle = await searchPokepediaFile(q);
+    if (fileTitle) break;
+    await sleep(80);
+  }
+
+  if (!fileTitle) {
+    console.error(`[ERR] Introuvable sur Poképédia : ${card.nom} (${card.extension} #${card.num})`);
     return;
   }
 
-  const primaryUrl = getRemoteUrl(card);
-  try {
-    const buffer = await fetchImageBuffer(primaryUrl);
-    fs.writeFileSync(localFilePath, buffer);
-    console.log(`[OK] Téléchargé (TCGdex) : ${card.file} (${card.nom})`);
-  } catch {
-    const fallbackUrl = getFallbackUrl(card);
-    try {
-      const buffer = await fetchImageBuffer(fallbackUrl);
-      fs.writeFileSync(localFilePath, buffer);
-      console.log(`[OK] Téléchargé (Fallback) : ${card.file} (${card.nom})`);
-    } catch (err2) {
-      console.error(`[ERR] Échec pour ${card.file} (${card.nom}) : ${err2.message}`);
-    }
+  const directUrl = await getPokepediaImageUrl(fileTitle);
+  if (!directUrl) {
+    console.error(`[ERR] URL introuvable pour le fichier : ${fileTitle}`);
+    return;
   }
 
-  await sleep(150);
+  try {
+    const buffer = await downloadBinary(directUrl);
+    fs.writeFileSync(localFilePath, buffer);
+    console.log(`[OK] Poképédia -> ${card.file} (${card.nom})`);
+  } catch (err) {
+    console.error(`[ERR] Téléchargement échoué pour ${card.file} : ${err.message}`);
+  }
+
+  await sleep(250);
 }
 
 async function run() {
-  console.log('=== DÉMARRAGE DU TÉLÉCHARGEMENT (CHRONIQUES & ODYSSÉE) ===');
+  console.log('=== DÉMARRAGE DU TÉLÉCHARGEMENT INTÉGRAL DEPUIS POKÉPÉDIA ===');
 
   const allCards = [];
-  const registeredFiles = new Set();
+  const registered = new Set();
 
-  [...odysseeDatabase, ...chroniquesDatabase].forEach((scene) => {
-    scene.cartes.forEach((c) => {
-      if (!registeredFiles.has(c.file)) {
-        registeredFiles.add(c.file);
+  [...odysseeDatabase, ...chroniquesDatabase].forEach(scene => {
+    scene.cartes.forEach(c => {
+      if (!registered.has(c.file)) {
+        registered.add(c.file);
         allCards.push(c);
       }
     });
   });
 
-  console.log(`Total d'images uniques à vérifier : ${allCards.length}`);
+  console.log(`Total de cartes à rapatrier : ${allCards.length}\n`);
 
   for (const card of allCards) {
-    await downloadCard(card);
+    await resolveAndDownloadCard(card);
   }
 
-  console.log('=== TÉLÉCHARGEMENT TERMINÉ DANS assets/cards/chroniques/ ===');
+  console.log('\n=== IMPORT POKÉPÉDIA TERMINÉ AVEC SUCCÈS DANS assets/cards/chroniques/ ===');
 }
 
 run();
