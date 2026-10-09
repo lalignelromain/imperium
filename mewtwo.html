@@ -6,14 +6,14 @@
     <title>Mewthology - Collection Mewtwo</title>
     <link rel="manifest" href="./manifest.json">
     <meta name="theme-color" content="#050608">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Mewthology">
     <link rel="apple-touch-icon" href="./favicon.png">
     <link rel="icon" type="image/png" href="./favicon.png">
     <link rel="stylesheet" href="./scripts/assets/css/style.css">
 </head>
-<body>
+<body class="theme-mewtwo">
     <img src="./scripts/assets/img/mew.png" alt="" class="bg-watermark bg-mew">
     <img src="./scripts/assets/img/mewtwo.png" alt="" class="bg-watermark bg-mewtwo">
 
@@ -21,14 +21,18 @@
         <h1>Collection Mewtwo</h1>
     </header>
 
-    <main class="collection-container">
-        <div class="cards-grid" id="mewtwo-grid"></div>
+    <main class="collection-workspace">
+        <!-- Boîtiers PSA (Hall of Fame) -->
+        <div class="psa-wall" id="psa-wall"></div>
+
+        <!-- Classeur Vault X 4x3 -->
+        <div class="binder-deck" id="binder-deck"></div>
     </main>
 
     <!-- SDKs Firebase (Compatibilité Vanilla JS) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
     
     <script src="./scripts/assets/js/cartes-data.js"></script>
     <script src="./scripts/assets/js/script.js"></script>
