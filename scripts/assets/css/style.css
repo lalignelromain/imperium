@@ -1390,26 +1390,7 @@ body.mode-art-pur .legend-box {
 }
 
 .section-meta-header {
-    margin: 30px auto 16px;
-    max-width: 1200px;
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding-bottom: 8px;
-}
-
-.section-meta-title {
-    font-size: 15px;
-    font-weight: 800;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: #f1f5f9;
-}
-
-.section-meta-subtitle {
-    font-size: 11px;
-    color: #94a3b8;
+    display: none !important;
 }
 
 /* ---------------- 1. BOÎTIERS PSA (TAILLE STRICTE UTILISATEUR) ---------------- */
@@ -1623,7 +1604,7 @@ body.mode-art-pur .legend-box {
     display: flex;
     flex-direction: column;
     gap: 30px;
-    max-width: 1200px;
+    max-width: 860px;
     margin: 0 auto;
 }
 
@@ -1699,26 +1680,41 @@ body.mode-art-pur .legend-box {
     transform: rotateY(180deg);
 }
 
+/* Nouveau bouton discret de flip en bas à gauche */
 .flip-btn-trigger {
     position: absolute;
-    top: 5px;
-    left: 5px;
-    background: rgba(0, 0, 0, 0.75);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    padding: 2px 5px;
-    font-size: 8px;
-    font-weight: 800;
+    bottom: 6px;
+    left: 6px;
+    width: 28px;
+    height: 28px;
+    background: rgba(12, 16, 24, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    color: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     z-index: 15;
     backdrop-filter: blur(4px);
-    transition: background-color 0.2s;
+    -webkit-backdrop-filter: blur(4px);
+    transition: all 0.25s ease;
+}
+
+.flip-btn-trigger svg {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.3s ease;
 }
 
 .flip-btn-trigger:hover {
-    background: rgba(244, 114, 182, 0.8);
+    background: rgba(244, 114, 182, 0.9);
     color: #000;
+    border-color: #f472b6;
+}
+
+.flip-btn-trigger:hover svg {
+    transform: rotate(180deg);
 }
 
 .lang-badge {
@@ -1801,15 +1797,37 @@ body.mode-edition .hof-pin-btn {
     fill: currentColor;
 }
 
-/* 6. Adaptation mobile stricte */
+/* 6. Adaptation mobile stricte pour Vitrine et Classeur */
 @media (max-width: 900px) {
+    .collection-workspace {
+        padding: 10px 10px 40px;
+    }
+    
     .psa-wall {
         grid-template-columns: repeat(2, 1fr);
-        gap: 14px;
+        gap: 10px;
+        margin-bottom: 30px;
     }
+    
+    .psa-slab {
+        padding: 6px 5px 8px;
+        border-radius: 8px;
+    }
+    
+    .psa-label-card {
+        min-height: 52px;
+        padding: 3px 4px;
+        border-width: 3px;
+    }
+    .psa-text-line { font-size: 5.5px; }
+    .psa-grade-val { font-size: 8px; }
+    .psa-barcode-svg { width: 45px; height: 8px; }
+    .psa-cert-code { font-size: 6.5px; }
+    
     .vaultx-page {
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        padding: 10px;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 8px;
     }
 }
