@@ -3,7 +3,7 @@
 ==================================================================== */
 
 // 1. ODYSSÉE : FRESQUES PANORAMIQUES & PUZZLES VISUELS
-export const odysseeDatabase = [
+const odysseeDatabase = [
   {
     id: "zenith-galar-9",
     titre: "La Nature de Galar",
@@ -68,7 +68,7 @@ export const odysseeDatabase = [
     desc: "Les trois cartes forment une seule branche d'arbre en panorama.",
     cartes: [
       { id: "dp3-45", set: "dp3", num: "45", nom: "Cheniti Cape Plante", file: "cheniti-plante-45.png" },
-      { id: "dp3-46", set: "dp3", num: "46", num: "46", nom: "Cheniti Cape Sable", file: "cheniti-sable-46.png" },
+      { id: "dp3-46", set: "dp3", num: "46", nom: "Cheniti Cape Sable", file: "cheniti-sable-46.png" },
       { id: "dp3-47", set: "dp3", num: "47", nom: "Cheniti Cape Déchet", file: "cheniti-dechet-47.png" }
     ]
   },
@@ -218,7 +218,7 @@ export const odysseeDatabase = [
 ];
 
 // 2. CHRONIQUES : LA NARRATION & LES PERSPECTIVES CROISÉES
-export const chroniquesDatabase = [
+const chroniquesDatabase = [
   {
     id: "tarsal-famille-trio",
     titre: "La Famille (L'histoire d'une vie)",
@@ -543,7 +543,17 @@ export const chroniquesDatabase = [
   }
 ];
 
-// Helper global pour injecter le bon chemin local
-export function getSceneCardPath(file) {
+function getSceneCardPath(file) {
   return `./assets/cards/chroniques/${file}`;
+}
+
+// Compatibilité double : Navigateur (window) + Node.js (CommonJS)
+if (typeof window !== 'undefined') {
+  window.odysseeDatabase = odysseeDatabase;
+  window.chroniquesDatabase = chroniquesDatabase;
+  window.getSceneCardPath = getSceneCardPath;
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { odysseeDatabase, chroniquesDatabase, getSceneCardPath };
 }
