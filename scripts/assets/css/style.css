@@ -427,7 +427,7 @@ body.mode-edition .card-item:hover {
 .dock-btn {
     background: transparent;
     border: none;
-    color: #94a3b3;
+    color: #94a3b8;
     width: 38px;
     height: 38px;
     border-radius: 50%;
@@ -903,7 +903,6 @@ body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
     background-repeat: no-repeat !important;
     background-color: transparent !important;
 
-    /* Tes réglages validés dans l'inspecteur */
     padding: 7% 5% 8% 5% !important;
     column-gap: 6.8% !important;
     row-gap: 6.4% !important;
@@ -929,6 +928,7 @@ body.theme-odyssee.mode-art-pur .nine-box .pocket img {
     object-fit: fill !important;
     display: block !important;
 }
+
 /* ====================================================================
    CARTES LÉGENDE HGSS : PRÉSENTATION CÔTE À CÔTE STABLE
 ==================================================================== */
@@ -957,7 +957,6 @@ body.mode-art-pur .legend-box {
    MODULE MASTER SET EV 5 (FORCES TEMPORELLES)
 ==================================================================== */
 
-/* Hub Card pleine largeur */
 .hub-card.masterset-card {
     grid-column: 1 / -1 !important;
     display: flex !important;
@@ -978,7 +977,7 @@ body.mode-art-pur .legend-box {
 .hub-card.masterset-card:hover {
     border-color: #00f0ff !important;
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85), 
-                0 0 35px rgba(0, 240, 255, 0.35),
+                0 0 35px rgba(0, 240, 255, 0.35), 
                 0 0 35px rgba(255, 0, 128, 0.25) !important;
 }
 
@@ -996,7 +995,6 @@ body.mode-art-pur .legend-box {
     color: #94a3b8;
 }
 
-/* Jauge de progression sur la Hub Card */
 .hub-progress-wrapper {
     display: flex;
     flex-direction: column;
@@ -1031,7 +1029,6 @@ body.mode-art-pur .legend-box {
     letter-spacing: 0.5px;
 }
 
-/* En-tête & Barre globale sur master-set.html */
 .master-header-progress {
     max-width: 520px;
     margin: 18px auto 0;
@@ -1068,7 +1065,6 @@ body.mode-art-pur .legend-box {
     text-transform: uppercase;
 }
 
-/* Grille et état de sélection des cartes */
 .theme-masterset .card-item {
     cursor: pointer !important;
 }
@@ -1085,7 +1081,6 @@ body.mode-art-pur .legend-box {
     box-shadow: 0 0 14px rgba(0, 240, 255, 0.6), inset 0 0 6px rgba(0, 240, 255, 0.3);
 }
 
-/* Adaptation smartphone */
 @media (max-width: 767px) {
     .hub-card.masterset-card {
         flex-direction: column !important;
@@ -1134,7 +1129,6 @@ body.mode-art-pur .legend-box {
     color: #fff;
 }
 
-/* Pastille Normale cochée (Cyan) */
 .theme-masterset .pill-btn.pill-reg.active {
     background: rgba(0, 240, 255, 0.2);
     border-color: #00f0ff;
@@ -1142,7 +1136,6 @@ body.mode-art-pur .legend-box {
     box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
 }
 
-/* Pastille Reverse cochée (Magenta) */
 .theme-masterset .pill-btn.pill-rev.active {
     background: rgba(255, 0, 128, 0.2);
     border-color: #ff0080;
@@ -1150,7 +1143,6 @@ body.mode-art-pur .legend-box {
     box-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
 }
 
-/* Pastille Unique cochée (Violet néon) */
 .theme-masterset .pill-btn.pill-unique.active {
     background: rgba(168, 85, 247, 0.25);
     border-color: #a855f7;
@@ -1158,7 +1150,6 @@ body.mode-art-pur .legend-box {
     box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
 }
 
-/* États globaux de la carte */
 .theme-masterset .card-item.status-none {
     opacity: 0.35;
     filter: grayscale(80%);
@@ -1437,7 +1428,6 @@ body.mode-art-pur .legend-box {
     .nine-box .pocket { width: 95px; }
     .legend-box .pocket { width: 130px; }
 
-    /* Ajustement responsive du cadre étendu sur smartphone */
     body.mode-art-pur .nine-box {
         padding: 10px !important;
         gap: 5px !important;
@@ -1467,10 +1457,10 @@ body.mode-art-pur .legend-box {
     --psa-chrome-rose-glow: 0 0 12px rgba(244, 114, 182, 0.45);
 }
 
-.collection-workspace {
-    max-width: 1100px;
+.collection-workspace, .workspace {
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 10px 16px 60px;
+    padding: 30px 16px;
 }
 
 .section-meta-header {
@@ -1500,17 +1490,16 @@ body.mode-art-pur .legend-box {
 .psa-wall {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    max-width: 860px;
-    margin: 0 auto 35px;
+    gap: 20px;
+    margin-bottom: 60px;
 }
 
 .psa-slab {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.02) 100%), #0c1018;
-    border: 2px solid rgba(255, 255, 255, 0.25);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.02) 100%), #0c1018;
+    border: 2px solid rgba(255, 255, 255, 0.28);
     border-radius: 12px;
-    padding: 8px 7px 10px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    padding: 10px 8px 12px;
+    box-shadow: 0 24px 45px rgba(0, 0, 0, 0.85), inset 0 1px 2px rgba(255, 255, 255, 0.5);
     display: flex;
     flex-direction: column;
     position: relative;
@@ -1519,7 +1508,16 @@ body.mode-art-pur .legend-box {
 
 .psa-slab:hover {
     transform: translateY(-4px);
-    box-shadow: 0 26px 48px rgba(0, 0, 0, 0.95), var(--psa-chrome-rose-glow);
+    box-shadow: 0 30px 55px rgba(0, 0, 0, 0.95), var(--psa-chrome-rose-glow);
+}
+
+.psa-slab::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 9px;
+    pointer-events: none;
 }
 
 /* Étiquette PSA conforme à la capture */
@@ -1650,7 +1648,6 @@ body.mode-art-pur .legend-box {
     color: #000;
 }
 
-/* Sceau holographique PSA officiel au centre */
 .psa-foil-seal {
     position: absolute;
     bottom: -6px;
@@ -1678,31 +1675,31 @@ body.mode-art-pur .legend-box {
     text-shadow: 0 0 1px #fff;
 }
 
-/* Logement acrylique : carte cadrée au centre avec marge noire protectrice */
+/* Logement acrylique de la carte (Règles restaurées) */
 .psa-card-chamber {
     width: 100%;
     aspect-ratio: 734 / 1024;
     border-radius: 4px;
     overflow: hidden;
-    background: #000000;
+    background: #000;
     position: relative;
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.95);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 6px;
 }
 
 .psa-card-chamber img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    border-radius: 3px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
+}
+
+.psa-card-chamber::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(125deg, rgba(255, 255, 255, 0.16) 0%, transparent 40%, rgba(255, 255, 255, 0.03) 100%);
+    pointer-events: none;
 }
 
 .psa-slab.is-empty {
@@ -1716,6 +1713,9 @@ body.mode-art-pur .legend-box {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* ---------------- 2. CLASSEUR VAULT X 4x3 (CALIBRE COMPACT) ---------------- */
@@ -1747,7 +1747,7 @@ body.mode-art-pur .legend-box {
     position: relative;
     box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
     transition: transform 0.2s ease, border-color 0.2s ease;
-    perspective: 1000px; /* Préparation pour le flip 3D */
+    perspective: 1000px;
 }
 
 .vaultx-pocket:hover {
@@ -1904,7 +1904,7 @@ body.mode-edition .hof-pin-btn {
 @media (max-width: 900px) {
     .psa-wall {
         grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        gap: 14px;
     }
     .vaultx-page {
         grid-template-columns: repeat(2, 1fr);
