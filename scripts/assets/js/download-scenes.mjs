@@ -23,81 +23,83 @@ const HEADERS = {
   'Referer': 'https://www.pokepedia.fr/'
 };
 
-// Vérifie la présence du numéro sans faux positifs
-function filenameMatchesNumber(filename, rawNum) {
-  const cleanNum = String(rawNum).trim();
-  const variations = [cleanNum];
-
-  const unpadded = cleanNum.replace(/^0+/, '');
-  if (unpadded && unpadded !== cleanNum) variations.push(unpadded);
-
-  const padded3 = cleanNum.padStart(3, '0');
-  if (padded3 !== cleanNum) variations.push(padded3);
-
-  return variations.some(v => {
-    const escaped = v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(`(^|[^a-zA-Z0-9])${escaped}([^a-zA-Z0-9]|$)`, 'i');
-    return regex.test(filename);
-  });
+// Nettoyage des chaînes pour la recherche MediaWiki
+function cleanSearchTerm(str) {
+  return str.replace(/-/g, ' ').replace(/[’']/g, ' ').trim();
 }
 
-// 1. Recherche par catalogue préfixé (allimages)
-async function findImageViaAllImages(baseName, rawNum) {
-  const prefix = `Carte ${baseName}`;
-  const url = `https://www.pokepedia.fr/api.php?action=query&list=allimages&aiprefix=${encodeURIComponent(prefix)}&ailimit=100&aiprop=url&format=json`;
+// Recherche dans l'espace de noms Fichier (Namespace 6)
+async function searchPokepediaFile(card) {
+  const cleanNom = cleanSearchTerm(card.nom);
+  const firstWord = cleanNom.split(' ')[0];
+  const rawNum = String(card.num).replace(/^#/, '').trim();
+  const unpaddedNum = rawNum.replace(/^0+/, '');
+  const paddedNum = rawNum.padStart(3, '0');
 
+  // Variantes de requêtes ordonnées par précision
+  const queries = [
+    `"Carte" "${cleanNom}" ${rawNum}`,
+    `"Carte" "${firstWord}" ${rawNum}`,
+    `"${cleanNom}" ${rawNum}`,
+    `"${firstWord}" ${rawNum}`
+  ];
+
+  if (unpaddedNum !== rawNum) {
+    queries.push(`"${firstWord}" ${unpaddedNum}`);
+    queries.push(`"Carte" "${firstWord}" ${unpaddedNum}`);
+  }
+  if (paddedNum !== rawNum) {
+    queries.push(`"${firstWord}" ${paddedNum}`);
+    queries.push(`"Carte" "${firstWord}" ${paddedNum}`);
+  }
+
+  // Dernier recours : recherche sur le numéro strict
+  queries.push(`"Carte" ${rawNum}`);
+
+  const uniqueQueries = [...new Set(queries)];
+
+  for (const q of uniqueQueries) {
+    const url = `https://www.pokepedia.fr/api.php?action=query&list=search&srnamespace=6&srsearch=${encodeURIComponent(q)}&srlimit=8&format=json`;
+    try {
+      const res = await fetch(url, { headers: HEADERS });
+      if (!res.ok) continue;
+      const data = await res.json();
+      const hits = data?.query?.search || [];
+
+      if (hits.length > 0) {
+        // Sélectionne en priorité un fichier commençant par "Carte"
+        const cardHit = hits.find(h => h.title.toLowerCase().includes('carte')) || hits[0];
+        return cardHit.title;
+      }
+    } catch {
+      // Poursuite vers la requête suivante
+    }
+    await sleep(60);
+  }
+
+  return null;
+}
+
+// Récupération de l'URL directe du fichier
+async function getFileDirectUrl(fileTitle) {
+  const url = `https://www.pokepedia.fr/api.php?action=query&titles=${encodeURIComponent(fileTitle)}&prop=imageinfo&iiprop=url&format=json`;
   try {
     const res = await fetch(url, { headers: HEADERS });
     if (!res.ok) return null;
     const data = await res.json();
-    const images = data?.query?.allimages || [];
-
-    const hit = images.find(img => filenameMatchesNumber(img.name, rawNum));
-    return hit ? hit.url : null;
-  } catch {
-    return null;
-  }
-}
-
-// 2. Recherche de secours : article encyclopédique de la carte
-async function findImageViaArticle(nom, rawNum) {
-  const searchUrl = `https://www.pokepedia.fr/api.php?action=query&list=search&srsearch=${encodeURIComponent(nom + ' ' + rawNum)}&srlimit=3&format=json`;
-  try {
-    const res = await fetch(searchUrl, { headers: HEADERS });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const hits = data?.query?.search || [];
-    if (hits.length === 0) return null;
-
-    const pageTitle = hits[0].title;
-    const imgUrl = `https://www.pokepedia.fr/api.php?action=query&titles=${encodeURIComponent(pageTitle)}&prop=images&format=json`;
-    const resImg = await fetch(imgUrl, { headers: HEADERS });
-    if (!resImg.ok) return null;
-    const dataImg = await resImg.json();
-    const pages = dataImg?.query?.pages || {};
+    const pages = data?.query?.pages || {};
     const firstPage = Object.values(pages)[0];
-    const imageList = firstPage?.images || [];
-
-    const matchedFile = imageList.find(img => img.title.startsWith('Fichier:Carte') && filenameMatchesNumber(img.title, rawNum));
-    if (!matchedFile) return null;
-
-    const infoUrl = `https://www.pokepedia.fr/api.php?action=query&titles=${encodeURIComponent(matchedFile.title)}&prop=imageinfo&iiprop=url&format=json`;
-    const resInfo = await fetch(infoUrl, { headers: HEADERS });
-    if (!resInfo.ok) return null;
-    const dataInfo = await resInfo.json();
-    const infoPages = dataInfo?.query?.pages || {};
-    const filePage = Object.values(infoPages)[0];
-    return filePage?.imageinfo?.[0]?.url || null;
+    return firstPage?.imageinfo?.[0]?.url || null;
   } catch {
     return null;
   }
 }
 
-async function downloadFile(url, destPath) {
+async function downloadBinary(url, destPath) {
   const res = await fetch(url, { headers: HEADERS });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const arrayBuffer = await res.arrayBuffer();
-  fs.writeFileSync(destPath, Buffer.from(arrayBuffer));
+  const ab = await res.arrayBuffer();
+  fs.writeFileSync(destPath, Buffer.from(ab));
 }
 
 async function processCard(card) {
@@ -108,36 +110,32 @@ async function processCard(card) {
     return;
   }
 
-  // Premier mot pour capturer le préfixe propre (ex: "Palkia" pour "Palkia Originel")
-  const baseName = card.nom.split(/[\s-]/)[0];
+  const fileTitle = await searchPokepediaFile(card);
 
-  let directUrl = await findImageViaAllImages(baseName, card.num);
-
-  if (!directUrl && card.nom !== baseName) {
-    directUrl = await findImageViaAllImages(card.nom, card.num);
+  if (!fileTitle) {
+    console.error(`[ERR] Introuvable : ${card.nom} #${card.num} (${card.file})`);
+    return;
   }
 
-  if (!directUrl) {
-    directUrl = await findImageViaArticle(card.nom, card.num);
-  }
+  const directUrl = await getFileDirectUrl(fileTitle);
 
   if (!directUrl) {
-    console.error(`[ERR] Scan introuvable sur Poképédia : ${card.nom} #${card.num} (${card.file})`);
+    console.error(`[ERR] URL introuvable pour : ${fileTitle}`);
     return;
   }
 
   try {
-    await downloadFile(directUrl, destPath);
-    console.log(`[OK] Poképédia -> ${card.file} (${card.nom} #${card.num})`);
+    await downloadBinary(directUrl, destPath);
+    console.log(`[OK] ${card.file} <- ${fileTitle}`);
   } catch (err) {
-    console.error(`[ERR] Téléchargement binaire échoué (${card.file}) : ${err.message}`);
+    console.error(`[ERR] Téléchargement échoué (${card.file}) : ${err.message}`);
   }
 
-  await sleep(180);
+  await sleep(150);
 }
 
 async function run() {
-  console.log('=== DÉMARRAGE DU TÉLÉCHARGEMENT DIRECT POKÉPÉDIA ===\n');
+  console.log('=== DÉMARRAGE DU TÉLÉCHARGEMENT OPTIMISÉ POKÉPÉDIA ===\n');
 
   const allCards = [];
   const registered = new Set();
@@ -151,13 +149,13 @@ async function run() {
     });
   });
 
-  console.log(`Cartes uniques à récupérer : ${allCards.length}\n`);
+  console.log(`Total de cartes à traiter : ${allCards.length}\n`);
 
   for (const card of allCards) {
     await processCard(card);
   }
 
-  console.log('\n=== TÉLÉCHARGEMENT COMPLET TERMINÉ DANS assets/cards/chroniques/ ===');
+  console.log('\n=== TÉLÉCHARGEMENT TERMINÉ DANS assets/cards/chroniques/ ===');
 }
 
 run();
