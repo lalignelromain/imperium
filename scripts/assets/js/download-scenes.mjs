@@ -1,12 +1,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { odysseeDatabase, chroniquesDatabase } from './tableaux-data.js';
+import { createRequire } from 'node:module';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
 
-// Chemin cible strict à la racine : assets/cards/chroniques
+// Importation compatible CommonJS depuis tableaux-data.js
+const { odysseeDatabase, chroniquesDatabase } = require('./tableaux-data.js');
+
+// Destination locale : assets/cards/chroniques à la racine du projet
 const ROOT_DIR = path.resolve(__dirname, '../../../');
 const DEST_DIR = path.join(ROOT_DIR, 'assets', 'cards', 'chroniques');
 
@@ -24,13 +28,10 @@ async function fetchImageBuffer(url) {
   return Buffer.from(arrayBuffer);
 }
 
-// Construction de l'URL distante
 function getRemoteUrl(card) {
-  // 1. TCGdex officiel (FR)
   return `https://assets.tcgdex.net/fr/${card.set}/${card.num}/high.webp`;
 }
 
-// Fallback si la version webp échoue (ex: sets plus anciens)
 function getFallbackUrl(card) {
   return `https://images.pokemontcg.io/${card.set}/${card.num}_hires.png`;
 }
@@ -59,7 +60,7 @@ async function downloadCard(card) {
     }
   }
 
-  await sleep(150); // Respect du serveur
+  await sleep(150);
 }
 
 async function run() {
