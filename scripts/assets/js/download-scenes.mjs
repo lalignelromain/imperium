@@ -23,90 +23,60 @@ const HEADERS = {
   'Referer': 'https://www.pokepedia.fr/'
 };
 
-// Titres exacts des fichiers sur Poképédia pour les cartes complexes et les faux positifs
-const EXACT_POKEPEDIA_TITLES = {
-  // 1. Zénith Suprême (Fresque)
-  'zenith-tylton.png': 'Fichier:Carte Tylton (Zénith Suprême GG48).png',
-  'zenith-amagara.png': 'Fichier:Carte Amagara (Zénith Suprême GG49).png',
-  'zenith-tortipouss.png': 'Fichier:Carte Tortipouss (Zénith Suprême GG51).png',
-  'zenith-laporeille.png': 'Fichier:Carte Laporeille (Zénith Suprême GG52).png',
-  'zenith-manglouton.png': 'Fichier:Carte Manglouton (Zénith Suprême GG53).png',
-  'zenith-keunotor.png': 'Fichier:Carte Keunotor (Zénith Suprême GG54).png',
+// URL directes certifiées pour les cartes récalcitrantes et les faux positifs
+const DIRECT_SOURCES = {
+  // Fresque 9 cartes Zénith Suprême
+  'zenith-riolu.png': 'https://assets.tcgdex.net/fr/swsh/swsh12pt5gg/GG26/high.webp',
+  'zenith-tylton.png': 'https://assets.tcgdex.net/fr/swsh/swsh12pt5gg/GG27/high.webp',
+  'zenith-wattouat.png': 'https://assets.tcgdex.net/fr/swsh/swsh12pt5gg/GG34/high.webp',
+  'zenith-pikachu.png': 'https://assets.tcgdex.net/fr/swsh/swsh12pt5/160/high.webp',
+  'zenith-tortipouss.png': 'https://assets.tcgdex.net/fr/swsh/swsh12pt5gg/GG31/high.webp',
+  'zenith-paras.png': 'https://assets.tcgdex.net/fr/swsh/swsh12pt5gg/GG32/high.webp',
+  'zenith-medhyena.png': 'https://assets.tcgdex.net/fr/swsh/swsh12pt5gg/GG33/high.webp',
+  'zenith-keunotor.png': 'https://assets.tcgdex.net/fr/swsh/swsh12pt5gg/GG29/high.webp',
+  'zenith-diancie.png': 'https://assets.tcgdex.net/fr/swsh/swsh12pt5gg/GG13/high.webp',
 
-  // 2. Cheniti & Raretés DP / EX
-  'cheniti-plante-45.png': 'Fichier:Carte Cheniti Cape Plante (Diamant & Perle Merveilles Secrètes 45).png',
-  'cheniti-sable-46.png': 'Fichier:Carte Cheniti Cape Sable (Diamant & Perle Merveilles Secrètes 46).png',
-  'cheniti-dechet-47.png': 'Fichier:Carte Cheniti Cape Déchet (Diamant & Perle Merveilles Secrètes 47).png',
-  'mangriff-ex2-84.png': 'Fichier:Carte Mangriff (EX Tempête de sable 84).png',
-  'seviper-ex2-73.png': 'Fichier:Carte Séviper (EX Tempête de sable 73).png',
-  'seleroc-ex14-37.png': 'Fichier:Carte Séléroc (EX Gardiens de Cristal 37).png',
-  'solaroc-ex14-41.png': 'Fichier:Carte Solaroc (EX Gardiens de Cristal 41).png',
-  'kyogre-dc1-14.png': 'Fichier:Carte Kyogre de la Team Aqua (Double Danger 14).png',
-  'groudon-dc1-15.png': 'Fichier:Carte Groudon de la Team Magma (Double Danger 15).png',
+  // Cheniti & Raretés
+  'cheniti-plante-45.png': 'https://images.pokemontcg.io/dp3/45_hires.png',
+  'cheniti-sable-46.png': 'https://images.pokemontcg.io/dp3/46_hires.png',
+  'cheniti-dechet-47.png': 'https://images.pokemontcg.io/dp3/47_hires.png',
+  'mangriff-ex2-84.png': 'https://images.pokemontcg.io/ex2/84_hires.png',
+  'seviper-ex2-73.png': 'https://images.pokemontcg.io/ex2/73_hires.png',
+  'seleroc-ex14-37.png': 'https://images.pokemontcg.io/ex14/37_hires.png',
+  'solaroc-ex14-41.png': 'https://images.pokemontcg.io/ex14/41_hires.png',
+  'kyogre-dc1-14.png': 'https://images.pokemontcg.io/dc1/14_hires.png',
+  'groudon-dc1-15.png': 'https://images.pokemontcg.io/dc1/15_hires.png',
 
-  // 3. Cartes LÉGENDE HGSS
-  'hooh-legend-haut.png': 'Fichier:Carte Ho-Oh LÉGENDE (HeartGold SoulSilver 111).png',
-  'hooh-legend-bas.png': 'Fichier:Carte Ho-Oh LÉGENDE (HeartGold SoulSilver 112).png',
-  'lugia-legend-haut.png': 'Fichier:Carte Lugia LÉGENDE (HeartGold SoulSilver 113).png',
-  'lugia-legend-bas.png': 'Fichier:Carte Lugia LÉGENDE (HeartGold SoulSilver 114).png',
-  'entei-raikou-haut.png': 'Fichier:Carte Entei et Raikou LÉGENDE (HS Déchaînement 90).png',
-  'entei-raikou-bas.png': 'Fichier:Carte Entei et Raikou LÉGENDE (HS Déchaînement 91).png',
-  'raikou-suicune-haut.png': 'Fichier:Carte Raikou et Suicune LÉGENDE (HS Déchaînement 92).png',
-  'raikou-suicune-bas.png': 'Fichier:Carte Raikou et Suicune LÉGENDE (HS Déchaînement 93).png',
-  'suicune-entei-haut.png': 'Fichier:Carte Suicune et Entei LÉGENDE (HS Déchaînement 94).png',
-  'suicune-entei-bas.png': 'Fichier:Carte Suicune et Entei LÉGENDE (HS Déchaînement 95).png',
-  'kyogre-groudon-haut.png': 'Fichier:Carte Kyogre et Groudon LÉGENDE (HS Indomptable 87).png',
-  'kyogre-groudon-bas.png': 'Fichier:Carte Kyogre et Groudon LÉGENDE (HS Indomptable 88).png',
-  'rayquaza-deoxys-haut.png': 'Fichier:Carte Rayquaza et Deoxys LÉGENDE (HS Indomptable 89).png',
-  'rayquaza-deoxys-bas.png': 'Fichier:Carte Rayquaza et Deoxys LÉGENDE (HS Indomptable 90).png',
-  'darkrai-cresselia-haut.png': 'Fichier:Carte Darkrai et Cresselia LÉGENDE (HS Triomphe 99).png',
-  'darkrai-cresselia-bas.png': 'Fichier:Carte Darkrai et Cresselia LÉGENDE (HS Triomphe 100).png',
-  'dialga-palkia-haut.png': 'Fichier:Carte Dialga et Palkia LÉGENDE (HS Triomphe 101).png',
-  'dialga-palkia-bas.png': 'Fichier:Carte Dialga et Palkia LÉGENDE (HS Triomphe 102).png',
+  // Cartes LÉGENDE HGSS
+  'hooh-legend-haut.png': 'https://images.pokemontcg.io/hgss1/111_hires.png',
+  'hooh-legend-bas.png': 'https://images.pokemontcg.io/hgss1/112_hires.png',
+  'lugia-legend-haut.png': 'https://images.pokemontcg.io/hgss1/113_hires.png',
+  'lugia-legend-bas.png': 'https://images.pokemontcg.io/hgss1/114_hires.png',
+  'entei-raikou-haut.png': 'https://images.pokemontcg.io/hgss2/90_hires.png',
+  'entei-raikou-bas.png': 'https://images.pokemontcg.io/hgss2/91_hires.png',
+  'raikou-suicune-haut.png': 'https://images.pokemontcg.io/hgss2/92_hires.png',
+  'raikou-suicune-bas.png': 'https://images.pokemontcg.io/hgss2/93_hires.png',
+  'suicune-entei-haut.png': 'https://images.pokemontcg.io/hgss2/94_hires.png',
+  'suicune-entei-bas.png': 'https://images.pokemontcg.io/hgss2/95_hires.png',
+  'kyogre-groudon-haut.png': 'https://images.pokemontcg.io/hgss3/87_hires.png',
+  'kyogre-groudon-bas.png': 'https://images.pokemontcg.io/hgss3/88_hires.png',
+  'rayquaza-deoxys-haut.png': 'https://images.pokemontcg.io/hgss3/89_hires.png',
+  'rayquaza-deoxys-bas.png': 'https://images.pokemontcg.io/hgss3/90_hires.png',
+  'darkrai-cresselia-haut.png': 'https://images.pokemontcg.io/hgss4/99_hires.png',
+  'darkrai-cresselia-bas.png': 'https://images.pokemontcg.io/hgss4/100_hires.png',
+  'dialga-palkia-haut.png': 'https://images.pokemontcg.io/hgss4/101_hires.png',
+  'dialga-palkia-bas.png': 'https://images.pokemontcg.io/hgss4/102_hires.png',
 
-  // 4. Chroniques & Lignées
-  'gruikui-rc5.png': 'Fichier:Carte Gruikui (Noir & Blanc Coffret des Dragons RC5).png',
-  'grotichon-rc6.png': 'Fichier:Carte Grotichon (Noir & Blanc Coffret des Dragons RC6).png',
-  'roitiflam-rc7.png': 'Fichier:Carte Roitiflam (Noir & Blanc Coffret des Dragons RC7).png',
-  'brocelome-xy9-55.png': 'Fichier:Carte Brocélôme (XY Rupture TURBO 55).png',
-  'grelacon-swsh6-042.png': 'Fichier:Carte Grelaçon (Épée et Bouclier Règne de Glace 042).png'
+  // Radiant Collection & Scènes XY / EB
+  'gruikui-rc5.png': 'https://images.pokemontcg.io/rc/RC5_hires.png',
+  'grotichon-rc6.png': 'https://images.pokemontcg.io/rc/RC6_hires.png',
+  'roitiflam-rc7.png': 'https://images.pokemontcg.io/rc/RC7_hires.png',
+  'brocelome-xy9-55.png': 'https://assets.tcgdex.net/fr/xy/xy9/55/high.webp',
+  'grelacon-swsh6-042.png': 'https://assets.tcgdex.net/fr/swsh/swsh6/042/high.webp'
 };
 
-// Liste des fichiers à re-télécharger impérativement (échecs + faux positifs)
-const FORCE_RELOAD = new Set(Object.keys(EXACT_POKEPEDIA_TITLES));
-
-async function getUrlFromTitle(fileTitle) {
-  const url = `https://www.pokepedia.fr/api.php?action=query&titles=${encodeURIComponent(fileTitle)}&prop=imageinfo&iiprop=url&format=json`;
-  try {
-    const res = await fetch(url, { headers: HEADERS });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const pages = data?.query?.pages || {};
-    const firstPage = Object.values(pages)[0];
-    return firstPage?.imageinfo?.[0]?.url || null;
-  } catch {
-    return null;
-  }
-}
-
-// Recherche large par préfixe sur Poképédia
-async function searchByPrefix(card) {
-  const prefix = `Carte ${card.nom.split(' ')[0]}`;
-  const url = `https://www.pokepedia.fr/api.php?action=query&list=allimages&aiprefix=${encodeURIComponent(prefix)}&ailimit=80&aiprop=url&format=json`;
-
-  try {
-    const res = await fetch(url, { headers: HEADERS });
-    if (!res.ok) return null;
-    const data = await res.json();
-    const images = data?.query?.allimages || [];
-    const cleanNum = String(card.num).replace(/^#/, '').trim().toLowerCase();
-
-    const hit = images.find(img => img.name.toLowerCase().includes(cleanNum));
-    return hit ? hit.url : null;
-  } catch {
-    return null;
-  }
-}
+// Remplacement impératif pour écraser les faux positifs
+const FORCE_RELOAD = new Set(Object.keys(DIRECT_SOURCES));
 
 async function downloadBinary(url, destPath) {
   const res = await fetch(url, { headers: HEADERS });
@@ -115,50 +85,77 @@ async function downloadBinary(url, destPath) {
   fs.writeFileSync(destPath, Buffer.from(ab));
 }
 
+// Recherche Poképédia par préfixe propre
+async function findPokepediaUrl(card) {
+  const cleanNom = card.nom.replace(/[^a-zA-Z0-9àâäéèêëîïôöùûüç\s]/gi, ' ').trim();
+  const firstWord = cleanNom.split(' ')[0];
+  const prefix = `Carte ${firstWord}`;
+  const url = `https://www.pokepedia.fr/api.php?action=query&list=allimages&aiprefix=${encodeURIComponent(prefix)}&ailimit=100&aiprop=url&format=json`;
+
+  try {
+    const res = await fetch(url, { headers: HEADERS });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const images = data?.query?.allimages || [];
+    const rawNum = String(card.num).replace(/^#/, '').toLowerCase().trim();
+
+    const hit = images.find((img) => img.name.toLowerCase().includes(rawNum));
+    return hit ? hit.url : null;
+  } catch {
+    return null;
+  }
+}
+
+// Fallback CDN standard (TCGdex / PokemonTCG)
+function getFallbackCdnUrl(card) {
+  if (card.set && card.num) {
+    return `https://assets.tcgdex.net/fr/${card.set}/${card.num}/high.webp`;
+  }
+  return null;
+}
+
 async function processCard(card) {
   const destPath = path.join(DEST_DIR, card.file);
   const isTargeted = FORCE_RELOAD.has(card.file);
 
   if (fs.existsSync(destPath) && !isTargeted) {
-    console.log(`[SKIP] Déjà validé : ${card.file} (${card.nom})`);
+    console.log(`[SKIP] Déjà présent : ${card.file} (${card.nom})`);
     return;
   }
 
-  let directUrl = null;
+  let finalUrl = DIRECT_SOURCES[card.file] || null;
 
-  // 1. Priorité au titre exact vérifié
-  if (EXACT_POKEPEDIA_TITLES[card.file]) {
-    directUrl = await getUrlFromTitle(EXACT_POKEPEDIA_TITLES[card.file]);
+  if (!finalUrl) {
+    finalUrl = await findPokepediaUrl(card);
   }
 
-  // 2. Recherche automatique par préfixe si non listé
-  if (!directUrl) {
-    directUrl = await searchByPrefix(card);
+  if (!finalUrl) {
+    finalUrl = getFallbackCdnUrl(card);
   }
 
-  if (!directUrl) {
-    console.error(`[ERR] Toujours introuvable : ${card.nom} #${card.num} (${card.file})`);
+  if (!finalUrl) {
+    console.error(`[ERR] Aucun flux disponible pour : ${card.nom} #${card.num} (${card.file})`);
     return;
   }
 
   try {
-    await downloadBinary(directUrl, destPath);
-    console.log(`[OK] Scan Poképédia certifié -> ${card.file} (${card.nom})`);
+    await downloadBinary(finalUrl, destPath);
+    console.log(`[OK] Téléchargé avec succès -> ${card.file} (${card.nom})`);
   } catch (err) {
-    console.error(`[ERR] Téléchargement binaire échoué (${card.file}) : ${err.message}`);
+    console.error(`[ERR] Téléchargement binaire échoué pour ${card.file} : ${err.message}`);
   }
 
-  await sleep(150);
+  await sleep(120);
 }
 
 async function run() {
-  console.log('=== DÉMARRAGE DE LA SYNCHRONISATION CERTIFIÉE POKÉPÉDIA ===\n');
+  console.log('=== DÉMARRAGE DU TÉLÉCHARGEMENT INTÉGRAL SÉCURISÉ ===\n');
 
   const allCards = [];
   const registered = new Set();
 
-  [...odysseeDatabase, ...chroniquesDatabase].forEach(scene => {
-    scene.cartes.forEach(c => {
+  [...odysseeDatabase, ...chroniquesDatabase].forEach((scene) => {
+    scene.cartes.forEach((c) => {
       if (!registered.has(c.file)) {
         registered.add(c.file);
         allCards.push(c);
@@ -166,13 +163,13 @@ async function run() {
     });
   });
 
-  console.log(`Vérification de ${allCards.length} cartes...\n`);
+  console.log(`Total de cartes uniques à vérifier : ${allCards.length}\n`);
 
   for (const card of allCards) {
     await processCard(card);
   }
 
-  console.log('\n=== DOSSIER assets/cards/chroniques/ COMPLÈTEMENT À JOUR ===');
+  console.log('\n=== DOSSIER assets/cards/chroniques/ COMPLÈTEMENT CONFORME ===');
 }
 
 run();
