@@ -29,13 +29,14 @@ const ADMIN_EMAIL = "romainlal76@gmail.com";
 
 // État local en mémoire
 let localCollection = new Set();
+let cardLangs = {}; // Structure: { [cardId]: { fr: boolean, jp: boolean } }
 let hallOfFameData = {
     mew: [],
     mewtwo: []
 };
 let isEditMode = false;
 
-// 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL (POSSESSION & HALL OF FAME)
+// 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL (POSSESSION, LANGUES & HOF)
 function initFirestoreSync() {
     if (!docRef) {
         localCollection = typeof CARTES_POSSEDEES !== 'undefined' ? new Set(CARTES_POSSEDEES) : new Set();
@@ -47,10 +48,12 @@ function initFirestoreSync() {
         if (doc.exists) {
             const data = doc.data();
             localCollection = new Set(data.ids || (typeof CARTES_POSSEDEES !== 'undefined' ? CARTES_POSSEDEES : []));
+            cardLangs = data.cardLangs || {};
             hallOfFameData.mew = Array.isArray(data.hof_mew) ? data.hof_mew : [];
             hallOfFameData.mewtwo = Array.isArray(data.hof_mewtwo) ? data.hof_mewtwo : [];
         } else {
             localCollection = typeof CARTES_POSSEDEES !== 'undefined' ? new Set(CARTES_POSSEDEES) : new Set();
+            cardLangs = {};
             hallOfFameData = { mew: [], mewtwo: [] };
         }
         updateAllViews();
@@ -63,6 +66,7 @@ function saveToCloud() {
     if (!isEditMode || !docRef) return;
     docRef.set({
         ids: Array.from(localCollection),
+        cardLangs: cardLangs,
         derniereMaj: firebase.firestore.FieldValue.serverTimestamp()
     }, { merge: true }).catch(err => {
         console.error("Erreur d'écriture Firestore :", err);
@@ -106,8 +110,12 @@ function renderPokedex() {
 
             if (localCollection.has(carte.id)) {
                 localCollection.delete(carte.id);
+                delete cardLangs[carte.id];
             } else {
                 localCollection.add(carte.id);
+                if (!cardLangs[carte.id]) {
+                    cardLangs[carte.id] = { fr: true, jp: false };
+                }
             }
 
             const nowOwned = localCollection.has(carte.id);
@@ -121,17 +129,16 @@ function renderPokedex() {
     });
 }
 
-// 5. RENDU DU CLASSEUR VAULT X 4x3 & DU HALL OF FAME (MEW & MEWTWO)
+// 5. RENDU DU CLASSEUR VAULT X 4x3 & DU HALL OF FAME
 function renderBinderView(pokemonName) {
     const binderContainer = document.getElementById('binder-deck');
     const psaContainer = document.getElementById('psa-wall');
     if (!binderContainer || typeof cartesDatabase === 'undefined') return;
 
-    // Filtre les cartes physiques de ce Pokémon actuellement possédées
     const cartesPossedees = cartesDatabase.filter(c => c.pokemon === pokemonName && localCollection.has(c.id));
     const currentHofIds = hallOfFameData[pokemonName] || [];
 
-    // --- A. RENDU DU HALL OF FAME (4 BOÎTIERS PSA) ---
+    // --- A. RENDU DU HALL OF FAME (4 BOÎTIERS STRICTS - AUTHENTIC / A) ---
     if (psaContainer) {
         let psaHTML = '';
         for (let i = 0; i < 4; i++) {
@@ -139,29 +146,32 @@ function renderBinderView(pokemonName) {
             const card = cardId ? cartesPossedees.find(c => c.id === cardId) : null;
 
             if (card) {
+                const yearPrefix = (card.annee && card.annee !== "Inconnue") ? `${card.annee} ` : '';
+                const displayImg = resolveImg(card.imageFr || card.image, card.langue);
+
                 psaHTML += `
                     <div class="psa-slab">
                         <div class="psa-label-card">
                             <div class="psa-upper-block">
                                 <div class="psa-left-text">
-                                    <span class="psa-row-set">${card.annee} POKÉMON ${card.extension.toUpperCase()}</span>
+                                    <span class="psa-row-set">${yearPrefix}POKÉMON ${card.extension.toUpperCase()}</span>
                                     <span class="psa-row-name">${card.nom.toUpperCase()}</span>
-                                    <span class="psa-row-sub">OFFICIAL ARCHIVE</span>
+                                    <span class="psa-row-sub">${(card.extension || 'OFFICIAL ARCHIVE').toUpperCase()}</span>
                                 </div>
                                 <div class="psa-right-text">
                                     <span class="psa-card-number">${card.numero}</span>
-                                    <span class="psa-grade-title">GEM MT</span>
-                                    <span class="psa-grade-value">10</span>
+                                    <span class="psa-grade-title">AUTHENTIC</span>
+                                    <span class="psa-grade-value">A</span>
                                 </div>
                             </div>
                             <div class="psa-lower-block">
                                 <div class="psa-barcode-svg"></div>
-                                <span class="psa-cert-code">8492015${i}</span>
+                                <span class="psa-cert-code">7193028${i}</span>
                             </div>
                             <div class="psa-foil-seal"></div>
                         </div>
                         <div class="psa-card-chamber">
-                            <img src="${resolveImg(card.image, card.langue)}" alt="${card.nom}" loading="lazy">
+                            <img src="${displayImg}" alt="${card.nom}" loading="lazy">
                         </div>
                     </div>
                 `;
@@ -178,16 +188,14 @@ function renderBinderView(pokemonName) {
         psaContainer.innerHTML = psaHTML;
     }
 
-    // --- B. RENDU DU CLASSEUR VAULT X (GRILLES 4x3 = 12 CASES) ---
+    // --- B. RENDU DU CLASSEUR VAULT X (PLANCHE 4x3) ---
     const totalCountEl = document.getElementById('total-count-text');
-    if (totalCountEl) {
-        totalCountEl.innerText = `${cartesPossedees.length} cartes en classeur`;
-    }
+    if (totalCountEl) totalCountEl.innerText = `${cartesPossedees.length} cartes en classeur`;
 
     if (cartesPossedees.length === 0) {
         binderContainer.innerHTML = `
-            <div style="text-align: center; padding: 50px 20px; color: #94a3b8; width: 100%;">
-                <p style="font-size: 15px; margin-bottom: 12px;">Aucune carte ${pokemonName === 'mew' ? 'Mew' : 'Mewtwo'} cochée dans le Pokédex pour l'instant.</p>
+            <div style="text-align: center; padding: 40px; color: #94a3b8; width: 100%;">
+                <p style="font-size: 14px; margin-bottom: 10px;">Aucune carte ${pokemonName === 'mew' ? 'Mew' : 'Mewtwo'} cochée dans le Pokédex pour l'instant.</p>
                 <a href="pokedex.html" style="color: #f472b6; font-weight: 700; text-decoration: underline;">Accéder au Pokédex Global</a>
             </div>
         `;
@@ -206,19 +214,54 @@ function renderBinderView(pokemonName) {
         let pageHTML = '';
         pageCards.forEach(c => {
             const inHof = currentHofIds.includes(c.id);
-            const isJp = c.langue === 'ja';
+            const userLang = cardLangs[c.id] || { fr: true, jp: false };
+            const hasBoth = userLang.fr && userLang.jp;
+            const isOnlyJp = !userLang.fr && userLang.jp;
+
+            const imgFr = resolveImg(c.imageFr || c.image, 'fr');
+            const imgJp = resolveImg(c.imageJp || c.imageFr || c.image, 'ja');
+
+            let pocketContent = '';
+
+            if (hasBoth) {
+                // FLIP RECTO ↔ RECTO
+                pocketContent = `
+                    <div class="card-flipper">
+                        <div class="face-fr"><img src="${imgFr}" alt="${c.nom} FR" loading="lazy"></div>
+                        <div class="face-jp"><img src="${imgJp}" alt="${c.nom} JP" loading="lazy"></div>
+                    </div>
+                    <button type="button" class="flip-btn-trigger" title="Permuter FR / JP" onclick="event.stopPropagation(); this.closest('.vaultx-pocket').classList.toggle('is-flipped');">FR ↔ JP</button>
+                `;
+            } else if (isOnlyJp) {
+                // STATIQUE JP
+                pocketContent = `
+                    <img src="${imgJp}" alt="${c.nom} JP" loading="lazy">
+                    <span class="lang-badge">JP</span>
+                `;
+            } else {
+                // STATIQUE FR
+                pocketContent = `
+                    <img src="${imgFr}" alt="${c.nom} FR" loading="lazy">
+                `;
+            }
 
             pageHTML += `
-                <div class="vaultx-pocket ${inHof ? 'in-hof' : ''}">
-                    <img src="${resolveImg(c.image, c.langue)}" alt="${c.nom}" loading="lazy">
-                    ${isJp ? '<span class="lang-badge">JP</span>' : ''}
-                    <button type="button" class="hof-pin-btn" title="Épingler au Hall of Fame" onclick="toggleHofSlot('${pokemonName}', '${c.id}')">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <div class="vaultx-pocket ${inHof ? 'in-hof' : ''}" id="pocket-${c.id}">
+                    ${pocketContent}
+
+                    <div class="lang-toggles">
+                        <button type="button" class="lang-btn ${userLang.fr ? 'active' : ''}" onclick="event.stopPropagation(); toggleCardLang('${c.id}', 'fr')">FR</button>
+                        <button type="button" class="lang-btn ${userLang.jp ? 'active' : ''}" onclick="event.stopPropagation(); toggleCardLang('${c.id}', 'jp')">JP</button>
+                    </div>
+
+                    <button type="button" class="hof-pin-btn" title="Épingler au Hall of Fame" onclick="event.stopPropagation(); toggleHofSlot('${pokemonName}', '${c.id}')">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     </button>
                 </div>
             `;
         });
 
+        // Compléter les 12 cases avec des transparents hachurés
         const emptySlots = CARDS_PER_PAGE - pageCards.length;
         for (let e = 0; e < emptySlots; e++) {
             pageHTML += `<div class="vaultx-pocket is-empty"></div>`;
@@ -229,7 +272,28 @@ function renderBinderView(pokemonName) {
     }
 }
 
-// Action d'attribution HOF en mode édition
+// 6. ACTIONS EN MODE ÉDITION
+window.toggleCardLang = function(cardId, lang) {
+    if (!isEditMode || !docRef) return;
+
+    if (!cardLangs[cardId]) {
+        cardLangs[cardId] = { fr: false, jp: false };
+    }
+
+    cardLangs[cardId][lang] = !cardLangs[cardId][lang];
+
+    // Si aucune langue cochée, la carte est retirée de la collection
+    if (!cardLangs[cardId].fr && !cardLangs[cardId].jp) {
+        localCollection.delete(cardId);
+        delete cardLangs[cardId];
+    } else {
+        localCollection.add(cardId);
+    }
+
+    saveToCloud();
+    updateAllViews();
+};
+
 window.toggleHofSlot = function(pokemonName, cardId) {
     if (!isEditMode || !docRef) return;
 
@@ -239,9 +303,7 @@ window.toggleHofSlot = function(pokemonName, cardId) {
     if (index > -1) {
         list.splice(index, 1);
     } else {
-        if (list.length >= 4) {
-            list.shift();
-        }
+        if (list.length >= 4) list.shift();
         list.push(cardId);
     }
     hallOfFameData[pokemonName] = list;
@@ -251,26 +313,17 @@ window.toggleHofSlot = function(pokemonName, cardId) {
 
     docRef.set(payload, { merge: true }).catch(err => {
         console.error("Erreur d'enregistrement Hall of Fame :", err);
-        alert("Action refusée : vérifiez vos droits d'administration.");
     });
+    updateAllViews();
 };
 
-// Rendu historique pour les conteneurs classiques par extension (mew-grid / mewtwo-grid)
+// Rendu historique conservé
 function renderLegacyCollection(pokemonName, containerId) {
     const container = document.getElementById(containerId);
     if (!container || typeof cartesDatabase === 'undefined') return;
 
     const cartesPossedees = cartesDatabase.filter(c => c.pokemon === pokemonName && localCollection.has(c.id));
-
-    if (cartesPossedees.length === 0) {
-        container.innerHTML = `
-            <div style="text-align: center; padding: 40px; color: #888; width: 100%;">
-                <p>Aucune carte ${pokemonName === 'mew' ? 'Mew' : 'Mewtwo'} répertoriée pour l'instant.</p>
-                <a href="pokedex.html" style="color: #ff77a9; text-decoration: underline;">Consulter le Pokédex Global</a>
-            </div>
-        `;
-        return;
-    }
+    if (cartesPossedees.length === 0) return;
 
     const parExtension = {};
     cartesPossedees.forEach(carte => {
@@ -299,11 +352,10 @@ function renderLegacyCollection(pokemonName, containerId) {
             </section>
         `;
     }
-
     container.innerHTML = html;
 }
 
-// 6. RENDU PANTHÉON (ITEMS SCELLÉS AVEC TRI #XX# & CARTES GRADÉES 3D)
+// 7. RENDU PANTHÉON
 function renderPantheon() {
     if (typeof pantheonDatabase === 'undefined') return;
 
@@ -317,7 +369,6 @@ function renderPantheon() {
 
         scellesContainer.innerHTML = scellesTries.map(item => {
             const nomAffiche = item.nom.replace(/#\d+#\s*/, '');
-
             return `
                 <div class="pantheon-item item-scelle">
                     <img src="${resolveImg(item.image, item.langue)}" alt="${nomAffiche}" loading="lazy">
@@ -337,17 +388,12 @@ function renderPantheon() {
         pantheonDatabase.gradees.forEach(item => {
             const cardDiv = document.createElement('div');
             cardDiv.className = 'pantheon-item gradee-item';
-
             cardDiv.innerHTML = `
                 <div class="grade-badge">${item.societe} - ${item.note}</div>
                 <div class="flip-wrapper">
                     <div class="flip-inner">
-                        <div class="flip-front">
-                            <img src="${resolveImg(item.imageFront, item.langue)}" alt="${item.nom} Recto" loading="lazy">
-                        </div>
-                        <div class="flip-back">
-                            <img src="${resolveImg(item.imageBack, item.langue)}" alt="${item.nom} Verso" loading="lazy">
-                        </div>
+                        <div class="flip-front"><img src="${resolveImg(item.imageFront, item.langue)}" alt="${item.nom} Recto" loading="lazy"></div>
+                        <div class="flip-back"><img src="${resolveImg(item.imageBack, item.langue)}" alt="${item.nom} Verso" loading="lazy"></div>
                     </div>
                 </div>
                 <div class="item-info">
@@ -355,18 +401,12 @@ function renderPantheon() {
                     <p style="font-size: 12px; color: #aaa;">${item.extension} (${item.numero})</p>
                 </div>
             `;
-
             cardDiv.addEventListener('click', () => {
-                const isDesktopHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-                if (!isDesktopHover) {
+                if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
                     cardDiv.classList.toggle('is-flipped');
                 }
             });
-
-            cardDiv.addEventListener('mouseleave', () => {
-                cardDiv.classList.remove('is-flipped');
-            });
-
+            cardDiv.addEventListener('mouseleave', () => cardDiv.classList.remove('is-flipped'));
             gradeesContainer.appendChild(cardDiv);
         });
     }
@@ -383,11 +423,10 @@ function updateAllViews() {
 
     renderLegacyCollection('mew', 'mew-grid');
     renderLegacyCollection('mewtwo', 'mewtwo-grid');
-
     renderPantheon();
 }
 
-// 7. DOCK FLOTTANT EN VERRE
+// 8. DOCK FLOTTANT EN VERRE
 function setupDock() {
     if (document.getElementById('floating-dock')) return;
 
@@ -395,7 +434,6 @@ function setupDock() {
     dock.id = 'floating-dock';
     dock.className = 'floating-dock';
     dock.setAttribute('aria-label', 'Actions rapides');
-
     dock.innerHTML = `
         <a href="index.html" class="dock-btn" title="Retour à l'accueil" aria-label="Accueil">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -407,19 +445,13 @@ function setupDock() {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </button>
     `;
-
     document.body.appendChild(dock);
 
-    document.getElementById('dock-btn-top').addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    document.getElementById('dock-btn-lock').addEventListener('click', () => {
-        if (auth) auth.signOut();
-    });
+    document.getElementById('dock-btn-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    document.getElementById('dock-btn-lock').addEventListener('click', () => { if (auth) auth.signOut(); });
 }
 
-// 8. DÉCLENCHEUR DU MODE ÉDITION (Double-clic & Appui long sur le titre)
+// 9. DÉCLENCHEUR DU MODE ÉDITION
 function setupAdminTrigger() {
     const title = document.querySelector('.header-main h1');
     if (!title) return;
@@ -428,33 +460,21 @@ function setupAdminTrigger() {
 
     let pressTimer;
     title.addEventListener('touchstart', () => {
-        pressTimer = setTimeout(() => {
-            triggerLogin();
-        }, 1500);
+        pressTimer = setTimeout(triggerLogin, 1500);
     }, { passive: true });
-
-    title.addEventListener('touchend', () => {
-        clearTimeout(pressTimer);
-    });
-
-    title.addEventListener('touchmove', () => {
-        clearTimeout(pressTimer);
-    });
+    title.addEventListener('touchend', () => clearTimeout(pressTimer));
+    title.addEventListener('touchmove', () => clearTimeout(pressTimer));
 }
 
 function triggerLogin() {
     if (isEditMode || !auth) return;
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider).catch(err => {
-        console.error("Erreur d'authentification Google :", err);
-    });
+    auth.signInWithPopup(provider).catch(err => console.error("Erreur d'authentification Google :", err));
 }
 
-// 9. ÉCOUTE DE L'AUTHENTIFICATION
 if (auth) {
     auth.onAuthStateChanged(user => {
         const lockBtn = document.getElementById('dock-btn-lock');
-
         if (user && user.email === ADMIN_EMAIL) {
             isEditMode = true;
             document.body.classList.add('mode-edition');
@@ -475,19 +495,17 @@ document.addEventListener('DOMContentLoaded', () => {
     initFirestoreSync();
 });
 
-// 11. ENREGISTREMENT DU SERVICE WORKER (PWA)
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(err => console.error("SW error:", err));
 }
 
-// 12. PROGRESSION MASTER SET EV5 SUR LE HUB (TOTAL DE 363)
+// 11. PROGRESSION MASTER SET EV5 SUR LE HUB (TOTAL 363)
 function initEV5ProgressHub() {
     const fill = document.getElementById("ev5-hub-progress-fill");
     const text = document.getElementById("ev5-hub-progress-text");
     if (!fill || !text) return;
 
     const TOTAL_MASTERSET = 363;
-
     const cached = localStorage.getItem("ev5_progress_cache");
     if (cached) {
         try {
@@ -505,9 +523,7 @@ function initEV5ProgressHub() {
                 fill.style.width = `${percent}%`;
                 text.innerText = `${current} / ${TOTAL_MASTERSET} • ${percent}%`;
             }
-        }, (err) => {
-            console.warn("Écoute EV05 Hub :", err);
-        });
+        }, err => console.warn("Écoute EV05 Hub :", err));
     }
 }
 
