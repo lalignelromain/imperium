@@ -9,7 +9,7 @@ const firebaseConfig = {
     projectId: "mewthology",
     storageBucket: "mewthology.firebasestorage.app",
     messagingSenderId: "416428446683",
-    appId: "1:416428446683:web:12abb86abd6df36b6c8dfe"
+    app appId: "1:416428446683:web:12abb86abd6df36b6c8dfe"
 };
 
 let auth = null;
@@ -29,9 +29,13 @@ const ADMIN_EMAIL = "romainlal76@gmail.com";
 
 // État local en mémoire
 let localCollection = new Set();
+let hallOfFameData = {
+    mew: [],
+    mewtwo: []
+};
 let isEditMode = false;
 
-// 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL (MEW & MEWTWO)
+// 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL (POSSESSION & HALL OF FAME)
 function initFirestoreSync() {
     if (!docRef) {
         localCollection = typeof CARTES_POSSEDEES !== 'undefined' ? new Set(CARTES_POSSEDEES) : new Set();
@@ -40,10 +44,14 @@ function initFirestoreSync() {
     }
 
     docRef.onSnapshot(doc => {
-        if (doc.exists && doc.data().ids) {
-            localCollection = new Set(doc.data().ids);
+        if (doc.exists) {
+            const data = doc.data();
+            localCollection = new Set(data.ids || (typeof CARTES_POSSEDEES !== 'undefined' ? CARTES_POSSEDEES : []));
+            hallOfFameData.mew = Array.isArray(data.hof_mew) ? data.hof_mew : [];
+            hallOfFameData.mewtwo = Array.isArray(data.hof_mewtwo) ? data.hof_mewtwo : [];
         } else {
             localCollection = typeof CARTES_POSSEDEES !== 'undefined' ? new Set(CARTES_POSSEDEES) : new Set();
+            hallOfFameData = { mew: [], mewtwo: [] };
         }
         updateAllViews();
     }, error => {
@@ -113,8 +121,143 @@ function renderPokedex() {
     });
 }
 
-// 5. RENDU COLLECTIONS DÉDIÉES (MEW & MEWTWO)
-function renderCollection(pokemonName, containerId) {
+// 5. RENDU DU CLASSEUR VAULT X 4x3 & DU HALL OF FAME (MEW & MEWTWO)
+function renderBinderView(pokemonName) {
+    const binderContainer = document.getElementById('binder-deck');
+    const psaContainer = document.getElementById('psa-wall');
+    if (!binderContainer || typeof cartesDatabase === 'undefined') return;
+
+    // Filtre les cartes physiques de ce Pokémon actuellement possédées
+    const cartesPossedees = cartesDatabase.filter(c => c.pokemon === pokemonName && localCollection.has(c.id));
+    const currentHofIds = hallOfFameData[pokemonName] || [];
+
+    // --- A. RENDU DU HALL OF FAME (4 BOÎTIERS PSA) ---
+    if (psaContainer) {
+        let psaHTML = '';
+        for (let i = 0; i < 4; i++) {
+            const cardId = currentHofIds[i];
+            const card = cardId ? cartesPossedees.find(c => c.id === cardId) : null;
+
+            if (card) {
+                psaHTML += `
+                    <div class="psa-slab">
+                        <div class="psa-label-card">
+                            <div class="psa-upper-block">
+                                <div class="psa-left-text">
+                                    <span class="psa-row-set">${card.annee} POKÉMON ${card.extension.toUpperCase()}</span>
+                                    <span class="psa-row-name">${card.nom.toUpperCase()}</span>
+                                    <span class="psa-row-sub">OFFICIAL ARCHIVE</span>
+                                </div>
+                                <div class="psa-right-text">
+                                    <span class="psa-card-number">${card.numero}</span>
+                                    <span class="psa-grade-title">GEM MT</span>
+                                    <span class="psa-grade-value">10</span>
+                                </div>
+                            </div>
+                            <div class="psa-lower-block">
+                                <div class="psa-barcode-svg"></div>
+                                <span class="psa-cert-code">8492015${i}</span>
+                            </div>
+                            <div class="psa-foil-seal"></div>
+                        </div>
+                        <div class="psa-card-chamber">
+                            <img src="${resolveImg(card.image, card.langue)}" alt="${card.nom}" loading="lazy">
+                        </div>
+                    </div>
+                `;
+            } else {
+                psaHTML += `
+                    <div class="psa-slab is-empty">
+                        <div class="psa-card-chamber">
+                            <span>Emplacement Libre</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        psaContainer.innerHTML = psaHTML;
+    }
+
+    // --- B. RENDU DU CLASSEUR VAULT X (GRILLES 4x3 = 12 CASES) ---
+    const totalCountEl = document.getElementById('total-count-text');
+    if (totalCountEl) {
+        totalCountEl.innerText = `${cartesPossedees.length} cartes en classeur`;
+    }
+
+    if (cartesPossedees.length === 0) {
+        binderContainer.innerHTML = `
+            <div style="text-align: center; padding: 50px 20px; color: #94a3b8; width: 100%;">
+                <p style="font-size: 15px; margin-bottom: 12px;">Aucune carte ${pokemonName === 'mew' ? 'Mew' : 'Mewtwo'} cochée dans le Pokédex pour l'instant.</p>
+                <a href="pokedex.html" style="color: #f472b6; font-weight: 700; text-decoration: underline;">Accéder au Pokédex Global</a>
+            </div>
+        `;
+        return;
+    }
+
+    binderContainer.innerHTML = '';
+    const CARDS_PER_PAGE = 12;
+    const totalPages = Math.ceil(cartesPossedees.length / CARDS_PER_PAGE);
+
+    for (let p = 0; p < totalPages; p++) {
+        const pageCards = cartesPossedees.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
+        const pageEl = document.createElement('div');
+        pageEl.className = 'vaultx-page';
+
+        let pageHTML = '';
+        pageCards.forEach(c => {
+            const inHof = currentHofIds.includes(c.id);
+            const isJp = c.langue === 'ja';
+
+            pageHTML += `
+                <div class="vaultx-pocket ${inHof ? 'in-hof' : ''}">
+                    <img src="${resolveImg(c.image, c.langue)}" alt="${c.nom}" loading="lazy">
+                    ${isJp ? '<span class="lang-badge">JP</span>' : ''}
+                    <button type="button" class="hof-pin-btn" title="Épingler au Hall of Fame" onclick="toggleHofSlot('${pokemonName}', '${c.id}')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </button>
+                </div>
+            `;
+        });
+
+        // Complète la grille 4x3 par des pochettes transparentes hachurées si la page est incomplète
+        const emptySlots = CARDS_PER_PAGE - pageCards.length;
+        for (let e = 0; e < emptySlots; e++) {
+            pageHTML += `<div class="vaultx-pocket is-empty"></div>`;
+        }
+
+        pageEl.innerHTML = pageHTML;
+        binderContainer.appendChild(pageEl);
+    }
+}
+
+// Action d'attribution HOF en mode édition
+window.toggleHofSlot = function(pokemonName, cardId) {
+    if (!isEditMode || !docRef) return;
+
+    let list = hallOfFameData[pokemonName] || [];
+    const index = list.indexOf(cardId);
+
+    if (index > -1) {
+        list.splice(index, 1);
+    } else {
+        if (list.length >= 4) {
+            list.shift();
+        }
+        list.push(cardId);
+    }
+    hallOfFameData[pokemonName] = list;
+
+    const payload = {};
+    payload[`hof_${pokemonName}`] = list;
+
+    docRef.set(payload, { merge: true }).catch(err => {
+        console.error("Erreur d'enregistrement Hall of Fame :", err);
+        alert("Action refusée : vérifiez vos droits d'administration.");
+    });
+};
+
+// Rendu historique pour les conteneurs classiques par extension (mew-grid / mewtwo-grid)
+function renderLegacyCollection(pokemonName, containerId) {
     const container = document.getElementById(containerId);
     if (!container || typeof cartesDatabase === 'undefined') return;
 
@@ -236,8 +379,18 @@ function renderPantheon() {
 
 function updateAllViews() {
     renderPokedex();
-    renderCollection('mew', 'mew-grid');
-    renderCollection('mewtwo', 'mewtwo-grid');
+
+    // Rendu spécifique Binder Vault X & Hall of Fame (mew.html ou mewtwo.html)
+    if (document.getElementById('binder-deck')) {
+        const isMewtwo = document.body.classList.contains('theme-mewtwo') ||
+                         (document.title && document.title.toLowerCase().includes('mewtwo'));
+        renderBinderView(isMewtwo ? 'mewtwo' : 'mew');
+    }
+
+    // Maintien du rendu des grilles traditionnelles
+    renderLegacyCollection('mew', 'mew-grid');
+    renderLegacyCollection('mewtwo', 'mewtwo-grid');
+
     renderPantheon();
 }
 
@@ -318,6 +471,7 @@ if (auth) {
             document.body.classList.remove('mode-edition');
             if (lockBtn) lockBtn.style.display = 'none';
         }
+        updateAllViews();
     });
 }
 
