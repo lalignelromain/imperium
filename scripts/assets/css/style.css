@@ -1878,3 +1878,103 @@ body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn {
     color: #fff;
     box-shadow: 0 0 8px rgba(168, 85, 247, 0.8);
 }
+
+/* ====================================================================
+   STYLES TABLEAUX : ODYSSÉE & CHRONIQUES
+==================================================================== */
+
+.scene-frame {
+  margin: 0 auto 50px auto;
+  max-width: 900px;
+  background: rgba(18, 20, 29, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  backdrop-filter: blur(12px);
+}
+
+.scene-meta {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.scene-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 6px 0;
+}
+
+.scene-sub {
+  font-size: 0.85rem;
+  color: #8c90a4;
+}
+
+/* Grilles par format */
+.scene-grid {
+  display: grid;
+  justify-content: center;
+  margin: 0 auto;
+  transition: gap 0.3s ease;
+}
+
+/* Mode Classeur (espaces réalistes) */
+.mode-classeur .scene-grid {
+  gap: 16px;
+}
+.mode-classeur .scene-card-slot {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Mode Art Pur (cartes fusionnées bord à bord) */
+.mode-art-pur .scene-grid {
+  gap: 0 !important;
+}
+.mode-art-pur .scene-card-slot {
+  box-shadow: none;
+  border-radius: 0;
+}
+.mode-art-pur .scene-grid.grid-nine-box {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Configurations de colonnes */
+.grid-duo {
+  grid-template-columns: repeat(2, minmax(140px, 200px));
+}
+.grid-trio {
+  grid-template-columns: repeat(3, minmax(130px, 180px));
+}
+.grid-quad {
+  grid-template-columns: repeat(2, minmax(140px, 190px));
+}
+.grid-legend {
+  grid-template-columns: minmax(180px, 260px); /* Haut empilé sur Bas */
+}
+.grid-nine-box {
+  grid-template-columns: repeat(3, minmax(110px, 160px));
+}
+
+.scene-card-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.scene-card-slot.is-missing {
+  aspect-ratio: 734 / 1024;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #666;
+  font-size: 0.8rem;
+  padding: 10px;
+}
