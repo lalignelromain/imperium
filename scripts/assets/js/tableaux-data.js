@@ -246,13 +246,13 @@ const chroniquesDatabase = [
   {
     id: "gruikui-parcours-vie-trio",
     titre: "Le Parcours de Vie",
-    extension: "Noir & Blanc",
+    extension: "Noir & Blanc Coffret Trésor",
     format: "trio",
     desc: "Un enfant grandit, se marie et devient père avec son Pokémon.",
     cartes: [
-      { id: "gruikui-rc5", nom: "Gruikui", set: "bw11", num: "RC5", file: "gruikui-rc5.png" },
-      { id: "grotichon-rc6", nom: "Grotichon", set: "bw11", num: "RC6", file: "grotichon-rc6.png" },
-      { id: "roitiflam-rc7", nom: "Roitiflam", set: "bw11", num: "RC7", file: "roitiflam-rc7.png" }
+      { id: "gruikui-rc5", nom: "Gruikui", set: "rc", num: "RC5", file: "gruikui-rc5.png" },
+      { id: "grotichon-rc6", nom: "Grotichon", set: "rc", num: "RC6", file: "grotichon-rc6.png" },
+      { id: "roitiflam-rc7", nom: "Roitiflam", set: "rc", num: "RC7", file: "roitiflam-rc7.png" }
     ]
   },
   {
@@ -526,7 +526,7 @@ const chroniquesDatabase = [
     format: "duo",
     desc: "Les deux Pokémon de la Team Rocket face à face dans la même grotte.",
     cartes: [
-      { id: "abo-25", nom: "Abo", set: "sm115", num: "25", file: "abo-sm115-25.png" },
+      { id: "sm115-25", nom: "Abo", set: "sm115", num: "25", file: "abo-sm115-25.png" },
       { id: "smogo-28", nom: "Smogo", set: "sm115", num: "28", file: "smogo-sm115-28.png" }
     ]
   },
@@ -547,7 +547,6 @@ function getSceneCardPath(file) {
   return `./assets/cards/chroniques/${file}`;
 }
 
-// Compatibilité double : Navigateur (window) + Node.js (CommonJS)
 if (typeof window !== 'undefined') {
   window.odysseeDatabase = odysseeDatabase;
   window.chroniquesDatabase = chroniquesDatabase;
