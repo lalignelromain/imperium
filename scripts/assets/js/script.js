@@ -138,7 +138,7 @@ function renderBinderView(pokemonName) {
     const cartesPossedees = cartesDatabase.filter(c => c.pokemon === pokemonName && localCollection.has(c.id));
     const currentHofIds = hallOfFameData[pokemonName] || [];
 
-    // --- A. RENDU DU HALL OF FAME (4 BOÎTIERS STRICTS - AUTHENTIC / A) ---
+    // --- A. RENDU DU HALL OF FAME (RÉPLIQUE EXACTE CHARIZARD PSA) ---
     if (psaContainer) {
         let psaHTML = '';
         for (let i = 0; i < 4; i++) {
@@ -146,15 +146,20 @@ function renderBinderView(pokemonName) {
             const card = cardId ? cartesPossedees.find(c => c.id === cardId) : null;
 
             if (card) {
-                // Élimine toute mention "Inconnue" pour respecter le label PSA
+                // Élimination "Inconnue". Ex: "2016 POKEMON XY"
                 const hasValidYear = card.annee && String(card.annee).toLowerCase() !== "inconnue";
-                const lineSet = hasValidYear 
-                    ? `${card.annee} POKÉMON ${card.extension.toUpperCase()}`
-                    : `POKÉMON ${card.extension.toUpperCase()}`;
+                const line1 = hasValidYear 
+                    ? `${card.annee} POKÉMON`
+                    : `POKÉMON`;
+                
+                // Ex: "F.A./M CHARIZARD EX"
+                const line2 = card.nom;
+                
+                // Ex: "EVOLUTIONS"
+                const line3 = card.extension || 'OFFICIAL ARCHIVE';
 
-                const lineSub = (card.spec || card.rarete || card.rarity || card.extension || 'OFFICIAL ARCHIVE').toUpperCase();
                 const cardNum = card.numero ? String(card.numero).replace(/^#/, '') : 'PROMO';
-                const certCode = card.cert || `2735808${i + 1}`;
+                const certCode = card.cert || `4936280${i + 1}`;
                 const displayImg = resolveImg(card.imageFr || card.image, card.langue);
 
                 psaHTML += `
@@ -162,21 +167,21 @@ function renderBinderView(pokemonName) {
                         <div class="psa-label-card">
                             <div class="psa-upper-block">
                                 <div class="psa-left-text">
-                                    <span class="psa-row-set">${lineSet}</span>
-                                    <span class="psa-row-name">${card.nom.toUpperCase()}</span>
-                                    <span class="psa-row-sub">${lineSub}</span>
+                                    <span class="psa-text-line">${line1}</span>
+                                    <span class="psa-text-line">${line2}</span>
+                                    <span class="psa-text-line">${line3}</span>
                                 </div>
                                 <div class="psa-right-text">
-                                    <span class="psa-card-number">${cardNum}</span>
-                                    <span class="psa-grade-title">AUTHENTIC</span>
-                                    <span class="psa-grade-value">A</span>
+                                    <span class="psa-text-line">#${cardNum}</span>
+                                    <span class="psa-grade-val">AUTHENTIC</span>
+                                    <span class="psa-grade-val">A</span>
                                 </div>
                             </div>
                             <div class="psa-lower-block">
                                 <div class="psa-barcode-svg"></div>
+                                <div class="psa-foil-seal"></div>
                                 <span class="psa-cert-code">${certCode}</span>
                             </div>
-                            <div class="psa-foil-seal" title="PSA Lighthouse Security"></div>
                         </div>
                         <div class="psa-card-chamber">
                             <img src="${displayImg}" alt="${card.nom}" loading="lazy">
@@ -234,7 +239,6 @@ function renderBinderView(pokemonName) {
             let pocketContent = '';
 
             if (hasBoth) {
-                // FLIP RECTO ↔ RECTO
                 pocketContent = `
                     <div class="card-flipper">
                         <div class="face-fr"><img src="${imgFr}" alt="${c.nom} FR" loading="lazy"></div>
@@ -243,13 +247,11 @@ function renderBinderView(pokemonName) {
                     <button type="button" class="flip-btn-trigger" title="Permuter FR / JP" onclick="event.stopPropagation(); this.closest('.vaultx-pocket').classList.toggle('is-flipped');">FR ↔ JP</button>
                 `;
             } else if (isOnlyJp) {
-                // STATIQUE JP
                 pocketContent = `
                     <img src="${imgJp}" alt="${c.nom} JP" loading="lazy">
                     <span class="lang-badge">JP</span>
                 `;
             } else {
-                // STATIQUE FR
                 pocketContent = `
                     <img src="${imgFr}" alt="${c.nom} FR" loading="lazy">
                 `;
@@ -258,14 +260,10 @@ function renderBinderView(pokemonName) {
             pageHTML += `
                 <div class="vaultx-pocket ${inHof ? 'in-hof' : ''}" id="pocket-${c.id}">
                     ${pocketContent}
-
-                    <!-- Sélecteur FR / JP en Mode Édition -->
                     <div class="lang-toggles">
                         <button type="button" class="lang-btn ${userLang.fr ? 'active' : ''}" onclick="event.stopPropagation(); toggleCardLang('${c.id}', 'fr')">FR</button>
                         <button type="button" class="lang-btn ${userLang.jp ? 'active' : ''}" onclick="event.stopPropagation(); toggleCardLang('${c.id}', 'jp')">JP</button>
                     </div>
-
-                    <!-- Épingle Hall of Fame -->
                     <button type="button" class="hof-pin-btn" title="Épingler au Hall of Fame" onclick="event.stopPropagation(); toggleHofSlot('${pokemonName}', '${c.id}')">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                     </button>
@@ -273,7 +271,6 @@ function renderBinderView(pokemonName) {
             `;
         });
 
-        // Compléter les 12 cases avec des transparents hachurés
         const emptySlots = CARDS_PER_PAGE - pageCards.length;
         for (let e = 0; e < emptySlots; e++) {
             pageHTML += `<div class="vaultx-pocket is-empty"></div>`;
