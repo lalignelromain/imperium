@@ -138,7 +138,7 @@ function renderBinderView(pokemonName) {
     const cartesPossedees = cartesDatabase.filter(c => c.pokemon === pokemonName && localCollection.has(c.id));
     const currentHofIds = hallOfFameData[pokemonName] || [];
 
-    // --- A. RENDU DU HALL OF FAME (RÉPLIQUE EXACTE CHARIZARD PSA) ---
+    // --- A. RENDU DU HALL OF FAME ---
     if (psaContainer) {
         let psaHTML = '';
         for (let i = 0; i < 4; i++) {
@@ -146,16 +146,12 @@ function renderBinderView(pokemonName) {
             const card = cardId ? cartesPossedees.find(c => c.id === cardId) : null;
 
             if (card) {
-                // Élimination "Inconnue". Ex: "2016 POKEMON XY"
                 const hasValidYear = card.annee && String(card.annee).toLowerCase() !== "inconnue";
                 const line1 = hasValidYear 
                     ? `${card.annee} POKÉMON`
                     : `POKÉMON`;
                 
-                // Ex: "F.A./M CHARIZARD EX"
                 const line2 = card.nom;
-                
-                // Ex: "EVOLUTIONS"
                 const line3 = card.extension || 'OFFICIAL ARCHIVE';
 
                 const cardNum = card.numero ? String(card.numero).replace(/^#/, '') : 'PROMO';
@@ -202,11 +198,6 @@ function renderBinderView(pokemonName) {
     }
 
     // --- B. RENDU DU CLASSEUR VAULT X (PLANCHE 4x3) ---
-    const totalCountEl = document.getElementById('total-count-text');
-    if (totalCountEl) {
-        totalCountEl.innerText = `${cartesPossedees.length} cartes en classeur`;
-    }
-
     if (cartesPossedees.length === 0) {
         binderContainer.innerHTML = `
             <div style="text-align: center; padding: 40px; color: #94a3b8; width: 100%;">
@@ -244,7 +235,9 @@ function renderBinderView(pokemonName) {
                         <div class="face-fr"><img src="${imgFr}" alt="${c.nom} FR" loading="lazy"></div>
                         <div class="face-jp"><img src="${imgJp}" alt="${c.nom} JP" loading="lazy"></div>
                     </div>
-                    <button type="button" class="flip-btn-trigger" title="Permuter FR / JP" onclick="event.stopPropagation(); this.closest('.vaultx-pocket').classList.toggle('is-flipped');">FR ↔ JP</button>
+                    <button type="button" class="flip-btn-trigger" title="Permuter FR / JP" onclick="event.stopPropagation(); this.closest('.vaultx-pocket').classList.toggle('is-flipped');">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                    </button>
                 `;
             } else if (isOnlyJp) {
                 pocketContent = `
