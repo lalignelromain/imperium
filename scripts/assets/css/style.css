@@ -1241,14 +1241,14 @@ body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn {
 @media (max-width: 1024px) and (min-width: 768px) {
     .hub-grid { display: grid; grid-template-columns: repeat(2, 1fr); max-width: 540px; gap: 16px; }
     
-    /* 2 cartes par ligne */
+    /* On annule le placement de bureau pour que ça passe en 2 par ligne */
     .hub-card.pokedex-card,
     .hub-card.pantheon-card,
     .hub-card.mew-card,
     .hub-card.mewtwo-card { grid-column: span 1; }
     
-    /* Les Dresseuses prennent la largeur totale en dessous de Mew et Mewtwo */
-    .hub-card.dresseuses-card { grid-column: span 2; }
+    /* Dresseuses prend la ligne entière en dessous */
+    .hub-card.dresseuses-card { grid-column: 1 / -1; }
     
     .hub-card { min-width: auto; max-width: 100%; min-height: 120px; padding: 18px 14px; border-radius: 20px; }
     .hub-card p { display: block; }
