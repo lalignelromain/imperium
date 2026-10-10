@@ -35,7 +35,6 @@ let hallOfFameData = {
     mewtwo: []
 };
 let isEditMode = false;
-let isPureArtMode = false; // Bascule Classeur vs Art Pur pour Odyssée & Chroniques
 
 // 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL (POSSESSION, LANGUES & HOF)
 function initFirestoreSync() {
@@ -275,7 +274,7 @@ function renderBinderView(pokemonName) {
     }
 }
 
-// 5. BIS RENDU DU CLASSEUR DES DRESSEUSES (AVEC FLIP PRIVÉ)
+// 6. RENDU DU CLASSEUR DES DRESSEUSES (AVEC FLIP PRIVÉ)
 function renderDresseusesView() {
     const container = document.getElementById('dresseuses-deck');
     if (!container || typeof dresseusesDatabase === 'undefined') return;
@@ -342,7 +341,7 @@ function renderDresseusesView() {
     });
 }
 
-// 6. ACTIONS EN MODE ÉDITION
+// 7. ACTIONS EN MODE ÉDITION
 window.toggleCardLang = function(cardId, lang) {
     if (!isEditMode || !docRef) return;
 
@@ -386,7 +385,7 @@ window.toggleHofSlot = function(pokemonName, cardId) {
     updateAllViews();
 };
 
-// Rendu historique conservé
+// 8. RENDU HISTORIQUE CONSERVÉ (Mew et Mewtwo)
 function renderLegacyCollection(pokemonName, containerId) {
     const container = document.getElementById(containerId);
     if (!container || typeof cartesDatabase === 'undefined') return;
@@ -424,7 +423,7 @@ function renderLegacyCollection(pokemonName, containerId) {
     container.innerHTML = html;
 }
 
-// 7. RENDU PANTHÉON
+// 9. RENDU PANTHÉON
 function renderPantheon() {
     if (typeof pantheonDatabase === 'undefined') return;
 
@@ -481,180 +480,7 @@ function renderPantheon() {
     }
 }
 
-// 8. RENDU DES SCÈNES & TABLEAUX (ODYSSÉE & CHRONIQUES)
-function renderScenes(container, database) {
-    if (!container || !database || !Array.isArray(database)) return;
-
-    container.innerHTML = '';
-
-    database.forEach(scene => {
-        const sceneEl = document.createElement('section');
-        sceneEl.className = `scene-frame format-${scene.format} ${isPureArtMode ? 'mode-art-pur' : 'mode-classeur'}`;
-
-        const metaEl = document.createElement('div');
-        metaEl.className = 'scene-meta';
-        
-        // Détection d'une perspective croisée pour le badge UI
-        const isFlipCapable = scene.cartes.some(c => c.relation === 'reverse-shot');
-        const badgeFlip = (isFlipCapable && isPureArtMode) 
-            ? `<span style="font-size: 0.7rem; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 12px; margin-left: 10px; border: 1px solid rgba(255,255,255,0.2); vertical-align: middle;">🔄 Cliquez pour pivoter</span>`
-            : '';
-
-        metaEl.innerHTML = `
-            <h2 class="scene-title">${scene.titre} ${badgeFlip}</h2>
-            <span class="scene-sub">${scene.extension || ''} ${scene.desc ? '— ' + scene.desc : ''}</span>
-        `;
-
-        const gridEl = document.createElement('div');
-
-        // CONDITION A : Perspective Croisée (Champ / Contrechamp) activée en mode Art Pur
-        if (isFlipCapable && isPureArtMode && scene.cartes.length === 2) {
-            gridEl.className = `flip-scene-container`;
-            
-            const innerEl = document.createElement('div');
-            innerEl.className = 'flip-scene-inner';
-            
-            const createSide = (carte, sideClass) => {
-                const sideEl = document.createElement('div');
-                sideEl.className = `${sideClass} scene-card-slot`;
-                
-                const img = document.createElement('img');
-                const imgPath = typeof getSceneCardPath === 'function' ? getSceneCardPath(carte.file) : `./assets/cards/chroniques/${carte.file}`;
-                
-                img.src = imgPath;
-                img.alt = `${carte.nom} (#${carte.num})`;
-                img.loading = 'lazy';
-                img.className = 'scene-card-img';
-                
-                img.onerror = () => {
-                    sideEl.classList.add('is-missing');
-                    sideEl.innerHTML = `<span class="missing-label">${carte.nom}<br>#${carte.num}</span>`;
-                };
-                
-                sideEl.appendChild(img);
-                return sideEl;
-            };
-
-            innerEl.appendChild(createSide(scene.cartes[0], 'flip-scene-front'));
-            innerEl.appendChild(createSide(scene.cartes[1], 'flip-scene-back'));
-            
-            gridEl.appendChild(innerEl);
-
-            // Interaction de pivotement au clic
-            gridEl.addEventListener('click', () => {
-                gridEl.classList.toggle('is-flipped');
-            });
-        } 
-        // CONDITION B : Affichage Grille Standard ou Mode Classeur
-        else {
-            gridEl.className = `scene-grid grid-${scene.format}`;
-            
-            scene.cartes.forEach(carte => {
-                const cardBox = document.createElement('div');
-                cardBox.className = 'scene-card-slot';
-
-                const img = document.createElement('img');
-                const imgPath = typeof getSceneCardPath === 'function'
-                    ? getSceneCardPath(carte.file)
-                    : `./assets/cards/chroniques/${carte.file}`;
-
-                img.src = imgPath;
-                img.alt = `${carte.nom} (#${carte.num})`;
-                img.loading = 'lazy';
-                img.className = 'scene-card-img';
-
-                img.onerror = () => {
-                    cardBox.classList.add('is-missing');
-                    cardBox.innerHTML = `<span class="missing-label">${carte.nom}<br>#${carte.num}</span>`;
-                };
-
-                cardBox.appendChild(img);
-                gridEl.appendChild(cardBox);
-            });
-        }
-
-        sceneEl.appendChild(metaEl);
-        sceneEl.appendChild(gridEl);
-        container.appendChild(sceneEl);
-    });
-}
-
-function initTableauxView() {
-    const odysseeContainer = document.getElementById('odyssee-container') || document.getElementById('odyssee-content') || document.getElementById('odyssee-grid');
-    const chroniquesContainer = document.getElementById('chroniques-container') || document.getElementById('chroniques-content') || document.getElementById('chroniques-grid');
-    const genericContainer = document.getElementById('scenes-container') || document.getElementById('scenes-grid');
-
-    let activeContainer = null;
-    let activeData = null;
-
-    if (odysseeContainer && typeof odysseeDatabase !== 'undefined') {
-        activeContainer = odysseeContainer;
-        activeData = odysseeDatabase;
-    } else if (chroniquesContainer && typeof chroniquesDatabase !== 'undefined') {
-        activeContainer = chroniquesContainer;
-        activeData = chroniquesDatabase;
-    } else if (genericContainer) {
-        const isOdyssee = document.body.classList.contains('theme-odyssee') || 
-                          (document.title && (document.title.toLowerCase().includes('odyssée') || document.title.toLowerCase().includes('odyssee')));
-        activeContainer = genericContainer;
-        activeData = isOdyssee 
-            ? (typeof odysseeDatabase !== 'undefined' ? odysseeDatabase : null)
-            : (typeof chroniquesDatabase !== 'undefined' ? chroniquesDatabase : null);
-    }
-
-    if (!activeContainer || !activeData) return;
-
-    // Gestion de la paire de boutons (#btn-classeur et #btn-art)
-    const btnClasseur = document.getElementById('btn-classeur');
-    const btnArt = document.getElementById('btn-art');
-
-    if (btnClasseur && btnArt && !btnClasseur.dataset.bound) {
-        btnClasseur.dataset.bound = 'true';
-
-        btnClasseur.addEventListener('click', () => {
-            isPureArtMode = false;
-            btnClasseur.classList.add('active');
-            btnArt.classList.remove('active');
-            document.body.classList.add('mode-classeur');
-            document.body.classList.remove('mode-art-pur');
-            renderScenes(activeContainer, activeData);
-        });
-
-        btnArt.addEventListener('click', () => {
-            isPureArtMode = true;
-            btnArt.classList.add('active');
-            btnClasseur.classList.remove('active');
-            document.body.classList.add('mode-art-pur');
-            document.body.classList.remove('mode-classeur');
-            renderScenes(activeContainer, activeData);
-        });
-    }
-
-    // Repli : bouton unique bascule (#btn-toggle-view ou #btn-mode-art)
-    const toggleBtn = document.getElementById('btn-toggle-view') || document.getElementById('btn-mode-art');
-    if (toggleBtn && !toggleBtn.dataset.bound) {
-        toggleBtn.dataset.bound = 'true';
-        toggleBtn.addEventListener('click', () => {
-            isPureArtMode = !isPureArtMode;
-            toggleBtn.textContent = isPureArtMode ? 'Mode Classeur' : 'Mode Art Pur';
-            toggleBtn.classList.toggle('active', isPureArtMode);
-            document.body.classList.toggle('mode-art-pur', isPureArtMode);
-            document.body.classList.toggle('mode-classeur', !isPureArtMode);
-            renderScenes(activeContainer, activeData);
-        });
-    }
-
-    renderScenes(activeContainer, activeData);
-}
-
-// Fonctions globales de rétro-compatibilité
-window.setChroniquesMode = function(mode) {
-    const btn = mode === 'art' ? document.getElementById('btn-art') : document.getElementById('btn-classeur');
-    if (btn) btn.click();
-};
-window.setOdysseeMode = window.setChroniquesMode;
-
-// 9. MISE À JOUR GLOBALE DE TOUTES LES VUES
+// 10. MISE À JOUR GLOBALE DE TOUTES LES VUES RESTANTES
 function updateAllViews() {
     renderPokedex();
 
@@ -667,14 +493,10 @@ function updateAllViews() {
     renderLegacyCollection('mew', 'mew-grid');
     renderLegacyCollection('mewtwo', 'mewtwo-grid');
     renderPantheon();
-    
-    // NOUVEL APPEL POUR LE CLASSEUR DES DRESSEUSES
     renderDresseusesView(); 
-
-    initTableauxView();
 }
 
-// 10. DOCK FLOTTANT EN VERRE
+// 11. DOCK FLOTTANT EN VERRE
 function setupDock() {
     if (document.getElementById('floating-dock')) return;
 
@@ -699,7 +521,7 @@ function setupDock() {
     document.getElementById('dock-btn-lock').addEventListener('click', () => { if (auth) auth.signOut(); });
 }
 
-// 11. DÉCLENCHEUR DU MODE ÉDITION
+// 12. DÉCLENCHEUR DU MODE ÉDITION
 function setupAdminTrigger() {
     const title = document.querySelector('.header-main h1');
     if (!title) return;
@@ -736,7 +558,7 @@ if (auth) {
     });
 }
 
-// 12. PROGRESSION MASTER SET EV5 SUR LE HUB (TOTAL 363)
+// 13. PROGRESSION MASTER SET EV5 SUR LE HUB (TOTAL 363)
 function initEV5ProgressHub() {
     const fill = document.getElementById("ev5-hub-progress-fill");
     const text = document.getElementById("ev5-hub-progress-text");
@@ -764,13 +586,12 @@ function initEV5ProgressHub() {
     }
 }
 
-// 13. LANCEMENT AU CHARGEMENT DU DOM
+// 14. LANCEMENT AU CHARGEMENT DU DOM
 document.addEventListener('DOMContentLoaded', () => {
     setupDock();
     setupAdminTrigger();
     initFirestoreSync();
     initEV5ProgressHub();
-    initTableauxView();
 });
 
 if ('serviceWorker' in navigator) {

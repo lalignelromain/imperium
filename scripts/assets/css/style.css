@@ -155,7 +155,7 @@ body.mode-edition .header-main h1 {
 }
 
 /* ==========================================
-   HUB D'ACCUEIL (DESKTOP - GRILLE 2 + 4)
+   HUB D'ACCUEIL (DESKTOP - GRILLE DE 6)
 ========================================== */
 .hub-container {
     flex: 1;
@@ -170,7 +170,7 @@ body.mode-edition .header-main h1 {
 
 .hub-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr); /* Grille de 6 pour diviser par 2 et par 3 */
     gap: clamp(14px, 1.8vw, 24px);
     width: 100%;
     max-width: 1100px;
@@ -182,22 +182,19 @@ body.mode-edition .header-main h1 {
 .hub-card.pantheon-card   { --th-color: #e5c05c; --th-glow: rgba(229, 192, 92, 0.45); }
 .hub-card.mew-card        { --th-color: #fea6ca; --th-glow: rgba(254, 166, 202, 0.45); }
 .hub-card.mewtwo-card     { --th-color: #a858d4; --th-glow: rgba(168, 88, 212, 0.45); }
-.hub-card.chroniques-card { --th-color: #10b981; --th-glow: rgba(16, 185, 129, 0.45); }
-.hub-card.odyssee-card    { --th-color: #00d2ff; --th-glow: rgba(0, 210, 255, 0.45); }
+.hub-card.dresseuses-card { --th-color: #f472b6; --th-glow: rgba(244, 114, 182, 0.45); }
 
-.hub-card.pokedex-card {
-    grid-column: 1 / 3;
+/* LIGNE 1 : 2 cartes qui prennent la moitié (3/6 colonnes) */
+.hub-card.pokedex-card,
+.hub-card.pantheon-card { 
+    grid-column: span 3; 
 }
 
-.hub-card.pantheon-card {
-    grid-column: 3 / 5;
-}
-
+/* LIGNE 2 : 3 cartes qui prennent un tiers (2/6 colonnes) */
 .hub-card.mew-card,
 .hub-card.mewtwo-card,
-.hub-card.chroniques-card,
-.hub-card.odyssee-card {
-    grid-column: span 1;
+.hub-card.dresseuses-card { 
+    grid-column: span 2; 
 }
 
 .hub-card {
@@ -387,13 +384,8 @@ body.mode-edition .card-item:hover {
     text-overflow: ellipsis;
 }
 
-.card-item.not-owned {
-    opacity: 0.55;
-}
-
-.card-item.is-owned {
-    opacity: 1;
-}
+.card-item.not-owned { opacity: 0.55; }
+.card-item.is-owned { opacity: 1; }
 
 .card-item.is-owned.theme-mew {
     border-color: #fea6ca;
@@ -446,13 +438,8 @@ body.mode-edition .card-item:hover {
     transform: translateY(-2px);
 }
 
-.dock-btn-lock {
-    color: #e5c05c !important;
-}
-
-.dock-btn-lock:hover {
-    background-color: rgba(229, 192, 92, 0.15) !important;
-}
+.dock-btn-lock { color: #e5c05c !important; }
+.dock-btn-lock:hover { background-color: rgba(229, 192, 92, 0.15) !important; }
 
 /* ==========================================
    PANTHÉON
@@ -466,10 +453,7 @@ body.mode-edition .card-item:hover {
     z-index: 1;
 }
 
-.pantheon-section {
-    margin-bottom: 44px;
-}
-
+.pantheon-section { margin-bottom: 44px; }
 .pantheon-section h2 {
     font-size: 1.4rem;
     margin-bottom: 16px;
@@ -554,12 +538,10 @@ body.mode-edition .card-item:hover {
         border-color: #d4af37;
         box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
     }
-
     .gradee-item:hover .flip-inner {
         transform: rotateY(180deg);
         -webkit-transform: rotateY(180deg);
     }
-
     .flip-front img, .flip-back img {
         filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.75));
     }
@@ -604,337 +586,6 @@ body.mode-edition .card-item:hover {
     transform: translateZ(0);
 }
 
-/* ==========================================
-   CHRONIQUES & ODYSSÉE
-========================================== */
-.mode-switcher-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    top: 0;
-    z-index: 10;
-    width: 100%;
-    margin-bottom: 35px;
-}
-
-.mode-switcher {
-    display: inline-flex;
-    background: rgba(14, 18, 26, 0.88);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 40px;
-    padding: 5px;
-    gap: 6px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-}
-
-.switch-btn {
-    background: transparent;
-    border: none;
-    color: #94a3b8;
-    padding: 9px 22px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    letter-spacing: 0.6px;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.switch-btn:hover {
-    color: #ffffff;
-}
-
-.theme-chroniques .switch-btn.active {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: #ffffff;
-    box-shadow: 0 0 18px rgba(16, 185, 129, 0.45);
-}
-
-.theme-odyssee .switch-btn.active {
-    background: linear-gradient(135deg, #00d2ff, #0072ff);
-    color: #ffffff;
-    box-shadow: 0 0 18px rgba(0, 210, 255, 0.45);
-}
-
-.binder-page {
-    width: 100%;
-    max-width: 1080px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 48px;
-}
-
-.assembly-section {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    width: 100%;
-}
-
-.assembly-section-title {
-    font-size: 1.15rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #cbd5e1;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
-}
-
-.theme-chroniques .assembly-section-title {
-    color: #10b981;
-}
-
-.theme-odyssee .assembly-section-title {
-    color: #00d2ff;
-}
-
-.assembly-section-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, rgba(255, 255, 255, 0.15), transparent);
-}
-
-.assembly-unit {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.scene-header {
-    text-align: center;
-    margin-bottom: 14px;
-}
-
-.scene-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    color: #ffffff;
-}
-
-.scene-meta {
-    font-size: 0.78rem;
-    color: #8b949e;
-    margin-top: 3px;
-}
-
-.scene-desc {
-    max-width: 620px;
-    text-align: center;
-    margin-top: 14px;
-    font-size: 0.82rem;
-    color: #94a3b8;
-    line-height: 1.45;
-}
-
-.assembly-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    position: relative;
-    max-width: 100%;
-    transition: padding 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
-                background 0.3s ease, 
-                border-color 0.3s ease, 
-                box-shadow 0.3s ease;
-}
-
-body.mode-classeur .assembly-box {
-    background: #0c1017;
-    padding: 16px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    gap: 12px;
-    box-shadow: 
-        inset 0 0 25px rgba(0, 0, 0, 0.85),
-        0 12px 30px rgba(0, 0, 0, 0.6);
-}
-
-body.mode-classeur .pocket {
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-    aspect-ratio: 2.5 / 3.5;
-    background: #141822;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
-}
-
-body.mode-classeur .pocket::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 40%, rgba(255,255,255,0.02) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    pointer-events: none;
-    z-index: 5;
-}
-
-body.mode-art-pur .assembly-box {
-    background: transparent;
-    padding: 0;
-    border-radius: 12px;
-    gap: 0;
-    overflow: hidden;
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9);
-}
-
-body.theme-chroniques.mode-art-pur .assembly-box {
-    border: 1px solid rgba(16, 185, 129, 0.45);
-    box-shadow: 0 0 25px rgba(16, 185, 129, 0.22), 0 20px 45px rgba(0, 0, 0, 0.9);
-}
-
-body.theme-odyssee.mode-art-pur .assembly-box {
-    border: 1px solid rgba(0, 210, 255, 0.45);
-    box-shadow: 0 0 25px rgba(0, 210, 255, 0.22), 0 20px 45px rgba(0, 0, 0, 0.9);
-}
-
-body.mode-art-pur .pocket {
-    border-radius: 0;
-    box-shadow: none;
-    aspect-ratio: 2.5 / 3.5;
-}
-
-body.mode-art-pur .pocket::before {
-    display: none;
-}
-
-.pocket {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    flex-shrink: 0;
-}
-
-.pocket img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    pointer-events: none;
-}
-
-.pocket-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 12px 10px;
-    background: radial-gradient(circle at 50% 30%, #1e2533 0%, #0d1117 100%);
-    border: 1px dashed rgba(255, 255, 255, 0.15);
-    border-radius: 8px;
-    text-align: center;
-}
-
-.placeholder-name {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #e2e8f0;
-}
-
-.placeholder-icon {
-    font-size: 1.4rem;
-    opacity: 0.4;
-    margin: auto 0;
-}
-
-.placeholder-num {
-    font-size: 0.65rem;
-    color: #10b981;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-
-.duo-box .pocket { width: clamp(140px, 18vw, 220px); }
-.trio-box .pocket { width: clamp(110px, 14vw, 190px); }
-.quad-box .pocket { width: clamp(120px, 15vw, 180px); }
-.nine-box .pocket { width: clamp(80px, 10vw, 130px); }
-
-.quad-box {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr);
-    width: fit-content;
-}
-
-.nine-box {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr);
-    width: fit-content;
-}
-
-body.theme-odyssee.mode-art-pur .assembly-box.nine-box {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important;
-    grid-template-rows: repeat(3, 1fr) !important;
-    width: min(92vw, 540px) !important;
-    aspect-ratio: 732 / 951 !important;
-    margin: 0 auto !important;
-    background-image: url('../img/zenith-tableau.png') !important;
-    background-size: 100% 100% !important;
-    background-position: center center !important;
-    background-repeat: no-repeat !important;
-    background-color: transparent !important;
-    padding: 7% 5% 8% 5% !important;
-    column-gap: 6.8% !important;
-    row-gap: 6.4% !important;
-    border-radius: 12px !important;
-    border: none !important;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9) !important;
-}
-
-body.theme-odyssee.mode-art-pur .nine-box .pocket {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: none !important;
-    border-radius: 4px !important;
-    overflow: hidden !important;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-}
-
-body.theme-odyssee.mode-art-pur .nine-box .pocket img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: fill !important;
-    display: block !important;
-}
-
-.legend-box {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center;
-    align-items: center;
-    width: fit-content;
-    margin: 0 auto;
-}
-
-body.mode-classeur .legend-box {
-    gap: 12px;
-}
-
-body.mode-art-pur .legend-box {
-    gap: 0 !important;
-}
-
-.legend-box .pocket {
-    width: clamp(140px, 18vw, 210px);
-}
 
 /* ====================================================================
    MODULE MASTER SET EV 5
@@ -963,19 +614,9 @@ body.mode-art-pur .legend-box {
                 0 0 35px rgba(255, 0, 128, 0.25) !important;
 }
 
-.masterset-card .hub-card-content {
-    text-align: left;
-}
-
-.masterset-card h2 {
-    font-size: 1.35rem;
-    margin-bottom: 2px;
-}
-
-.masterset-card p {
-    font-size: 0.85rem;
-    color: #94a3b8;
-}
+.masterset-card .hub-card-content { text-align: left; }
+.masterset-card h2 { font-size: 1.35rem; margin-bottom: 2px; }
+.masterset-card p { font-size: 0.85rem; color: #94a3b8; }
 
 .hub-progress-wrapper {
     display: flex;
@@ -1047,9 +688,7 @@ body.mode-art-pur .legend-box {
     text-transform: uppercase;
 }
 
-.theme-masterset .card-item {
-    cursor: pointer !important;
-}
+.theme-masterset .card-item { cursor: pointer !important; }
 
 .theme-masterset .card-item.not-owned {
     opacity: 0.38;
@@ -1133,250 +772,7 @@ body.mode-art-pur .legend-box {
 }
 
 /* ====================================================================
-   RESPONSIVE / MEDIA QUERIES
-==================================================================== */
-
-@media (max-width: 1650px) and (min-width: 1025px) {
-    .hub-container {
-        padding: 20px 40px;
-    }
-    .hub-grid {
-        max-width: 860px;
-        gap: 14px;
-        padding: 5px;
-    }
-    .hub-card {
-        min-height: 130px;
-        padding: 18px 14px;
-        border-radius: 18px;
-    }
-    .hub-card h2 {
-        font-size: 1.15rem;
-        margin-bottom: 4px;
-        letter-spacing: 0.8px;
-    }
-    .hub-card p {
-        font-size: 0.72rem;
-        line-height: 1.3;
-        display: block;
-    }
-    .bg-mew {
-        width: 18vw;
-        max-width: 240px;
-        max-height: 50vh;
-        left: 2vw;
-    }
-    .bg-mewtwo {
-        width: 20vw;
-        max-width: 270px;
-        max-height: 62vh;
-        right: 2vw;
-    }
-}
-
-@media (max-width: 1024px) and (min-width: 768px) {
-    .hub-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        max-width: 540px;
-        gap: 16px;
-    }
-    .hub-card.pokedex-card,
-    .hub-card.pantheon-card,
-    .hub-card.mew-card,
-    .hub-card.mewtwo-card,
-    .hub-card.chroniques-card,
-    .hub-card.odyssee-card {
-        grid-column: span 1;
-    }
-    .hub-card {
-        min-width: auto;
-        max-width: 100%;
-        min-height: 120px;
-        padding: 18px 14px;
-        border-radius: 20px;
-    }
-    .hub-card p {
-        display: block;
-    }
-    .bg-watermark {
-        opacity: 0.2;
-    }
-    .bg-mew {
-        width: 200px;
-        left: -15px;
-    }
-    .bg-mewtwo {
-        width: 220px;
-        right: -15px;
-    }
-    .cards-grid {
-        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-        gap: 16px;
-    }
-}
-
-@media (max-width: 767px) {
-    .header-main {
-        padding: 35px 12px 15px;
-    }
-    .header-main h1 {
-        font-size: 1.45rem;
-        letter-spacing: 2px;
-        text-indent: 2px;
-    }
-    .subtitle {
-        font-size: 0.75rem;
-        letter-spacing: 1.5px;
-        margin-top: 6px;
-    }
-    .bg-watermark {
-        opacity: 0.18;
-        -webkit-mask-image: none;
-        mask-image: none;
-    }
-    .bg-mew {
-        width: 115px;
-        max-height: 25vh;
-        left: 8px;
-        top: 18%;
-        bottom: auto;
-    }
-    .bg-mewtwo {
-        width: 125px;
-        max-height: 28vh;
-        right: 8px;
-        top: 18%;
-        transform: translateY(0);
-    }
-    .hub-container {
-        padding: 20px 16px 40px;
-    }
-    .hub-grid {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        max-width: 360px;
-        margin: 0 auto;
-        gap: 12px;
-        padding: 0;
-    }
-    .hub-card {
-        min-width: 100%;
-        max-width: 100%;
-        min-height: 56px;
-        padding: 14px 18px;
-        border-radius: 16px;
-    }
-    .hub-card h2 {
-        font-size: 1.15rem;
-        letter-spacing: 1px;
-        margin-bottom: 0;
-    }
-    .hub-card p {
-        display: none !important;
-    }
-    .collection-container {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 0 10px 30px !important;
-    }
-    .cards-grid {
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 8px !important;
-        padding: 8px 0 !important;
-        width: 100% !important;
-    }
-    .card-item {
-        padding: 8px !important;
-        border-radius: 8px !important;
-        min-width: 0 !important;
-        width: 100% !important;
-    }
-    .card-item img {
-        border-radius: 4px;
-        width: 100%;
-    }
-    .card-info {
-        margin-top: 6px;
-    }
-    .card-name {
-        font-size: 0.72rem;
-    }
-    .card-meta {
-        font-size: 0.62rem;
-        margin-top: 2px;
-    }
-    .pantheon-item {
-        width: 100%;
-        max-width: 280px;
-        margin: 0 auto;
-    }
-    .floating-dock {
-        bottom: 16px;
-        right: 50%;
-        transform: translateX(50%);
-        padding: 4px 8px;
-    }
-    .dock-btn {
-        width: 34px;
-        height: 34px;
-    }
-    .mode-switcher-container {
-        top: 0;
-        margin-bottom: 24px;
-    }
-    .mode-switcher {
-        padding: 4px;
-        gap: 4px;
-    }
-    .switch-btn {
-        padding: 7px 16px;
-        font-size: 0.75rem;
-    }
-    .binder-page {
-        gap: 36px;
-    }
-    body.mode-classeur .assembly-box {
-        padding: 8px;
-        gap: 6px;
-        border-radius: 12px;
-    }
-    .duo-box .pocket { width: 140px; }
-    .trio-box .pocket { width: 102px; }
-    .quad-box .pocket { width: 130px; }
-    .nine-box .pocket { width: 95px; }
-    .legend-box .pocket { width: 130px; }
-
-    body.mode-art-pur .nine-box {
-        padding: 10px !important;
-        gap: 5px !important;
-    }
-    .scene-title {
-        font-size: 0.95rem;
-    }
-    .scene-desc {
-        font-size: 0.76rem;
-        padding: 0 10px;
-    }
-    .hub-card.masterset-card {
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 12px !important;
-        padding: 16px !important;
-    }
-    .masterset-card .hub-card-content {
-        text-align: center !important;
-    }
-    .hub-progress-wrapper {
-        min-width: 100% !important;
-        align-items: center !important;
-    }
-}
-
-/* ====================================================================
-   MODULE : VITRINE PSA & CLASSEUR VAULT X 4x3 (CALIBRAGE STRICT)
+   MODULE : VITRINE PSA & CLASSEUR VAULT X 4x3
 ==================================================================== */
 :root {
     --bg-binder: #0b0f17;
@@ -1389,11 +785,9 @@ body.mode-art-pur .legend-box {
     --psa-chrome-rose-glow: 0 0 16px rgba(244, 114, 182, 0.45);
 }
 
-.section-meta-header {
-    display: none !important;
-}
+.section-meta-header { display: none !important; }
 
-/* ---------------- 1. BOÎTIERS PSA (TAILLE STRICTE UTILISATEUR) ---------------- */
+/* 1. BOÎTIERS PSA */
 .collection-workspace, .workspace {
     max-width: 1200px;
     margin: 0 auto;
@@ -1433,7 +827,6 @@ body.mode-art-pur .legend-box {
     pointer-events: none;
 }
 
-/* ÉTIQUETTE PSA OFFICIELLE — REGULAR (M-MET 02 CHROME ROSE MIROIR) */
 .psa-label-card {
     background: #ffffff;
     border: 4px solid #f472b6;
@@ -1524,7 +917,6 @@ body.mode-art-pur .legend-box {
     color: #222;
 }
 
-/* Pastille Holographique posée au centre bas */
 .psa-foil-seal {
     width: 22px;
     height: 12px;
@@ -1556,7 +948,6 @@ body.mode-art-pur .legend-box {
     mix-blend-mode: overlay;
 }
 
-/* Compartiment carte strict utilisateur */
 .psa-card-chamber {
     width: 100%;
     aspect-ratio: 734 / 1024;
@@ -1599,7 +990,7 @@ body.mode-art-pur .legend-box {
     justify-content: center;
 }
 
-/* ---------------- 2. CLASSEUR VAULT X 4x3 (CALIBRE ADAPTÉ) ---------------- */
+/* 2. CLASSEUR VAULT X 4x3 */
 .binder-deck {
     display: flex;
     flex-direction: column;
@@ -1656,7 +1047,7 @@ body.mode-art-pur .legend-box {
     pointer-events: none;
 }
 
-/* ---------------- 3. FLIP RECTO ↔ RECTO (FR / JP DUAL) ---------------- */
+/* 3. FLIP RECTO ↔ RECTO */
 .card-flipper {
     width: 100%;
     height: 100%;
@@ -1680,7 +1071,6 @@ body.mode-art-pur .legend-box {
     transform: rotateY(180deg);
 }
 
-/* Nouveau bouton discret de flip en bas à gauche */
 .flip-btn-trigger {
     position: absolute;
     bottom: 6px;
@@ -1732,7 +1122,7 @@ body.mode-art-pur .legend-box {
     letter-spacing: 0.5px;
 }
 
-/* ---------------- 4. SÉLECTEUR FR / JP EN MODE ÉDITION ---------------- */
+/* 4. SÉLECTEUR FR / JP EN MODE ÉDITION */
 .lang-toggles {
     display: none;
     position: absolute;
@@ -1763,7 +1153,6 @@ body.mode-edition .lang-toggles {
     border-color: #f472b6;
 }
 
-/* Bouton d'épingle HOF */
 .hof-pin-btn {
     display: none;
     position: absolute;
@@ -1793,44 +1182,8 @@ body.mode-edition .hof-pin-btn {
     box-shadow: 0 0 8px rgba(244, 114, 182, 0.8);
 }
 
-.vaultx-pocket.in-hof .hof-pin-btn svg {
-    fill: currentColor;
-}
+.vaultx-pocket.in-hof .hof-pin-btn svg { fill: currentColor; }
 
-/* 6. Adaptation mobile stricte pour Vitrine et Classeur */
-@media (max-width: 900px) {
-    .collection-workspace {
-        padding: 10px 10px 40px;
-    }
-    
-    .psa-wall {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        margin-bottom: 30px;
-    }
-    
-    .psa-slab {
-        padding: 6px 5px 8px;
-        border-radius: 8px;
-    }
-    
-    .psa-label-card {
-        min-height: 52px;
-        padding: 3px 4px;
-        border-width: 3px;
-    }
-    .psa-text-line { font-size: 5.5px; }
-    .psa-grade-val { font-size: 8px; }
-    .psa-barcode-svg { width: 45px; height: 8px; }
-    .psa-cert-code { font-size: 6.5px; }
-    
-    .vaultx-page {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-        padding: 8px;
-        border-radius: 8px;
-    }
-}
 
 /* ====================================================================
    FINITION MEWTWO : T-MET 01 • TITANE SOMBRE ANODISÉ
@@ -1839,7 +1192,6 @@ body.theme-mewtwo .psa-slab:hover {
     box-shadow: 0 30px 55px rgba(0, 0, 0, 0.95), 0 0 18px rgba(168, 85, 247, 0.45);
 }
 
-/* Baguette PSA Titane Métallique Biseautée */
 body.theme-mewtwo .psa-label-card {
     border: 4px solid #3f3f46;
     border-image: linear-gradient(
@@ -1852,15 +1204,9 @@ body.theme-mewtwo .psa-label-card {
     ) 1;
 }
 
-body.theme-mewtwo .psa-slab.is-empty {
-    border-color: rgba(168, 85, 247, 0.3);
-}
+body.theme-mewtwo .psa-slab.is-empty { border-color: rgba(168, 85, 247, 0.3); }
+body.theme-mewtwo .vaultx-pocket:hover { border-color: rgba(168, 85, 247, 0.5); }
 
-body.theme-mewtwo .vaultx-pocket:hover {
-    border-color: rgba(168, 85, 247, 0.5);
-}
-
-/* Boutons d'interaction teintés violet psychique */
 body.theme-mewtwo .flip-btn-trigger:hover {
     background: rgba(168, 85, 247, 0.9);
     border-color: #a855f7;
@@ -1880,159 +1226,73 @@ body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn {
 }
 
 /* ====================================================================
-   STYLES TABLEAUX : ODYSSÉE & CHRONIQUES
+   RESPONSIVE / MEDIA QUERIES GLOBALES
 ==================================================================== */
-
-.scene-frame {
-  margin: 0 auto 50px auto;
-  max-width: 900px;
-  background: rgba(18, 20, 29, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 24px;
-  backdrop-filter: blur(12px);
+@media (max-width: 1650px) and (min-width: 1025px) {
+    .hub-container { padding: 20px 40px; }
+    .hub-grid { max-width: 860px; gap: 14px; padding: 5px; }
+    .hub-card { min-height: 130px; padding: 18px 14px; border-radius: 18px; }
+    .hub-card h2 { font-size: 1.15rem; margin-bottom: 4px; letter-spacing: 0.8px; }
+    .hub-card p { font-size: 0.72rem; line-height: 1.3; display: block; }
+    .bg-mew { width: 18vw; max-width: 240px; max-height: 50vh; left: 2vw; }
+    .bg-mewtwo { width: 20vw; max-width: 270px; max-height: 62vh; right: 2vw; }
 }
 
-.scene-meta {
-  margin-bottom: 20px;
-  text-align: left;
+@media (max-width: 1024px) and (min-width: 768px) {
+    .hub-grid { display: grid; grid-template-columns: repeat(2, 1fr); max-width: 540px; gap: 16px; }
+    
+    /* 2 cartes par ligne */
+    .hub-card.pokedex-card,
+    .hub-card.pantheon-card,
+    .hub-card.mew-card,
+    .hub-card.mewtwo-card { grid-column: span 1; }
+    
+    /* Les Dresseuses prennent la largeur totale en dessous de Mew et Mewtwo */
+    .hub-card.dresseuses-card { grid-column: span 2; }
+    
+    .hub-card { min-width: auto; max-width: 100%; min-height: 120px; padding: 18px 14px; border-radius: 20px; }
+    .hub-card p { display: block; }
+    .bg-watermark { opacity: 0.2; }
+    .bg-mew { width: 200px; left: -15px; }
+    .bg-mewtwo { width: 220px; right: -15px; }
+    .cards-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
 }
 
-.scene-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #fff;
-  margin: 0 0 6px 0;
+@media (max-width: 900px) {
+    .collection-workspace { padding: 10px 10px 40px; }
+    .psa-wall { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 30px; }
+    .psa-slab { padding: 6px 5px 8px; border-radius: 8px; }
+    .psa-label-card { min-height: 52px; padding: 3px 4px; border-width: 3px; }
+    .psa-text-line { font-size: 5.5px; }
+    .psa-grade-val { font-size: 8px; }
+    .psa-barcode-svg { width: 45px; height: 8px; }
+    .psa-cert-code { font-size: 6.5px; }
+    .vaultx-page { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px; border-radius: 8px; }
 }
 
-.scene-sub {
-  font-size: 0.85rem;
-  color: #8c90a4;
-}
-
-/* Grilles par format */
-.scene-grid {
-  display: grid;
-  justify-content: center;
-  margin: 0 auto;
-  transition: gap 0.3s ease;
-}
-
-/* Mode Classeur (espaces réalistes) */
-.mode-classeur .scene-grid {
-  gap: 16px;
-}
-.mode-classeur .scene-card-slot {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  border-radius: 10px;
-  overflow: hidden;
-}
-/* Restaure les bords natifs en mode classeur */
-.mode-classeur .scene-card-img {
-    clip-path: inset(0);
-    transform: scale(1);
-    transition: clip-path 0.4s ease, transform 0.4s ease;
-    border-radius: 4.5%; 
-}
-
-/* Mode Art Pur (cartes fusionnées bord à bord) */
-.mode-art-pur .scene-grid {
-  gap: 0 !important;
-}
-.mode-art-pur .scene-card-slot {
-  box-shadow: none;
-  border-radius: 0;
-  overflow: hidden;
-}
-.mode-art-pur .scene-grid.grid-nine-box {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
-  border-radius: 12px;
-  overflow: hidden;
-}
-/* Magie Visuelle : Rognage des bordures en mode Art Pur */
-.mode-art-pur .scene-grid:not(.grid-legend) .scene-card-img {
-    clip-path: inset(4.5% 4.5% 4.5% 4.5%);
-    transform: scale(1.09); /* Grossit pour combler le vide du clip-path */
-    transition: clip-path 0.4s ease, transform 0.4s ease;
-}
-
-/* Configurations de colonnes */
-.grid-duo {
-  grid-template-columns: repeat(2, minmax(140px, 200px));
-}
-.grid-trio {
-  grid-template-columns: repeat(3, minmax(130px, 180px));
-}
-.grid-quad {
-  grid-template-columns: repeat(2, minmax(140px, 190px));
-}
-.grid-nine-box {
-  grid-template-columns: repeat(3, minmax(110px, 160px));
-}
-
-/* CARTES LÉGENDE (HGSS - Empilement Vertical) */
-.scene-grid.grid-legend {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0 !important;
-}
-.grid-legend .scene-card-slot {
-    line-height: 0;
-    width: 100%;
-    max-width: 380px;
-}
-
-.scene-card-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-}
-
-.scene-card-slot.is-missing {
-  aspect-ratio: 734 / 1024;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px dashed rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: #666;
-  font-size: 0.8rem;
-  padding: 10px;
-}
-
-/* ====================================================================
-   PERSPECTIVES CROISÉES (Flip 3D)
-==================================================================== */
-.flip-scene-container {
-    perspective: 1000px;
-    width: 100%;
-    max-width: 280px;
-    margin: 0 auto;
-    cursor: pointer;
-}
-.flip-scene-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
-    transform-style: preserve-3d;
-}
-.flip-scene-container.is-flipped .flip-scene-inner {
-    transform: rotateY(180deg);
-}
-.flip-scene-front, 
-.flip-scene-back {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    width: 100%;
-    display: block;
-}
-.flip-scene-back {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: rotateY(180deg);
+@media (max-width: 767px) {
+    .header-main { padding: 35px 12px 15px; }
+    .header-main h1 { font-size: 1.45rem; letter-spacing: 2px; text-indent: 2px; }
+    .subtitle { font-size: 0.75rem; letter-spacing: 1.5px; margin-top: 6px; }
+    .bg-watermark { opacity: 0.18; -webkit-mask-image: none; mask-image: none; }
+    .bg-mew { width: 115px; max-height: 25vh; left: 8px; top: 18%; bottom: auto; }
+    .bg-mewtwo { width: 125px; max-height: 28vh; right: 8px; top: 18%; transform: translateY(0); }
+    .hub-container { padding: 20px 16px 40px; }
+    .hub-grid { display: flex; flex-direction: column; width: 100%; max-width: 360px; margin: 0 auto; gap: 12px; padding: 0; }
+    .hub-card { min-width: 100%; max-width: 100%; min-height: 56px; padding: 14px 18px; border-radius: 16px; }
+    .hub-card h2 { font-size: 1.15rem; letter-spacing: 1px; margin-bottom: 0; }
+    .hub-card p { display: none !important; }
+    .collection-container { width: 100% !important; max-width: 100% !important; padding: 0 10px 30px !important; }
+    .cards-grid { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important; padding: 8px 0 !important; width: 100% !important; }
+    .card-item { padding: 8px !important; border-radius: 8px !important; min-width: 0 !important; width: 100% !important; }
+    .card-item img { border-radius: 4px; width: 100%; }
+    .card-info { margin-top: 6px; }
+    .card-name { font-size: 0.72rem; }
+    .card-meta { font-size: 0.62rem; margin-top: 2px; }
+    .pantheon-item { width: 100%; max-width: 280px; margin: 0 auto; }
+    .floating-dock { bottom: 16px; right: 50%; transform: translateX(50%); padding: 4px 8px; }
+    .dock-btn { width: 34px; height: 34px; }
+    .hub-card.masterset-card { flex-direction: column !important; align-items: stretch !important; gap: 12px !important; padding: 16px !important; }
+    .masterset-card .hub-card-content { text-align: center !important; }
+    .hub-progress-wrapper { min-width: 100% !important; align-items: center !important; }
 }

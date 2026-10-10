@@ -1,43 +1,7 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mewthology</title>
-
-    <!-- PWA & Métadonnées Mobiles -->
-    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#050608">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Mewthology">
-    <link rel="apple-touch-icon" href="./favicon.png">
-    <link rel="icon" type="image/png" href="./favicon.png">
-
-    <!-- Feuilles de style -->
-    <link rel="stylesheet" href="./scripts/assets/css/style.css">
-
-    <!-- SDK Firebase Compat -->
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-</head>
-<body>
-
-    <!-- Filigranes d'arrière-plan interactifs -->
-    <img src="./scripts/assets/img/mew.png" alt="Mew" class="bg-watermark bg-mew">
-    <img src="./scripts/assets/img/mewtwo.png" alt="Mewtwo" class="bg-watermark bg-mewtwo">
-
-    <!-- En-tête Principal -->
-    <header class="header-main">
-        <h1>Mewthology</h1>
-        <p class="subtitle">Archives & Collections</p>
-    </header>
-
-    <!-- Hub de Navigation 2 + 4 -->
+<!-- Hub de Navigation -->
     <main class="hub-container">
         <nav class="hub-grid" aria-label="Navigation principale">
-            <!-- NIVEAU 1 : ARCHIVES & PRESTIGE (2 GRANDES CARTES) -->
+            <!-- LIGNE 1 : ARCHIVES & PRESTIGE (2 cartes) -->
             <a href="pokedex.html" class="hub-card pokedex-card">
                 <h2>Pokédex</h2>
                 <p>Répertoire Global</p>
@@ -47,7 +11,7 @@
                 <p>Scellés & Gradées</p>
             </a>
 
-            <!-- NIVEAU 2 : COLLECTIONS THÉMATIQUES (4 CARTES EN LIGNE) -->
+            <!-- LIGNE 2 : COLLECTIONS THÉMATIQUES (3 cartes) -->
             <a href="mew.html" class="hub-card mew-card">
                 <h2>Mew</h2>
                 <p>Collection Dédiée</p>
@@ -56,37 +20,23 @@
                 <h2>Mewtwo</h2>
                 <p>Collection Dédiée</p>
             </a>
-            <a href="chroniques.html" class="hub-card chroniques-card">
-                <h2>Chroniques</h2>
-                <p>L'Art Caché</p>
-            </a>
-            <a href="odyssee.html" class="hub-card odyssee-card">
-                <h2>Odyssée</h2>
-                <p>Grands Formats</p>
-            </a>
             <a href="dresseuses.html" class="hub-card dresseuses-card" style="--th-color: #f472b6; --th-glow: rgba(244, 114, 182, 0.45);">
-    <h2>DRESSEUSES</h2>
-    <p>Full Art</p>
-</a>
-            <!-- NOUVELLE CARTE MASTER SET EV 5 (Pleine largeur) -->
-        <a href="master-set.html" class="hub-card masterset-card">
-            <div class="hub-card-content">
-                <h2>Master Set EV 5</h2>
-                <p>Forces Temporelles</p>
-            </div>
-            <div class="hub-progress-wrapper">
-                <div class="hub-progress-bar">
-                    <div class="hub-progress-fill" id="ev5-hub-progress-fill"></div>
-                </div>
-              <span class="hub-progress-text" id="ev5-hub-progress-text">0 / 363 • 0%</span>
-            </div>
-        </a>
+                <h2>DRESSEUSES</h2>
+                <p>Full Art</p>
+            </a>
 
-    </div>
+            <!-- LIGNE 3 : MASTER SET (Pleine largeur) -->
+            <a href="master-set.html" class="hub-card masterset-card">
+                <div class="hub-card-content">
+                    <h2>Master Set EV 5</h2>
+                    <p>Forces Temporelles</p>
+                </div>
+                <div class="hub-progress-wrapper">
+                    <div class="hub-progress-bar">
+                        <div class="hub-progress-fill" id="ev5-hub-progress-fill"></div>
+                    </div>
+                    <span class="hub-progress-text" id="ev5-hub-progress-text">0 / 363 • 0%</span>
+                </div>
+            </a>
         </nav>
     </main>
-
-    <!-- Moteur Principal & Service Worker -->
-    <script src="./scripts/assets/js/script.js"></script>
-</body>
-</html>
