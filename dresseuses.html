@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mewthology - Panthéon des Dresseuses</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050608">
+    
+    <link rel="stylesheet" href="scripts/assets/css/style.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="theme-mew">
+    <!-- Filigrane (Optionnel) -->
+    <img src="scripts/assets/img/mew-icon.png" class="bg-watermark bg-mew" alt="">
+    
+    <header class="header-main">
+        <h1>DRESSEUSES</h1>
+        <div class="subtitle">Illustrations Spéciales</div>
+    </header>
+
+    <main class="collection-workspace">
+        <div class="binder-deck" id="dresseuses-deck">
+            <!-- Injecté par JS -->
+        </div>
+    </main>
+
+    <script src="scripts/assets/js/dresseuses-data.js"></script>
+    <script src="scripts/assets/js/script.js"></script>
+</body>
+</html>
