@@ -244,18 +244,6 @@ const chroniquesDatabase = [
     ]
   },
   {
-    id: "gruikui-parcours-vie-trio",
-    titre: "Le Parcours de Vie",
-    extension: "Noir & Blanc Coffret Trésor",
-    format: "trio",
-    desc: "Un enfant grandit, se marie et devient père avec son Pokémon.",
-    cartes: [
-      { id: "gruikui-rc5", nom: "Gruikui", set: "rc", num: "RC5", file: "gruikui-rc5.png", timeline_step: 1 },
-      { id: "grotichon-rc6", nom: "Grotichon", set: "rc", num: "RC6", file: "grotichon-rc6.png", timeline_step: 2 },
-      { id: "roitiflam-rc7", nom: "Roitiflam", set: "rc", num: "RC7", file: "roitiflam-rc7.png", timeline_step: 3 }
-    ]
-  },
-  {
     id: "salameche-explorateur-trio",
     titre: "L'Explorateur",
     extension: "Générations",
