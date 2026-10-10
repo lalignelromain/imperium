@@ -1927,6 +1927,13 @@ body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn {
   border-radius: 10px;
   overflow: hidden;
 }
+/* Restaure les bords natifs en mode classeur */
+.mode-classeur .scene-card-img {
+    clip-path: inset(0);
+    transform: scale(1);
+    transition: clip-path 0.4s ease, transform 0.4s ease;
+    border-radius: 4.5%; 
+}
 
 /* Mode Art Pur (cartes fusionnées bord à bord) */
 .mode-art-pur .scene-grid {
@@ -1935,11 +1942,18 @@ body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn {
 .mode-art-pur .scene-card-slot {
   box-shadow: none;
   border-radius: 0;
+  overflow: hidden;
 }
 .mode-art-pur .scene-grid.grid-nine-box {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
   border-radius: 12px;
   overflow: hidden;
+}
+/* Magie Visuelle : Rognage des bordures en mode Art Pur */
+.mode-art-pur .scene-grid:not(.grid-legend) .scene-card-img {
+    clip-path: inset(4.5% 4.5% 4.5% 4.5%);
+    transform: scale(1.09); /* Grossit pour combler le vide du clip-path */
+    transition: clip-path 0.4s ease, transform 0.4s ease;
 }
 
 /* Configurations de colonnes */
@@ -1952,11 +1966,21 @@ body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn {
 .grid-quad {
   grid-template-columns: repeat(2, minmax(140px, 190px));
 }
-.grid-legend {
-  grid-template-columns: minmax(180px, 260px); /* Haut empilé sur Bas */
-}
 .grid-nine-box {
   grid-template-columns: repeat(3, minmax(110px, 160px));
+}
+
+/* CARTES LÉGENDE (HGSS - Empilement Vertical) */
+.scene-grid.grid-legend {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0 !important;
+}
+.grid-legend .scene-card-slot {
+    line-height: 0;
+    width: 100%;
+    max-width: 380px;
 }
 
 .scene-card-img {
@@ -1977,4 +2001,38 @@ body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn {
   color: #666;
   font-size: 0.8rem;
   padding: 10px;
+}
+
+/* ====================================================================
+   PERSPECTIVES CROISÉES (Flip 3D)
+==================================================================== */
+.flip-scene-container {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+.flip-scene-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+}
+.flip-scene-container.is-flipped .flip-scene-inner {
+    transform: rotateY(180deg);
+}
+.flip-scene-front, 
+.flip-scene-back {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    width: 100%;
+    display: block;
+}
+.flip-scene-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotateY(180deg);
 }
