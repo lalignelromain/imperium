@@ -20,64 +20,99 @@ if (!fs.existsSync(ALT_DIR)) fs.mkdirSync(ALT_DIR, { recursive: true });
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const HEADERS = {
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-  'Referer': 'https://www.pokepedia.fr/'
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
 };
 
-async function downloadFromPokepedia(card) {
-  const cleanNom = card.nom.replace(/\s*\(.*?\)\s*/g, '').replace(/[^a-zA-Z0-9àâäéèêëîïôöùûüç\s-]/gi, '').split(' ')[0];
-  const prefix = `Carte ${cleanNom}`;
-  const url = `https://www.pokepedia.fr/api.php?action=query&list=allimages&aiprefix=${encodeURIComponent(prefix)}&ailimit=100&aiprop=url&format=json`;
+// Génération de toutes les URL possibles (Français prioritaire, Anglais en secours)
+function getUrlsToTry(card) {
+  const set = card.set;
+  const num = String(card.num).trim();
+  const unpadded = num.replace(/^0+/, '');
+  const padded3 = num.padStart(3, '0');
 
+  const urls = [];
+
+  // 1. TCGdex (Priorité : scans HD en Français WebP)
+  urls.push(`https://assets.tcgdex.net/fr/${set}/${num}/high.webp`);
+  if (unpadded !== num) urls.push(`https://assets.tcgdex.net/fr/${set}/${unpadded}/high.webp`);
+  if (padded3 !== num) urls.push(`https://assets.tcgdex.net/fr/${set}/${padded3}/high.webp`);
+
+  // 2. PokemonTCG.io (Plan B : scans HD en Anglais PNG)
+  urls.push(`https://images.pokemontcg.io/${set}/${num}_hires.png`);
+  if (unpadded !== num) urls.push(`https://images.pokemontcg.io/${set}/${unpadded}_hires.png`);
+  if (padded3 !== num) urls.push(`https://images.pokemontcg.io/${set}/${padded3}_hires.png`);
+
+  // 3. Gestion spécifique des sets secondaires (Trainer Gallery, Galarian Gallery, Shiny Vault)
+  if (set.endsWith('gg') || set.endsWith('tg') || num.startsWith('GG') || num.startsWith('TG') || num.startsWith('SV')) {
+    const cleanSet = set.replace(/(gg|tg)$/, '');
+    urls.push(`https://assets.tcgdex.net/fr/${cleanSet}/${num}/high.webp`);
+    urls.push(`https://images.pokemontcg.io/${cleanSet}/${num}_hires.png`);
+  }
+
+  // 4. Cas spécifiques (Promos Japonaises comme Selene)
+  if (set === 'smp') {
+     urls.push(`https://images.pokemontcg.io/smp/${num}_hires.png`);
+  }
+
+  return [...new Set(urls)];
+}
+
+// Téléchargement sécurisé
+async function tryDownloadUrl(url) {
   try {
     const res = await fetch(url, { headers: HEADERS });
-    if (!res.ok) return false;
-    const data = await res.json();
-    const images = data?.query?.allimages || [];
-    
-    const rawNum = String(card.num).replace(/^#/, '').toLowerCase().trim();
-    const unpaddedNum = rawNum.replace(/^0+/, '');
-    
-    const hit = images.find((img) => {
-      const imgName = img.name.toLowerCase();
-      return imgName.includes(` ${rawNum})`) || 
-             imgName.includes(` ${unpaddedNum})`) ||
-             imgName.includes(`_${rawNum}.`) ||
-             imgName.includes(` ${rawNum}.`);
-    });
-    
-    if (hit) {
-        const imgRes = await fetch(hit.url, { headers: HEADERS });
-        if (!imgRes.ok) return false;
-        const arrayBuffer = await imgRes.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        
-        fs.writeFileSync(path.join(DEST_DIR, card.file), buffer);
-        console.log(`🟢 [OK] ${card.file} téléchargé depuis Poképédia.`);
-        return true;
-    }
-    return false;
-  } catch (e) {
-    return false;
+    if (!res.ok) return null;
+    const contentType = res.headers.get('content-type') || '';
+    if (contentType.includes('text/html')) return null; // Ignore les fausses pages 404
+    const arrayBuffer = await res.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    if (buffer.length < 5000) return null; // Ignore les fichiers corrompus
+    return buffer;
+  } catch {
+    return null;
   }
 }
 
 async function run() {
-  console.log('=== TÉLÉCHARGEMENT DES DRESSEUSES (POKÉPÉDIA) ===\n');
+  console.log('=== TÉLÉCHARGEMENT DES DRESSEUSES (VIA API OFFICIELLES) ===\n');
+
+  let successCount = 0;
+  let failCount = 0;
 
   for (const section of dresseusesDatabase) {
       for (const card of section.cartes) {
-          const exists = fs.existsSync(path.join(DEST_DIR, card.file));
-          if (!exists) {
-              const success = await downloadFromPokepedia(card);
-              if (!success) {
-                  console.log(`🟡 [INFO] Introuvable sur Poképédia : ${card.nom} #${card.num} (Téléchargement manuel requis)`);
-              }
-              await sleep(200);
+          const destPath = path.join(DEST_DIR, card.file);
+          
+          if (fs.existsSync(destPath)) {
+              console.log(`⚪ [SKIP] ${card.file} existe déjà.`);
+              continue;
           }
+
+          let downloadedBuffer = null;
+          const urls = getUrlsToTry(card);
+
+          for (const url of urls) {
+              downloadedBuffer = await tryDownloadUrl(url);
+              if (downloadedBuffer) {
+                  break; // Stoppe dès qu'une URL a fonctionné
+              }
+              await sleep(50);
+          }
+
+          if (downloadedBuffer) {
+              fs.writeFileSync(destPath, downloadedBuffer);
+              console.log(`🟢 [OK] ${card.nom} (#${card.num}) téléchargé.`);
+              successCount++;
+          } else {
+              console.error(`🔴 [ERR] Introuvable : ${card.nom} (${card.set} #${card.num})`);
+              failCount++;
+          }
+          await sleep(150);
       }
   }
-  console.log('\n=== TERMINÉ ! N\'oubliez pas de placer vos images alternatives manuellement dans le dossier "alt/". ===');
+  
+  console.log(`\n=== TERMINÉ ! Succès: ${successCount} | Échecs: ${failCount} ===`);
+  console.log('Placez vos images alternatives manuellement dans le dossier "assets/cards/dresseuses/alt/".');
 }
 
 run();
