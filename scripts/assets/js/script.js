@@ -426,37 +426,85 @@ function renderScenes(container, database) {
 
         const metaEl = document.createElement('div');
         metaEl.className = 'scene-meta';
+        
+        // Détection d'une perspective croisée pour le badge UI
+        const isFlipCapable = scene.cartes.some(c => c.relation === 'reverse-shot');
+        const badgeFlip = (isFlipCapable && isPureArtMode) 
+            ? `<span style="font-size: 0.7rem; background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 12px; margin-left: 10px; border: 1px solid rgba(255,255,255,0.2); vertical-align: middle;">🔄 Cliquez pour pivoter</span>`
+            : '';
+
         metaEl.innerHTML = `
-            <h2 class="scene-title">${scene.titre}</h2>
+            <h2 class="scene-title">${scene.titre} ${badgeFlip}</h2>
             <span class="scene-sub">${scene.extension || ''} ${scene.desc ? '— ' + scene.desc : ''}</span>
         `;
 
         const gridEl = document.createElement('div');
-        gridEl.className = `scene-grid grid-${scene.format}`;
 
-        scene.cartes.forEach(carte => {
-            const cardBox = document.createElement('div');
-            cardBox.className = 'scene-card-slot';
-
-            const img = document.createElement('img');
-            const imgPath = typeof getSceneCardPath === 'function'
-                ? getSceneCardPath(carte.file)
-                : `./assets/cards/chroniques/${carte.file}`;
-
-            img.src = imgPath;
-            img.alt = `${carte.nom} (#${carte.num})`;
-            img.loading = 'lazy';
-            img.className = 'scene-card-img';
-
-            // Remplacement visuel si le fichier est manquant
-            img.onerror = () => {
-                cardBox.classList.add('is-missing');
-                cardBox.innerHTML = `<span class="missing-label">${carte.nom}<br>#${carte.num}</span>`;
+        // CONDITION A : Perspective Croisée (Champ / Contrechamp) activée en mode Art Pur
+        if (isFlipCapable && isPureArtMode && scene.cartes.length === 2) {
+            gridEl.className = `flip-scene-container`;
+            
+            const innerEl = document.createElement('div');
+            innerEl.className = 'flip-scene-inner';
+            
+            const createSide = (carte, sideClass) => {
+                const sideEl = document.createElement('div');
+                sideEl.className = `${sideClass} scene-card-slot`;
+                
+                const img = document.createElement('img');
+                const imgPath = typeof getSceneCardPath === 'function' ? getSceneCardPath(carte.file) : `./assets/cards/chroniques/${carte.file}`;
+                
+                img.src = imgPath;
+                img.alt = `${carte.nom} (#${carte.num})`;
+                img.loading = 'lazy';
+                img.className = 'scene-card-img';
+                
+                img.onerror = () => {
+                    sideEl.classList.add('is-missing');
+                    sideEl.innerHTML = `<span class="missing-label">${carte.nom}<br>#${carte.num}</span>`;
+                };
+                
+                sideEl.appendChild(img);
+                return sideEl;
             };
 
-            cardBox.appendChild(img);
-            gridEl.appendChild(cardBox);
-        });
+            innerEl.appendChild(createSide(scene.cartes[0], 'flip-scene-front'));
+            innerEl.appendChild(createSide(scene.cartes[1], 'flip-scene-back'));
+            
+            gridEl.appendChild(innerEl);
+
+            // Interaction de pivotement au clic
+            gridEl.addEventListener('click', () => {
+                gridEl.classList.toggle('is-flipped');
+            });
+        } 
+        // CONDITION B : Affichage Grille Standard ou Mode Classeur
+        else {
+            gridEl.className = `scene-grid grid-${scene.format}`;
+            
+            scene.cartes.forEach(carte => {
+                const cardBox = document.createElement('div');
+                cardBox.className = 'scene-card-slot';
+
+                const img = document.createElement('img');
+                const imgPath = typeof getSceneCardPath === 'function'
+                    ? getSceneCardPath(carte.file)
+                    : `./assets/cards/chroniques/${carte.file}`;
+
+                img.src = imgPath;
+                img.alt = `${carte.nom} (#${carte.num})`;
+                img.loading = 'lazy';
+                img.className = 'scene-card-img';
+
+                img.onerror = () => {
+                    cardBox.classList.add('is-missing');
+                    cardBox.innerHTML = `<span class="missing-label">${carte.nom}<br>#${carte.num}</span>`;
+                };
+
+                cardBox.appendChild(img);
+                gridEl.appendChild(cardBox);
+            });
+        }
 
         sceneEl.appendChild(metaEl);
         sceneEl.appendChild(gridEl);
