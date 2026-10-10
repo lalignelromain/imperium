@@ -275,6 +275,73 @@ function renderBinderView(pokemonName) {
     }
 }
 
+// 5. BIS RENDU DU CLASSEUR DES DRESSEUSES (AVEC FLIP PRIVÉ)
+function renderDresseusesView() {
+    const container = document.getElementById('dresseuses-deck');
+    if (!container || typeof dresseusesDatabase === 'undefined') return;
+
+    container.innerHTML = '';
+    const CARDS_PER_PAGE = 12;
+
+    dresseusesDatabase.forEach(section => {
+        // Ajout du titre de la section
+        const sectionTitle = document.createElement('h2');
+        sectionTitle.className = 'assembly-section-title';
+        sectionTitle.style.marginTop = '20px';
+        sectionTitle.innerHTML = section.categorie;
+        container.appendChild(sectionTitle);
+
+        const totalPages = Math.ceil(section.cartes.length / CARDS_PER_PAGE);
+
+        for (let p = 0; p < totalPages; p++) {
+            const pageCards = section.cartes.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
+            const pageEl = document.createElement('div');
+            pageEl.className = 'vaultx-page';
+
+            let pageHTML = '';
+            pageCards.forEach(carte => {
+                let pocketContent = '';
+
+                // SI MODE ADMIN ET IMAGE ALTERNATIVE DISPONIBLE -> FLIP 3D
+                if (isEditMode && carte.fileAlt) {
+                    pocketContent = `
+                        <div class="card-flipper">
+                            <div class="face-fr"><img src="./assets/cards/dresseuses/${carte.file}" alt="${carte.nom}" loading="lazy"></div>
+                            <div class="face-jp"><img src="./assets/cards/dresseuses/alt/${carte.fileAlt}" alt="${carte.nom} Alt" loading="lazy"></div>
+                        </div>
+                    `;
+                    pageHTML += `
+                        <div class="vaultx-pocket" style="cursor:pointer;" onclick="this.classList.toggle('is-flipped')">
+                            ${pocketContent}
+                            <div class="lang-badge" style="background:#f472b6; color:#000; border:none; z-index:10;">SECURE</div>
+                        </div>
+                    `;
+                } 
+                // SINON (PUBLIC) -> IMAGE SIMPLE
+                else {
+                    pocketContent = `
+                        <img src="./assets/cards/dresseuses/${carte.file}" alt="${carte.nom}" loading="lazy">
+                    `;
+                    pageHTML += `
+                        <div class="vaultx-pocket">
+                            ${pocketContent}
+                        </div>
+                    `;
+                }
+            });
+
+            // Remplir les trous si la page n'a pas 12 cartes
+            const emptySlots = CARDS_PER_PAGE - pageCards.length;
+            for (let e = 0; e < emptySlots; e++) {
+                pageHTML += `<div class="vaultx-pocket is-empty"></div>`;
+            }
+
+            pageEl.innerHTML = pageHTML;
+            container.appendChild(pageEl);
+        }
+    });
+}
+
 // 6. ACTIONS EN MODE ÉDITION
 window.toggleCardLang = function(cardId, lang) {
     if (!isEditMode || !docRef) return;
@@ -600,6 +667,10 @@ function updateAllViews() {
     renderLegacyCollection('mew', 'mew-grid');
     renderLegacyCollection('mewtwo', 'mewtwo-grid');
     renderPantheon();
+    
+    // NOUVEL APPEL POUR LE CLASSEUR DES DRESSEUSES
+    renderDresseusesView(); 
+
     initTableauxView();
 }
 
