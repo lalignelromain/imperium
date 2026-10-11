@@ -417,7 +417,6 @@ function renderDresseusesHub() {
         const imgFile = firstCard ? (firstCard.file || firstCard.image) : null;
         
         if (imgFile) {
-            // CORRECTION DÉFINITIVE DU CHEMIN ICI : ./assets/cards/dresseuses/
             const imagePath = imgFile.includes('/') ? imgFile : `./assets/cards/dresseuses/${imgFile}`;
             imgHtml = `<img src="${imagePath}" onerror="this.src='./scripts/assets/img/back-fr.png'" style="width:100%; height:100%; object-fit:cover; opacity:0.8; border-radius:2px;" loading="lazy">`;
         }
@@ -447,6 +446,10 @@ function renderDresseuseClasseur() {
     const titleEl = document.getElementById('interior-title');
     if (!container || !titleEl) return; 
 
+    // Nettoyage de l'intercalaire s'il existe déjà d'un précédent rendu
+    const existingTab = document.getElementById('secret-tab');
+    if (existingTab) existingTab.remove();
+
     const urlParams = new URLSearchParams(window.location.search);
     const trainerName = urlParams.get('dresseuse');
     if (!trainerName) { titleEl.textContent = "DRESSEUSE INTROUVABLE"; return; }
@@ -456,11 +459,15 @@ function renderDresseuseClasseur() {
     const trainerCards = grouped[trainerName] || [];
     container.innerHTML = '';
     
+    // SÉPARATION DES CARTES NORMALES ET SECRÈTES
+    const standardCards = trainerCards.filter(c => !c.isSecret);
+    const secretCards = trainerCards.filter(c => c.isSecret);
+
     const CARDS_PER_PAGE = window.innerWidth <= 800 ? 4 : 6;
-    const totalPages = Math.ceil(trainerCards.length / CARDS_PER_PAGE) || 1;
+    const totalPages = Math.ceil(standardCards.length / CARDS_PER_PAGE) || 1;
 
     for (let p = 0; p < totalPages; p++) {
-        const pageCards = trainerCards.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
+        const pageCards = standardCards.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
         const pageEl = document.createElement('div');
         pageEl.className = 'vaultx-page';
 
@@ -470,7 +477,6 @@ function renderDresseuseClasseur() {
             let imgSrc = './scripts/assets/img/back-fr.png'; // fallback par défaut
             
             if (imgFile) {
-                // CORRECTION DÉFINITIVE DU CHEMIN ICI : ./assets/cards/dresseuses/
                 imgSrc = imgFile.includes('/') ? imgFile : `./assets/cards/dresseuses/${imgFile}`;
             }
 
@@ -488,14 +494,67 @@ function renderDresseuseClasseur() {
         container.appendChild(pageEl);
     }
 
+    // MECANIQUE CARTE SECRETE (MODE EDITION UNIQUEMENT)
+    if (isEditMode && secretCards.length > 0) {
+        const secretCard = secretCards[0]; 
+        
+        const tab = document.createElement('div');
+        tab.id = 'secret-tab';
+        tab.className = 'secret-tab';
+        tab.textContent = 'SECRET';
+        document.body.appendChild(tab);
+
+        // Au clic sur l'intercalaire
+        tab.onclick = () => {
+            if (tab.textContent === 'SECRET') {
+                const imgFile = secretCard.file || secretCard.image || '';
+                const imgSrc = imgFile.includes('/') ? imgFile : `./assets/cards/dresseuses/${imgFile}`;
+                
+                // Remplacer le contenu du classeur par la page 1x1 géante
+                container.innerHTML = `
+                    <div class="vaultx-page-secret">
+                        <div class="vaultx-pocket" onclick="openLightbox('${imgSrc}')" title="Cliquer pour zoomer">
+                            <img src="${imgSrc}" alt="${secretCard.nom}" onerror="this.src='./scripts/assets/img/back-fr.png'">
+                        </div>
+                    </div>
+                `;
+                
+                // Transformer l'intercalaire en bouton retour
+                tab.textContent = 'RETOUR';
+                tab.style.background = 'linear-gradient(135deg, #8a94a2, #5a636f)';
+                tab.style.borderColor = '#949ea8';
+                tab.style.boxShadow = '-4px 0 15px rgba(138, 148, 162, 0.4)';
+            } else {
+                // Si on était sur la page secrète, on recharge la vue normale
+                renderDresseuseClasseur();
+            }
+        };
+    }
+
     container.querySelectorAll('.dresseuse-card-slot').forEach(slot => {
         slot.addEventListener('click', (e) => {
             if (!isEditMode) return;
             const cardId = slot.dataset.id;
-            console.log("Clic mode édition dresseuse :", cardId);
+            console.log("Clic mode édition dresseuse normale :", cardId);
         });
     });
 }
+
+// -> Fonction globale pour le zoom (Lightbox)
+window.openLightbox = function(imgSrc) {
+    let overlay = document.getElementById('lightbox-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'lightbox-overlay';
+        overlay.className = 'lightbox-overlay';
+        overlay.innerHTML = `<img class="lightbox-card" src="" alt="Zoom Carte Secrète">`;
+        document.body.appendChild(overlay);
+        
+        overlay.onclick = () => overlay.classList.remove('active');
+    }
+    overlay.querySelector('img').src = imgSrc;
+    setTimeout(() => overlay.classList.add('active'), 10);
+};
 
 /* ====================================================================
    7. EXÉCUTION & SYNCHRO
