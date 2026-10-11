@@ -270,105 +270,126 @@ body.mode-edition .hof-pin-btn { display: flex; }
 .vaultx-pocket.in-hof .hof-pin-btn svg { fill: currentColor; }
 
 /* ====================================================================
-   MODULE : HUB DRESSEUSES (VUE TRANCHES / BIBLIOTHÈQUE)
+   MODULE : HUB DRESSEUSES (VITRINE TOPLOADERS 4x10)
 ==================================================================== */
-.library-container { 
-    max-width: 1200px; 
-    margin: 0 auto; 
-    position: relative; 
-    z-index: 1; 
-    padding: 20px;
-}
-
-.library-shelf {
-    display: flex; 
-    flex-wrap: wrap; 
-    justify-content: center; 
-    gap: 12px;
-    padding: 2.5rem; 
-    background: #0f121a; 
-    border-bottom: 12px solid #050608;
-    box-shadow: inset 0 -10px 20px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.6);
-    border-radius: 12px; 
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.binder-spine {
-    width: 60px; 
-    height: 300px; 
-    border-radius: 4px;
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: flex-start;
-    cursor: pointer; 
+.library-container {
+    max-width: 1200px;
+    margin: 0 auto;
     position: relative;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-sizing: border-box;
-    box-shadow: 
-        -4px 8px 12px rgba(0,0,0,0.6), 
-        inset -2px 0 5px rgba(0,0,0,0.5),
-        inset 2px 0 5px rgba(255,255,255,0.05);
-    overflow: hidden; /* Empêche le texte long de dépasser de la tranche */
+    z-index: 1;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
 }
 
-.binder-spine:hover { 
-    transform: translateY(-15px); 
-    box-shadow: -8px 15px 20px rgba(0,0,0,0.8), inset -2px 0 5px rgba(0,0,0,0.5); 
+.vaultx-page-large {
+    background: radial-gradient(circle at 50% 50%, #111724 0%, #0b0f17 100%);
+    border: 3px solid #161f30;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85), inset 0 0 20px rgba(0, 0, 0, 0.7);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 800px;
+    width: 100%;
+    position: relative;
 }
 
-/* Texture eXo-Tec Matte */
-.binder-spine::after {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: inherit;
-    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="1.5" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.12"/></svg>');
-    pointer-events: none; z-index: 1;
+/* Reliure à gauche de la grande page */
+.vaultx-page-large::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 5%;
+    bottom: 5%;
+    width: 12px;
+    background-image: radial-gradient(circle, #050608 40%, transparent 45%);
+    background-size: 100% 4%;
+    background-repeat: repeat-y;
+    opacity: 0.8;
 }
 
-/* Rainures du zip en haut et en bas de la tranche */
-.binder-spine::before {
-    content: ''; position: absolute;
-    top: 0; bottom: 0; right: -2px; width: 4px;
-    background-image: repeating-linear-gradient(to bottom, #0f0f0f 0px, #0f0f0f 2px, #2a2a2a 2px, #2a2a2a 4px);
-    z-index: 0;
+.binder-pocket {
+    background: #06080d;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    aspect-ratio: 734 / 1024;
+    padding: 4px;
+    position: relative;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.spine-title-container {
-    margin-top: 30px;
-    writing-mode: vertical-rl; /* Affiche le texte verticalement, de haut en bas */
-    max-height: 240px; 
-    z-index: 10;
-}
-
-.spine-title-container h3 {
-    color: rgba(255, 255, 255, 0.85); 
-    font-size: 1.1rem; 
-    font-weight: 700; 
-    margin: 0; 
-    letter-spacing: 2px; 
-    text-transform: uppercase;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-    white-space: nowrap; 
+/* Toploader Rigide Transparent */
+.toploader-insert {
+    width: 92%;
+    height: 94%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    border-radius: 3px;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     overflow: hidden;
-    text-overflow: ellipsis; /* Ajoute des points de suspension si le nom est trop long */
+    transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
-/* Rainures de pliure Vault X */
-.spine-crease {
-    position: absolute; left: 10px; top: 0; bottom: 0; width: 2px;
-    background: rgba(0,0,0,0.4);
-    box-shadow: 1px 0 1px rgba(255,255,255,0.05);
-    z-index: 2;
+.toploader-insert:hover {
+    transform: scale(1.04);
+    border-color: var(--accent, #f472b6);
+    z-index: 5;
 }
-.spine-crease.right { left: auto; right: 10px; }
 
-/* Coloris Vault X Mates */
-.theme-vx-black    { background-color: #1a1c1e; }
-.theme-vx-navy     { background-color: #0b1d3a; }
-.theme-vx-forest   { background-color: #132e18; }
-.theme-vx-burgundy { background-color: #4a1010; }
-.theme-vx-purple   { background-color: #361647; }
-.theme-vx-teal     { background-color: #0d4752; }
+/* Reflet plastique */
+.toploader-insert::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, transparent 45%, rgba(255, 255, 255, 0.04) 100%);
+    pointer-events: none;
+}
 
+/* Carte sous sleeve */
+.card-in-sleeve {
+    width: 86%;
+    height: 88%;
+    background: #141820;
+    border: 1px solid rgba(244, 114, 182, 0.4);
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.8);
+}
+
+.card-in-sleeve .card-name {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-transform: uppercase;
+}
+
+/* Adaptation mobile pour le hub Toploaders */
+@media (max-width: 768px) {
+    .vaultx-page-large {
+        padding: 10px;
+        gap: 6px;
+        grid-template-columns: repeat(3, 1fr); /* 3 colonnes sur mobile pour ne pas écraser */
+    }
+}
 /* ====================================================================
    FINITION MEWTWO
 ==================================================================== */
