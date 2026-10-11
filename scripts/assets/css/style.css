@@ -105,9 +105,10 @@ body.mode-edition .header-main h1 { -webkit-text-stroke: 1.2px #e5c05c; animatio
 .hub-card.pantheon-card   { --th-color: #e5c05c; --th-glow: rgba(229, 192, 92, 0.45); grid-column: span 3; }
 .hub-card.mew-card        { --th-color: #fea6ca; --th-glow: rgba(254, 166, 202, 0.45); grid-column: span 2; }
 .hub-card.mewtwo-card     { --th-color: #a858d4; --th-glow: rgba(168, 88, 212, 0.45); grid-column: span 2; }
-.hub-card.dresseuses-card { --th-color: #f472b6; --th-glow: rgba(244, 114, 182, 0.45); grid-column: span 2; }
-.hub-card.masterset-card  { grid-column: 1 / -1 !important; }
-
+/* Argent chromé vif pour les Dresseuses : */
+.hub-card.dresseuses-card { --th-color: #e2e8f0; --th-glow: rgba(226, 232, 240, 0.55); grid-column: span 2; }
+/* Ajout du cyan pour activer le pulse sur le Master Set : */
+.hub-card.masterset-card  { --th-color: #00f0ff; grid-column: 1 / -1 !important; }
 .hub-card {
     width: 100%; min-height: 140px; background: rgba(12, 15, 22, 0.5); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 22px; padding: 22px 18px; text-decoration: none; color: inherit;
