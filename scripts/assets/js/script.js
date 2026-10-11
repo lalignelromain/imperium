@@ -414,10 +414,11 @@ function renderDresseusesHub() {
         
         let imgHtml = '<span style="font-size: 0.9rem;">🖼️</span>';
         
-        // RETOUR À .image AVEC SÉCURITÉ
-        if (firstCard && firstCard.image) {
-            // Construit le chemin correctement
-            const imagePath = firstCard.image.includes('/') ? firstCard.image : `./scripts/assets/cards/dresseuses/${firstCard.image}`;
+        const imgFile = firstCard ? (firstCard.file || firstCard.image) : null;
+        
+        if (imgFile) {
+            // CORRECTION DÉFINITIVE DU CHEMIN ICI : ./assets/cards/dresseuses/
+            const imagePath = imgFile.includes('/') ? imgFile : `./assets/cards/dresseuses/${imgFile}`;
             imgHtml = `<img src="${imagePath}" onerror="this.src='./scripts/assets/img/back-fr.png'" style="width:100%; height:100%; object-fit:cover; opacity:0.8; border-radius:2px;" loading="lazy">`;
         }
 
@@ -425,9 +426,9 @@ function renderDresseusesHub() {
         pocket.className = 'binder-pocket';
         pocket.innerHTML = `
             <div class="toploader-insert" ${isEmpty ? 'style="border-style:dashed; opacity:0.3;"' : ''}>
-                <div class="card-in-sleeve" style="${(firstCard && firstCard.image) ? 'padding:0;' : ''}">
+                <div class="card-in-sleeve" style="${imgFile ? 'padding:0;' : ''}">
                     ${isEmpty ? '' : imgHtml}
-                    ${!isEmpty && !(firstCard && firstCard.image) ? `<span class="card-name">${trainerName}</span>` : ''}
+                    ${!isEmpty && !imgFile ? `<span class="card-name">${trainerName}</span>` : ''}
                 </div>
             </div>
         `;
@@ -465,8 +466,14 @@ function renderDresseuseClasseur() {
 
         let pageHTML = '';
         pageCards.forEach(carte => {
-            // RETOUR À .image AVEC SÉCURITÉ
-            const imgSrc = carte.image.includes('/') ? carte.image : `./scripts/assets/cards/dresseuses/${carte.image}`;
+            const imgFile = carte.file || carte.image || '';
+            let imgSrc = './scripts/assets/img/back-fr.png'; // fallback par défaut
+            
+            if (imgFile) {
+                // CORRECTION DÉFINITIVE DU CHEMIN ICI : ./assets/cards/dresseuses/
+                imgSrc = imgFile.includes('/') ? imgFile : `./assets/cards/dresseuses/${imgFile}`;
+            }
+
             pageHTML += `
                 <div class="vaultx-pocket dresseuse-card-slot" data-id="${carte.id}" style="cursor: ${isEditMode ? 'pointer' : 'default'}">
                     <img src="${imgSrc}" alt="${carte.nom}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy">
