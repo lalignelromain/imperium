@@ -1,7 +1,7 @@
 /* ====================================================================
    MEWTHOLOGY — BASE DE DONNÉES : DRESSEUSES FULL ART, TG & SAR
 ==================================================================== */
-
+console.log("LE SCRIPT SE LANCE BIEN !");
 const dresseusesDatabase = [
   {
     categorie: "Dresseuses (De A à C)",
