@@ -269,7 +269,6 @@ body.mode-edition .hof-pin-btn { display: flex; }
 .vaultx-pocket.in-hof .hof-pin-btn { background: #f472b6; color: #000; box-shadow: 0 0 8px rgba(244, 114, 182, 0.8); }
 .vaultx-pocket.in-hof .hof-pin-btn svg { fill: currentColor; }
 
-
 /* ====================================================================
    MODULE : HUB DRESSEUSES (VUE TRANCHES / BIBLIOTHÈQUE)
 ==================================================================== */
@@ -310,6 +309,7 @@ body.mode-edition .hof-pin-btn { display: flex; }
         -4px 8px 12px rgba(0,0,0,0.6), 
         inset -2px 0 5px rgba(0,0,0,0.5),
         inset 2px 0 5px rgba(255,255,255,0.05);
+    overflow: hidden; /* Empêche le texte long de dépasser de la tranche */
 }
 
 .binder-spine:hover { 
@@ -333,11 +333,9 @@ body.mode-edition .hof-pin-btn { display: flex; }
 }
 
 .spine-title-container {
-    margin-top: 40px;
-    width: 200px;
-    transform: rotate(90deg);
-    transform-origin: 20px 20px;
-    text-align: left;
+    margin-top: 30px;
+    writing-mode: vertical-rl; /* Affiche le texte verticalement, de haut en bas */
+    max-height: 240px; 
     z-index: 10;
 }
 
@@ -350,6 +348,8 @@ body.mode-edition .hof-pin-btn { display: flex; }
     text-transform: uppercase;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; /* Ajoute des points de suspension si le nom est trop long */
 }
 
 /* Rainures de pliure Vault X */
@@ -368,7 +368,6 @@ body.mode-edition .hof-pin-btn { display: flex; }
 .theme-vx-burgundy { background-color: #4a1010; }
 .theme-vx-purple   { background-color: #361647; }
 .theme-vx-teal     { background-color: #0d4752; }
-
 
 /* ====================================================================
    FINITION MEWTWO
@@ -444,10 +443,10 @@ body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn { background: #a855f7; colo
     .masterset-card .hub-card-content { text-align: center !important; }
     .hub-progress-wrapper { min-width: 100% !important; align-items: center !important; }
 
-    /* Responsive Bibliothèque */
+    /* Responsive Bibliothèque (Tranches) */
     .library-shelf { gap: 8px; padding: 1.5rem 1rem; }
     .binder-spine { width: 45px; height: 220px; }
-    .spine-title-container { margin-top: 30px; transform-origin: 15px 15px; }
+    .spine-title-container { margin-top: 20px; max-height: 180px; }
     .spine-title-container h3 { font-size: 0.85rem; letter-spacing: 1px; }
     .spine-crease { left: 6px; }
     .spine-crease.right { right: 6px; }
