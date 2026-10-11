@@ -298,19 +298,19 @@ body.mode-edition .hof-pin-btn { display: flex; }
 }
 
 /* Reliure à gauche de la grande page */
-.vaultx-page-large::before {
-    content: '';
-    position: absolute;
-    left: -20px;
-    top: 5%;
-    bottom: 5%;
-    width: 12px;
-    background-image: radial-gradient(circle, #050608 40%, transparent 45%);
-    background-size: 100% 4%;
-    background-repeat: repeat-y;
-    opacity: 0.8;
+.vaultx-page-large {
+    background: radial-gradient(circle at 50% 50%, #111724 0%, #0b0f17 100%);
+    border: 3px solid #161f30;
+    border-radius: 14px;
+    padding: 24px; /* Un peu plus d'espace autour */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85), inset 0 0 20px rgba(0, 0, 0, 0.7);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px; /* Plus d'espace entre les Toploaders */
+    max-width: 1050px; /* <-- C'est ici qu'on agrandit le classeur ! (était à 800px) */
+    width: 100%;
+    position: relative;
 }
-
 .binder-pocket {
     background: #06080d;
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -342,7 +342,7 @@ body.mode-edition .hof-pin-btn { display: flex; }
 
 .toploader-insert:hover {
     transform: scale(1.04);
-    border-color: var(--accent, #f472b6);
+    border-color: var(--accent, #e2e8f0);
     z-index: 5;
 }
 
