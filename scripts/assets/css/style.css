@@ -460,6 +460,6 @@ body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn { background: #a855f7; colo
     .vaultx-page-large {
         padding: 10px;
         gap: 6px;
-        grid-template-columns: repeat(3, 1fr); /* 3 colonnes sur mobile pour ne pas écraser */
+        grid-template-columns: repeat(3, 1fr);
     }
 }
