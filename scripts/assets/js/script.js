@@ -27,13 +27,9 @@ if (typeof firebase !== 'undefined') {
 
 const ADMIN_EMAIL = "romainlal76@gmail.com";
 
-// État local en mémoire
 let localCollection = new Set();
-let cardLangs = {}; // Structure : { [cardId]: { fr: boolean, jp: boolean } }
-let hallOfFameData = {
-    mew: [],
-    mewtwo: []
-};
+let cardLangs = {}; 
+let hallOfFameData = { mew: [], mewtwo: [] };
 let isEditMode = false;
 
 // 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL (POSSESSION, LANGUES & HOF)
@@ -107,24 +103,18 @@ function renderPokedex() {
 
         cardDiv.addEventListener('click', () => {
             if (!isEditMode) return;
-
             if (localCollection.has(carte.id)) {
                 localCollection.delete(carte.id);
                 delete cardLangs[carte.id];
             } else {
                 localCollection.add(carte.id);
-                if (!cardLangs[carte.id]) {
-                    cardLangs[carte.id] = { fr: true, jp: false };
-                }
+                if (!cardLangs[carte.id]) cardLangs[carte.id] = { fr: true, jp: false };
             }
-
             const nowOwned = localCollection.has(carte.id);
             cardDiv.classList.toggle('is-owned', nowOwned);
             cardDiv.classList.toggle('not-owned', !nowOwned);
-
             saveToCloud();
         });
-
         container.appendChild(cardDiv);
     });
 }
@@ -138,7 +128,6 @@ function renderBinderView(pokemonName) {
     const cartesPossedees = cartesDatabase.filter(c => c.pokemon === pokemonName && localCollection.has(c.id));
     const currentHofIds = hallOfFameData[pokemonName] || [];
 
-    // --- A. RENDU DU HALL OF FAME ---
     if (psaContainer) {
         let psaHTML = '';
         for (let i = 0; i < 4; i++) {
@@ -147,13 +136,9 @@ function renderBinderView(pokemonName) {
 
             if (card) {
                 const hasValidYear = card.annee && String(card.annee).toLowerCase() !== "inconnue";
-                const line1 = hasValidYear 
-                    ? `${card.annee} POKÉMON`
-                    : `POKÉMON`;
-                
+                const line1 = hasValidYear ? `${card.annee} POKÉMON` : `POKÉMON`;
                 const line2 = card.nom;
                 const line3 = card.extension || 'OFFICIAL ARCHIVE';
-
                 const cardNum = card.numero ? String(card.numero).replace(/^#/, '') : 'PROMO';
                 const certCode = card.cert || `4936280${i + 1}`;
                 const displayImg = resolveImg(card.imageFr || card.image, card.langue);
@@ -179,29 +164,20 @@ function renderBinderView(pokemonName) {
                                 <span class="psa-cert-code">${certCode}</span>
                             </div>
                         </div>
-                        <div class="psa-card-chamber">
-                            <img src="${displayImg}" alt="${card.nom}" loading="lazy">
-                        </div>
+                        <div class="psa-card-chamber"><img src="${displayImg}" alt="${card.nom}" loading="lazy"></div>
                     </div>
                 `;
             } else {
-                psaHTML += `
-                    <div class="psa-slab is-empty">
-                        <div class="psa-card-chamber">
-                            <span>Emplacement Libre</span>
-                        </div>
-                    </div>
-                `;
+                psaHTML += `<div class="psa-slab is-empty"><div class="psa-card-chamber"><span>Emplacement Libre</span></div></div>`;
             }
         }
         psaContainer.innerHTML = psaHTML;
     }
 
-    // --- B. RENDU DU CLASSEUR VAULT X (PLANCHE 4x3) ---
     if (cartesPossedees.length === 0) {
         binderContainer.innerHTML = `
             <div style="text-align: center; padding: 40px; color: #94a3b8; width: 100%;">
-                <p style="font-size: 14px; margin-bottom: 10px;">Aucune carte ${pokemonName === 'mew' ? 'Mew' : 'Mewtwo'} cochée dans le Pokédex pour l'instant.</p>
+                <p style="font-size: 14px; margin-bottom: 10px;">Aucune carte cochée dans le Pokédex pour l'instant.</p>
                 <a href="pokedex.html" style="color: #f472b6; font-weight: 700; text-decoration: underline;">Accéder au Pokédex Global</a>
             </div>
         `;
@@ -223,7 +199,6 @@ function renderBinderView(pokemonName) {
             const userLang = cardLangs[c.id] || { fr: true, jp: false };
             const hasBoth = userLang.fr && userLang.jp;
             const isOnlyJp = !userLang.fr && userLang.jp;
-
             const imgFr = resolveImg(c.imageFr || c.image, 'fr');
             const imgJp = resolveImg(c.imageJp || c.imageFr || c.image, 'ja');
 
@@ -240,14 +215,9 @@ function renderBinderView(pokemonName) {
                     </button>
                 `;
             } else if (isOnlyJp) {
-                pocketContent = `
-                    <img src="${imgJp}" alt="${c.nom} JP" loading="lazy">
-                    <span class="lang-badge">JP</span>
-                `;
+                pocketContent = `<img src="${imgJp}" alt="${c.nom} JP" loading="lazy"><span class="lang-badge">JP</span>`;
             } else {
-                pocketContent = `
-                    <img src="${imgFr}" alt="${c.nom} FR" loading="lazy">
-                `;
+                pocketContent = `<img src="${imgFr}" alt="${c.nom} FR" loading="lazy">`;
             }
 
             pageHTML += `
@@ -276,9 +246,9 @@ function renderBinderView(pokemonName) {
 
 
 /* ====================================================================
-   6. RENDU DU CLASSEUR DES DRESSEUSES (NOUVELLE STRUCTURE PREMIUM)
+   6. RENDU DU CLASSEUR DES DRESSEUSES (1 CLASSEUR PAR DRESSEUSE)
 ==================================================================== */
-let currentDresseuseSection = null;
+let currentTrainerCards = null;
 
 function renderDresseusesView() {
     const shelfContainer = document.getElementById('shelf');
@@ -289,33 +259,45 @@ function renderDresseusesView() {
 
     shelfContainer.innerHTML = '';
     
-    // Cycle de couleurs Premium Vault X
-    const themes = [
-        'theme-vx-teal', 'theme-vx-navy', 'theme-vx-black', 
-        'theme-vx-burgundy', 'theme-vx-purple', 'theme-vx-forest'
-    ];
+    // ÉTAPE 1 : Extraire toutes les cartes et grouper par DRESSEUSE
+    let allCards = [];
+    if (dresseusesDatabase.length > 0 && dresseusesDatabase[0].cartes) {
+        dresseusesDatabase.forEach(sec => allCards.push(...sec.cartes));
+    } else {
+        allCards = [...dresseusesDatabase];
+    }
 
-    // 6.A Générer l'étagère de classeurs
-    dresseusesDatabase.forEach((section, index) => {
+    const groupedByTrainer = allCards.reduce((acc, card) => {
+        const nomDresseuse = card.personnage || "Inconnue";
+        if (!acc[nomDresseuse]) acc[nomDresseuse] = [];
+        acc[nomDresseuse].push(card);
+        return acc;
+    }, {});
+
+    const trainers = Object.keys(groupedByTrainer).sort();
+    const themes = ['theme-vx-teal', 'theme-vx-navy', 'theme-vx-black', 'theme-vx-burgundy', 'theme-vx-purple', 'theme-vx-forest'];
+
+    // ÉTAPE 2 : Créer un classeur unique pour chaque dresseuse
+    trainers.forEach((trainerName, index) => {
         const cover = document.createElement('div');
         const theme = themes[index % themes.length];
         
         cover.className = `binder-cover ${theme}`;
         cover.innerHTML = `
             <div class="spine"></div>
-            <h3>${section.categorie}</h3>
-            <div class="brand-logo">Vault X</div>
+            <div class="cover-label">
+                <h3>${trainerName}</h3>
+            </div>
         `;
         
-        // Ouvrir le classeur
         cover.addEventListener('click', () => {
-            currentDresseuseSection = section;
+            currentTrainerCards = groupedByTrainer[trainerName];
             
             if(libraryView) libraryView.style.display = 'none';
             if(interiorView) interiorView.style.display = 'block';
             
             const titleEl = document.getElementById('interior-title');
-            if(titleEl) titleEl.textContent = section.categorie;
+            if(titleEl) titleEl.textContent = trainerName;
             
             renderDresseusesPages();
             window.scrollTo(0, 0);
@@ -324,36 +306,32 @@ function renderDresseusesView() {
         shelfContainer.appendChild(cover);
     });
 
-    // Initialisation du bouton Retour à l'étagère
     const btnBack = document.getElementById('btn-back');
     if (btnBack && !btnBack.dataset.listener) {
         btnBack.dataset.listener = "true";
         btnBack.addEventListener('click', () => {
-            currentDresseuseSection = null;
+            currentTrainerCards = null;
             if(interiorView) interiorView.style.display = 'none';
             if(libraryView) libraryView.style.display = 'block';
         });
     }
 
-    // Regénérer la vue intérieure si un classeur est déjà ouvert (cas du changement de mode)
-    if (interiorView && interiorView.style.display === 'block' && currentDresseuseSection) {
+    if (interiorView && interiorView.style.display === 'block' && currentTrainerCards) {
         renderDresseusesPages();
     }
 }
 
 function renderDresseusesPages() {
     const container = document.getElementById('pages-container');
-    if (!container || !currentDresseuseSection) return;
+    if (!container || !currentTrainerCards) return;
 
     container.innerHTML = '';
     
-    // 3 colonnes sur PC (6 cartes), 2 colonnes sur Mobile (4 cartes)
     const CARDS_PER_PAGE = window.innerWidth <= 800 ? 4 : 6;
-    const totalPages = Math.ceil(currentDresseuseSection.cartes.length / CARDS_PER_PAGE);
+    const totalPages = Math.ceil(currentTrainerCards.length / CARDS_PER_PAGE);
 
-    // 6.B Générer les pages physiques
     for (let p = 0; p < totalPages; p++) {
-        const pageCards = currentDresseuseSection.cartes.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
+        const pageCards = currentTrainerCards.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
         const pageEl = document.createElement('div');
         pageEl.className = 'binder-page';
 
@@ -361,7 +339,6 @@ function renderDresseusesPages() {
         pageCards.forEach(carte => {
             let pocketContent = '';
 
-            // SI MODE ADMIN ET IMAGE ALTERNATIVE DISPONIBLE -> FLIP 3D
             if (isEditMode && carte.fileAlt) {
                 pocketContent = `
                     <div class="card-flipper">
@@ -371,28 +348,20 @@ function renderDresseusesPages() {
                     <div class="plastic-overlay"></div>
                     <div class="lang-badge" style="background:#f472b6; color:#000; border:none; z-index:15;">SECURE</div>
                 `;
-                // Le onclick tourne l'enfant .card-flipper en modifiant son style inline
                 pageHTML += `
                     <div class="pocket" style="cursor:pointer;" data-flipped="false" onclick="this.querySelector('.card-flipper').style.transform = this.dataset.flipped === 'true' ? 'rotateY(0deg)' : 'rotateY(180deg)'; this.dataset.flipped = this.dataset.flipped === 'true' ? 'false' : 'true';">
                         ${pocketContent}
                     </div>
                 `;
-            } 
-            // SINON (PUBLIC) -> IMAGE SIMPLE
-            else {
+            } else {
                 pocketContent = `
                     <img src="./assets/cards/dresseuses/${carte.file}" class="card-img" alt="${carte.nom}" loading="lazy">
                     <div class="plastic-overlay"></div>
                 `;
-                pageHTML += `
-                    <div class="pocket">
-                        ${pocketContent}
-                    </div>
-                `;
+                pageHTML += `<div class="pocket">${pocketContent}</div>`;
             }
         });
 
-        // Remplir les trous avec des pochettes vides texturées
         const emptySlots = CARDS_PER_PAGE - pageCards.length;
         for (let e = 0; e < emptySlots; e++) {
             pageHTML += `<div class="pocket" style="background: repeating-linear-gradient(-45deg, rgba(255,255,255,0.015), rgba(255,255,255,0.015) 5px, rgba(0,0,0,0.3) 5px, rgba(0,0,0,0.3) 10px); box-shadow: inset 0 2px 6px rgba(0,0,0,0.8); border: 1px dashed rgba(255,255,255,0.05); pointer-events: none;"></div>`;
@@ -403,7 +372,6 @@ function renderDresseusesPages() {
     }
 }
 
-// 6.C Re-calculer les pages si l'utilisateur bascule de PC à Mobile avec le classeur ouvert
 window.addEventListener('resize', () => {
     const interiorView = document.getElementById('interior');
     if (interiorView && interiorView.style.display === 'block') {
@@ -415,11 +383,7 @@ window.addEventListener('resize', () => {
 // 7. ACTIONS EN MODE ÉDITION
 window.toggleCardLang = function(cardId, lang) {
     if (!isEditMode || !docRef) return;
-
-    if (!cardLangs[cardId]) {
-        cardLangs[cardId] = { fr: false, jp: false };
-    }
-
+    if (!cardLangs[cardId]) cardLangs[cardId] = { fr: false, jp: false };
     cardLangs[cardId][lang] = !cardLangs[cardId][lang];
 
     if (!cardLangs[cardId].fr && !cardLangs[cardId].jp) {
@@ -428,14 +392,12 @@ window.toggleCardLang = function(cardId, lang) {
     } else {
         localCollection.add(cardId);
     }
-
     saveToCloud();
     updateAllViews();
 };
 
 window.toggleHofSlot = function(pokemonName, cardId) {
     if (!isEditMode || !docRef) return;
-
     let list = hallOfFameData[pokemonName] || [];
     const index = list.indexOf(cardId);
 
@@ -449,10 +411,7 @@ window.toggleHofSlot = function(pokemonName, cardId) {
 
     const payload = {};
     payload[`hof_${pokemonName}`] = list;
-
-    docRef.set(payload, { merge: true }).catch(err => {
-        console.error("Erreur d'enregistrement Hall of Fame :", err);
-    });
+    docRef.set(payload, { merge: true }).catch(err => console.error("Erreur d'enregistrement Hall of Fame :", err));
     updateAllViews();
 };
 
@@ -594,17 +553,23 @@ function setupDock() {
 
 // 12. DÉCLENCHEUR DU MODE ÉDITION
 function setupAdminTrigger() {
-    const title = document.querySelector('.header-main h1');
-    if (!title) return;
+    const mainTitle = document.querySelector('.header-main h1');
+    const interiorTitle = document.getElementById('interior-title');
+    
+    function attachSecretLogin(element) {
+        if (!element) return;
+        element.addEventListener('dblclick', triggerLogin);
+        
+        let pressTimer;
+        element.addEventListener('touchstart', () => {
+            pressTimer = setTimeout(triggerLogin, 1500);
+        }, { passive: true });
+        element.addEventListener('touchend', () => clearTimeout(pressTimer));
+        element.addEventListener('touchmove', () => clearTimeout(pressTimer));
+    }
 
-    title.addEventListener('dblclick', triggerLogin);
-
-    let pressTimer;
-    title.addEventListener('touchstart', () => {
-        pressTimer = setTimeout(triggerLogin, 1500);
-    }, { passive: true });
-    title.addEventListener('touchend', () => clearTimeout(pressTimer));
-    title.addEventListener('touchmove', () => clearTimeout(pressTimer));
+    attachSecretLogin(mainTitle);
+    attachSecretLogin(interiorTitle);
 }
 
 function triggerLogin() {
