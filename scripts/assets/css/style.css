@@ -382,14 +382,6 @@ body.mode-edition .hof-pin-btn { display: flex; }
     text-transform: uppercase;
 }
 
-/* Adaptation mobile pour le hub Toploaders */
-@media (max-width: 768px) {
-    .vaultx-page-large {
-        padding: 10px;
-        gap: 6px;
-        grid-template-columns: repeat(3, 1fr); /* 3 colonnes sur mobile pour ne pas écraser */
-    }
-}
 /* ====================================================================
    FINITION MEWTWO
 ==================================================================== */
@@ -464,11 +456,10 @@ body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn { background: #a855f7; colo
     .masterset-card .hub-card-content { text-align: center !important; }
     .hub-progress-wrapper { min-width: 100% !important; align-items: center !important; }
 
-    /* Responsive Bibliothèque (Tranches) */
-    .library-shelf { gap: 8px; padding: 1.5rem 1rem; }
-    .binder-spine { width: 45px; height: 220px; }
-    .spine-title-container { margin-top: 20px; max-height: 180px; }
-    .spine-title-container h3 { font-size: 0.85rem; letter-spacing: 1px; }
-    .spine-crease { left: 6px; }
-    .spine-crease.right { right: 6px; }
+    /* Adaptation mobile pour la planche de Toploaders du Hub */
+    .vaultx-page-large {
+        padding: 10px;
+        gap: 6px;
+        grid-template-columns: repeat(3, 1fr); /* 3 colonnes sur mobile pour ne pas écraser */
+    }
 }
