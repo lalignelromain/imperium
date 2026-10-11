@@ -259,26 +259,14 @@ function renderDresseusesView() {
 
     shelfContainer.innerHTML = '';
     
-    // ÉTAPE 1 : Extraire toutes les cartes et grouper par DRESSEUSE
-    let allCards = [];
-    if (dresseusesDatabase.length > 0 && dresseusesDatabase[0].cartes) {
-        dresseusesDatabase.forEach(sec => allCards.push(...sec.cartes));
-    } else {
-        allCards = [...dresseusesDatabase];
-    }
-
-    const groupedByTrainer = allCards.reduce((acc, card) => {
-        const nomDresseuse = card.personnage || "Inconnue";
-        if (!acc[nomDresseuse]) acc[nomDresseuse] = [];
-        acc[nomDresseuse].push(card);
-        return acc;
-    }, {});
-
-    const trainers = Object.keys(groupedByTrainer).sort();
+    // Cycle de couleurs Vault X Mates
     const themes = ['theme-vx-teal', 'theme-vx-navy', 'theme-vx-black', 'theme-vx-burgundy', 'theme-vx-purple', 'theme-vx-forest'];
 
-    // ÉTAPE 2 : Créer un classeur unique pour chaque dresseuse
-    trainers.forEach((trainerName, index) => {
+    // On utilise directement la structure originale : chaque section est une dresseuse
+    dresseusesDatabase.forEach((section, index) => {
+        const trainerName = section.categorie; // Le nom de la dresseuse
+        const trainerCards = section.cartes;   // Ses cartes associées
+        
         const cover = document.createElement('div');
         const theme = themes[index % themes.length];
         
@@ -290,8 +278,9 @@ function renderDresseusesView() {
             </div>
         `;
         
+        // Clic pour ouvrir le classeur de CETTE dresseuse
         cover.addEventListener('click', () => {
-            currentTrainerCards = groupedByTrainer[trainerName];
+            currentTrainerCards = trainerCards;
             
             if(libraryView) libraryView.style.display = 'none';
             if(interiorView) interiorView.style.display = 'block';
@@ -342,8 +331,8 @@ function renderDresseusesPages() {
             if (isEditMode && carte.fileAlt) {
                 pocketContent = `
                     <div class="card-flipper">
-                        <div class="face-fr"><img src="./assets/cards/dresseuses/${carte.file}" class="card-img" alt="${carte.nom}" loading="lazy"></div>
-                        <div class="face-jp"><img src="./assets/cards/dresseuses/alt/${carte.fileAlt}" class="card-img" alt="${carte.nom} Alt" loading="lazy"></div>
+                        <div class="face-fr"><img src="./scripts/assets/cards/dresseuses/${carte.file}" class="card-img" alt="${carte.nom}" loading="lazy"></div>
+                        <div class="face-jp"><img src="./scripts/assets/cards/dresseuses/alt/${carte.fileAlt}" class="card-img" alt="${carte.nom} Alt" loading="lazy"></div>
                     </div>
                     <div class="plastic-overlay"></div>
                     <div class="lang-badge" style="background:#f472b6; color:#000; border:none; z-index:15;">SECURE</div>
@@ -355,7 +344,7 @@ function renderDresseusesPages() {
                 `;
             } else {
                 pocketContent = `
-                    <img src="./assets/cards/dresseuses/${carte.file}" class="card-img" alt="${carte.nom}" loading="lazy">
+                    <img src="./scripts/assets/cards/dresseuses/${carte.file}" class="card-img" alt="${carte.nom}" loading="lazy">
                     <div class="plastic-overlay"></div>
                 `;
                 pageHTML += `<div class="pocket">${pocketContent}</div>`;
