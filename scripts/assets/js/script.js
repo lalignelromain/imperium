@@ -274,72 +274,143 @@ function renderBinderView(pokemonName) {
     }
 }
 
-// 6. RENDU DU CLASSEUR DES DRESSEUSES (AVEC FLIP PRIVÉ)
+
+/* ====================================================================
+   6. RENDU DU CLASSEUR DES DRESSEUSES (NOUVELLE STRUCTURE PREMIUM)
+==================================================================== */
+let currentDresseuseSection = null;
+
 function renderDresseusesView() {
-    const container = document.getElementById('dresseuses-deck');
-    if (!container || typeof dresseusesDatabase === 'undefined') return;
+    const shelfContainer = document.getElementById('shelf');
+    const libraryView = document.getElementById('library-view');
+    const interiorView = document.getElementById('interior');
+    
+    if (!shelfContainer || typeof dresseusesDatabase === 'undefined') return;
+
+    shelfContainer.innerHTML = '';
+    
+    // Cycle de couleurs Premium Vault X
+    const themes = [
+        'theme-vx-teal', 'theme-vx-navy', 'theme-vx-black', 
+        'theme-vx-burgundy', 'theme-vx-purple', 'theme-vx-forest'
+    ];
+
+    // 6.A Générer l'étagère de classeurs
+    dresseusesDatabase.forEach((section, index) => {
+        const cover = document.createElement('div');
+        const theme = themes[index % themes.length];
+        
+        cover.className = `binder-cover ${theme}`;
+        cover.innerHTML = `
+            <div class="spine"></div>
+            <h3>${section.categorie}</h3>
+            <div class="brand-logo">Vault X</div>
+        `;
+        
+        // Ouvrir le classeur
+        cover.addEventListener('click', () => {
+            currentDresseuseSection = section;
+            
+            if(libraryView) libraryView.style.display = 'none';
+            if(interiorView) interiorView.style.display = 'block';
+            
+            const titleEl = document.getElementById('interior-title');
+            if(titleEl) titleEl.textContent = section.categorie;
+            
+            renderDresseusesPages();
+            window.scrollTo(0, 0);
+        });
+        
+        shelfContainer.appendChild(cover);
+    });
+
+    // Initialisation du bouton Retour à l'étagère
+    const btnBack = document.getElementById('btn-back');
+    if (btnBack && !btnBack.dataset.listener) {
+        btnBack.dataset.listener = "true";
+        btnBack.addEventListener('click', () => {
+            currentDresseuseSection = null;
+            if(interiorView) interiorView.style.display = 'none';
+            if(libraryView) libraryView.style.display = 'block';
+        });
+    }
+
+    // Regénérer la vue intérieure si un classeur est déjà ouvert (cas du changement de mode)
+    if (interiorView && interiorView.style.display === 'block' && currentDresseuseSection) {
+        renderDresseusesPages();
+    }
+}
+
+function renderDresseusesPages() {
+    const container = document.getElementById('pages-container');
+    if (!container || !currentDresseuseSection) return;
 
     container.innerHTML = '';
-    const CARDS_PER_PAGE = 12;
+    
+    // 3 colonnes sur PC (6 cartes), 2 colonnes sur Mobile (4 cartes)
+    const CARDS_PER_PAGE = window.innerWidth <= 800 ? 4 : 6;
+    const totalPages = Math.ceil(currentDresseuseSection.cartes.length / CARDS_PER_PAGE);
 
-    dresseusesDatabase.forEach(section => {
-        // Ajout du titre de la section
-        const sectionTitle = document.createElement('h2');
-        sectionTitle.className = 'assembly-section-title';
-        sectionTitle.style.marginTop = '20px';
-        sectionTitle.innerHTML = section.categorie;
-        container.appendChild(sectionTitle);
+    // 6.B Générer les pages physiques
+    for (let p = 0; p < totalPages; p++) {
+        const pageCards = currentDresseuseSection.cartes.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
+        const pageEl = document.createElement('div');
+        pageEl.className = 'binder-page';
 
-        const totalPages = Math.ceil(section.cartes.length / CARDS_PER_PAGE);
+        let pageHTML = '';
+        pageCards.forEach(carte => {
+            let pocketContent = '';
 
-        for (let p = 0; p < totalPages; p++) {
-            const pageCards = section.cartes.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
-            const pageEl = document.createElement('div');
-            pageEl.className = 'vaultx-page';
-
-            let pageHTML = '';
-            pageCards.forEach(carte => {
-                let pocketContent = '';
-
-                // SI MODE ADMIN ET IMAGE ALTERNATIVE DISPONIBLE -> FLIP 3D
-                if (isEditMode && carte.fileAlt) {
-                    pocketContent = `
-                        <div class="card-flipper">
-                            <div class="face-fr"><img src="./assets/cards/dresseuses/${carte.file}" alt="${carte.nom}" loading="lazy"></div>
-                            <div class="face-jp"><img src="./assets/cards/dresseuses/alt/${carte.fileAlt}" alt="${carte.nom} Alt" loading="lazy"></div>
-                        </div>
-                    `;
-                    pageHTML += `
-                        <div class="vaultx-pocket" style="cursor:pointer;" onclick="this.classList.toggle('is-flipped')">
-                            ${pocketContent}
-                            <div class="lang-badge" style="background:#f472b6; color:#000; border:none; z-index:10;">SECURE</div>
-                        </div>
-                    `;
-                } 
-                // SINON (PUBLIC) -> IMAGE SIMPLE
-                else {
-                    pocketContent = `
-                        <img src="./assets/cards/dresseuses/${carte.file}" alt="${carte.nom}" loading="lazy">
-                    `;
-                    pageHTML += `
-                        <div class="vaultx-pocket">
-                            ${pocketContent}
-                        </div>
-                    `;
-                }
-            });
-
-            // Remplir les trous si la page n'a pas 12 cartes
-            const emptySlots = CARDS_PER_PAGE - pageCards.length;
-            for (let e = 0; e < emptySlots; e++) {
-                pageHTML += `<div class="vaultx-pocket is-empty"></div>`;
+            // SI MODE ADMIN ET IMAGE ALTERNATIVE DISPONIBLE -> FLIP 3D
+            if (isEditMode && carte.fileAlt) {
+                pocketContent = `
+                    <div class="card-flipper">
+                        <div class="face-fr"><img src="./assets/cards/dresseuses/${carte.file}" class="card-img" alt="${carte.nom}" loading="lazy"></div>
+                        <div class="face-jp"><img src="./assets/cards/dresseuses/alt/${carte.fileAlt}" class="card-img" alt="${carte.nom} Alt" loading="lazy"></div>
+                    </div>
+                    <div class="plastic-overlay"></div>
+                    <div class="lang-badge" style="background:#f472b6; color:#000; border:none; z-index:15;">SECURE</div>
+                `;
+                // Le onclick tourne l'enfant .card-flipper en modifiant son style inline
+                pageHTML += `
+                    <div class="pocket" style="cursor:pointer;" data-flipped="false" onclick="this.querySelector('.card-flipper').style.transform = this.dataset.flipped === 'true' ? 'rotateY(0deg)' : 'rotateY(180deg)'; this.dataset.flipped = this.dataset.flipped === 'true' ? 'false' : 'true';">
+                        ${pocketContent}
+                    </div>
+                `;
+            } 
+            // SINON (PUBLIC) -> IMAGE SIMPLE
+            else {
+                pocketContent = `
+                    <img src="./assets/cards/dresseuses/${carte.file}" class="card-img" alt="${carte.nom}" loading="lazy">
+                    <div class="plastic-overlay"></div>
+                `;
+                pageHTML += `
+                    <div class="pocket">
+                        ${pocketContent}
+                    </div>
+                `;
             }
+        });
 
-            pageEl.innerHTML = pageHTML;
-            container.appendChild(pageEl);
+        // Remplir les trous avec des pochettes vides texturées
+        const emptySlots = CARDS_PER_PAGE - pageCards.length;
+        for (let e = 0; e < emptySlots; e++) {
+            pageHTML += `<div class="pocket" style="background: repeating-linear-gradient(-45deg, rgba(255,255,255,0.015), rgba(255,255,255,0.015) 5px, rgba(0,0,0,0.3) 5px, rgba(0,0,0,0.3) 10px); box-shadow: inset 0 2px 6px rgba(0,0,0,0.8); border: 1px dashed rgba(255,255,255,0.05); pointer-events: none;"></div>`;
         }
-    });
+
+        pageEl.innerHTML = pageHTML;
+        container.appendChild(pageEl);
+    }
 }
+
+// 6.C Re-calculer les pages si l'utilisateur bascule de PC à Mobile avec le classeur ouvert
+window.addEventListener('resize', () => {
+    const interiorView = document.getElementById('interior');
+    if (interiorView && interiorView.style.display === 'block') {
+        renderDresseusesPages();
+    }
+});
+
 
 // 7. ACTIONS EN MODE ÉDITION
 window.toggleCardLang = function(cardId, lang) {
