@@ -15,39 +15,21 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body class="theme-mew">
-    <!-- Filigrane (Optionnel) -->
+    <!-- Filigrane -->
     <img src="scripts/assets/img/mew-icon.png" class="bg-watermark bg-mew" alt="">
     
     <header class="header-main">
         <h1>DRESSEUSES</h1>
         <div class="subtitle">Illustrations Spéciales</div>
-        <!-- Emplacement du bouton Glass global pour la page principale -->
-        <button class="btn-glass header-btn" id="btn-main-action" style="display: none;">Action</button>
     </header>
 
     <main class="collection-workspace">
-        
-        <!-- VUE 1 : L'ÉTAGÈRE (Bibliothèque Vault X) -->
+        <!-- L'ÉTAGÈRE À CLASSEURS -->
         <div class="library-container" id="library-view">
             <div class="library-shelf" id="shelf">
-                <!-- Les classeurs seront injectés ici par JS -->
+                <!-- Les classeurs seront générés ici par script.js -->
             </div>
         </div>
-
-        <!-- VUE 2 : L'INTÉRIEUR DU CLASSEUR -->
-        <div class="interior-view" id="interior" style="display: none;">
-            <div class="interior-header">
-                <!-- Le bouton Glass pour retourner à l'étagère -->
-                <button class="btn-glass" id="btn-back">← Ranger</button>
-                <h2 class="interior-title" id="interior-title"></h2>
-                <div style="width: 100px;"></div> <!-- Espaceur invisible pour centrer le titre -->
-            </div>
-
-            <div class="pages-container" id="pages-container">
-                <!-- Les pages de cartes (3x2 ou 2x2) seront injectées ici par JS -->
-            </div>
-        </div>
-
     </main>
 
     <script src="scripts/assets/js/dresseuses-data.js"></script>
