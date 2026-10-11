@@ -78,9 +78,18 @@ async function run() {
 
   let successCount = 0;
   let failCount = 0;
+  let skipCount = 0;
 
   for (const section of dresseusesDatabase) {
       for (const card of section.cartes) {
+          
+          // Sécurité anti-crash pour les cartes sans références complètes
+          if (!card.set || !card.num) {
+              console.log(`🟡 [ATTENTE] Données incomplètes pour ${card.nom}, téléchargement ignoré.`);
+              skipCount++;
+              continue;
+          }
+
           const destPath = path.join(DEST_DIR, card.file);
           
           if (fs.existsSync(destPath)) {
@@ -111,7 +120,7 @@ async function run() {
       }
   }
   
-  console.log(`\n=== TERMINÉ ! Succès: ${successCount} | Échecs: ${failCount} ===`);
+  console.log(`\n=== TERMINÉ ! Succès: ${successCount} | Échecs: ${failCount} | Ignorés: ${skipCount} ===`);
   console.log('Placez vos images alternatives manuellement dans le dossier "assets/cards/dresseuses/alt/".');
 }
 
