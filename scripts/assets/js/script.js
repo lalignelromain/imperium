@@ -368,6 +368,13 @@ function initEV5ProgressHub() {
 /* ====================================================================
    6. MODULE DRESSEUSES (HUB & CLASSEUR)
 ==================================================================== */
+
+// REGISTRE DES CARTES SECRÈTES (MODE ÉDITION UNIQUEMENT)
+// Ajoute simplement "Nom de la dresseuse": "fichier.jpg" au fur et à mesure.
+const REGISTRE_SECRET = {
+    "Carolina": "carolina.jpg"
+};
+
 function getAllDresseusesCards() {
     let allCards = [];
     if (typeof dresseusesDatabase !== 'undefined') {
@@ -418,7 +425,11 @@ function renderDresseusesHub() {
         
         if (imgFile) {
             const imagePath = imgFile.includes('/') ? imgFile : `./assets/cards/dresseuses/${imgFile}`;
-            imgHtml = `<img src="${imagePath}" onerror="this.src='./scripts/assets/img/back-fr.png'" style="width:100%; height:100%; object-fit:cover; opacity:0.8; border-radius:2px;" loading="lazy">`;
+            const safeName = trainerName.replace(/'/g, "\\'"); // Sécurise les apostrophes pour le code inline
+            
+            // LA CORRECTION DES DOS DE CARTE EST ICI : 
+            // Si l'image n'est pas encore sur GitHub (erreur 404), elle se remplace par un texte avec le nom !
+            imgHtml = `<img src="${imagePath}" onerror="this.outerHTML='<span class=\\'card-name\\' style=\\'color:#64748b; font-size:0.75rem; text-align:center; padding:10px;\\'>${safeName}</span>'" style="width:100%; height:100%; object-fit:cover; opacity:0.8; border-radius:2px;" loading="lazy">`;
         }
 
         const pocket = document.createElement('div');
@@ -446,7 +457,7 @@ function renderDresseuseClasseur() {
     const titleEl = document.getElementById('interior-title');
     if (!container || !titleEl) return; 
 
-    // Nettoyage de l'intercalaire s'il existe déjà d'un précédent rendu
+    // Nettoyage de l'intercalaire s'il existe déjà
     const existingTab = document.getElementById('secret-tab');
     if (existingTab) existingTab.remove();
 
@@ -459,15 +470,11 @@ function renderDresseuseClasseur() {
     const trainerCards = grouped[trainerName] || [];
     container.innerHTML = '';
     
-    // SÉPARATION DES CARTES NORMALES ET SECRÈTES
-    const standardCards = trainerCards.filter(c => !c.isSecret);
-    const secretCards = trainerCards.filter(c => c.isSecret);
-
     const CARDS_PER_PAGE = window.innerWidth <= 800 ? 4 : 6;
-    const totalPages = Math.ceil(standardCards.length / CARDS_PER_PAGE) || 1;
+    const totalPages = Math.ceil(trainerCards.length / CARDS_PER_PAGE) || 1;
 
     for (let p = 0; p < totalPages; p++) {
-        const pageCards = standardCards.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
+        const pageCards = trainerCards.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
         const pageEl = document.createElement('div');
         pageEl.className = 'vaultx-page';
 
@@ -494,9 +501,9 @@ function renderDresseuseClasseur() {
         container.appendChild(pageEl);
     }
 
-    // MECANIQUE CARTE SECRETE (MODE EDITION UNIQUEMENT)
-    if (isEditMode && secretCards.length > 0) {
-        const secretCard = secretCards[0]; 
+    // MECANIQUE CARTE SECRETE (MODE EDITION + DRESSEUSE DANS LE REGISTRE)
+    if (isEditMode && REGISTRE_SECRET[trainerName]) {
+        const secretFileName = REGISTRE_SECRET[trainerName];
         
         const tab = document.createElement('div');
         tab.id = 'secret-tab';
@@ -507,14 +514,13 @@ function renderDresseuseClasseur() {
         // Au clic sur l'intercalaire
         tab.onclick = () => {
             if (tab.textContent === 'SECRET') {
-                const imgFile = secretCard.file || secretCard.image || '';
-                const imgSrc = imgFile.includes('/') ? imgFile : `./assets/cards/dresseuses/${imgFile}`;
+                const imgSrc = `./assets/cards/dresseuses/${secretFileName}`;
                 
                 // Remplacer le contenu du classeur par la page 1x1 géante
                 container.innerHTML = `
                     <div class="vaultx-page-secret">
                         <div class="vaultx-pocket" onclick="openLightbox('${imgSrc}')" title="Cliquer pour zoomer">
-                            <img src="${imgSrc}" alt="${secretCard.nom}" onerror="this.src='./scripts/assets/img/back-fr.png'">
+                            <img src="${imgSrc}" alt="Secrète ${trainerName}" onerror="this.src='./scripts/assets/img/back-fr.png'">
                         </div>
                     </div>
                 `;
@@ -535,12 +541,12 @@ function renderDresseuseClasseur() {
         slot.addEventListener('click', (e) => {
             if (!isEditMode) return;
             const cardId = slot.dataset.id;
-            console.log("Clic mode édition dresseuse normale :", cardId);
+            console.log("Clic mode édition dresseuse :", cardId);
         });
     });
 }
 
-// -> Fonction globale pour le zoom (Lightbox)
+// -> Fonction globale pour le zoom (Lightbox) de la carte secrète
 window.openLightbox = function(imgSrc) {
     let overlay = document.getElementById('lightbox-overlay');
     if (!overlay) {
