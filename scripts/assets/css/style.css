@@ -155,6 +155,34 @@ body.mode-edition .header-main h1 {
 }
 
 /* ==========================================
+   BOUTONS GLASS (NOUVEAU)
+========================================== */
+.btn-glass {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #e6edf3;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 15px; /* S'intègre sous le sous-titre si utilisé dans le header */
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================
    HUB D'ACCUEIL (DESKTOP - GRILLE 2 + 3 + 1)
 ========================================== */
 .hub-container {
@@ -677,7 +705,7 @@ body.mode-edition .card-item:hover { transform: translateY(-4px); }
 .theme-masterset .card-item.status-complete { opacity: 1; filter: none; border-color: #00f0ff; box-shadow: 0 0 16px rgba(0, 240, 255, 0.45); }
 
 /* ====================================================================
-   MODULE : VITRINE PSA & CLASSEUR VAULT X 4x3
+   MODULE : VITRINE PSA & CLASSEUR VAULT X 4x3 (EXISTANT)
 ==================================================================== */
 :root {
     --bg-binder: #0b0f17;
@@ -688,6 +716,16 @@ body.mode-edition .card-item:hover { transform: translateY(-4px); }
     /* Finition M-MET 02 • Chrome Rose Miroir */
     --psa-chrome-rose-border: #f472b6;
     --psa-chrome-rose-glow: 0 0 16px rgba(244, 114, 182, 0.45);
+    
+    /* Nouvelles Variables : Classeurs Dresseuses */
+    --cover-w: 230px;
+    --cover-h: 320px;
+    --spine-w: 25px;
+    --title-size: 1.8rem;
+    --card-w: 220px;
+    --card-h: 306px;
+    --card-w-mobile: 150px;
+    --card-h-mobile: 208px;
 }
 
 .section-meta-header { display: none !important; }
@@ -750,7 +788,7 @@ body.mode-edition .card-item:hover { transform: translateY(-4px); }
 .psa-slab.is-empty { border: 2px dashed rgba(244, 114, 182, 0.3); background: rgba(12, 16, 24, 0.4); }
 .psa-slab.is-empty .psa-card-chamber { color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; }
 
-/* 2. CLASSEUR VAULT X 4x3 */
+/* 2. CLASSEUR VAULT X 4x3 (EXISTANT) */
 .binder-deck { display: flex; flex-direction: column; gap: 30px; max-width: 860px; margin: 0 auto; }
 .vaultx-page {
     background: radial-gradient(circle at 50% 50%, #111724 0%, var(--bg-binder) 100%);
@@ -807,6 +845,168 @@ body.mode-edition .hof-pin-btn { display: flex; }
 .vaultx-pocket.in-hof .hof-pin-btn { background: #f472b6; color: #000; box-shadow: 0 0 8px rgba(244, 114, 182, 0.8); }
 .vaultx-pocket.in-hof .hof-pin-btn svg { fill: currentColor; }
 
+
+/* ====================================================================
+   MODULE : PANTHÉON DRESSEUSES (NOUVELLE ÉTAGÈRE VAULT X ET INTERIEUR)
+==================================================================== */
+
+/* --- L'Étagère --- */
+.library-container {
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.library-shelf {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    gap: 3rem;
+    padding: 3rem;
+    background: #0f121a;
+    border-bottom: 12px solid #050608;
+    box-shadow: inset 0 -10px 20px rgba(0,0,0,0.5), 0 10px 30px rgba(0,0,0,0.6);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.binder-cover {
+    width: var(--cover-w); 
+    height: var(--cover-h);
+    border-radius: 8px 16px 16px 8px;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    cursor: pointer; 
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    padding: 1rem;
+    box-sizing: border-box;
+    box-shadow: 
+        -10px 15px 20px rgba(0,0,0,0.7), 
+        inset 2px 2px 5px rgba(255,255,255,0.05), 
+        inset -8px -8px 20px rgba(0,0,0,0.6);
+}
+
+.binder-cover:hover { 
+    transform: translateY(-8px) scale(1.03); 
+    box-shadow: -15px 20px 25px rgba(0,0,0,0.9), inset 2px 2px 5px rgba(255,255,255,0.05), inset -8px -8px 20px rgba(0,0,0,0.6);
+}
+
+.binder-cover::after {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: inherit;
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.1"/></svg>');
+    pointer-events: none; z-index: 1;
+}
+
+.binder-cover::before {
+    content: ''; position: absolute;
+    top: -4px; bottom: -4px; right: -4px; 
+    left: calc(var(--spine-w) - 2px);
+    border-top: 5px solid #222;
+    border-right: 5px solid #222;
+    border-bottom: 5px solid #222;
+    border-radius: 0 18px 18px 0;
+    z-index: 0;
+    background-image: repeating-linear-gradient(to bottom, #111 0px, #111 2px, #333 2px, #333 4px);
+    background-size: 5px 100%;
+    background-position: right top;
+    background-repeat: no-repeat;
+    box-shadow: inset 3px 0 5px rgba(0,0,0,0.8);
+}
+
+.spine {
+    position: absolute; left: 0; top: 0; bottom: 0; 
+    width: var(--spine-w);
+    background: linear-gradient(to right, rgba(255,255,255,0.08), rgba(0,0,0,0.5));
+    border-radius: 8px 0 0 8px;
+    border-right: 2px groove rgba(0,0,0,0.8);
+    z-index: 2;
+}
+
+.binder-cover h3 { 
+    color: rgba(255,255,255,0.7); 
+    font-size: var(--title-size); 
+    font-weight: 700; margin: 0; z-index: 10; 
+    letter-spacing: 2px; text-transform: uppercase;
+    text-shadow: -1px -1px 2px rgba(0,0,0,0.9), 1px 1px 1px rgba(255,255,255,0.1);
+    text-align: center;
+}
+
+.binder-cover .brand-logo {
+    position: absolute; bottom: 20px;
+    font-family: Arial, sans-serif; font-size: 0.75rem; font-weight: 900;
+    color: rgba(255,255,255,0.1); 
+    text-shadow: -1px -1px 1px rgba(0,0,0,0.8), 1px 1px 1px rgba(255,255,255,0.15);
+    z-index: 10;
+}
+
+/* Coloris Vault X Premium */
+.theme-vx-black    { background-color: #1a1c1e; }
+.theme-vx-navy     { background-color: #0b1d3a; }
+.theme-vx-forest   { background-color: #132e18; }
+.theme-vx-burgundy { background-color: #4a1010; }
+.theme-vx-purple   { background-color: #361647; }
+.theme-vx-teal     { background-color: #0d4752; }
+
+/* --- L'Intérieur du Classeur --- */
+.interior-view { margin-top: 1rem; padding: 1rem 0; min-height: 80vh; position: relative; z-index: 1; }
+.interior-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 3rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 1000px; margin-left: auto; margin-right: auto;
+}
+.interior-title { 
+    margin: 0; font-size: clamp(1.8rem, 4vw, 2.5rem); color: #e6edf3; 
+    font-weight: 300; letter-spacing: 4px; text-transform: uppercase;
+    cursor: pointer; user-select: none;
+}
+.pages-container { display: flex; flex-direction: column; align-items: center; gap: 3rem; padding-bottom: 4rem; }
+
+.binder-page {
+    background-color: #0a0e14;
+    background-image: radial-gradient(#1e2532 15%, transparent 16%), radial-gradient(#1e2532 15%, transparent 16%);
+    background-size: 8px 8px; background-position: 0 0, 4px 4px;
+    padding: 24px; border-radius: 12px; border: 2px solid #1a2233;
+    box-shadow: 0 16px 36px rgba(0,0,0,0.8), inset 0 0 15px rgba(0,0,0,0.6);
+    position: relative;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+
+.binder-page::before {
+    content: ''; position: absolute; left: -25px; top: 15%; bottom: 15%; width: 12px;
+    background-image: radial-gradient(circle, #050608 40%, transparent 45%);
+    background-size: 100% 33.33%; background-repeat: repeat-y; opacity: 0.6;
+}
+
+/* La Nouvelle Pochette et le Reflet */
+.pocket {
+    position: relative; width: var(--card-w); height: var(--card-h);
+    background: #06080d; border-radius: 6px; padding: 6px;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.8); border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.pocket:hover { border-color: rgba(244, 114, 182, 0.4); transform: scale(1.02); z-index: 5; }
+.pocket::before {
+    content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px;
+    border: 1px dashed rgba(255,255,255,0.08); border-radius: 5px; pointer-events: none;
+}
+.pocket img.card-img { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; display: block; }
+.plastic-overlay {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 6px; pointer-events: none; z-index: 10; overflow: hidden;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 30%, rgba(255,255,255,0) 70%, rgba(255,255,255,0.05) 100%);
+}
+.plastic-overlay::after {
+    content: ''; position: absolute; top: -100%; left: -100%; right: -100%; bottom: -100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
+    transform: rotate(35deg) translateY(-250px); transition: transform 0.4s ease-out;
+}
+.pocket:hover .plastic-overlay::after { transform: rotate(35deg) translateY(350px); }
 
 /* ====================================================================
    FINITION MEWTWO : T-MET 01 • TITANE SOMBRE ANODISÉ
@@ -866,12 +1066,23 @@ body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn { background: #a855f7; colo
     .psa-barcode-svg { width: 45px; height: 8px; }
     .psa-cert-code { font-size: 6.5px; }
     .vaultx-page { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px; border-radius: 8px; }
+    
+    /* Responsive Nouveau Classeur Dresseuses */
+    .library-shelf { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; padding: 1.5rem; }
+    .binder-page { grid-template-columns: repeat(2, 1fr); padding: 12px; gap: 10px; }
+    .binder-page::before { left: -15px; }
+    :root {
+        --cover-w: 160px;
+        --cover-h: 230px;
+        --spine-w: 18px;
+        --title-size: 1.2rem;
+    }
 }
 
 @media (max-width: 767px) {
     .header-main { padding: 35px 12px 15px; }
     .header-main h1 { font-size: 1.45rem; letter-spacing: 2px; text-indent: 2px; }
-    .subtitle { font-size: 0.75rem; letter-spacing: 1.5px; margin-top: 6px; }
+    .subtitle { font-size: 0.75rem; letter-spacing: 1.5px; margin-bottom: 10px; }
     .bg-watermark { opacity: 0.18; -webkit-mask-image: none; mask-image: none; }
     .bg-mew { width: 115px; max-height: 25vh; left: 8px; top: 18%; bottom: auto; }
     .bg-mewtwo { width: 125px; max-height: 28vh; right: 8px; top: 18%; transform: translateY(0); }
@@ -893,4 +1104,10 @@ body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn { background: #a855f7; colo
     .hub-card.masterset-card { flex-direction: column !important; align-items: stretch !important; gap: 12px !important; padding: 16px !important; }
     .masterset-card .hub-card-content { text-align: center !important; }
     .hub-progress-wrapper { min-width: 100% !important; align-items: center !important; }
+
+    /* Ajustement Mobile Intérieur Classeur Dresseuses */
+    .pocket { width: var(--card-w-mobile); height: var(--card-h-mobile); padding: 4px; }
+    .interior-header { flex-direction: column; gap: 15px; }
+    .interior-header > div { display: none; } /* Cache l'espaceur de centrage */
+    .interior-title { font-size: 1.6rem; letter-spacing: 2px; }
 }
