@@ -32,7 +32,7 @@ let cardLangs = {};
 let hallOfFameData = { mew: [], mewtwo: [] };
 let isEditMode = false;
 
-// 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL (POSSESSION, LANGUES & HOF)
+// 2. SYNCHRONISATION FIRESTORE TEMPS RÉEL
 function initFirestoreSync() {
     if (!docRef) {
         localCollection = typeof CARTES_POSSEDEES !== 'undefined' ? new Set(CARTES_POSSEDEES) : new Set();
@@ -70,7 +70,6 @@ function saveToCloud() {
     });
 }
 
-// 3. UTILITAIRE IMAGES
 function resolveImg(path, langue) {
     if (!path) {
         return langue === 'ja' ? './scripts/assets/img/back-ja.png' : './scripts/assets/img/back-fr.png';
@@ -119,7 +118,7 @@ function renderPokedex() {
     });
 }
 
-// 5. RENDU DU CLASSEUR VAULT X 4x3 & DU HALL OF FAME PSA (MEW / MEWTWO)
+// 5. RENDU DU CLASSEUR VAULT X 4x3 & DU HALL OF FAME PSA
 function renderBinderView(pokemonName) {
     const binderContainer = document.getElementById('binder-deck');
     const psaContainer = document.getElementById('psa-wall');
@@ -244,8 +243,9 @@ function renderBinderView(pokemonName) {
     }
 }
 
+
 /* ====================================================================
-   6. RENDU DU HUB DES DRESSEUSES (L'ÉTAGÈRE GLOBALE)
+   6. RENDU DU HUB DES DRESSEUSES (VUE TRANCHES / BIBLIOTHÈQUE)
 ==================================================================== */
 function renderDresseusesView() {
     const shelfContainer = document.getElementById('shelf');
@@ -259,7 +259,7 @@ function renderDresseusesView() {
         if (section.cartes) allCards.push(...section.cartes);
     });
 
-    // 2. Fonction intelligente pour extraire le vrai nom de la dresseuse
+    // 2. Extraire le vrai nom de la dresseuse
     function getCleanDresseuseName(carte) {
         if (carte.id.includes("olim")) return "Prof. Olim";
         if (carte.id.includes("keteleeria")) return "Prof. Keteleeria";
@@ -267,7 +267,7 @@ function renderDresseusesView() {
 
         let n = carte.nom;
         
-        // Enlever les mentions entre parenthèses ex: (SAR), (TG)
+        // Enlever les mentions entre parenthèses
         n = n.replace(/\(.*?\)/g, "").trim();
         
         // Enlever les préfixes de cartes Action/Objet
@@ -281,11 +281,10 @@ function renderDresseusesView() {
             if (n.startsWith(p)) n = n.replace(p, "").trim();
         });
 
-        // Cas particuliers (ex: les Duos) on garde le nom complet nettoyé
         return n || "Inconnue";
     }
 
-    // 3. Regrouper les cartes par Dresseuse
+    // 3. Regrouper par Dresseuse
     const groupedByTrainer = allCards.reduce((acc, card) => {
         const nomDresseuse = getCleanDresseuseName(card);
         if (!acc[nomDresseuse]) acc[nomDresseuse] = [];
@@ -293,35 +292,32 @@ function renderDresseusesView() {
         return acc;
     }, {});
 
-    // 4. Trier les classeurs par ordre alphabétique
-    const trainers = Object.keys(groupedByTrainer).sort();
+    // 4. Tri strict alphabétique (Français)
+    const trainers = Object.keys(groupedByTrainer).sort((a, b) => a.localeCompare(b, 'fr'));
 
     // 5. Thèmes mats Vault X
     const themes = ['theme-vx-teal', 'theme-vx-navy', 'theme-vx-black', 'theme-vx-burgundy', 'theme-vx-purple', 'theme-vx-forest'];
 
-    // 6. Générer l'étagère
+    // 6. Générer l'étagère de tranches
     trainers.forEach((trainerName, index) => {
-        const cover = document.createElement('div');
+        const spine = document.createElement('div');
         const theme = themes[index % themes.length];
-        const quantite = groupedByTrainer[trainerName].length;
         
-        cover.className = `binder-cover ${theme}`;
-        cover.innerHTML = `
-            <div class="spine"></div>
-            <div class="cover-label">
+        spine.className = `binder-spine ${theme}`;
+        spine.innerHTML = `
+            <div class="spine-crease"></div>
+            <div class="spine-crease right"></div>
+            <div class="spine-title-container">
                 <h3>${trainerName}</h3>
-            </div>
-            <div style="position:absolute; bottom:15px; font-size:11px; color:rgba(255,255,255,0.4); font-weight:bold;">
-                ${quantite} CARTE${quantite > 1 ? 'S' : ''}
             </div>
         `;
         
         // REDIRECTION VERS LA FUTURE PAGE CLASSEUR
-        cover.addEventListener('click', () => {
+        spine.addEventListener('click', () => {
             window.location.href = `classeur.html?dresseuse=${encodeURIComponent(trainerName)}`;
         });
         
-        shelfContainer.appendChild(cover);
+        shelfContainer.appendChild(spine);
     });
 }
 
@@ -360,7 +356,7 @@ window.toggleHofSlot = function(pokemonName, cardId) {
     updateAllViews();
 };
 
-// 8. RENDU HISTORIQUE CONSERVÉ (Mew et Mewtwo)
+// 8. RENDU HISTORIQUE CONSERVÉ
 function renderLegacyCollection(pokemonName, containerId) {
     const container = document.getElementById(containerId);
     if (!container || typeof cartesDatabase === 'undefined') return;
