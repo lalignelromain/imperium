@@ -413,8 +413,10 @@ function renderDresseusesHub() {
         const firstCard = !isEmpty ? grouped[trainerName][0] : null;
         
         let imgHtml = '<span style="font-size: 0.9rem;">🖼️</span>';
-        if (firstCard && firstCard.image) {
-            const resolvedSrc = resolveImg(firstCard.image, 'fr');
+        
+        // CORRECTION IMAGE DRESSEUSES ICI (.file au lieu de .image)
+        if (firstCard && firstCard.file) {
+            const resolvedSrc = `./scripts/assets/cards/dresseuses/${firstCard.file}`;
             imgHtml = `<img src="${resolvedSrc}" style="width:100%; height:100%; object-fit:cover; opacity:0.8; border-radius:2px;" loading="lazy">`;
         }
 
@@ -422,9 +424,9 @@ function renderDresseusesHub() {
         pocket.className = 'binder-pocket';
         pocket.innerHTML = `
             <div class="toploader-insert" ${isEmpty ? 'style="border-style:dashed; opacity:0.3;"' : ''}>
-                <div class="card-in-sleeve" style="${(firstCard && firstCard.image) ? 'padding:0;' : ''}">
+                <div class="card-in-sleeve" style="${(firstCard && firstCard.file) ? 'padding:0;' : ''}">
                     ${isEmpty ? '' : imgHtml}
-                    ${!isEmpty && !(firstCard && firstCard.image) ? `<span class="card-name">${trainerName}</span>` : ''}
+                    ${!isEmpty && !(firstCard && firstCard.file) ? `<span class="card-name">${trainerName}</span>` : ''}
                 </div>
             </div>
         `;
@@ -462,7 +464,8 @@ function renderDresseuseClasseur() {
 
         let pageHTML = '';
         pageCards.forEach(carte => {
-            const imgSrc = resolveImg(carte.image, 'fr');
+            // CORRECTION IMAGE CLASSEUR ICI (.file)
+            const imgSrc = `./scripts/assets/cards/dresseuses/${carte.file}`;
             pageHTML += `
                 <div class="vaultx-pocket dresseuse-card-slot" data-id="${carte.id}" style="cursor: ${isEditMode ? 'pointer' : 'default'}">
                     <img src="${imgSrc}" alt="${carte.nom}" loading="lazy">
