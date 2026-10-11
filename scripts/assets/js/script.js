@@ -119,7 +119,7 @@ function renderPokedex() {
     });
 }
 
-// 5. RENDU DU CLASSEUR VAULT X 4x3 & DU HALL OF FAME PSA
+// 5. RENDU DU CLASSEUR VAULT X 4x3 & DU HALL OF FAME PSA (MEW / MEWTWO)
 function renderBinderView(pokemonName) {
     const binderContainer = document.getElementById('binder-deck');
     const psaContainer = document.getElementById('psa-wall');
@@ -244,31 +244,66 @@ function renderBinderView(pokemonName) {
     }
 }
 
-
 /* ====================================================================
-   6. RENDU DU CLASSEUR DES DRESSEUSES (1 CLASSEUR PAR DRESSEUSE)
+   6. RENDU DU HUB DES DRESSEUSES (L'ÉTAGÈRE GLOBALE)
 ==================================================================== */
-let currentTrainerCards = null;
-
 function renderDresseusesView() {
     const shelfContainer = document.getElementById('shelf');
-    const libraryView = document.getElementById('library-view');
-    const interiorView = document.getElementById('interior');
-    
     if (!shelfContainer || typeof dresseusesDatabase === 'undefined') return;
 
     shelfContainer.innerHTML = '';
     
-    // Cycle de couleurs Vault X Mates
+    // 1. Aplatir toutes les cartes de la base de données
+    let allCards = [];
+    dresseusesDatabase.forEach(section => {
+        if (section.cartes) allCards.push(...section.cartes);
+    });
+
+    // 2. Fonction intelligente pour extraire le vrai nom de la dresseuse
+    function getCleanDresseuseName(carte) {
+        if (carte.id.includes("olim")) return "Prof. Olim";
+        if (carte.id.includes("keteleeria")) return "Prof. Keteleeria";
+        if (carte.id.includes("magnolia")) return "Prof. Magnolia";
+
+        let n = carte.nom;
+        
+        // Enlever les mentions entre parenthèses ex: (SAR), (TG)
+        n = n.replace(/\(.*?\)/g, "").trim();
+        
+        // Enlever les préfixes de cartes Action/Objet
+        const prefixes = [
+            "Vigilance d'", "Vigilance de ", "Dévouement de ", "Exploration de ", 
+            "Affinité de ", "Ambition de ", "Hospitalité d'", "Invitation d'", 
+            "Éclat d'", "Suggestion de ", "Résolution de "
+        ];
+        
+        prefixes.forEach(p => {
+            if (n.startsWith(p)) n = n.replace(p, "").trim();
+        });
+
+        // Cas particuliers (ex: les Duos) on garde le nom complet nettoyé
+        return n || "Inconnue";
+    }
+
+    // 3. Regrouper les cartes par Dresseuse
+    const groupedByTrainer = allCards.reduce((acc, card) => {
+        const nomDresseuse = getCleanDresseuseName(card);
+        if (!acc[nomDresseuse]) acc[nomDresseuse] = [];
+        acc[nomDresseuse].push(card);
+        return acc;
+    }, {});
+
+    // 4. Trier les classeurs par ordre alphabétique
+    const trainers = Object.keys(groupedByTrainer).sort();
+
+    // 5. Thèmes mats Vault X
     const themes = ['theme-vx-teal', 'theme-vx-navy', 'theme-vx-black', 'theme-vx-burgundy', 'theme-vx-purple', 'theme-vx-forest'];
 
-    // On utilise directement la structure originale : chaque section est une dresseuse
-    dresseusesDatabase.forEach((section, index) => {
-        const trainerName = section.categorie; // Le nom de la dresseuse
-        const trainerCards = section.cartes;   // Ses cartes associées
-        
+    // 6. Générer l'étagère
+    trainers.forEach((trainerName, index) => {
         const cover = document.createElement('div');
         const theme = themes[index % themes.length];
+        const quantite = groupedByTrainer[trainerName].length;
         
         cover.className = `binder-cover ${theme}`;
         cover.innerHTML = `
@@ -276,98 +311,19 @@ function renderDresseusesView() {
             <div class="cover-label">
                 <h3>${trainerName}</h3>
             </div>
+            <div style="position:absolute; bottom:15px; font-size:11px; color:rgba(255,255,255,0.4); font-weight:bold;">
+                ${quantite} CARTE${quantite > 1 ? 'S' : ''}
+            </div>
         `;
         
-        // Clic pour ouvrir le classeur de CETTE dresseuse
+        // REDIRECTION VERS LA FUTURE PAGE CLASSEUR
         cover.addEventListener('click', () => {
-            currentTrainerCards = trainerCards;
-            
-            if(libraryView) libraryView.style.display = 'none';
-            if(interiorView) interiorView.style.display = 'block';
-            
-            const titleEl = document.getElementById('interior-title');
-            if(titleEl) titleEl.textContent = trainerName;
-            
-            renderDresseusesPages();
-            window.scrollTo(0, 0);
+            window.location.href = `classeur.html?dresseuse=${encodeURIComponent(trainerName)}`;
         });
         
         shelfContainer.appendChild(cover);
     });
-
-    const btnBack = document.getElementById('btn-back');
-    if (btnBack && !btnBack.dataset.listener) {
-        btnBack.dataset.listener = "true";
-        btnBack.addEventListener('click', () => {
-            currentTrainerCards = null;
-            if(interiorView) interiorView.style.display = 'none';
-            if(libraryView) libraryView.style.display = 'block';
-        });
-    }
-
-    if (interiorView && interiorView.style.display === 'block' && currentTrainerCards) {
-        renderDresseusesPages();
-    }
 }
-
-function renderDresseusesPages() {
-    const container = document.getElementById('pages-container');
-    if (!container || !currentTrainerCards) return;
-
-    container.innerHTML = '';
-    
-    const CARDS_PER_PAGE = window.innerWidth <= 800 ? 4 : 6;
-    const totalPages = Math.ceil(currentTrainerCards.length / CARDS_PER_PAGE);
-
-    for (let p = 0; p < totalPages; p++) {
-        const pageCards = currentTrainerCards.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
-        const pageEl = document.createElement('div');
-        pageEl.className = 'binder-page';
-
-        let pageHTML = '';
-        pageCards.forEach(carte => {
-            let pocketContent = '';
-
-            if (isEditMode && carte.fileAlt) {
-                pocketContent = `
-                    <div class="card-flipper">
-                        <div class="face-fr"><img src="./scripts/assets/cards/dresseuses/${carte.file}" class="card-img" alt="${carte.nom}" loading="lazy"></div>
-                        <div class="face-jp"><img src="./scripts/assets/cards/dresseuses/alt/${carte.fileAlt}" class="card-img" alt="${carte.nom} Alt" loading="lazy"></div>
-                    </div>
-                    <div class="plastic-overlay"></div>
-                    <div class="lang-badge" style="background:#f472b6; color:#000; border:none; z-index:15;">SECURE</div>
-                `;
-                pageHTML += `
-                    <div class="pocket" style="cursor:pointer;" data-flipped="false" onclick="this.querySelector('.card-flipper').style.transform = this.dataset.flipped === 'true' ? 'rotateY(0deg)' : 'rotateY(180deg)'; this.dataset.flipped = this.dataset.flipped === 'true' ? 'false' : 'true';">
-                        ${pocketContent}
-                    </div>
-                `;
-            } else {
-                pocketContent = `
-                    <img src="./scripts/assets/cards/dresseuses/${carte.file}" class="card-img" alt="${carte.nom}" loading="lazy">
-                    <div class="plastic-overlay"></div>
-                `;
-                pageHTML += `<div class="pocket">${pocketContent}</div>`;
-            }
-        });
-
-        const emptySlots = CARDS_PER_PAGE - pageCards.length;
-        for (let e = 0; e < emptySlots; e++) {
-            pageHTML += `<div class="pocket" style="background: repeating-linear-gradient(-45deg, rgba(255,255,255,0.015), rgba(255,255,255,0.015) 5px, rgba(0,0,0,0.3) 5px, rgba(0,0,0,0.3) 10px); box-shadow: inset 0 2px 6px rgba(0,0,0,0.8); border: 1px dashed rgba(255,255,255,0.05); pointer-events: none;"></div>`;
-        }
-
-        pageEl.innerHTML = pageHTML;
-        container.appendChild(pageEl);
-    }
-}
-
-window.addEventListener('resize', () => {
-    const interiorView = document.getElementById('interior');
-    if (interiorView && interiorView.style.display === 'block') {
-        renderDresseusesPages();
-    }
-});
-
 
 // 7. ACTIONS EN MODE ÉDITION
 window.toggleCardLang = function(cardId, lang) {
@@ -512,6 +468,8 @@ function updateAllViews() {
     renderLegacyCollection('mew', 'mew-grid');
     renderLegacyCollection('mewtwo', 'mewtwo-grid');
     renderPantheon();
+    
+    // Met à jour l'étagère du Hub
     renderDresseusesView(); 
 }
 
@@ -583,7 +541,7 @@ if (auth) {
     });
 }
 
-// 13. PROGRESSION MASTER SET EV5 SUR LE HUB (TOTAL 363)
+// 13. PROGRESSION MASTER SET EV5 SUR LE HUB
 function initEV5ProgressHub() {
     const fill = document.getElementById("ev5-hub-progress-fill");
     const text = document.getElementById("ev5-hub-progress-text");
