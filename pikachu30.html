@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pikachu 30th - Mewthology</title>
+
+    <!-- PWA & Métadonnées Mobiles -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#050608">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mewthology">
+    <link rel="apple-touch-icon" href="./favicon.png">
+    <link rel="icon" type="image/png" href="./favicon.png">
+
+    <!-- Feuilles de style -->
+    <link rel="stylesheet" href="./scripts/assets/css/style.css">
+
+    <!-- SDK Firebase Compat -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="theme-pikachu"> <!-- Classe spécifique pour le thème doré -->
+
+    <!-- En-tête Principal -->
+    <header class="header-main">
+        <h1 style="background: linear-gradient(135deg, #fef08a 0%, #ca8a04 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PIKACHU 30TH</h1>
+        <p class="subtitle">Set Commémoratif • 1996 - 2026</p>
+    </header>
+
+    <!-- Conteneur de la Collection (Généré par JS) -->
+    <main class="collection-container">
+        <!-- On prépare le conteneur du classeur -->
+        <div class="binder-deck pikachu-binder" id="pikachu-binder-container">
+            <!-- Les pages et cartes Vault X viendront s'injecter ici via script.js -->
+        </div>
+    </main>
+
+    <!-- LIGHTBOX COLLECTAURA PIKACHU 30TH (Mode 2D Plat) -->
+    <div class="lightbox-overlay" id="collectaura-lightbox" onclick="closeCollectAura()">
+        <!-- Le Cadre Acrylique avec l'illustration étendue -->
+        <div class="collectaura-frame" id="collectaura-frame-bg" onclick="event.stopPropagation()">
+            
+            <!-- Les 4 vis métalliques -->
+            <div class="frame-screw top-left"></div>
+            <div class="frame-screw top-right"></div>
+            <div class="frame-screw bottom-left"></div>
+            <div class="frame-screw bottom-right"></div>
+
+            <!-- Emplacement Logo CollectAura -->
+            <div class="collectaura-logo-area">
+                <span>CollectAura</span>
+            </div>
+
+            <!-- Le boitier Slab encastré (sans étiquette) -->
+            <div class="collectaura-slab-core">
+                <div class="slab-inner-recess">
+                    <img id="collectaura-card-img" src="" alt="Carte Pikachu">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Outils Mode Édition (Dock) -->
+    <div class="floating-dock">
+        <a href="index.html" class="dock-btn" title="Retour Accueil">🏠</a>
+        <button id="toggle-edit" class="dock-btn" title="Mode Édition">✏️</button>
+        <button id="save-btn" class="dock-btn dock-btn-lock" title="Sauvegarder">💾</button>
+    </div>
+
+    <!-- Scripts (On ajoutera la data des Pikachu ici juste après) -->
+    <script src="./scripts/assets/js/pikachu-data.js"></script>
+    <script src="./scripts/assets/js/script.js"></script>
+</body>
+</html>
