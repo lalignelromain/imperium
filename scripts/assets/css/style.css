@@ -141,10 +141,9 @@ border: 1px dashed #444;
 
 /* ====================================================================
 HUB DRESSEUSES & TOPLOADERS (LARGE 4 COLONNES)
-==================================================================== /
+==================================================================== */
 #shelf {
 display: grid;
-/ La version large utilise 4 colonnes par défaut sur PC */
 }
 
 .vaultx-page-large {
@@ -328,7 +327,6 @@ RESPONSIVE DESIGN (MOBILES ET TABLETTES)
 grid-template-columns: repeat(3, 1fr);
 }
 
-/* Le Hub passe de 4 à 3 colonnes */
 .vaultx-page-large {
     grid-template-columns: repeat(3, 1fr);
     gap: 14px;
@@ -345,12 +343,11 @@ grid-template-columns: repeat(2, 1fr);
 }
 
 .vaultx-page {
-    grid-template-columns: repeat(2, 1fr); /* Classeur passe à 2 colonnes */
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     padding: 12px;
 }
 
-/* Le Hub passe de 3 à 2 colonnes pour garder de grands toploaders lisibles */
 .vaultx-page-large {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
@@ -369,20 +366,19 @@ grid-template-columns: repeat(2, 1fr);
 
 }
 
-/* Très petits téléphones (moins de 400px de large) /
+/* Très petits téléphones (moins de 400px de large) */
 @media (max-width: 400px) {
 .vaultx-page {
-grid-template-columns: 1fr; / Classeur passe à 1 colonne */
+grid-template-columns: 1fr;
 }
 
-/* Le Hub Dresseuses reste sur 2 colonnes, mais on resserre tout */
 .vaultx-page-large {
     gap: 8px;
     padding: 8px;
 }
 
 .toploader-insert {
-    border-width: 1px; /* Plastique plus fin sur petit écran */
+    border-width: 1px;
     padding: 4px;
 }
 
