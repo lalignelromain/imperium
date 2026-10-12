@@ -542,7 +542,7 @@ window.openLightbox = function(imgSrc) {
         overlay = document.createElement('div');
         overlay.id = 'lightbox-overlay';
         overlay.className = 'lightbox-overlay';
-        overlay.innerHTML = `<img class="lightbox-card" src="" alt="Zoom Carte Secrète">`;
+        overlay.innerHTML = `<img class="lightbox-card" src="" alt="Zoom Carte">`;
         document.body.appendChild(overlay);
         
         overlay.onclick = () => overlay.classList.remove('active');
@@ -552,7 +552,7 @@ window.openLightbox = function(imgSrc) {
 };
 
 /* ====================================================================
-   8. MODULE PIKACHU 30TH (SANS IMAGES ÉTENDUES)
+   8. MODULE PIKACHU 30TH (SLEEVE GLOSS & ZOOM SIMPLE)
 ==================================================================== */
 function renderPikachuBinder() {
     const container = document.getElementById('pikachu-binder-container');
@@ -573,14 +573,16 @@ function renderPikachuBinder() {
         pageCards.forEach(c => {
             const isOwned = localCollection.has(c.id);
             const statusClass = isOwned ? 'is-owned' : 'not-owned';
-            
-            // Uniquement l'image standard
             const imgSrc = `./assets/cards/pikachu/${c.id}.jpg`;
 
+            // Rendu avec un effet "Sleeve Gloss" intégré (reflet diagonal)
             pageHTML += `
                 <div class="vaultx-pocket ${statusClass}" onclick="handlePikachuClick('${c.id}', '${imgSrc}')">
-                    <div class="sleeve-matte">
-                        <img src="${imgSrc}" alt="${c.nom}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy">
+                    <div style="width:100%; height:100%; overflow:hidden; border-radius:4px; position:relative; box-shadow: 0 2px 5px rgba(0,0,0,0.4);">
+                        <img src="${imgSrc}" alt="${c.nom}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                        
+                        <!-- Calque de brillance (Gloss) -->
+                        <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>
                     </div>
                 </div>
             `;
@@ -607,7 +609,8 @@ window.handlePikachuClick = function(id, imgSrc) {
         updateAllViews(); 
     } else {
         if (localCollection.has(id)) {
-            openCollectAura(imgSrc);
+            // On utilise la lightbox simple pour le zoom
+            openLightbox(imgSrc);
         }
     }
 };
@@ -628,27 +631,6 @@ function initPika30ProgressHub() {
     fill.style.width = `${percent}%`;
     text.innerText = `${current} / ${total} • ${percent}%`;
 }
-
-window.openCollectAura = function(cardSrc) {
-    const lightbox = document.getElementById('collectaura-lightbox');
-    const frameBg = document.getElementById('collectaura-frame-bg');
-    const cardImg = document.getElementById('collectaura-card-img');
-    if (!lightbox) return;
-
-    cardImg.src = cardSrc;
-    
-    // Génération automatique d'un fond étendu assombri avec l'image normale
-    frameBg.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('${cardSrc}')`;
-    frameBg.style.backgroundSize = 'cover';
-    frameBg.style.backgroundPosition = 'center';
-    
-    lightbox.classList.add('active');
-};
-
-window.closeCollectAura = function() {
-    const lightbox = document.getElementById('collectaura-lightbox');
-    if (lightbox) lightbox.classList.remove('active');
-};
 
 /* ====================================================================
    9. EXÉCUTION & SYNCHRO
