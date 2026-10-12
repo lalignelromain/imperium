@@ -372,10 +372,17 @@ function initEV5ProgressHub() {
 // REGISTRE DES CARTES SECRÈTES (MODE ÉDITION UNIQUEMENT)
 // RAPPEL : Remplace ces noms par les VRAIS noms de tes images secrètes !!
 const REGISTRE_SECRET = {
-    "Barbara": ["barbara_sec1.jpg", "barbara_sec2.jpg"],
-    "Carolina": ["carolina_sec1.jpg", "carolina_sec2.jpg"],
-    "Irida": ["irida_sec.jpg"],
-    "Rosemary": ["rosemary_sec.jpg"]
+    "Carolina": ["carolina.jpg"],
+    "Cynthia": ["cynthia.jpg"],
+    "Donna": ["donna.jpg"],
+    "Erika": ["erika.jpg"],
+    "Gladys": ["gladys.jpg"],
+    "Lillie": ["lillie.jpg"],
+    "Margie": ["margie.jpg"],
+    "Nacchara": ["irida.jpg"],
+    "Rosemary": ["rosemary.jpg"],
+    "Roxanne": ["roxanne.jpg"],
+    "Sophora": ["sophora.jpg"]
 };
 
 // -> Le Hub des Toploaders (dresseuses.html)
