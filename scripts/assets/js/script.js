@@ -373,7 +373,8 @@ function initEV5ProgressHub() {
 // Ajoute simplement "Nom de la dresseuse": "fichier.jpg" au fur et à mesure.
 const REGISTRE_SECRET = {
     "Carolina": "carolina.jpg",
-   "Irida": "irida.jpg"
+   "Irida": "irida.jpg",
+   "Rosemary": "rosemary.jpg"
 };
 
 function getAllDresseusesCards() {
