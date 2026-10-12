@@ -1,164 +1,251 @@
-/* ====================================================================
-   MEWTHOLOGY — BASE DE DONNÉES : DRESSEUSES FULL ART, TG & SAR
-==================================================================== */
-
-const dresseusesDatabase = [
-  {
-    categorie: "Dresseuses (De A à C)",
-    cartes: [
-      { id: "alizee-xy6-108", nom: "Alizée", set: "xy6", num: "108", file: "alizee-xy6-108.png", fileAlt: "alizee-xy6-108-alt.png" },
-      { id: "ancolie-fa", nom: "Ancolie", set: "", num: "", file: "ancolie-fa.png", fileAlt: "ancolie-fa-alt.png" },
-      { id: "angelique-sm5-149", nom: "Angélique", set: "sm5", num: "149", file: "angelique-sm5-149.png", fileAlt: "angelique-sm5-149-alt.png" },
-      { id: "angelique-swsh10-184", nom: "Vigilance d'Angélique", set: "swsh10", num: "184", file: "angelique-swsh10-184.png", fileAlt: "angelique-swsh10-184-alt.png" },
-      { id: "angelique-gg61", nom: "Vigilance d'Angélique (TG)", set: "swsh12pt5gg", num: "GG61", file: "angelique-swsh12pt5gg-gg61.png", fileAlt: "angelique-swsh12pt5gg-gg61-alt.png" },
-      { id: "appoline-swsh11-189", nom: "Appoline", set: "swsh11", num: "189", file: "appoline-swsh11-189.png", fileAlt: "appoline-swsh11-189-alt.png" },
-      { id: "archa-swsh10-189", nom: "Archa", set: "swsh10", num: "189", file: "archa-swsh10-189.png", fileAlt: "archa-swsh10-189-alt.png" },
-      { id: "aveline-fa", nom: "Aveline", set: "", num: "", file: "aveline-fa.png", fileAlt: "aveline-fa-alt.png" },
-      { id: "azia-fa-1", nom: "Azia", set: "", num: "", file: "azia-fa.png", fileAlt: "azia-fa-alt.png" },
-      { id: "azia-sar-2", nom: "Azia (SAR)", set: "", num: "", file: "azia-sar.png", fileAlt: "azia-sar-alt.png" },
-      { id: "barbara-sm2-145", nom: "Barbara", set: "sm2", num: "145", file: "barbara-sm2-145.png", fileAlt: "barbara-sm2-145-alt.png" },
-      { id: "barbara-nephie-231", nom: "Barbara & Néphie", set: "sm12", num: "231", file: "barbara-nephie-sm12-231.png", fileAlt: "barbara-nephie-sm12-231-alt.png" },
-      { id: "barbara-nephie-alt", nom: "Barbara & Néphie (Alt)", set: "sm12", num: "", file: "barbara-nephie-sm12-alt.png", fileAlt: "barbara-nephie-sm12-alt-alt.png" },
-      { id: "beatrice-swsh4-180", nom: "Béatrice", set: "swsh4", num: "180", file: "beatrice-swsh4-180.png", fileAlt: "beatrice-swsh4-180-alt.png" },
-      { id: "beatrice-tg26", nom: "Béatrice (TG)", set: "swsh10tg", num: "TG26", file: "beatrice-swsh10-tg26.png", fileAlt: "beatrice-swsh10-tg26-alt.png" },
-      { id: "bianca-bw6-147", nom: "Bianca", set: "bw6", num: "147", file: "bianca-bw6-147.png", fileAlt: "bianca-bw6-147-alt.png" },
-      { id: "bianca-sv5-197", nom: "Dévouement de Bianca", set: "sv5", num: "197", file: "bianca-sv5-197.png", fileAlt: "bianca-sv5-197-alt.png" },
-      { id: "bianca-sv5-209", nom: "Dévouement de Bianca (SAR)", set: "sv5", num: "209", file: "bianca-sv5-209.png", fileAlt: "bianca-sv5-209-alt.png" },
-      { id: "bleuet-sv7-155", nom: "Bleuet", set: "sv7", num: "155", file: "bleuet-sv7-155.png", fileAlt: "bleuet-sv7-155-alt.png" },
-      { id: "bleuet-sv7-172", nom: "Bleuet (SAR)", set: "sv7", num: "172", file: "bleuet-sv7-172.png", fileAlt: "bleuet-sv7-172-alt.png" },
-      { id: "blue-sm10-209", nom: "Exploration de Blue", set: "sm10", num: "209", file: "blue-sm10-209.png", fileAlt: "blue-sm10-209-alt.png" },
-      { id: "brindille-sv6pt5", nom: "Brindille", set: "", num: "", file: "brindille-fa.png", fileAlt: "brindille-fa-alt.png" },
-      { id: "camelia-swsh10-188", nom: "Camélia", set: "swsh10", num: "188", file: "camelia-swsh10-188.png", fileAlt: "camelia-swsh10-188-alt.png" },
-      { id: "camelia-gg66", nom: "Camélia (TG)", set: "swsh12pt5gg", num: "GG66", file: "camelia-swsh12pt5gg-gg66.png", fileAlt: "camelia-swsh12pt5gg-gg66-alt.png" },
-      { id: "candice-swsh12-189", nom: "Candice", set: "swsh12", num: "189", file: "candice-swsh12-189.png", fileAlt: "candice-swsh12-189-alt.png" },
-      { id: "capucine-sv1-238", nom: "Capucine", set: "sv1", num: "238", file: "capucine-sv1-238.png", fileAlt: "capucine-sv1-238-alt.png" },
-      { id: "capucine-sv1-251", nom: "Capucine (SAR)", set: "sv1", num: "251", file: "capucine-sv1-251.png", fileAlt: "capucine-sv1-251-alt.png" },
-      { id: "carolina-bw6-149", nom: "Carolina", set: "bw6", num: "149", file: "carolina-bw6-149.png", fileAlt: "carolina-bw6-149-alt.png" },
-      { id: "carolina-xy9-122", nom: "Carolina (Rupture Turbo)", set: "xy9", num: "122", file: "carolina-xy9-122.png", fileAlt: "carolina-xy9-122-alt.png" },
-      { id: "carolina-swsh45-072", nom: "Carolina (Destinées Radieuses)", set: "swsh45", num: "072", file: "carolina-swsh45-072.png", fileAlt: "carolina-swsh45-072-alt.png" },
-      { id: "cassiopeia-sv6pt5-088", nom: "Cassiopeia", set: "", num: "", file: "cassiopeia-sv6pt5-088.png", fileAlt: "cassiopeia-sv6pt5-088-alt.png" },
-      { id: "cassiopeia-sv6pt5-094", nom: "Cassiopeia (SAR)", set: "sv6pt5", num: "094", file: "cassiopeia-sv6pt5-094.png", fileAlt: "cassiopeia-sv6pt5-094-alt.png" },
-      { id: "catherine-sv4-243", nom: "Catherine", set: "sv4", num: "243", file: "catherine-sv4-243.png", fileAlt: "catherine-sv4-243-alt.png" },
-      { id: "chama-sv4-241", nom: "Chama", set: "sv4", num: "241", file: "chama-sv4-241.png", fileAlt: "chama-sv4-241-alt.png" },
-      { id: "chama-sv4-258", nom: "Chama (SAR)", set: "sv4", num: "258", file: "chama-sv4-258.png", fileAlt: "chama-sv4-258-alt.png" },
-      { id: "chantal-swsh6-186", nom: "Chantal", set: "swsh6", num: "186", file: "chantal-swsh6-186.png", fileAlt: "chantal-swsh6-186-alt.png" },
-      { id: "clara-swsh6-194", nom: "Clara", set: "swsh6", num: "194", file: "clara-swsh6-194.png", fileAlt: "clara-swsh6-194-alt.png" },
-      { id: "clara-swsh302", nom: "Clara (Promo)", set: "swshp", num: "SWSH302", file: "clara-promo-swsh302.png", fileAlt: "clara-promo-swsh302-alt.png" },
-      { id: "colette-xy8-161", nom: "Colette", set: "xy8", num: "161", file: "colette-xy8-161.png", fileAlt: "colette-xy8-161-alt.png" },
-      { id: "copieuse-sm7-163", nom: "Copieuse", set: "sm7", num: "163", file: "copieuse-sm7-163.png", fileAlt: "copieuse-sm7-163-alt.png" },
-      { id: "copieuse-swsh7-200", nom: "Copieuse (Évolution Céleste)", set: "swsh7", num: "200", file: "copieuse-swsh7-200.png", fileAlt: "copieuse-swsh7-200-alt.png" },
-      { id: "cornelia-xy3-111", nom: "Cornélia", set: "xy3", num: "111", file: "cornelia-xy3-111.png", fileAlt: "cornelia-xy3-111-alt.png" },
-      { id: "cornelia-swsh5-160", nom: "Affinité de Cornélia", set: "swsh5", num: "160", file: "cornelia-swsh5-160.png", fileAlt: "cornelia-swsh5-160-alt.png" },
-      { id: "cynthia-sm5-148", nom: "Cynthia", set: "sm5", num: "148", file: "cynthia-sm5-148.png", fileAlt: "cynthia-sm5-148-alt.png" },
-      { id: "cynthia-swsh9-169", nom: "Ambition de Cynthia", set: "swsh9", num: "169", file: "cynthia-swsh9-169.png", fileAlt: "cynthia-swsh9-169-alt.png" },
-      { id: "cynthia-gg60", nom: "Ambition de Cynthia (TG)", set: "swsh12pt5gg", num: "GG60", file: "cynthia-swsh12pt5gg-gg60.png", fileAlt: "cynthia-swsh12pt5gg-gg60-alt.png" },
-      { id: "cynthia-percila-228", nom: "Cynthia & Percila", set: "sm12", num: "228", file: "cynthia-percila-sm12-228.png", fileAlt: "cynthia-percila-sm12-228-alt.png" },
-      { id: "cynthia-percila-alt", nom: "Cynthia & Percila (Alt)", set: "sm12", num: "", file: "cynthia-percila-sm12-alt.png", fileAlt: "cynthia-percila-sm12-alt-alt.png" }
+const dresseusesData = {
+    "Leaf": [
+        "leaf-01.png",
+        "leaf-02.png"
+    ],
+    "Célesta": [
+        "celesta-01.png",
+        "celesta-02.png"
+    ],
+    "Flora": [
+        "flora-01.png",
+        "flora-02.png"
+    ],
+    "Aurore": [
+        "aurore-01.jpg",
+        "aurore-03.jpg",
+        "aurore-02.jpg"
+    ],
+    "Ludvina": [
+        "ludvina-01.jpg",
+        "ludvina-02.jpg",
+        "ludvina-03.jpg"
+    ],
+    "Écho": [
+        "echo-01.jpg",
+        "echo-02.jpg",
+        "echo-03.jpg",
+        "echo-04.jpg"
+    ],
+    "Seréna": [
+        "serena-01.png",
+        "serena-02.jpg",
+        "serena-03.png"
+    ],
+    "Gloria": [
+        "gloria-01.jpg",
+        "gloria-02.jpg"
+    ],
+    "Juliana": [
+        "juliana-01.png",
+        "juliana-02.png"
+    ],
+    "Ondine": [
+        "ondine-01.jpg",
+        "ondine-02.jpg",
+        "ondine-03.jpg",
+        "ondine-04.jpg"
+    ],
+    "Erika": [
+        "erika-01.jpg",
+        "erika-02.jpg",
+        "erika-03.jpg",
+        "erika-04.jpg"
+    ],
+    "Morgane": [
+        "morgane-02.jpg",
+        "morgane-01.jpg"
+    ],
+    "Blanche": [
+        "blanche-01.jpg",
+        "blanche-02.jpg"
+    ],
+    "Jasmine": [
+        "jasmine-01.jpg",
+        "jasmine-02.jpg",
+        "jasmine-03.jpg"
+    ],
+    "Roxanne": [
+        "roxanne-01.jpg",
+        "roxanne-02.jpg"
+    ],
+    "Alizée": [
+        "alizee-01.jpg",
+        "alizee-02.jpg"
+    ],
+    "Flo": [
+        "flo-01.jpg",
+        "flo-02.jpg",
+        "flo-03.jpg"
+    ],
+    "Gladys": [
+        "gladys-01.jpg",
+        "gladys-02.jpg"
+    ],
+    "Inezia": [
+        "inezia-01.jpg",
+        "inezia-02.jpg",
+        "inezia-03.jpg"
+    ],
+    "Carolina": [
+        "carolina-01.jpg",
+        "carolina-02.jpg",
+        "carolina-03.jpg",
+        "carolina-04.jpg",
+        "carolina-05.jpg"
+    ],
+    "Strykna": [
+        "strykna-01.jpg",
+        "strykna-02.jpg",
+        "strykna-03.jpg"
+    ],
+    "Cornélia": [
+        "cornelia-01.jpg",
+        "cornelia-02.jpg",
+        "cornelia-03.jpg"
+    ],
+    "Néphie": [
+        "nephie-01.jpg",
+        "nephie-02.jpg",
+        "nephie-03.jpg",
+        "nephie-04.jpg"
+    ],
+    "Barbara": [
+        "barbara-01.jpg",
+        "barbara-02.jpg"
+    ],
+    "Alyxia": [
+        "alyxia-01.jpg",
+        "alyxia-02.jpg"
+    ],
+    "Donna": [
+        "donna-01.jpg",
+        "donna-02.jpg"
+    ],
+    "Faïza": [
+        "faiza-02.jpg",
+        "faiza-01.jpg"
+    ],
+    "Rosemary": [
+        "rosemary-01.jpg",
+        "rosemary-02.jpg",
+        "rosemary-03.jpg"
+    ],
+    "Mashynn": [
+        "mashyn-01.jpg",
+        "mashyn-02.jpg",
+        "mashyn-03.jpg",
+        "mashyn-04.jpg"
+    ],
+    "Tully": [
+        "tully-01.jpg",
+        "tully-02.jpg"
+    ],
+    "Spectra": [
+        "spectra-01.jpg"
+    ],
+    "Anis": [
+        "anis-01.jpg",
+        "anis-02.jpg"
+    ],
+    "Dracéna": [
+        "dracena-01.jpg"
+    ],
+    "Dianthéa": [
+        "dianthea-01.jpg",
+        "dianthea-02.jpg",
+        "dianthea-03.png"
+    ],
+    "Kahili": [
+        "kahili-01.jpg",
+        "kahili-02.jpg"
+    ],
+    "Margie": [
+        "margie-01.jpg",
+        "margie-02.jpg",
+        "margie-03.jpg",
+        "margie-04.jpg",
+        "margie-05.jpg"
+    ],
+    "Cayenn": [
+        "cayenn-01.jpg",
+        "cayenn-02.jpg"
+    ],
+    "Cynthia": [
+        "cynthia-01.jpg",
+        "cynthia-02.jpg",
+        "cynthia-03.jpg"
+    ],
+    "Iris": [
+        "iris-01.jpg",
+        "iris-02.jpg",
+        "iris-03.jpg"
+    ],
+    "Lillie": [
+        "lillie-01.jpg",
+        "lillie-02.jpg",
+        "lillie-03.jpg",
+        "lillie-04.jpg",
+        "lillie-05.jpg",
+        "lillie-06.jpg"
+    ],
+    "Menzi": [
+        "menzi-01.jpg",
+        "menzi-02.jpg",
+        "menzi-03.jpg"
+    ],
+    "Pania": [
+        "pania-01.jpg",
+        "pania-02.jpg",
+        "pania-03.jpg",
+        "pania-04.jpg",
+        "pania-05.jpg",
+        "pania-06.jpg"
+    ],
+    "Élige": [
+        "elige-01.jpg",
+        "elige-02.jpg"
+    ],
+    "Apia": [
+        "apia-01.jpg"
+    ],
+    "Atalante": [
+        "atalante-01.jpg",
+        "atalante-02.jpg",
+        "atalante-03.jpg",
+        "atalante-04.jpg"
+    ],
+    "Oryse": [
+        "oryse-01.jpg",
+        "oryse-02.jpg"
+    ],
+    "Elsa-Mina": [
+        "elsamina-01.jpg",
+        "elsamina-02.jpg"
+    ],
+    "Vicky": [
+        "vicky-01.jpg"
+    ],
+    "Liv": [
+        "liv-01.jpg"
+    ],
+    "Sophora": [
+        "sophora-01.jpg",
+        "sophora-02.jpg"
+    ],
+    "Rose": [
+        "rose-01.jpg"
+    ],
+    "Mars": [
+        "mars-01.jpg",
+        "mars-02.jpg"
+    ],
+    "Nacchara": [
+        "nacchara-01.jpg",
+        "nacchara-02.jpg"
+    ],
+    "Marcia": [
+        "marcia-01.jpg",
+        "marcia-02.jpg"
     ]
-  },
-  {
-    categorie: "Dresseuses (De D à I)",
-    cartes: [
-      { id: "dahlia-fa", nom: "Dahlia", set: "", num: "", file: "dahlia-fa.png", fileAlt: "dahlia-fa-alt.png" },
-      { id: "danseuse-swsh8-259", nom: "Danseuse", set: "swsh8", num: "259", file: "danseuse-swsh8-259.png", fileAlt: "danseuse-swsh8-259-alt.png" },
-      { id: "dianthe-sm6-130", nom: "Dianthe", set: "sm6", num: "130", file: "dianthe-sm6-130.png", fileAlt: "dianthe-sm6-130-alt.png" },
-      { id: "donna-swsh4-183", nom: "Donna", set: "swsh4", num: "183", file: "donna-swsh4-183.png", fileAlt: "donna-swsh4-183-alt.png" },
-      { id: "donna-tg27", nom: "Donna (TG)", set: "swsh11tg", num: "TG27", file: "donna-swsh11-tg27.png", fileAlt: "donna-swsh11-tg27-alt.png" },
-      { id: "eleonore-sm3-147", nom: "Éléonore", set: "sm3", num: "147", file: "eleonore-sm3-147.png", fileAlt: "eleonore-sm3-147-alt.png" },
-      { id: "elsamina-sm4-110", nom: "Elsa-Mina", set: "sm4", num: "110", file: "elsamina-sm4-110.png", fileAlt: "elsamina-sm4-110-alt.png" },
-      { id: "elsamina-sm5-153", nom: "Elsa-Mina (Ultra-Prisme)", set: "sm5", num: "153", file: "elsamina-sm5-153.png", fileAlt: "elsamina-sm5-153-alt.png" },
-      { id: "erika-sm9-174", nom: "Hospitalité d'Erika", set: "sm9", num: "174", file: "erika-sm9-174.png", fileAlt: "erika-sm9-174-alt.png" },
-      { id: "erika-sv3pt5-196", nom: "Invitation d'Erika", set: "sv3pt5", num: "196", file: "erika-sv3pt5-196.png", fileAlt: "erika-sv3pt5-196-alt.png" },
-      { id: "erika-sv3pt5-203", nom: "Invitation d'Erika (SAR)", set: "sv3pt5", num: "203", file: "erika-sv3pt5-203.png", fileAlt: "erika-sv3pt5-203-alt.png" },
-      { id: "faiza-swsh4-180", nom: "Faïza", set: "swsh4", num: "180", file: "faiza-swsh4-180.png", fileAlt: "faiza-swsh4-180-alt.png" },
-      { id: "faiza-tg26", nom: "Faïza (TG)", set: "swsh10tg", num: "TG26", file: "faiza-swsh10-tg26.png", fileAlt: "faiza-swsh10-tg26-alt.png" },
-      { id: "kahili-sm8-210", nom: "Fanny / Kahili", set: "sm8", num: "210", file: "kahili-sm8-210.png", fileAlt: "kahili-sm8-210-alt.png" },
-      { id: "floriane-fa", nom: "Floriane", set: "", num: "", file: "floriane-fa.png", fileAlt: "floriane-fa-alt.png" },
-      { id: "frimousse-fa", nom: "Frimousse", set: "", num: "", file: "frimousse-fa.png", fileAlt: "frimousse-fa-alt.png" },
-      { id: "glacia-fa", nom: "Glacia", set: "", num: "", file: "glacia-fa.png", fileAlt: "glacia-fa-alt.png" },
-      { id: "guillemette-fa", nom: "Guillemette / Malva", set: "", num: "", file: "guillemette-fa.png", fileAlt: "guillemette-fa-alt.png" },
-      { id: "ines-sv4-236", nom: "Inès", set: "sv4", num: "236", file: "ines-sv4-236.png", fileAlt: "ines-sv4-236-alt.png" },
-      { id: "ines-sv4-254", nom: "Inès (SAR)", set: "sv4", num: "254", file: "ines-sv4-254.png", fileAlt: "ines-sv4-254-alt.png" },
-      { id: "inezia-swsh8-260", nom: "Éclat d'Inezia", set: "swsh8", num: "260", file: "inezia-swsh8-260.png", fileAlt: "inezia-swsh8-260-alt.png" },
-      { id: "inezia-gg58", nom: "Éclat d'Inezia (TG)", set: "", num: "", file: "inezia-swsh12pt5gg-gg58.png", fileAlt: "inezia-swsh12pt5gg-gg58-alt.png" },
-      { id: "iris-bw9-101", nom: "Iris", set: "", num: "", file: "iris-bw9-101.png", fileAlt: "iris-bw9-101-alt.png" },
-      { id: "irida-swsh10-186", nom: "Irida", set: "swsh10", num: "186", file: "irida-swsh10-186.png", fileAlt: "irida-swsh10-186-alt.png" },
-      { id: "irida-gg63", nom: "Irida (SAR)", set: "swsh12pt5gg", num: "GG63", file: "irida-swsh12pt5gg-gg63.png", fileAlt: "irida-swsh12pt5gg-gg63-alt.png" }
-    ]
-  },
-  {
-    categorie: "Dresseuses (De J à M)",
-    cartes: [
-      { id: "janine-sm10-210", nom: "Janine", set: "sm10", num: "210", file: "janine-sm10-210.png", fileAlt: "janine-sm10-210-alt.png" },
-      { id: "jasmin-sm9-177", nom: "Jasmin", set: "sm9", num: "177", file: "jasmin-sm9-177.png", fileAlt: "jasmin-sm9-177-alt.png" },
-      { id: "joelle-xy2-105", nom: "Joëlle (Infirmière)", set: "xy2", num: "105", file: "joelle-xy2-105.png", fileAlt: "joelle-xy2-105-alt.png" },
-      { id: "joelle-swsh4-185", nom: "Joëlle (Voltage Éclatant)", set: "swsh4", num: "185", file: "joelle-swsh4-185.png", fileAlt: "joelle-swsh4-185-alt.png" },
-      { id: "juana-fa", nom: "Juana", set: "", num: "", file: "juana-fa.png", fileAlt: "juana-fa-alt.png" },
-      { id: "kaly-sv3-218", nom: "Kaly", set: "sv3", num: "218", file: "kaly-sv3-218.png", fileAlt: "kaly-sv3-218-alt.png" },
-      { id: "kaly-sv3-226", nom: "Kaly (SAR)", set: "sv3", num: "226", file: "kaly-sv3-226.png", fileAlt: "kaly-sv3-226-alt.png" },
-      { id: "kimera-swsh11-191", nom: "Kiméra", set: "swsh11", num: "191", file: "kimera-swsh11-191.png", fileAlt: "kimera-swsh11-191-alt.png" },
-      { id: "lana-sm3-143", nom: "Lana / Néphie", set: "", num: "", file: "lana-sm3-143.png", fileAlt: "lana-sm3-143-alt.png" },
-      { id: "laurette-sv7-163", nom: "Laurette", set: "sv7", num: "163", file: "laurette-sv7-163.png", fileAlt: "laurette-sv7-163-alt.png" },
-      { id: "laurette-sv7-171", nom: "Laurette (SAR)", set: "sv7", num: "171", file: "laurette-sv7-171.png", fileAlt: "laurette-sv7-171-alt.png" },
-      { id: "lilie-sm1-147", nom: "Lilie", set: "sm1", num: "147", file: "lilie-sm1-147.png", fileAlt: "lilie-sm1-147-alt.png" },
-      { id: "lilie-sm5-151", nom: "Lilie (Ultra-Prisme)", set: "sm5", num: "151", file: "lilie-sm5-151.png", fileAlt: "lilie-sm5-151-alt.png" },
-      { id: "melodie-swsh6-195", nom: "Lona / Mélodie", set: "swsh6", num: "195", file: "melodie-swsh6-195.png", fileAlt: "melodie-swsh6-195-alt.png" },
-      { id: "melodie-gg64", nom: "Lona / Mélodie (TG)", set: "swsh12pt5gg", num: "GG64", file: "melodie-swsh12pt5gg-gg64.png", fileAlt: "melodie-swsh12pt5gg-gg64-alt.png" },
-      { id: "lucie-fa", nom: "Lucie", set: "", num: "", file: "lucie-fa.png", fileAlt: "lucie-fa-alt.png" },
-      { id: "lula-sm8-211", nom: "Lula", set: "sm8", num: "211", file: "lula-sm8-211.png", fileAlt: "lula-sm8-211-alt.png" },
-      { id: "mademoiselle-sm7pt5-72", nom: "Mademoiselle", set: "sm7pt5", num: "72", file: "mademoiselle-sm7pt5-72.png", fileAlt: "mademoiselle-sm7pt5-72-alt.png" },
-      { id: "mademoiselle-swsh11-193", nom: "Mademoiselle (Origine Perdue)", set: "", num: "", file: "mademoiselle-swsh11-193.png", fileAlt: "mademoiselle-swsh11-193-alt.png" },
-      { id: "maite-swsh5-159", nom: "Maïté", set: "swsh5", num: "159", file: "maite-swsh5-159.png", fileAlt: "maite-swsh5-159-alt.png" },
-      { id: "maite-tg", nom: "Maïté (TG)", set: "", num: "", file: "maite-tg.png", fileAlt: "maite-tg-alt.png" },
-      { id: "margie-sm3-142", nom: "Margie (Acerola)", set: "sm3", num: "142", file: "margie-sm3-142.png", fileAlt: "margie-sm3-142-alt.png" },
-      { id: "melanie-fa", nom: "Mélanie", set: "", num: "", file: "melanie-fa.png", fileAlt: "melanie-fa-alt.png" },
-      { id: "melina-fa", nom: "Mélina", set: "", num: "", file: "melina-fa.png", fileAlt: "melina-fa-alt.png" },
-      { id: "menzi-sv1-238", nom: "Menzi", set: "", num: "", file: "menzi-sv1-238.png", fileAlt: "menzi-sv1-238-alt.png" },
-      { id: "menzi-sv4pt5-237", nom: "Menzi (SAR)", set: "", num: "", file: "menzi-sv4pt5-237.png", fileAlt: "menzi-sv4pt5-237-alt.png" },
-      { id: "morgane-sm9-181", nom: "Suggestion de Morgane", set: "sm9", num: "181", file: "morgane-sm9-181.png", fileAlt: "morgane-sm9-181-alt.png" },
-      { id: "morgane-sv3pt5", nom: "Morgane (151)", set: "sv3pt5", num: "", file: "morgane-sv3pt5.png", fileAlt: "morgane-sv3pt5-alt.png" }
-    ]
-  },
-  {
-    categorie: "Dresseuses (De N à Z)",
-    cartes: [
-      { id: "ondine-olga-235", nom: "Ondine & Olga", set: "sm12", num: "235", file: "ondine-olga-sm12-235.png", fileAlt: "ondine-olga-sm12-235-alt.png" },
-      { id: "ortensia-sv2-244", nom: "Ortensia", set: "sv2", num: "244", file: "ortensia-sv2-244.png", fileAlt: "ortensia-sv2-244-alt.png" },
-      { id: "ortensia-sv2-259", nom: "Ortensia (SAR)", set: "sv2", num: "259", file: "ortensia-sv2-259.png", fileAlt: "ortensia-sv2-259-alt.png" },
-      { id: "pani-sv1-239", nom: "Pani", set: "sv1", num: "239", file: "pani-sv1-239.png", fileAlt: "pani-sv1-239-alt.png" },
-      { id: "pani-sv1-252", nom: "Pani (SAR)", set: "sv1", num: "252", file: "pani-sv1-252.png", fileAlt: "pani-sv1-252-alt.png" },
-      { id: "parfumeuse-swsh7-199", nom: "Parfumeuse", set: "", num: "", file: "parfumeuse-swsh7-199.png", fileAlt: "parfumeuse-swsh7-199-alt.png" },
-      { id: "patience-sm7pt5-70", nom: "Amaryllis (Zinnia)", set: "sm7pt5", num: "70", file: "patience-sm7pt5-70.png", fileAlt: "patience-sm7pt5-70-alt.png" },
-      { id: "patience-swsh7-203", nom: "Résolution de Patience", set: "swsh7", num: "203", file: "patience-swsh7-203.png", fileAlt: "patience-swsh7-203-alt.png" },
-      { id: "penelope-fa", nom: "Pénélope / Valériane", set: "", num: "", file: "penelope-fa.png", fileAlt: "penelope-fa-alt.png" },
-      { id: "petunia-sv2-250", nom: "Petunia", set: "", num: "", file: "petunia-sv2-250.png", fileAlt: "petunia-sv2-250-alt.png" },
-      { id: "petunia-sv2-266", nom: "Petunia (SAR)", set: "", num: "", file: "petunia-sv2-266.png", fileAlt: "petunia-sv2-266-alt.png" },
-      { id: "plumeria-sm3-145", nom: "Plumeria / Aza", set: "sm3", num: "145", file: "plumeria-sm3-145.png", fileAlt: "plumeria-sm3-145-alt.png" },
-      { id: "poppy-sv3-220", nom: "Poppy", set: "sv3", num: "220", file: "poppy-sv3-220.png", fileAlt: "poppy-sv3-220-alt.png" },
-      { id: "poppy-sv3-227", nom: "Poppy (SAR)", set: "sv3", num: "227", file: "poppy-sv3-227.png", fileAlt: "poppy-sv3-227-alt.png" },
-      { id: "prof-keteleeria-bw4-116", nom: "Professeure Keteleeria", set: "bw4", num: "116", file: "prof-keteleeria-bw4-116.png", fileAlt: "prof-keteleeria-bw4-116-alt.png" },
-      { id: "prof-keteleeria-swsh9", nom: "Recherches Professorales (Keteleeria)", set: "swsh9", num: "", file: "prof-keteleeria-swsh9.png", fileAlt: "prof-keteleeria-swsh9-alt.png" },
-      { id: "prof-magnolia-swsh1-201", nom: "Professeure Magnolia", set: "swsh1", num: "201", file: "prof-magnolia-swsh1-201.png", fileAlt: "prof-magnolia-swsh1-201-alt.png" },
-      { id: "prof-olim-sv4-239", nom: "Vitalité d'Olim", set: "sv4", num: "239", file: "prof-olim-sv4-239.png", fileAlt: "prof-olim-sv4-239-alt.png" },
-      { id: "prof-olim-sv4-256", nom: "Vitalité d'Olim (SAR)", set: "sv4", num: "256", file: "prof-olim-sv4-256.png", fileAlt: "prof-olim-sv4-256-alt.png" },
-      { id: "rosemary-swsh1-200", nom: "Rosemary", set: "swsh1", num: "200", file: "rosemary-swsh1-200.png", fileAlt: "rosemary-swsh1-200-alt.png" },
-      { id: "rosemary-swsh9-171", nom: "Fierté de Rosemary", set: "swsh9", num: "171", file: "rosemary-swsh9-171.png", fileAlt: "rosemary-swsh9-171-alt.png" },
-      { id: "rosemary-promo-swsh121", nom: "Rosemary (Promo)", set: "swshp", num: "SWSH121", file: "rosemary-promo-swsh121.png", fileAlt: "rosemary-promo-swsh121-alt.png" },
-      { id: "sannah-fa", nom: "Sannah", set: "", num: "", file: "sannah-fa.png", fileAlt: "sannah-fa-alt.png" },
-      { id: "serena-swsh11-193", nom: "Serena", set: "", num: "", file: "serena-swsh11-193.png", fileAlt: "serena-swsh11-193-alt.png" },
-      { id: "sonia-swsh2-192", nom: "Sonia", set: "swsh2", num: "192", file: "sonia-swsh2-192.png", fileAlt: "sonia-swsh2-192-alt.png" },
-      { id: "sophie-tg", nom: "Sophie (TG)", set: "", num: "", file: "sophie-tg.png", fileAlt: "sophie-tg-alt.png" },
-      { id: "taro-sv6pt5-089", nom: "Taro", set: "", num: "", file: "taro-sv6pt5-089.png", fileAlt: "taro-sv6pt5-089-alt.png" },
-      { id: "taro-sv6pt5-095", nom: "Taro (SAR)", set: "", num: "", file: "taro-sv6pt5-095.png", fileAlt: "taro-sv6pt5-095-alt.png" },
-      { id: "tully-sv3-228", nom: "Tully", set: "", num: "", file: "tully-sv3-228.png", fileAlt: "tully-sv3-228-alt.png" },
-      { id: "viviane-fa", nom: "Viviane", set: "", num: "", file: "viviane-fa.png", fileAlt: "viviane-fa-alt.png" }
-    ]
-  }
-];
-
-if (typeof window !== 'undefined') {
-  window.dresseusesDatabase = dresseusesDatabase;
-}
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { dresseusesDatabase };
-}
+};
