@@ -372,17 +372,10 @@ function initEV5ProgressHub() {
 // REGISTRE DES CARTES SECRÈTES (MODE ÉDITION UNIQUEMENT)
 // RAPPEL : Remplace ces noms par les VRAIS noms de tes images secrètes !!
 const REGISTRE_SECRET = {
-    "Carolina": ["carolina.jpg"],
-    "Cynthia": ["cynthia.jpg"],
-    "Donna": ["donna.jpg"],
-    "Erika": ["erika.jpg"],
-    "Gladys": ["gladys.jpg"],
-    "Lillie": ["lillie.jpg"],
-    "Margie": ["margie.jpg"],
-    "Nacchara": ["irida.jpg"],
-    "Rosemary": ["rosemary.jpg"],
-    "Roxanne": ["roxanne.jpg"],
-    "Sophora": ["sophora.jpg"]
+    "Barbara": ["barbara_sec1.jpg", "barbara_sec2.jpg"],
+    "Carolina": ["carolina_sec1.jpg", "carolina_sec2.jpg"],
+    "Irida": ["irida_sec.jpg"],
+    "Rosemary": ["rosemary_sec.jpg"]
 };
 
 // -> Le Hub des Toploaders (dresseuses.html)
@@ -411,9 +404,25 @@ function renderDresseusesHub() {
             imgHtml = `<img src="${imagePath}" onerror="this.outerHTML='<span class=\\'card-name\\' style=\\'color:#64748b; font-size:0.75rem; text-align:center; padding:10px;\\'>${safeName}</span>'" style="width:100%; height:100%; object-fit:cover; opacity:0.8; border-radius:2px;" loading="lazy">`;
         }
 
+        // --- NOUVEAUTÉ : Indicateur de secrète en mode édition ---
+        let secretBadge = '';
+        if (isEditMode && !isEmpty && REGISTRE_SECRET[trainerName]) {
+            const count = REGISTRE_SECRET[trainerName].length;
+            secretBadge = `
+                <div style="position: absolute; top: -8px; right: -8px; background: #f472b6; color: #000; font-size: 0.7rem; font-weight: 800; padding: 3px 6px; border-radius: 12px; z-index: 10; box-shadow: 0 0 8px rgba(244, 114, 182, 0.6); display: flex; align-items: center; gap: 3px; pointer-events: none;">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    ${count}
+                </div>
+            `;
+        }
+
         const pocket = document.createElement('div');
         pocket.className = 'binder-pocket';
+        // Position relative pour le badge
+        pocket.style.position = 'relative';
+        
         pocket.innerHTML = `
+            ${secretBadge}
             <div class="toploader-insert" ${isEmpty ? 'style="border-style:dashed; opacity:0.3;"' : ''}>
                 <div class="card-in-sleeve" style="${imgFile ? 'padding:0;' : ''}">
                     ${isEmpty ? '' : imgHtml}
