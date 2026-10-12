@@ -366,70 +366,43 @@ function initEV5ProgressHub() {
 }
 
 /* ====================================================================
-   6. MODULE DRESSEUSES (HUB & CLASSEUR)
+   6. MODULE DRESSEUSES (HUB & CLASSEUR) - NOUVELLE BASE DICTIONNAIRE
 ==================================================================== */
 
 // REGISTRE DES CARTES SECRÈTES (MODE ÉDITION UNIQUEMENT)
 const REGISTRE_SECRET = {
     "Carolina": "carolina.jpg",
-   "Irida": "irida.jpg",
-   "Rosemary": "rosemary.jpg"
+    "Irida": "irida.jpg",
+    "Rosemary": "rosemary.jpg"
 };
-
-function getAllDresseusesCards() {
-    let allCards = [];
-    if (typeof dresseusesDatabase !== 'undefined') {
-        dresseusesDatabase.forEach(section => {
-            if (section.cartes) allCards.push(...section.cartes);
-        });
-    }
-    return allCards;
-}
-
-function getCleanDresseuseName(carte) {
-    if (carte.id.includes("olim")) return "Prof. Olim";
-    if (carte.id.includes("keteleeria")) return "Prof. Keteleeria";
-    if (carte.id.includes("magnolia")) return "Prof. Magnolia";
-    let n = carte.nom.replace(/\(.*?\)/g, "").trim();
-    const prefixes = ["Vigilance d'", "Vigilance de ", "Dévouement de ", "Exploration de ", "Affinité de ", "Ambition de ", "Hospitalité d'", "Invitation d'", "Éclat d'", "Suggestion de ", "Résolution de "];
-    prefixes.forEach(p => { if (n.startsWith(p)) n = n.replace(p, "").trim(); });
-    return n || "Inconnue";
-}
-
-function getGroupedDresseuses() {
-    return getAllDresseusesCards().reduce((acc, card) => {
-        const nom = getCleanDresseuseName(card);
-        if (!acc[nom]) acc[nom] = [];
-        acc[nom].push(card);
-        return acc;
-    }, {});
-}
 
 // -> Le Hub des Toploaders (dresseuses.html)
 function renderDresseusesHub() {
     const shelfContainer = document.getElementById('shelf');
-    if (!shelfContainer) return; 
+    if (!shelfContainer || typeof dresseusesData === 'undefined') return; 
 
-    const grouped = getGroupedDresseuses();
-    const trainers = Object.keys(grouped).sort((a, b) => a.localeCompare(b, 'fr'));
+    // On récupère directement les noms (les clés) et on les trie
+    const trainers = Object.keys(dresseusesData).sort((a, b) => a.localeCompare(b, 'fr'));
     shelfContainer.innerHTML = '';
     
+    // On calcule le nombre total d'emplacements pour que ça tombe rond (multiple de 4)
     const exactCount = trainers.length;
     const totalSlots = Math.ceil(exactCount / 4) * 4; 
 
     for (let i = 0; i < totalSlots; i++) {
         const trainerName = trainers[i];
         const isEmpty = !trainerName;
-        const firstCard = !isEmpty ? grouped[trainerName][0] : null;
+        
+        // On prend la première image du tableau pour la couverture (si elle existe)
+        const imgFile = !isEmpty && dresseusesData[trainerName].length > 0 ? dresseusesData[trainerName][0] : null;
         
         let imgHtml = '<span style="font-size: 0.9rem;">🖼️</span>';
         
-        const imgFile = firstCard ? (firstCard.file || firstCard.image) : null;
-        
         if (imgFile) {
-            const imagePath = imgFile.includes('/') ? imgFile : `./assets/cards/dresseuses/${imgFile}`;
+            const imagePath = `./assets/cards/dresseuses/${imgFile}`;
             const safeName = trainerName.replace(/'/g, "\\'"); 
             
+            // Image de couverture : si erreur, on affiche le nom propre
             imgHtml = `<img src="${imagePath}" onerror="this.outerHTML='<span class=\\'card-name\\' style=\\'color:#64748b; font-size:0.75rem; text-align:center; padding:10px;\\'>${safeName}</span>'" style="width:100%; height:100%; object-fit:cover; opacity:0.8; border-radius:2px;" loading="lazy">`;
         }
 
@@ -456,51 +429,58 @@ function renderDresseusesHub() {
 function renderDresseuseClasseur() {
     const container = document.getElementById('pages-container');
     const titleEl = document.getElementById('interior-title');
-    if (!container || !titleEl) return; 
+    if (!container || !titleEl || typeof dresseusesData === 'undefined') return; 
 
     const existingTab = document.getElementById('secret-tab');
     if (existingTab) existingTab.remove();
 
     const urlParams = new URLSearchParams(window.location.search);
     const trainerName = urlParams.get('dresseuse');
-    if (!trainerName) { titleEl.textContent = "DRESSEUSE INTROUVABLE"; return; }
+    
+    // Si la dresseuse n'existe pas dans le dictionnaire
+    if (!trainerName || !dresseusesData[trainerName]) { 
+        titleEl.textContent = "DRESSEUSE INTROUVABLE"; 
+        return; 
+    }
 
     titleEl.textContent = trainerName;
-    const grouped = getGroupedDresseuses();
-    const trainerCards = grouped[trainerName] || [];
+    const trainerImages = dresseusesData[trainerName]; // Le tableau des noms de fichiers
     container.innerHTML = '';
     
     const CARDS_PER_PAGE = window.innerWidth <= 800 ? 4 : 6;
-    const totalPages = Math.ceil(trainerCards.length / CARDS_PER_PAGE) || 1;
+    const totalPages = Math.ceil(trainerImages.length / CARDS_PER_PAGE) || 1;
 
     for (let p = 0; p < totalPages; p++) {
-        const pageCards = trainerCards.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
+        const pageImages = trainerImages.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
         const pageEl = document.createElement('div');
         pageEl.className = 'vaultx-page';
 
         let pageHTML = '';
-        pageCards.forEach(carte => {
-            const imgFile = carte.file || carte.image || '';
-            let imgSrc = './scripts/assets/img/back-fr.png';
+        pageImages.forEach(imgFile => {
+            const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
             
-            if (imgFile) {
-                imgSrc = imgFile.includes('/') ? imgFile : `./assets/cards/dresseuses/${imgFile}`;
-            }
+            // L'ID pour Firebase est directement le nom du fichier
+            const isOwned = localCollection.has(imgFile);
+            const opacityStyle = (!isOwned && !isEditMode) ? 'opacity: 0.4; filter: grayscale(80%);' : '';
+            const borderStyle = (isOwned && !isEditMode) ? 'border: 1px solid #f472b6; box-shadow: 0 0 10px rgba(244, 114, 182, 0.4);' : '';
 
             pageHTML += `
-                <div class="vaultx-pocket dresseuse-card-slot" data-id="${carte.id}" style="cursor: ${isEditMode ? 'pointer' : 'default'}">
-                    <img src="${imgSrc}" alt="${carte.nom}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy">
+                <div class="vaultx-pocket dresseuse-card-slot" data-id="${imgFile}" style="cursor: ${isEditMode ? 'pointer' : 'default'}; ${borderStyle}">
+                    <div style="width:100%; height:100%; overflow:hidden; border-radius:3px; position:relative; ${opacityStyle}">
+                        <img src="${imgSrc}" alt="${trainerName}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
                 </div>
             `;
         });
 
-        const emptySlots = CARDS_PER_PAGE - pageCards.length;
+        const emptySlots = CARDS_PER_PAGE - pageImages.length;
         for (let e = 0; e < emptySlots; e++) pageHTML += `<div class="vaultx-pocket is-empty"></div>`;
 
         pageEl.innerHTML = pageHTML;
         container.appendChild(pageEl);
     }
 
+    // MECANIQUE CARTE SECRETE
     if (isEditMode && REGISTRE_SECRET[trainerName]) {
         const secretFileName = REGISTRE_SECRET[trainerName];
         
@@ -513,7 +493,6 @@ function renderDresseuseClasseur() {
         tab.onclick = () => {
             if (tab.textContent === 'SECRET') {
                 const imgSrc = `./assets/cards/dresseuses/${secretFileName}`;
-                
                 container.innerHTML = `
                     <div class="vaultx-page-secret">
                         <div class="vaultx-pocket" onclick="openLightbox('${imgSrc}')" title="Cliquer pour zoomer">
@@ -521,7 +500,6 @@ function renderDresseuseClasseur() {
                         </div>
                     </div>
                 `;
-                
                 tab.textContent = 'RETOUR';
                 tab.style.background = 'linear-gradient(135deg, #8a94a2, #5a636f)';
                 tab.style.borderColor = '#949ea8';
@@ -532,15 +510,24 @@ function renderDresseuseClasseur() {
         };
     }
 
+    // GESTION DU CLIC EN MODE ÉDITION
     container.querySelectorAll('.dresseuse-card-slot').forEach(slot => {
         slot.addEventListener('click', (e) => {
             if (!isEditMode) return;
-            const cardId = slot.dataset.id;
-            console.log("Clic mode édition dresseuse :", cardId);
+            const fileId = slot.dataset.id;
+            
+            if (localCollection.has(fileId)) {
+                localCollection.delete(fileId);
+            } else {
+                localCollection.add(fileId);
+            }
+            saveToCloud();
+            renderDresseuseClasseur(); // Rafraîchit visuellement le classeur actuel
         });
     });
 }
 
+// Fonction globale pour la Lightbox
 window.openLightbox = function(imgSrc) {
     let overlay = document.getElementById('lightbox-overlay');
     if (!overlay) {
