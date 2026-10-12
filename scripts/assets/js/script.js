@@ -372,7 +372,8 @@ function initEV5ProgressHub() {
 // REGISTRE DES CARTES SECRÈTES (MODE ÉDITION UNIQUEMENT)
 // Ajoute simplement "Nom de la dresseuse": "fichier.jpg" au fur et à mesure.
 const REGISTRE_SECRET = {
-    "Carolina": "carolina.jpg"
+    "Carolina": "carolina.jpg",
+   "Irida": "irida.jpg"
 };
 
 function getAllDresseusesCards() {
