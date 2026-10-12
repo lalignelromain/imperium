@@ -370,7 +370,6 @@ function initEV5ProgressHub() {
 ==================================================================== */
 
 // REGISTRE DES CARTES SECRÈTES (MODE ÉDITION UNIQUEMENT)
-// RAPPEL : Remplace ces noms par les VRAIS noms de tes images secrètes !!
 const REGISTRE_SECRET = {
     "Carolina": ["carolina.jpg"],
     "Cynthia": ["cynthia.jpg"],
@@ -411,7 +410,7 @@ function renderDresseusesHub() {
             imgHtml = `<img src="${imagePath}" onerror="this.outerHTML='<span class=\\'card-name\\' style=\\'color:#64748b; font-size:0.75rem; text-align:center; padding:10px;\\'>${safeName}</span>'" style="width:100%; height:100%; object-fit:cover; opacity:0.8; border-radius:2px;" loading="lazy">`;
         }
 
-        // --- NOUVEAUTÉ : Indicateur de secrète en mode édition ---
+        // Indicateur de secrète en mode édition
         let secretBadge = '';
         if (isEditMode && !isEmpty && REGISTRE_SECRET[trainerName]) {
             const count = REGISTRE_SECRET[trainerName].length;
@@ -425,7 +424,6 @@ function renderDresseusesHub() {
 
         const pocket = document.createElement('div');
         pocket.className = 'binder-pocket';
-        // Position relative pour le badge
         pocket.style.position = 'relative';
         
         pocket.innerHTML = `
@@ -479,7 +477,6 @@ function renderDresseuseClasseur() {
         pageImages.forEach(imgFile => {
             const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
             
-            // Affichage normal (galerie, pas de système grisé)
             pageHTML += `
                 <div class="vaultx-pocket">
                     <div style="width:100%; height:100%; overflow:hidden; border-radius:3px; position:relative;">
@@ -496,7 +493,7 @@ function renderDresseuseClasseur() {
         container.appendChild(pageEl);
     }
 
-    // MECANIQUE CARTES SECRÈTES MULTIPLES & TAILLE AJUSTÉE
+    // MECANIQUE CARTES SECRÈTES MULTIPLES
     if (isEditMode && REGISTRE_SECRET[trainerName]) {
         const secretFiles = REGISTRE_SECRET[trainerName];
         
@@ -508,12 +505,10 @@ function renderDresseuseClasseur() {
 
         tab.onclick = () => {
             if (tab.textContent === 'SECRET') {
-                // Création d'une galerie flexible et centrée pour les secrètes
                 let secretHTML = '<div class="vaultx-page-secret" style="display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; padding: 20px;">';
                 
                 secretFiles.forEach(secretFileName => {
                     const imgSrc = `./assets/cards/dresseuses/${secretFileName}`;
-                    // max-width 260px appliqué pour garder une taille de carte standard
                     secretHTML += `
                         <div class="vaultx-pocket" onclick="openLightbox('${imgSrc}')" title="Cliquer pour zoomer" style="max-width: 260px; width: 100%; aspect-ratio: 734/1024; flex-shrink: 0; cursor: zoom-in;">
                             <img src="${imgSrc}" alt="Secrète ${trainerName}" onerror="this.src='./scripts/assets/img/back-fr.png'" style="width:100%; height:100%; object-fit:cover; border-radius: 4px;">
@@ -575,14 +570,16 @@ function renderPikachuBinder() {
             const statusClass = isOwned ? 'is-owned' : 'not-owned';
             const imgSrc = `./assets/cards/pikachu/${c.id}.jpg`;
 
-            // Rendu avec un effet "Sleeve Gloss" intégré (reflet diagonal)
+            // Filtre gris et opacité réduite si carte non possédée
+            const imgStyle = isOwned ? 'width:100%; height:100%; object-fit:cover;' : 'width:100%; height:100%; object-fit:cover; filter: grayscale(100%) opacity(35%);';
+
             pageHTML += `
                 <div class="vaultx-pocket ${statusClass}" onclick="handlePikachuClick('${c.id}', '${imgSrc}')">
-                    <div style="width:100%; height:100%; overflow:hidden; border-radius:4px; position:relative; box-shadow: 0 2px 5px rgba(0,0,0,0.4);">
-                        <img src="${imgSrc}" alt="${c.nom}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                    <div style="width:100%; height:100%; overflow:hidden; border-radius:4px; position:relative; box-shadow: 0 2px 5px rgba(0,0,0,0.4); background-color: #111;">
+                        <img src="${imgSrc}" alt="${c.nom}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy" style="${imgStyle}">
                         
-                        <!-- Calque de brillance (Gloss) -->
-                        <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>
+                        <!-- L'effet Sleeve Gloss ne s'affiche QUE si la carte est possédée -->
+                        ${isOwned ? `<div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>` : ''}
                     </div>
                 </div>
             `;
@@ -609,7 +606,6 @@ window.handlePikachuClick = function(id, imgSrc) {
         updateAllViews(); 
     } else {
         if (localCollection.has(id)) {
-            // On utilise la lightbox simple pour le zoom
             openLightbox(imgSrc);
         }
     }
@@ -662,10 +658,8 @@ function setupDock() {
     // Détection de la page pour gérer la flèche Retour
     let backLink = '';
     if (window.location.pathname.includes('classeur.html')) {
-        // Retourne à la bibliothèque des toploaders
         backLink = `<a href="dresseuses.html" class="dock-btn" title="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>`;
     } else if (!window.location.pathname.includes('index.html') && window.location.pathname.length > 1) {
-        // Pour les autres pages, un retour général vers l'accueil
         backLink = `<a href="index.html" class="dock-btn" title="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>`;
     }
 
@@ -680,7 +674,7 @@ function setupDock() {
     document.getElementById('dock-btn-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     document.getElementById('dock-btn-lock').addEventListener('click', () => { if (auth) auth.signOut(); });
 
-    // Masquage automatique de tout ancien bouton "Retour au Panthéon" codé en dur dans ton HTML
+    // Masquage automatique de tout ancien bouton
     document.querySelectorAll('a, button, div').forEach(el => {
         if (el.textContent && el.textContent.trim().toUpperCase().includes('RETOUR AU PANTHÉON')) {
             el.style.display = 'none';
