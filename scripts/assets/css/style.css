@@ -475,6 +475,169 @@ body.theme-mewtwo .lang-btn.active { background: #a855f7; border-color: #a855f7;
 body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn { background: #a855f7; color: #fff; box-shadow: 0 0 8px rgba(168, 85, 247, 0.8); }
 
 /* ====================================================================
+   MODULE PIKACHU 30TH & COLLECTAURA LIGHTBOX
+==================================================================== */
+.pikachu-binder .vaultx-pocket {
+    cursor: pointer;
+    background: #06080d;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sleeve-matte {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: #141820;
+    border-radius: 3px;
+    overflow: hidden;
+    padding: 2px;
+}
+
+.sleeve-matte img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 2px;
+}
+
+.sleeve-matte::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 45%, rgba(255, 255, 255, 0.03) 100%);
+    pointer-events: none;
+}
+
+.pikachu-binder .vaultx-pocket.not-owned .sleeve-matte {
+    filter: grayscale(85%);
+    opacity: 0.4;
+}
+
+body.mode-edition .pikachu-binder .vaultx-pocket.not-owned {
+    cursor: pointer;
+}
+
+body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned {
+    pointer-events: none;
+}
+
+.pikachu-binder .vaultx-pocket.is-owned .sleeve-matte {
+    filter: none;
+    opacity: 1;
+    border: 1px solid #facc15;
+    box-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
+}
+
+.pikachu-binder .vaultx-pocket.is-owned:hover .sleeve-matte {
+    border-color: #fef08a;
+    box-shadow: 0 0 15px rgba(250, 204, 21, 0.6);
+}
+
+/* CADRE COLLECTAURA 2D PLAT */
+#collectaura-lightbox {
+    z-index: 10000;
+}
+
+.collectaura-frame {
+    position: relative;
+    width: 90vw;
+    max-width: 480px;
+    aspect-ratio: 3 / 4;
+    border-radius: 4px;
+    padding: 12%; 
+    background-color: #111;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.collectaura-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 40%, rgba(255, 255, 255, 0.02) 100%);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.frame-screw {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle at 30% 30%, #ffffff 0%, #cbd5e1 30%, #64748b 80%, #334155 100%);
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+    z-index: 5;
+}
+
+.frame-screw.top-left { top: 20px; left: 20px; }
+.frame-screw.top-right { top: 20px; right: 20px; }
+.frame-screw.bottom-left { bottom: 20px; left: 20px; }
+.frame-screw.bottom-right { bottom: 20px; right: 20px; }
+
+.collectaura-slab-core {
+    width: 100%;
+    max-width: 280px; 
+    background: rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 16px; 
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.05), 0 15px 30px rgba(0,0,0,0.6);
+    backdrop-filter: blur(1.5px); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.slab-inner-recess {
+    width: 100%;
+    aspect-ratio: 63 / 88;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+    padding: 2px;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slab-inner-recess img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 2px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+}
+
+.collectaura-logo-area {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    opacity: 0.8;
+}
+
+.collectaura-logo-area span {
+    font-family: Arial, sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+
+/* ====================================================================
    RESPONSIVE / MEDIA QUERIES GLOBALES
 ==================================================================== */
 @media (max-width: 1650px) and (min-width: 1025px) {
