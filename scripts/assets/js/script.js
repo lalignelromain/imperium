@@ -412,7 +412,10 @@ function renderDresseusesHub() {
     const grouped = getGroupedDresseuses();
     const trainers = Object.keys(grouped).sort((a, b) => a.localeCompare(b, 'fr'));
     shelfContainer.innerHTML = '';
-    const totalSlots = 40; 
+    
+    // On calcule le nombre total d'emplacements pour que ça tombe rond (multiple de 4)
+    const exactCount = trainers.length;
+    const totalSlots = Math.ceil(exactCount / 4) * 4; 
 
     for (let i = 0; i < totalSlots; i++) {
         const trainerName = trainers[i];
@@ -425,10 +428,9 @@ function renderDresseusesHub() {
         
         if (imgFile) {
             const imagePath = imgFile.includes('/') ? imgFile : `./assets/cards/dresseuses/${imgFile}`;
-            const safeName = trainerName.replace(/'/g, "\\'"); // Sécurise les apostrophes pour le code inline
+            const safeName = trainerName.replace(/'/g, "\\'"); 
             
-            // LA CORRECTION DES DOS DE CARTE EST ICI : 
-            // Si l'image n'est pas encore sur GitHub (erreur 404), elle se remplace par un texte avec le nom !
+            // L'image de couverture se charge, si elle manque, on affiche le nom propre
             imgHtml = `<img src="${imagePath}" onerror="this.outerHTML='<span class=\\'card-name\\' style=\\'color:#64748b; font-size:0.75rem; text-align:center; padding:10px;\\'>${safeName}</span>'" style="width:100%; height:100%; object-fit:cover; opacity:0.8; border-radius:2px;" loading="lazy">`;
         }
 
