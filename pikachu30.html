@@ -22,7 +22,11 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
-<body class="theme-pikachu"> <!-- Classe spécifique pour le thème doré -->
+<body class="theme-pikachu">
+
+    <!-- Filigranes d'arrière-plan interactifs -->
+    <img src="./scripts/assets/img/mew.png" alt="Mew" class="bg-watermark bg-mew">
+    <img src="./scripts/assets/img/mewtwo.png" alt="Mewtwo" class="bg-watermark bg-mewtwo">
 
     <!-- En-tête Principal -->
     <header class="header-main">
@@ -30,15 +34,15 @@
         <p class="subtitle">Set Commémoratif • 1996 - 2026</p>
     </header>
 
-    <!-- Conteneur de la Collection (Généré par JS) -->
+    <!-- Conteneur de la Collection -->
     <main class="collection-container">
-        <!-- On prépare le conteneur du classeur -->
+        <!-- Le script JS viendra injecter les 30 slots Vault X ici -->
         <div class="binder-deck pikachu-binder" id="pikachu-binder-container">
-            <!-- Les pages et cartes Vault X viendront s'injecter ici via script.js -->
+            <div class="vaultx-page" id="pikachu-page"></div>
         </div>
     </main>
 
-    <!-- LIGHTBOX COLLECTAURA PIKACHU 30TH (Mode 2D Plat) -->
+    <!-- LIGHTBOX COLLECTAURA (Mode 2D Plat) -->
     <div class="lightbox-overlay" id="collectaura-lightbox" onclick="closeCollectAura()">
         <!-- Le Cadre Acrylique avec l'illustration étendue -->
         <div class="collectaura-frame" id="collectaura-frame-bg" onclick="event.stopPropagation()">
@@ -70,7 +74,7 @@
         <button id="save-btn" class="dock-btn dock-btn-lock" title="Sauvegarder">💾</button>
     </div>
 
-    <!-- Scripts (On ajoutera la data des Pikachu ici juste après) -->
+    <!-- Scripts -->
     <script src="./scripts/assets/js/pikachu-data.js"></script>
     <script src="./scripts/assets/js/script.js"></script>
 </body>
