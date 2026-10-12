@@ -374,8 +374,15 @@ function initEV5ProgressHub() {
 const REGISTRE_SECRET = {
     "Carolina": ["carolina.jpg"],
     "Cynthia": ["cynthia.jpg"],
+    "Donna": ["donna.jpg"],
+    "Erika": ["erika.jpg"],
+    "Gladys": ["gladys.jpg"],
+    "Lillie": ["lillie.jpg"],
+    "Margie": ["margie.jpg"],
     "Nacchara": ["irida.jpg"],
-    "Rosemary": ["rosemary.jpg"]
+    "Rosemary": ["rosemary.jpg"],
+    "Roxanne": ["roxanne.jpg"],
+    "Sophora": ["sophora.jpg"]
 };
 
 // -> Le Hub des Toploaders (dresseuses.html)
