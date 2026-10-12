@@ -27,6 +27,11 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
 /* ====================================================================
    LAYOUT PRINCIPAL & EN-TÊTE
 ==================================================================== */
@@ -42,6 +47,73 @@ body {
     margin-bottom: 10px;
     letter-spacing: 2px;
     text-transform: uppercase;
+}
+
+.header-main p {
+    color: var(--text-muted);
+}
+
+/* ====================================================================
+   MENU D'ACCUEIL (NAVIGATION - INDEX.HTML)
+==================================================================== */
+nav, .nav-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto 40px auto;
+    padding: 0 20px;
+}
+
+nav a, .nav-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 25px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+nav a:hover, .nav-item:hover {
+    transform: translateY(-5px);
+    background: var(--hover-bg);
+    border-color: var(--accent-mewtwo);
+    box-shadow: 0 10px 20px rgba(168, 85, 247, 0.2);
+}
+
+nav a h2, nav a strong, .nav-item h2 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    color: var(--accent-mewtwo);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+nav a p, nav a span, .nav-item p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Jauge Master Set EV5 */
+#ev5-hub-progress-fill {
+    height: 8px;
+    background: linear-gradient(90deg, var(--accent-mew), var(--accent-mewtwo));
+    border-radius: 10px;
+    transition: width 1s ease-out;
+    margin-top: 15px;
+}
+
+#ev5-hub-progress-text {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: bold;
+    margin-top: 8px;
 }
 
 /* ====================================================================
