@@ -370,7 +370,6 @@ function initEV5ProgressHub() {
 ==================================================================== */
 
 // REGISTRE DES CARTES SECRÈTES (MODE ÉDITION UNIQUEMENT)
-// Ajoute simplement "Nom de la dresseuse": "fichier.jpg" au fur et à mesure.
 const REGISTRE_SECRET = {
     "Carolina": "carolina.jpg",
    "Irida": "irida.jpg",
@@ -415,7 +414,6 @@ function renderDresseusesHub() {
     const trainers = Object.keys(grouped).sort((a, b) => a.localeCompare(b, 'fr'));
     shelfContainer.innerHTML = '';
     
-    // On calcule le nombre total d'emplacements pour que ça tombe rond (multiple de 4)
     const exactCount = trainers.length;
     const totalSlots = Math.ceil(exactCount / 4) * 4; 
 
@@ -432,7 +430,6 @@ function renderDresseusesHub() {
             const imagePath = imgFile.includes('/') ? imgFile : `./assets/cards/dresseuses/${imgFile}`;
             const safeName = trainerName.replace(/'/g, "\\'"); 
             
-            // L'image de couverture se charge, si elle manque, on affiche le nom propre
             imgHtml = `<img src="${imagePath}" onerror="this.outerHTML='<span class=\\'card-name\\' style=\\'color:#64748b; font-size:0.75rem; text-align:center; padding:10px;\\'>${safeName}</span>'" style="width:100%; height:100%; object-fit:cover; opacity:0.8; border-radius:2px;" loading="lazy">`;
         }
 
@@ -461,7 +458,6 @@ function renderDresseuseClasseur() {
     const titleEl = document.getElementById('interior-title');
     if (!container || !titleEl) return; 
 
-    // Nettoyage de l'intercalaire s'il existe déjà
     const existingTab = document.getElementById('secret-tab');
     if (existingTab) existingTab.remove();
 
@@ -485,7 +481,7 @@ function renderDresseuseClasseur() {
         let pageHTML = '';
         pageCards.forEach(carte => {
             const imgFile = carte.file || carte.image || '';
-            let imgSrc = './scripts/assets/img/back-fr.png'; // fallback par défaut
+            let imgSrc = './scripts/assets/img/back-fr.png';
             
             if (imgFile) {
                 imgSrc = imgFile.includes('/') ? imgFile : `./assets/cards/dresseuses/${imgFile}`;
@@ -505,7 +501,6 @@ function renderDresseuseClasseur() {
         container.appendChild(pageEl);
     }
 
-    // MECANIQUE CARTE SECRETE (MODE EDITION + DRESSEUSE DANS LE REGISTRE)
     if (isEditMode && REGISTRE_SECRET[trainerName]) {
         const secretFileName = REGISTRE_SECRET[trainerName];
         
@@ -515,12 +510,10 @@ function renderDresseuseClasseur() {
         tab.textContent = 'SECRET';
         document.body.appendChild(tab);
 
-        // Au clic sur l'intercalaire
         tab.onclick = () => {
             if (tab.textContent === 'SECRET') {
                 const imgSrc = `./assets/cards/dresseuses/${secretFileName}`;
                 
-                // Remplacer le contenu du classeur par la page 1x1 géante
                 container.innerHTML = `
                     <div class="vaultx-page-secret">
                         <div class="vaultx-pocket" onclick="openLightbox('${imgSrc}')" title="Cliquer pour zoomer">
@@ -529,13 +522,11 @@ function renderDresseuseClasseur() {
                     </div>
                 `;
                 
-                // Transformer l'intercalaire en bouton retour
                 tab.textContent = 'RETOUR';
                 tab.style.background = 'linear-gradient(135deg, #8a94a2, #5a636f)';
                 tab.style.borderColor = '#949ea8';
                 tab.style.boxShadow = '-4px 0 15px rgba(138, 148, 162, 0.4)';
             } else {
-                // Si on était sur la page secrète, on recharge la vue normale
                 renderDresseuseClasseur();
             }
         };
@@ -550,7 +541,6 @@ function renderDresseuseClasseur() {
     });
 }
 
-// -> Fonction globale pour le zoom (Lightbox) de la carte secrète
 window.openLightbox = function(imgSrc) {
     let overlay = document.getElementById('lightbox-overlay');
     if (!overlay) {
@@ -567,19 +557,126 @@ window.openLightbox = function(imgSrc) {
 };
 
 /* ====================================================================
-   7. EXÉCUTION & SYNCHRO
+   8. MODULE PIKACHU 30TH (NOUVEAU)
+==================================================================== */
+function renderPikachuBinder() {
+    const container = document.getElementById('pikachu-binder-container');
+    if (!container || typeof pika30Data === 'undefined') return;
+
+    const pikaCards = pika30Data[0].cartes;
+    container.innerHTML = '';
+    
+    const CARDS_PER_PAGE = 12;
+    const totalPages = Math.ceil(pikaCards.length / CARDS_PER_PAGE);
+
+    for (let p = 0; p < totalPages; p++) {
+        const pageCards = pikaCards.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
+        const pageEl = document.createElement('div');
+        pageEl.className = 'vaultx-page';
+
+        let pageHTML = '';
+        pageCards.forEach(c => {
+            const isOwned = localCollection.has(c.id);
+            const statusClass = isOwned ? 'is-owned' : 'not-owned';
+            
+            // Format d'image attendu : pika30-001.jpg et pika30-001-ext.jpg
+            const imgSrc = `./assets/cards/pikachu/${c.id}.jpg`;
+            const extSrc = `./assets/cards/pikachu/${c.id}-ext.jpg`;
+
+            pageHTML += `
+                <div class="vaultx-pocket ${statusClass}" onclick="handlePikachuClick('${c.id}', '${imgSrc}', '${extSrc}')">
+                    <div class="sleeve-matte">
+                        <img src="${imgSrc}" alt="${c.nom}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy">
+                    </div>
+                </div>
+            `;
+        });
+
+        const emptySlots = CARDS_PER_PAGE - pageCards.length;
+        for (let e = 0; e < emptySlots; e++) {
+            pageHTML += `<div class="vaultx-pocket is-empty"></div>`;
+        }
+        
+        pageEl.innerHTML = pageHTML;
+        container.appendChild(pageEl);
+    }
+}
+
+// Fonction appelée au clic sur un Pikachu (Édition vs Lightbox)
+window.handlePikachuClick = function(id, imgSrc, extSrc) {
+    if (isEditMode) {
+        if (localCollection.has(id)) {
+            localCollection.delete(id);
+        } else {
+            localCollection.add(id);
+        }
+        saveToCloud();
+        updateAllViews(); // On rafraîchit immédiatement l'affichage
+    } else {
+        if (localCollection.has(id)) {
+            openCollectAura(imgSrc, extSrc);
+        }
+    }
+};
+
+// Mise à jour de la barre de progression sur le Hub
+function initPika30ProgressHub() {
+    const fill = document.getElementById("pika30-hub-progress-fill");
+    const text = document.getElementById("pika30-hub-progress-text");
+    if (!fill || !text || typeof pika30Data === 'undefined') return;
+
+    const total = pika30Data[0].cartes.length;
+    let current = 0;
+    
+    // On compte le nombre d'ID possédés commençant par "pika30-"
+    localCollection.forEach(id => {
+        if (id.startsWith('pika30-')) current++;
+    });
+
+    const percent = Math.min(100, Math.round((current / total) * 100));
+    fill.style.width = `${percent}%`;
+    text.innerText = `${current} / ${total} • ${percent}%`;
+}
+
+// Ouvre la Lightbox CollectAura
+window.openCollectAura = function(cardSrc, extendedBackgroundSrc) {
+    const lightbox = document.getElementById('collectaura-lightbox');
+    const frameBg = document.getElementById('collectaura-frame-bg');
+    const cardImg = document.getElementById('collectaura-card-img');
+    if (!lightbox) return;
+
+    cardImg.src = cardSrc;
+    frameBg.style.backgroundImage = `url('${extendedBackgroundSrc}')`;
+    lightbox.classList.add('active');
+};
+
+// Ferme la Lightbox CollectAura
+window.closeCollectAura = function() {
+    const lightbox = document.getElementById('collectaura-lightbox');
+    if (lightbox) lightbox.classList.remove('active');
+};
+
+/* ====================================================================
+   9. EXÉCUTION & SYNCHRO
 ==================================================================== */
 function updateAllViews() {
     renderPokedex();
-    if (document.getElementById('binder-deck')) {
+    
+    // Condition pour éviter de lancer renderBinderView sur la page Pikachu 30th
+    if (document.getElementById('binder-deck') && !document.querySelector('.pikachu-binder')) {
         const isMewtwo = document.body.classList.contains('theme-mewtwo') || (document.title && document.title.toLowerCase().includes('mewtwo'));
         renderBinderView(isMewtwo ? 'mewtwo' : 'mew');
     }
+    
     renderLegacyCollection('mew', 'mew-grid');
     renderLegacyCollection('mewtwo', 'mewtwo-grid');
     renderPantheon();
     renderDresseusesHub();
     renderDresseuseClasseur();
+    
+    // Nouveaux rendus Pikachu 30th
+    renderPikachuBinder();
+    initPika30ProgressHub();
 }
 
 function setupDock() {
