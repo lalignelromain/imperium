@@ -552,7 +552,7 @@ window.openLightbox = function(imgSrc) {
 };
 
 /* ====================================================================
-   8. MODULE PIKACHU 30TH
+   8. MODULE PIKACHU 30TH (SANS IMAGES ÉTENDUES)
 ==================================================================== */
 function renderPikachuBinder() {
     const container = document.getElementById('pikachu-binder-container');
@@ -574,11 +574,11 @@ function renderPikachuBinder() {
             const isOwned = localCollection.has(c.id);
             const statusClass = isOwned ? 'is-owned' : 'not-owned';
             
+            // Uniquement l'image standard
             const imgSrc = `./assets/cards/pikachu/${c.id}.jpg`;
-            const extSrc = `./assets/cards/pikachu/${c.id}-ext.jpg`;
 
             pageHTML += `
-                <div class="vaultx-pocket ${statusClass}" onclick="handlePikachuClick('${c.id}', '${imgSrc}', '${extSrc}')">
+                <div class="vaultx-pocket ${statusClass}" onclick="handlePikachuClick('${c.id}', '${imgSrc}')">
                     <div class="sleeve-matte">
                         <img src="${imgSrc}" alt="${c.nom}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy">
                     </div>
@@ -596,7 +596,7 @@ function renderPikachuBinder() {
     }
 }
 
-window.handlePikachuClick = function(id, imgSrc, extSrc) {
+window.handlePikachuClick = function(id, imgSrc) {
     if (isEditMode) {
         if (localCollection.has(id)) {
             localCollection.delete(id);
@@ -607,7 +607,7 @@ window.handlePikachuClick = function(id, imgSrc, extSrc) {
         updateAllViews(); 
     } else {
         if (localCollection.has(id)) {
-            openCollectAura(imgSrc, extSrc);
+            openCollectAura(imgSrc);
         }
     }
 };
@@ -629,14 +629,19 @@ function initPika30ProgressHub() {
     text.innerText = `${current} / ${total} • ${percent}%`;
 }
 
-window.openCollectAura = function(cardSrc, extendedBackgroundSrc) {
+window.openCollectAura = function(cardSrc) {
     const lightbox = document.getElementById('collectaura-lightbox');
     const frameBg = document.getElementById('collectaura-frame-bg');
     const cardImg = document.getElementById('collectaura-card-img');
     if (!lightbox) return;
 
     cardImg.src = cardSrc;
-    frameBg.style.backgroundImage = `url('${extendedBackgroundSrc}')`;
+    
+    // Génération automatique d'un fond étendu assombri avec l'image normale
+    frameBg.style.backgroundImage = `linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('${cardSrc}')`;
+    frameBg.style.backgroundSize = 'cover';
+    frameBg.style.backgroundPosition = 'center';
+    
     lightbox.classList.add('active');
 };
 
