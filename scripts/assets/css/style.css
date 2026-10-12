@@ -142,11 +142,7 @@ body {
 /* ====================================================================
    HUB DRESSEUSES & TOPLOADERS (LARGE 4 COLONNES)
 ==================================================================== */
-#shelf {
-    display: grid;
-}
-
-.vaultx-page-large {
+#shelf, .vaultx-page-large {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -327,7 +323,7 @@ body.mode-edition {
         grid-template-columns: repeat(3, 1fr);
     }
 
-    .vaultx-page-large {
+    #shelf, .vaultx-page-large {
         grid-template-columns: repeat(3, 1fr);
         gap: 14px;
         padding: 16px;
@@ -346,7 +342,7 @@ body.mode-edition {
         padding: 12px;
     }
 
-    .vaultx-page-large {
+    #shelf, .vaultx-page-large {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
         padding: 12px;
@@ -368,7 +364,7 @@ body.mode-edition {
         grid-template-columns: 1fr;
     }
 
-    .vaultx-page-large {
+    #shelf, .vaultx-page-large {
         gap: 8px;
         padding: 8px;
     }
