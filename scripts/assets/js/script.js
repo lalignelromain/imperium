@@ -373,6 +373,7 @@ function initEV5ProgressHub() {
 // RAPPEL : Remplace ces noms par les VRAIS noms de tes images secrètes !!
 const REGISTRE_SECRET = {
     "Carolina": ["carolina.jpg"],
+    "Cynthia": ["cynthia.jpg"],
     "Nacchara": ["irida.jpg"],
     "Rosemary": ["rosemary.jpg"]
 };
