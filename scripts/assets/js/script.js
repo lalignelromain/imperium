@@ -366,14 +366,15 @@ function initEV5ProgressHub() {
 }
 
 /* ====================================================================
-   6. MODULE DRESSEUSES (HUB & CLASSEUR) - NOUVELLE BASE DICTIONNAIRE
+   6. MODULE DRESSEUSES (HUB & CLASSEUR) - GALERIE & MULTI-SECRÈTES
 ==================================================================== */
 
 // REGISTRE DES CARTES SECRÈTES (MODE ÉDITION UNIQUEMENT)
+// Transformé en tableaux pour accepter une ou plusieurs cartes
 const REGISTRE_SECRET = {
-    "Carolina": "carolina.jpg",
-    "Irida": "irida.jpg",
-    "Rosemary": "rosemary.jpg"
+    "Carolina": ["carolina_sec1.jpg", "carolina_sec2.jpg"],
+    "Irida": ["irida_sec.jpg"],
+    "Rosemary": ["rosemary_sec.jpg"]
 };
 
 // -> Le Hub des Toploaders (dresseuses.html)
@@ -381,11 +382,9 @@ function renderDresseusesHub() {
     const shelfContainer = document.getElementById('shelf');
     if (!shelfContainer || typeof dresseusesData === 'undefined') return; 
 
-    // On récupère directement les noms (les clés) et on les trie
     const trainers = Object.keys(dresseusesData).sort((a, b) => a.localeCompare(b, 'fr'));
     shelfContainer.innerHTML = '';
     
-    // On calcule le nombre total d'emplacements pour que ça tombe rond (multiple de 4)
     const exactCount = trainers.length;
     const totalSlots = Math.ceil(exactCount / 4) * 4; 
 
@@ -393,7 +392,6 @@ function renderDresseusesHub() {
         const trainerName = trainers[i];
         const isEmpty = !trainerName;
         
-        // On prend la première image du tableau pour la couverture (si elle existe)
         const imgFile = !isEmpty && dresseusesData[trainerName].length > 0 ? dresseusesData[trainerName][0] : null;
         
         let imgHtml = '<span style="font-size: 0.9rem;">🖼️</span>';
@@ -402,7 +400,6 @@ function renderDresseusesHub() {
             const imagePath = `./assets/cards/dresseuses/${imgFile}`;
             const safeName = trainerName.replace(/'/g, "\\'"); 
             
-            // Image de couverture : si erreur, on affiche le nom propre
             imgHtml = `<img src="${imagePath}" onerror="this.outerHTML='<span class=\\'card-name\\' style=\\'color:#64748b; font-size:0.75rem; text-align:center; padding:10px;\\'>${safeName}</span>'" style="width:100%; height:100%; object-fit:cover; opacity:0.8; border-radius:2px;" loading="lazy">`;
         }
 
@@ -437,14 +434,13 @@ function renderDresseuseClasseur() {
     const urlParams = new URLSearchParams(window.location.search);
     const trainerName = urlParams.get('dresseuse');
     
-    // Si la dresseuse n'existe pas dans le dictionnaire
     if (!trainerName || !dresseusesData[trainerName]) { 
         titleEl.textContent = "DRESSEUSE INTROUVABLE"; 
         return; 
     }
 
     titleEl.textContent = trainerName;
-    const trainerImages = dresseusesData[trainerName]; // Le tableau des noms de fichiers
+    const trainerImages = dresseusesData[trainerName]; 
     container.innerHTML = '';
     
     const CARDS_PER_PAGE = window.innerWidth <= 800 ? 4 : 6;
@@ -459,14 +455,10 @@ function renderDresseuseClasseur() {
         pageImages.forEach(imgFile => {
             const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
             
-            // L'ID pour Firebase est directement le nom du fichier
-            const isOwned = localCollection.has(imgFile);
-            const opacityStyle = (!isOwned && !isEditMode) ? 'opacity: 0.4; filter: grayscale(80%);' : '';
-            const borderStyle = (isOwned && !isEditMode) ? 'border: 1px solid #f472b6; box-shadow: 0 0 10px rgba(244, 114, 182, 0.4);' : '';
-
+            // Suppression des filtres grisés et de la logique de possession. Affichage 100% visible.
             pageHTML += `
-                <div class="vaultx-pocket dresseuse-card-slot" data-id="${imgFile}" style="cursor: ${isEditMode ? 'pointer' : 'default'}; ${borderStyle}">
-                    <div style="width:100%; height:100%; overflow:hidden; border-radius:3px; position:relative; ${opacityStyle}">
+                <div class="vaultx-pocket">
+                    <div style="width:100%; height:100%; overflow:hidden; border-radius:3px; position:relative;">
                         <img src="${imgSrc}" alt="${trainerName}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
                     </div>
                 </div>
@@ -480,9 +472,9 @@ function renderDresseuseClasseur() {
         container.appendChild(pageEl);
     }
 
-    // MECANIQUE CARTE SECRETE
+    // MECANIQUE CARTES SECRÈTES MULTIPLES
     if (isEditMode && REGISTRE_SECRET[trainerName]) {
-        const secretFileName = REGISTRE_SECRET[trainerName];
+        const secretFiles = REGISTRE_SECRET[trainerName];
         
         const tab = document.createElement('div');
         tab.id = 'secret-tab';
@@ -492,14 +484,21 @@ function renderDresseuseClasseur() {
 
         tab.onclick = () => {
             if (tab.textContent === 'SECRET') {
-                const imgSrc = `./assets/cards/dresseuses/${secretFileName}`;
-                container.innerHTML = `
-                    <div class="vaultx-page-secret">
+                // Utilisation de flex-wrap pour afficher plusieurs cartes proprement
+                let secretHTML = '<div class="vaultx-page-secret" style="flex-wrap: wrap; gap: 20px;">';
+                
+                secretFiles.forEach(secretFileName => {
+                    const imgSrc = `./assets/cards/dresseuses/${secretFileName}`;
+                    secretHTML += `
                         <div class="vaultx-pocket" onclick="openLightbox('${imgSrc}')" title="Cliquer pour zoomer">
                             <img src="${imgSrc}" alt="Secrète ${trainerName}" onerror="this.src='./scripts/assets/img/back-fr.png'">
                         </div>
-                    </div>
-                `;
+                    `;
+                });
+                
+                secretHTML += '</div>';
+                container.innerHTML = secretHTML;
+                
                 tab.textContent = 'RETOUR';
                 tab.style.background = 'linear-gradient(135deg, #8a94a2, #5a636f)';
                 tab.style.borderColor = '#949ea8';
@@ -509,22 +508,6 @@ function renderDresseuseClasseur() {
             }
         };
     }
-
-    // GESTION DU CLIC EN MODE ÉDITION
-    container.querySelectorAll('.dresseuse-card-slot').forEach(slot => {
-        slot.addEventListener('click', (e) => {
-            if (!isEditMode) return;
-            const fileId = slot.dataset.id;
-            
-            if (localCollection.has(fileId)) {
-                localCollection.delete(fileId);
-            } else {
-                localCollection.add(fileId);
-            }
-            saveToCloud();
-            renderDresseuseClasseur(); // Rafraîchit visuellement le classeur actuel
-        });
-    });
 }
 
 // Fonction globale pour la Lightbox
