@@ -421,7 +421,6 @@ function renderDresseusesHub() {
         <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.6), transparent); pointer-events:none;"></div>
         <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>
     </div>
-`;
         `;
         shelfContainer.appendChild(pocket);
     });
