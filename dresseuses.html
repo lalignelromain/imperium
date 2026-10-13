@@ -23,13 +23,18 @@
         <div class="subtitle">Illustrations Spéciales</div>
     </header>
 
-    <main class="collection-workspace">
-        <!-- L'ÉTAGÈRE À TOPLOADERS (GRILLE 4x10) -->
-        <div class="library-container" id="library-view">
-            <div class="vaultx-page-large" id="shelf">
-                <!-- Les toploaders seront générés ici par script.js -->
-            </div>
+    <main class="collection-workspace" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+        
+        <!-- NOUVELLE ÉTAGÈRE (GRILLE 5x2) -->
+        <div class="hub-grid" id="shelf">
+            <!-- Les pochettes des dresseuses seront générées ici par script.js -->
         </div>
+
+        <!-- CONTENEUR POUR LA PAGINATION -->
+        <div class="pagination" id="dresseuses-pagination" style="display: flex; gap: 20px; margin-top: 30px; justify-content: center; width: 100%;">
+            <!-- Les boutons Précédent/Suivant y seront injectés -->
+        </div>
+
     </main>
 
     <script src="scripts/assets/js/dresseuses-data.js"></script>
