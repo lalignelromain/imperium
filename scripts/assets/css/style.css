@@ -270,116 +270,37 @@ body.mode-edition .hof-pin-btn { display: flex; }
 .vaultx-pocket.in-hof .hof-pin-btn svg { fill: currentColor; }
 
 /* ====================================================================
-   MODULE : HUB DRESSEUSES (VITRINE TOPLOADERS 4x10)
+   MODULE : HUB DRESSEUSES (VITRINE CLASSEUR)
 ==================================================================== */
 .library-container {
     max-width: 1200px;
     margin: 0 auto;
     position: relative;
     z-index: 1;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-.vaultx-page-large {
-    background: radial-gradient(circle at 50% 50%, #111724 0%, #0b0f17 100%);
-    border: 3px solid #161f30;
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.85), inset 0 0 20px rgba(0, 0, 0, 0.7);
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    max-width: 800px;
-    width: 100%;
-    position: relative;
-}
-
-/* Reliure à gauche de la grande page */
-.vaultx-page-large::before {
-    content: '';
-    position: absolute;
-    left: -20px;
-    top: 5%;
-    bottom: 5%;
-    width: 12px;
-    background-image: radial-gradient(circle, #050608 40%, transparent 45%);
-    background-size: 100% 4%;
-    background-repeat: repeat-y;
-    opacity: 0.8;
-}
-
-.binder-pocket {
-    background: #06080d;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 4px;
-    aspect-ratio: 734 / 1024;
-    padding: 4px;
-    position: relative;
-    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Toploader Rigide Transparent */
-.toploader-insert {
-    width: 92%;
-    height: 94%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1.5px solid rgba(255, 255, 255, 0.35);
-    border-radius: 3px;
-    position: relative;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.toploader-insert:hover {
-    transform: scale(1.04);
-    border-color: var(--accent, #f472b6);
-    z-index: 5;
-}
-
-/* Reflet plastique */
-.toploader-insert::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, transparent 45%, rgba(255, 255, 255, 0.04) 100%);
-    pointer-events: none;
-}
-
-/* Carte sous sleeve */
-.card-in-sleeve {
-    width: 86%;
-    height: 88%;
-    background: #141820;
-    border: 1px solid rgba(244, 114, 182, 0.4);
-    border-radius: 2px;
+    padding: 20px 20px 80px; /* Espace en bas pour le dock */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 2px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.8);
+    width: 100%;
 }
 
-.card-in-sleeve .card-name {
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: #e2e8f0;
-    margin-top: 4px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-    text-transform: uppercase;
+/* L'ancienne étagère rigide devient un simple conteneur vertical invisible */
+#shelf, .vaultx-page-large {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 860px !important; /* Largeur exacte de tes classeurs Mew/Pikachu */
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    gap: 0 !important;
+}
+
+/* On masque la fausse reliure latérale de l'ancienne étagère */
+.vaultx-page-large::before {
+    display: none !important;
 }
 
 /* ====================================================================
@@ -475,7 +396,7 @@ body.theme-mewtwo .lang-btn.active { background: #a855f7; border-color: #a855f7;
 body.theme-mewtwo .vaultx-pocket.in-hof .hof-pin-btn { background: #a855f7; color: #fff; box-shadow: 0 0 8px rgba(168, 85, 247, 0.8); }
 
 /* ====================================================================
-   MODULE PIKACHU 30TH & COLLECTAURA LIGHTBOX
+   MODULE PIKACHU 30TH (AFFICHE SIMPLE)
 ==================================================================== */
 .pikachu-binder .vaultx-pocket {
     cursor: pointer;
@@ -534,109 +455,6 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned {
     box-shadow: 0 0 15px rgba(250, 204, 21, 0.6);
 }
 
-/* CADRE COLLECTAURA 2D PLAT */
-#collectaura-lightbox {
-    z-index: 10000;
-}
-
-.collectaura-frame {
-    position: relative;
-    width: 90vw;
-    max-width: 480px;
-    aspect-ratio: 3 / 4;
-    border-radius: 4px;
-    padding: 12%; 
-    background-color: #111;
-    background-size: cover;
-    background-position: center;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(255, 255, 255, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.collectaura-frame::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 40%, rgba(255, 255, 255, 0.02) 100%);
-    pointer-events: none;
-    z-index: 10;
-}
-
-.frame-screw {
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    background: radial-gradient(circle at 30% 30%, #ffffff 0%, #cbd5e1 30%, #64748b 80%, #334155 100%);
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.8);
-    z-index: 5;
-}
-
-.frame-screw.top-left { top: 20px; left: 20px; }
-.frame-screw.top-right { top: 20px; right: 20px; }
-.frame-screw.bottom-left { bottom: 20px; left: 20px; }
-.frame-screw.bottom-right { bottom: 20px; right: 20px; }
-
-.collectaura-slab-core {
-    width: 100%;
-    max-width: 280px; 
-    background: rgba(255, 255, 255, 0.12);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    padding: 16px; 
-    box-shadow: inset 0 0 20px rgba(255,255,255,0.05), 0 15px 30px rgba(0,0,0,0.6);
-    backdrop-filter: blur(1.5px); 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-}
-
-.slab-inner-recess {
-    width: 100%;
-    aspect-ratio: 63 / 88;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 3px;
-    padding: 2px;
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.slab-inner-recess img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 2px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
-}
-
-.collectaura-logo-area {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 5;
-    opacity: 0.8;
-}
-
-.collectaura-logo-area span {
-    font-family: Arial, sans-serif;
-    font-weight: 800;
-    font-size: 1.2rem;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-}
-
-
 /* ====================================================================
    RESPONSIVE / MEDIA QUERIES GLOBALES
 ==================================================================== */
@@ -660,9 +478,6 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned {
     .bg-mew { width: 200px; left: -15px; }
     .bg-mewtwo { width: 220px; right: -15px; }
     .cards-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
-    
-    /* MODIF RESPONSIVE DRESSEUSES - TABLETTE */
-    .vaultx-page-large { grid-template-columns: repeat(3, 1fr); gap: 14px; }
 }
 
 @media (max-width: 900px) {
@@ -702,22 +517,4 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned {
     .hub-card.masterset-card { flex-direction: column !important; align-items: stretch !important; gap: 12px !important; padding: 16px !important; }
     .masterset-card .hub-card-content { text-align: center !important; }
     .hub-progress-wrapper { min-width: 100% !important; align-items: center !important; }
-
-    /* MODIF RESPONSIVE DRESSEUSES - SMARTPHONE */
-    .vaultx-page-large {
-        padding: 12px;
-        gap: 10px;
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .card-in-sleeve .card-name {
-        font-size: 0.7rem; 
-        padding: 4px;
-    }
-}
-
-/* MODIF RESPONSIVE DRESSEUSES - PETIT SMARTPHONE */
-@media (max-width: 400px) {
-    .vaultx-page-large { gap: 8px; padding: 8px; }
-    .toploader-insert { border-width: 1px; padding: 4px; }
-    .card-in-sleeve .card-name { font-size: 0.6rem; }
 }
