@@ -369,6 +369,8 @@ function initEV5ProgressHub() {
    6. MODULE DRESSEUSES (HUB & CLASSEUR) - GALERIE & MULTI-SECRÈTES
 ==================================================================== */
 
+let currentPageDresseuses = 0; // Ajout de la variable de pagination
+
 // REGISTRE DES CARTES SECRÈTES (MODE ÉDITION UNIQUEMENT)
 const REGISTRE_SECRET = {
     "Carolina": ["carolina.jpg"],
@@ -384,35 +386,35 @@ const REGISTRE_SECRET = {
     "Sophora": ["sophora.jpg"]
 };
 
-// -> Le Hub des Toploaders (dresseuses.html)
+// -> Le Hub des Dresseuses (dresseuses.html) au format Classeur 3x4
 function renderDresseusesHub() {
     const shelfContainer = document.getElementById('shelf');
     if (!shelfContainer || typeof dresseusesData === 'undefined') return; 
 
     const trainers = Object.keys(dresseusesData).sort((a, b) => a.localeCompare(b, 'fr'));
+    
+    const CARDS_PER_PAGE = 12; // Format 3x4
+    const totalPages = Math.ceil(trainers.length / CARDS_PER_PAGE);
+
+    // Sécurité si on dépasse la pagination suite à un tri ou filtre
+    if (currentPageDresseuses >= totalPages) currentPageDresseuses = totalPages - 1;
+    if (currentPageDresseuses < 0) currentPageDresseuses = 0;
+
+    // Découpage des dresseuses pour la page actuelle
+    const pageTrainers = trainers.slice(currentPageDresseuses * CARDS_PER_PAGE, (currentPageDresseuses + 1) * CARDS_PER_PAGE);
+
     shelfContainer.innerHTML = '';
     
-    const exactCount = trainers.length;
-    const totalSlots = Math.ceil(exactCount / 4) * 4; 
+    // Conteneur de la page du classeur
+    const pageEl = document.createElement('div');
+    pageEl.className = 'vaultx-page';
+    let pageHTML = '';
 
-    for (let i = 0; i < totalSlots; i++) {
-        const trainerName = trainers[i];
-        const isEmpty = !trainerName;
+    pageTrainers.forEach(trainerName => {
+        const imgFile = dresseusesData[trainerName].length > 0 ? dresseusesData[trainerName][0] : null;
         
-        const imgFile = !isEmpty && dresseusesData[trainerName].length > 0 ? dresseusesData[trainerName][0] : null;
-        
-        let imgHtml = '<span style="font-size: 0.9rem;">🖼️</span>';
-        
-        if (imgFile) {
-            const imagePath = `./assets/cards/dresseuses/${imgFile}`;
-            const safeName = trainerName.replace(/'/g, "\\'"); 
-            
-            imgHtml = `<img src="${imagePath}" onerror="this.outerHTML='<span class=\\'card-name\\' style=\\'color:#64748b; font-size:0.75rem; text-align:center; padding:10px;\\'>${safeName}</span>'" style="width:100%; height:100%; object-fit:cover; opacity:0.8; border-radius:2px;" loading="lazy">`;
-        }
-
-        // Indicateur de secrète en mode édition
         let secretBadge = '';
-        if (isEditMode && !isEmpty && REGISTRE_SECRET[trainerName]) {
+        if (isEditMode && REGISTRE_SECRET[trainerName]) {
             const count = REGISTRE_SECRET[trainerName].length;
             secretBadge = `
                 <div style="position: absolute; top: -8px; right: -8px; background: #f472b6; color: #000; font-size: 0.7rem; font-weight: 800; padding: 3px 6px; border-radius: 12px; z-index: 10; box-shadow: 0 0 8px rgba(244, 114, 182, 0.6); display: flex; align-items: center; gap: 3px; pointer-events: none;">
@@ -422,25 +424,80 @@ function renderDresseusesHub() {
             `;
         }
 
-        const pocket = document.createElement('div');
-        pocket.className = 'binder-pocket';
-        pocket.style.position = 'relative';
-        
-        pocket.innerHTML = `
-            ${secretBadge}
-            <div class="toploader-insert" ${isEmpty ? 'style="border-style:dashed; opacity:0.3;"' : ''}>
-                <div class="card-in-sleeve" style="${imgFile ? 'padding:0;' : ''}">
-                    ${isEmpty ? '' : imgHtml}
-                    ${!isEmpty && !imgFile ? `<span class="card-name">${trainerName}</span>` : ''}
+        const safeName = trainerName.replace(/'/g, "\\'"); 
+        const imagePath = imgFile ? `./assets/cards/dresseuses/${imgFile}` : '';
+        const fallbackHTML = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.75rem; text-align:center; padding:10px;">${safeName}</div>`;
+
+        pageHTML += `
+            <div class="vaultx-pocket" style="position:relative; cursor:pointer;" onclick="window.location.href='classeur.html?dresseuse=${encodeURIComponent(trainerName)}'">
+                ${secretBadge}
+                
+                <!-- La pochette avec ombre d'insertion latérale (gauche) -->
+                <div style="width:100%; height:100%; overflow:hidden; border-radius:4px; position:relative; box-shadow: 0 2px 5px rgba(0,0,0,0.4); background-color: #111; border-left: 2px solid rgba(0,0,0,0.8);">
+                    
+                    ${imgFile ? `<img src="${imagePath}" onerror="this.outerHTML='${fallbackHTML}'" loading="lazy" style="width:100%; height:100%; object-fit:cover;">` : fallbackHTML}
+                    
+                    <!-- Ligne d'ombre simulant l'ouverture de la pochette à gauche -->
+                    <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.6), transparent); pointer-events:none;"></div>
+
+                    <!-- Calque de brillance (Gloss) -->
+                    <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>
                 </div>
             </div>
         `;
+    });
 
-        if (!isEmpty) {
-            pocket.style.cursor = 'pointer';
-            pocket.addEventListener('click', () => { window.location.href = `classeur.html?dresseuse=${encodeURIComponent(trainerName)}`; });
-        }
-        shelfContainer.appendChild(pocket);
+    // Remplissage des cases vides pour maintenir la structure 3x4
+    const emptySlots = CARDS_PER_PAGE - pageTrainers.length;
+    for (let e = 0; e < emptySlots; e++) {
+        pageHTML += `
+            <div class="vaultx-pocket is-empty" style="border-left: 2px solid rgba(0,0,0,0.3); position:relative;">
+                <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.4), transparent); pointer-events:none;"></div>
+            </div>`;
+    }
+
+    pageEl.innerHTML = pageHTML;
+    shelfContainer.appendChild(pageEl);
+
+    // Création des boutons de navigation (Précédent / Suivant)
+    if (totalPages > 1) {
+        const navContainer = document.createElement('div');
+        navContainer.style = "display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 30px; width: 100%;";
+
+        const btnPrev = document.createElement('button');
+        btnPrev.innerHTML = "◀ Précédent";
+        btnPrev.style = `padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: ${currentPageDresseuses === 0 ? 'not-allowed' : 'pointer'}; border: 1px solid #333; background: #1a1a1a; color: #fff; opacity: ${currentPageDresseuses === 0 ? '0.4' : '1'}; transition: background 0.2s;`;
+        btnPrev.disabled = currentPageDresseuses === 0;
+        btnPrev.onmouseover = () => { if (!btnPrev.disabled) btnPrev.style.background = '#2a2a2a'; };
+        btnPrev.onmouseout = () => { if (!btnPrev.disabled) btnPrev.style.background = '#1a1a1a'; };
+        btnPrev.onclick = () => {
+            if (currentPageDresseuses > 0) {
+                currentPageDresseuses--;
+                renderDresseusesHub();
+            }
+        };
+
+        const pageIndicator = document.createElement('span');
+        pageIndicator.style = "color: #94a3b8; font-size: 0.95rem; font-weight: bold; font-family: monospace;";
+        pageIndicator.innerText = `PAGE ${currentPageDresseuses + 1} / ${totalPages}`;
+
+        const btnNext = document.createElement('button');
+        btnNext.innerHTML = "Suivant ▶";
+        btnNext.style = `padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: ${currentPageDresseuses >= totalPages - 1 ? 'not-allowed' : 'pointer'}; border: 1px solid #333; background: #1a1a1a; color: #fff; opacity: ${currentPageDresseuses >= totalPages - 1 ? '0.4' : '1'}; transition: background 0.2s;`;
+        btnNext.disabled = currentPageDresseuses >= totalPages - 1;
+        btnNext.onmouseover = () => { if (!btnNext.disabled) btnNext.style.background = '#2a2a2a'; };
+        btnNext.onmouseout = () => { if (!btnNext.disabled) btnNext.style.background = '#1a1a1a'; };
+        btnNext.onclick = () => {
+            if (currentPageDresseuses < totalPages - 1) {
+                currentPageDresseuses++;
+                renderDresseusesHub();
+            }
+        };
+
+        navContainer.appendChild(btnPrev);
+        navContainer.appendChild(pageIndicator);
+        navContainer.appendChild(btnNext);
+        shelfContainer.appendChild(navContainer);
     }
 }
 
