@@ -408,20 +408,20 @@ function renderDresseusesHub() {
         
         const safeName = trainerName.replace(/'/g, "\\'"); 
         const imagePath = imgFile ? `./assets/cards/dresseuses/${imgFile}` : '';
-        const fallbackHTML = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.75rem; text-align:center; padding:10px;">${safeName}</div>`;
+        const fallbackHTML = `<div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.75rem; text-align:center; padding:10px; background-color:#111;">${safeName}</div>`;
 
         const pocket = document.createElement('div');
         pocket.className = `hub-pocket ${hasSecret ? 'has-secret' : ''}`;
-        pocket.style.cursor = 'pointer';
-        pocket.onclick = () => window.location.href = `classeur.html?dresseuse=${encodeURIComponent(trainerName)}`;
         
+        // CORRECTION DE L'AFFICHAGE (position absolute + object-fit contain)
         pocket.innerHTML = `
-    <div style="width:100%; height:100%; overflow:hidden; border-radius:4px; position:relative; background-color: #111;">
-        ${imgFile ? `<img src="${imagePath}" onerror="this.outerHTML='${fallbackHTML}'" loading="lazy" style="width:100%; height:100%; object-fit:contain;">` : fallbackHTML}
-        <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.6), transparent); pointer-events:none;"></div>
-        <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>
-    </div>
+            ${imgFile ? `<img src="${imagePath}" onerror="this.outerHTML='${fallbackHTML}'" loading="lazy" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background-color: #111;">` : fallbackHTML}
+            
+            <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.6), transparent); pointer-events:none;"></div>
+            <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>
         `;
+        
+        pocket.onclick = () => window.location.href = `classeur.html?dresseuse=${encodeURIComponent(trainerName)}`;
         shelfContainer.appendChild(pocket);
     });
 
@@ -431,7 +431,7 @@ function renderDresseusesHub() {
         const emptyPocket = document.createElement('div');
         emptyPocket.className = 'hub-pocket is-empty';
         emptyPocket.style = 'border: 1px dashed #333; cursor: default;';
-        emptyPocket.innerHTML = `<div style="width:100%; height:100%; background: repeating-linear-gradient(-45deg, #111, #111 5px, #000 5px, #000 10px);"></div>`;
+        emptyPocket.innerHTML = `<div style="position:absolute; inset:0; background: repeating-linear-gradient(-45deg, #111, #111 5px, #000 5px, #000 10px);"></div>`;
         shelfContainer.appendChild(emptyPocket);
     }
 
@@ -492,7 +492,7 @@ function renderDresseuseClasseur() {
         htmlContent += `
             <div class="binder-pocket">
                 <div style="width:100%; height:100%; overflow:hidden; border-radius:3px; position:relative;">
-                    <img src="${imgSrc}" alt="${trainerName}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                    <img src="${imgSrc}" alt="${trainerName}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain;">
                 </div>
             </div>
         `;
@@ -778,8 +778,4 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAdminTrigger();
     initFirestoreSync();
     initEV5ProgressHub();
-});
-
-window.addEventListener('resize', () => {
-    // Si tu veux réactiver un comportement spécifique au redimensionnement, ça se passe ici
 });
