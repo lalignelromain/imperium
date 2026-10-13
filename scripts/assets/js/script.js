@@ -366,12 +366,13 @@ function initEV5ProgressHub() {
 }
 
 /* ====================================================================
-   6. MODULE DRESSEUSES (HUB & CLASSEUR) - GALERIE & MULTI-SECRÈTES
+   6. MODULE DRESSEUSES (HUB, CLASSEUR & SECRÈTES 3D)
 ==================================================================== */
 
 let currentPageDresseuses = 0; 
+let currentActiveTrainerDresseuse = null;
+let currentSecretIndexDresseuse = 0;
 
-// REGISTRE DES CARTES SECRÈTES (MODE ÉDITION UNIQUEMENT)
 const REGISTRE_SECRET = {
     "Carolina": ["carolina.jpg"],
     "Cynthia": ["cynthia.jpg"],
@@ -386,127 +387,80 @@ const REGISTRE_SECRET = {
     "Sophora": ["sophora.jpg"]
 };
 
-// -> Le Hub des Dresseuses (dresseuses.html) au format Classeur 3x3 (PC) / 2x2 (Mobile)
+// -> Hub (dresseuses.html) - Grille 5x2
 function renderDresseusesHub() {
     const shelfContainer = document.getElementById('shelf');
     if (!shelfContainer || typeof dresseusesData === 'undefined') return; 
 
     const trainers = Object.keys(dresseusesData).sort((a, b) => a.localeCompare(b, 'fr'));
-    
-    // DYNAMIQUE : 9 cartes (3x3) sur PC, 4 cartes (2x2) sur Mobile
-    const isMobile = window.innerWidth <= 900;
-    const CARDS_PER_PAGE = isMobile ? 4 : 9; 
+    const CARDS_PER_PAGE = 10; 
     const totalPages = Math.ceil(trainers.length / CARDS_PER_PAGE);
 
-    // Sécurité si on dépasse la pagination suite à un redimensionnement
     if (currentPageDresseuses >= totalPages) currentPageDresseuses = Math.max(0, totalPages - 1);
     if (currentPageDresseuses < 0) currentPageDresseuses = 0;
 
     const pageTrainers = trainers.slice(currentPageDresseuses * CARDS_PER_PAGE, (currentPageDresseuses + 1) * CARDS_PER_PAGE);
-
     shelfContainer.innerHTML = '';
-    
-    // Conteneur de la page du classeur
-    const pageEl = document.createElement('div');
-    pageEl.className = 'vaultx-page';
-    
-    // On force la grille en 3 colonnes pour le PC
-    if (!isMobile) {
-        pageEl.style.gridTemplateColumns = 'repeat(3, 1fr)';
-        pageEl.style.maxWidth = '700px'; 
-    }
-
-    let pageHTML = '';
 
     pageTrainers.forEach(trainerName => {
         const imgFile = dresseusesData[trainerName].length > 0 ? dresseusesData[trainerName][0] : null;
+        const hasSecret = isEditMode && REGISTRE_SECRET[trainerName] && REGISTRE_SECRET[trainerName].length > 0;
         
-        let secretBadge = '';
-        if (isEditMode && REGISTRE_SECRET[trainerName]) {
-            const count = REGISTRE_SECRET[trainerName].length;
-            secretBadge = `
-                <div style="position: absolute; top: -8px; right: -8px; background: #f472b6; color: #000; font-size: 0.7rem; font-weight: 800; padding: 3px 6px; border-radius: 12px; z-index: 10; box-shadow: 0 0 8px rgba(244, 114, 182, 0.6); display: flex; align-items: center; gap: 3px; pointer-events: none;">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    ${count}
-                </div>
-            `;
-        }
-
         const safeName = trainerName.replace(/'/g, "\\'"); 
         const imagePath = imgFile ? `./assets/cards/dresseuses/${imgFile}` : '';
         const fallbackHTML = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#64748b; font-size:0.75rem; text-align:center; padding:10px;">${safeName}</div>`;
 
-        pageHTML += `
-            <div class="vaultx-pocket" style="position:relative; cursor:pointer;" onclick="window.location.href='classeur.html?dresseuse=${encodeURIComponent(trainerName)}'">
-                ${secretBadge}
-                
-                <div style="width:100%; height:100%; overflow:hidden; border-radius:4px; position:relative; box-shadow: 0 2px 5px rgba(0,0,0,0.4); background-color: #111; border-left: 2px solid rgba(0,0,0,0.8);">
-                    
-                    ${imgFile ? `<img src="${imagePath}" onerror="this.outerHTML='${fallbackHTML}'" loading="lazy" style="width:100%; height:100%; object-fit:cover;">` : fallbackHTML}
-                    
-                    <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.6), transparent); pointer-events:none;"></div>
-                    <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>
-                </div>
+        const pocket = document.createElement('div');
+        pocket.className = `hub-pocket ${hasSecret ? 'has-secret' : ''}`;
+        pocket.style.cursor = 'pointer';
+        pocket.onclick = () => window.location.href = `classeur.html?dresseuse=${encodeURIComponent(trainerName)}`;
+        
+        pocket.innerHTML = `
+            <div style="width:100%; height:100%; overflow:hidden; border-radius:4px; position:relative; background-color: #111;">
+                ${imgFile ? `<img src="${imagePath}" onerror="this.outerHTML='${fallbackHTML}'" loading="lazy" style="width:100%; height:100%; object-fit:cover;">` : fallbackHTML}
+                <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.6), transparent); pointer-events:none;"></div>
+                <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>
             </div>
         `;
+        shelfContainer.appendChild(pocket);
     });
 
+    // Complète la grille pour toujours avoir 10 emplacements
     const emptySlots = CARDS_PER_PAGE - pageTrainers.length;
     for (let e = 0; e < emptySlots; e++) {
-        pageHTML += `
-            <div class="vaultx-pocket is-empty" style="border-left: 2px solid rgba(0,0,0,0.3); position:relative;">
-                <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.4), transparent); pointer-events:none;"></div>
-            </div>`;
+        const emptyPocket = document.createElement('div');
+        emptyPocket.className = 'hub-pocket is-empty';
+        emptyPocket.style = 'border: 1px dashed #333; cursor: default;';
+        emptyPocket.innerHTML = `<div style="width:100%; height:100%; background: repeating-linear-gradient(-45deg, #111, #111 5px, #000 5px, #000 10px);"></div>`;
+        shelfContainer.appendChild(emptyPocket);
     }
 
-    pageEl.innerHTML = pageHTML;
-    shelfContainer.appendChild(pageEl);
+    // Pagination
+    const navContainer = document.getElementById('dresseuses-pagination');
+    if (navContainer) {
+        navContainer.innerHTML = '';
+        if (totalPages > 1) {
+            const btnPrev = document.createElement('button');
+            btnPrev.innerHTML = "◀ Précédent";
+            btnPrev.disabled = currentPageDresseuses === 0;
+            btnPrev.onclick = () => { if (currentPageDresseuses > 0) { currentPageDresseuses--; renderDresseusesHub(); } };
 
-    // BOUTONS DE NAVIGATION ÉPURÉS (SANS TEXTE)
-    if (totalPages > 1) {
-        const navContainer = document.createElement('div');
-        navContainer.style = "display: flex; justify-content: center; gap: 20px; margin-top: 25px; width: 100%;";
+            const btnNext = document.createElement('button');
+            btnNext.innerHTML = "Suivant ▶";
+            btnNext.disabled = currentPageDresseuses >= totalPages - 1;
+            btnNext.onclick = () => { if (currentPageDresseuses < totalPages - 1) { currentPageDresseuses++; renderDresseusesHub(); } };
 
-        const btnStyle = (disabled) => `
-            display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; 
-            border-radius: 50%; cursor: ${disabled ? 'not-allowed' : 'pointer'}; 
-            border: 1px solid rgba(255,255,255,0.1); background: rgba(20,24,32,0.8); 
-            color: #fff; opacity: ${disabled ? '0.2' : '0.85'}; 
-            transition: all 0.2s ease; backdrop-filter: blur(4px);
-        `;
-
-        const btnPrev = document.createElement('button');
-        btnPrev.innerHTML = "<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><path d='M15 18l-6-6 6-6'/></svg>";
-        btnPrev.style = btnStyle(currentPageDresseuses === 0);
-        btnPrev.disabled = currentPageDresseuses === 0;
-        
-        btnPrev.onmouseover = () => { if (!btnPrev.disabled) { btnPrev.style.background = '#f472b6'; btnPrev.style.color = '#000'; btnPrev.style.borderColor = '#f472b6'; btnPrev.style.transform = 'translateX(-3px)'; btnPrev.style.opacity = '1'; } };
-        btnPrev.onmouseout = () => { if (!btnPrev.disabled) { btnPrev.style.background = 'rgba(20,24,32,0.8)'; btnPrev.style.color = '#fff'; btnPrev.style.borderColor = 'rgba(255,255,255,0.1)'; btnPrev.style.transform = 'translateX(0)'; } };
-        btnPrev.onclick = () => { if (currentPageDresseuses > 0) { currentPageDresseuses--; renderDresseusesHub(); } };
-
-        const btnNext = document.createElement('button');
-        btnNext.innerHTML = "<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><path d='M9 18l6-6-6-6'/></svg>";
-        btnNext.style = btnStyle(currentPageDresseuses >= totalPages - 1);
-        btnNext.disabled = currentPageDresseuses >= totalPages - 1;
-        
-        btnNext.onmouseover = () => { if (!btnNext.disabled) { btnNext.style.background = '#f472b6'; btnNext.style.color = '#000'; btnNext.style.borderColor = '#f472b6'; btnNext.style.transform = 'translateX(3px)'; btnNext.style.opacity = '1'; } };
-        btnNext.onmouseout = () => { if (!btnNext.disabled) { btnNext.style.background = 'rgba(20,24,32,0.8)'; btnNext.style.color = '#fff'; btnNext.style.borderColor = 'rgba(255,255,255,0.1)'; btnNext.style.transform = 'translateX(0)'; } };
-        btnNext.onclick = () => { if (currentPageDresseuses < totalPages - 1) { currentPageDresseuses++; renderDresseusesHub(); } };
-
-        navContainer.appendChild(btnPrev);
-        navContainer.appendChild(btnNext);
-        shelfContainer.appendChild(navContainer);
+            navContainer.appendChild(btnPrev);
+            navContainer.appendChild(btnNext);
+        }
     }
 }
 
-// -> La page de Classeur Individuel (classeur.html)
+// -> Classeur (classeur.html) - Flexbox Adaptatif
 function renderDresseuseClasseur() {
     const container = document.getElementById('pages-container');
     const titleEl = document.getElementById('interior-title');
     if (!container || !titleEl || typeof dresseusesData === 'undefined') return; 
-
-    const existingTab = document.getElementById('secret-tab');
-    if (existingTab) existingTab.remove();
 
     const urlParams = new URLSearchParams(window.location.search);
     const trainerName = urlParams.get('dresseuse');
@@ -517,88 +471,139 @@ function renderDresseuseClasseur() {
     }
 
     titleEl.textContent = trainerName;
-    const trainerImages = dresseusesData[trainerName]; 
-    container.innerHTML = '';
+    currentActiveTrainerDresseuse = trainerName;
     
-    const CARDS_PER_PAGE = window.innerWidth <= 800 ? 4 : 6;
-    const totalPages = Math.ceil(trainerImages.length / CARDS_PER_PAGE) || 1;
+    const trainerImages = dresseusesData[trainerName]; 
+    const secretFiles = REGISTRE_SECRET[trainerName] || [];
+    const hasMysteryCard = isEditMode && secretFiles.length > 0;
+    
+    const totalItems = trainerImages.length + (hasMysteryCard ? 1 : 0);
+    
+    // Application des layouts adaptatifs Flexbox
+    if (totalItems === 1) container.className = 'binder-page layout-flex layout-max-1'; 
+    else if (totalItems >= 2 && totalItems <= 4) container.className = 'binder-page layout-flex layout-max-2'; 
+    else if (totalItems === 5 || totalItems === 6) container.className = 'binder-page layout-flex layout-max-3'; 
+    else container.className = 'binder-page layout-flex layout-max-4';
 
-    for (let p = 0; p < totalPages; p++) {
-        const pageImages = trainerImages.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
-        const pageEl = document.createElement('div');
-        pageEl.className = 'vaultx-page';
-
-        let pageHTML = '';
-        pageImages.forEach(imgFile => {
-            const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
-            
-            pageHTML += `
-                <div class="vaultx-pocket">
-                    <div style="width:100%; height:100%; overflow:hidden; border-radius:3px; position:relative;">
-                        <img src="${imgSrc}" alt="${trainerName}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
-                    </div>
+    let htmlContent = '';
+    
+    trainerImages.forEach(imgFile => {
+        const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
+        htmlContent += `
+            <div class="binder-pocket">
+                <div style="width:100%; height:100%; overflow:hidden; border-radius:3px; position:relative;">
+                    <img src="${imgSrc}" alt="${trainerName}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
                 </div>
-            `;
-        });
+            </div>
+        `;
+    });
 
-        const emptySlots = CARDS_PER_PAGE - pageImages.length;
-        for (let e = 0; e < emptySlots; e++) pageHTML += `<div class="vaultx-pocket is-empty"></div>`;
-
-        pageEl.innerHTML = pageHTML;
-        container.appendChild(pageEl);
+    if (hasMysteryCard) {
+        htmlContent += `
+            <div class="binder-pocket mystery-pocket" onclick="openLightbox3D()">
+                <div class="mystery-visual">
+                    <span>???</span>
+                </div>
+            </div>
+        `;
     }
-
-    // MECANIQUE CARTES SECRÈTES MULTIPLES
-    if (isEditMode && REGISTRE_SECRET[trainerName]) {
-        const secretFiles = REGISTRE_SECRET[trainerName];
-        
-        const tab = document.createElement('div');
-        tab.id = 'secret-tab';
-        tab.className = 'secret-tab';
-        tab.textContent = 'SECRET';
-        document.body.appendChild(tab);
-
-        tab.onclick = () => {
-            if (tab.textContent === 'SECRET') {
-                let secretHTML = '<div class="vaultx-page-secret" style="display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; padding: 20px;">';
-                
-                secretFiles.forEach(secretFileName => {
-                    const imgSrc = `./assets/cards/dresseuses/${secretFileName}`;
-                    secretHTML += `
-                        <div class="vaultx-pocket" onclick="openLightbox('${imgSrc}')" title="Cliquer pour zoomer" style="max-width: 260px; width: 100%; aspect-ratio: 734/1024; flex-shrink: 0; cursor: zoom-in;">
-                            <img src="${imgSrc}" alt="Secrète ${trainerName}" onerror="this.src='./scripts/assets/img/back-fr.png'" style="width:100%; height:100%; object-fit:cover; border-radius: 4px;">
-                        </div>
-                    `;
-                });
-                
-                secretHTML += '</div>';
-                container.innerHTML = secretHTML;
-                
-                tab.textContent = 'RETOUR';
-                tab.style.background = 'linear-gradient(135deg, #8a94a2, #5a636f)';
-                tab.style.borderColor = '#949ea8';
-                tab.style.boxShadow = '-4px 0 15px rgba(138, 148, 162, 0.4)';
-            } else {
-                renderDresseuseClasseur();
-            }
-        };
-    }
+    
+    container.innerHTML = htmlContent;
 }
 
-// Fonction globale pour la Lightbox
+// -> Lightbox 3D (Module Dresseuses)
+window.openLightbox3D = function() {
+    currentSecretIndexDresseuse = 0;
+    updateSecretImage3D();
+    
+    const lightbox = document.getElementById('secret-lightbox');
+    const flipCard = document.getElementById('flip-card');
+    const secretNav = document.getElementById('secret-nav');
+    
+    if (lightbox) lightbox.classList.add('active');
+    if (flipCard) flipCard.classList.remove('is-flipped');
+    if (secretNav) secretNav.classList.remove('visible');
+};
+
+window.closeLightbox = function(event) {
+    if (event && (event.target.closest('#flip-card') || event.target.closest('#secret-nav'))) return;
+    
+    const lightbox = document.getElementById('secret-lightbox');
+    if (lightbox) lightbox.classList.remove('active');
+    
+    setTimeout(() => {
+        const flipCard = document.getElementById('flip-card');
+        const secretNav = document.getElementById('secret-nav');
+        if (flipCard) flipCard.classList.remove('is-flipped');
+        if (secretNav) secretNav.classList.remove('visible');
+    }, 400);
+};
+
+window.triggerFlip = function(event) {
+    const flipCard = document.getElementById('flip-card');
+    if (!flipCard) return;
+    
+    const isFlipped = flipCard.classList.contains('is-flipped');
+    flipCard.classList.toggle('is-flipped');
+    
+    const secretFiles = REGISTRE_SECRET[currentActiveTrainerDresseuse] || [];
+    if (secretFiles.length > 1) {
+        const nav = document.getElementById('secret-nav');
+        if (nav) {
+            if (!isFlipped) setTimeout(() => nav.classList.add('visible'), 400);
+            else nav.classList.remove('visible');
+        }
+    }
+};
+
+window.changeSecret = function(dir) {
+    const secretFiles = REGISTRE_SECRET[currentActiveTrainerDresseuse] || [];
+    if (secretFiles.length === 0) return;
+    
+    currentSecretIndexDresseuse += dir;
+    if (currentSecretIndexDresseuse >= secretFiles.length) currentSecretIndexDresseuse = 0;
+    if (currentSecretIndexDresseuse < 0) currentSecretIndexDresseuse = secretFiles.length - 1;
+    
+    updateSecretImage3D();
+};
+
+window.updateSecretImage3D = function() {
+    const secretFiles = REGISTRE_SECRET[currentActiveTrainerDresseuse] || [];
+    if (secretFiles.length === 0) return;
+    
+    const imgDisplay = document.getElementById('secret-img-display');
+    if (imgDisplay) {
+        imgDisplay.src = `./assets/cards/dresseuses/${secretFiles[currentSecretIndexDresseuse]}`;
+    }
+    
+    const indicator = document.getElementById('secret-indicator');
+    if (indicator) {
+        indicator.innerText = `${currentSecretIndexDresseuse + 1} / ${secretFiles.length}`;
+    }
+};
+
+// -> Lightbox Classique Globale (Utilisée par Pikachu & autres modules)
 window.openLightbox = function(imgSrc) {
-    let overlay = document.getElementById('lightbox-overlay');
+    let overlay = document.getElementById('lightbox-overlay-standard');
     if (!overlay) {
         overlay = document.createElement('div');
-        overlay.id = 'lightbox-overlay';
-        overlay.className = 'lightbox-overlay';
-        overlay.innerHTML = `<img class="lightbox-card" src="" alt="Zoom Carte">`;
+        overlay.id = 'lightbox-overlay-standard';
+        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;justify-content:center;align-items:center;z-index:9999;opacity:0;pointer-events:none;transition:opacity 0.3s;";
+        overlay.innerHTML = `<img src="" alt="Zoom Carte" style="max-width:90vw;max-height:90vh;border-radius:10px;box-shadow:0 0 50px rgba(0,0,0,0.8);transform:scale(0.95);transition:transform 0.3s;">`;
         document.body.appendChild(overlay);
         
-        overlay.onclick = () => overlay.classList.remove('active');
+        overlay.onclick = () => {
+            overlay.style.opacity = '0';
+            overlay.style.pointerEvents = 'none';
+            overlay.querySelector('img').style.transform = 'scale(0.95)';
+        };
     }
     overlay.querySelector('img').src = imgSrc;
-    setTimeout(() => overlay.classList.add('active'), 10);
+    setTimeout(() => {
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'all';
+        overlay.querySelector('img').style.transform = 'scale(1)';
+    }, 10);
 };
 
 /* ====================================================================
@@ -661,7 +666,7 @@ window.handlePikachuClick = function(id, imgSrc) {
         updateAllViews(); 
     } else {
         if (localCollection.has(id)) {
-            openLightbox(imgSrc);
+            openLightbox(imgSrc); // Utilise la Lightbox Classique
         }
     }
 };
@@ -776,13 +781,5 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('resize', () => {
-    const shelfContainer = document.getElementById('shelf');
-    if (shelfContainer) {
-        const isMobile = window.innerWidth <= 900;
-        if (isMobile !== (shelfContainer.dataset.mobile === 'true')) {
-            shelfContainer.dataset.mobile = isMobile;
-            currentPageDresseuses = 0; 
-            renderDresseusesHub();
-        }
-    }
+    // Si tu veux réactiver un comportement spécifique au redimensionnement, ça se passe ici
 });
