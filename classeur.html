@@ -22,14 +22,50 @@
         <div class="subtitle">Collection Privée</div>
     </header>
 
-    <main class="collection-workspace">
-        <div class="binder-deck" id="pages-container">
-            <!-- Les pages du classeur Vault X seront générées ici -->
+    <main class="collection-workspace" style="display: flex; flex-direction: column; align-items: center;">
+        
+        <!-- NOUVEAU CONTENEUR ADAPTATIF -->
+        <div class="binder-page-container" style="width: 100%; max-width: 960px; margin: 0 auto; display: flex; flex-direction: column;">
+            <div class="binder-page" id="pages-container">
+                <!-- Les cartes normales et la pochette mystère seront injectées ici par le JS -->
+            </div>
         </div>
+        
         <div style="text-align: center; margin-top: 40px;">
             <a href="dresseuses.html" class="btn-glass">Retour au Panthéon</a>
         </div>
     </main>
+
+    <!-- LIGHTBOX 3D - CARTE MYSTÈRE -->
+    <div class="secret-lightbox" id="secret-lightbox" onclick="closeLightbox(event)">
+        <div class="flip-scene">
+            <div class="flip-card" id="flip-card" onclick="triggerFlip(event)">
+                
+                <!-- Face Avant (La Carte Mystère) -->
+                <div class="flip-face flip-front">
+                    <div class="mystery-visual">
+                        <span>???</span>
+                    </div>
+                </div>
+                
+                <!-- Face Arrière (La vraie carte Secrète) -->
+                <div class="flip-face flip-back">
+                    <img id="secret-img-display" src="" alt="Carte Secrète" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4.5%;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation (S'affiche uniquement s'il y a plusieurs secrètes) -->
+        <div class="secret-nav" id="secret-nav" onclick="event.stopPropagation()">
+            <button onclick="changeSecret(-1)">◀</button>
+            <span id="secret-indicator">1 / 1</span>
+            <button onclick="changeSecret(1)">▶</button>
+        </div>
+        
+        <div style="color: #64748b; margin-top: 20px; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase;">
+            Cliquez en dehors pour fermer
+        </div>
+    </div>
 
     <script src="scripts/assets/js/dresseuses-data.js"></script>
     <script src="scripts/assets/js/script.js"></script>
