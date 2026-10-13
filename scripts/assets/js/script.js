@@ -748,23 +748,13 @@ function setupAdminTrigger() {
 function triggerLogin() {
     if (isEditMode || !auth) return;
     const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider).catch(err => console.error(err));
-}
-
-if (auth) {
-    auth.onAuthStateChanged(user => {
-        const lockBtn = document.getElementById('dock-btn-lock');
-        if (user && user.email === ADMIN_EMAIL) {
-            isEditMode = true;
-            document.body.classList.add('mode-edition');
-            if (lockBtn) lockBtn.style.display = 'flex';
-        } else {
-            isEditMode = false;
-            document.body.classList.remove('mode-edition');
-            if (lockBtn) lockBtn.style.display = 'none';
-        }
-        updateAllViews();
+    
+    // ASTUCE : Indique à Google quel compte utiliser directement
+    provider.setCustomParameters({
+        login_hint: ADMIN_EMAIL
     });
+
+    auth.signInWithPopup(provider).catch(err => console.error(err));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
