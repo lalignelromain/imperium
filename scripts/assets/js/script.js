@@ -413,7 +413,6 @@ function renderDresseusesHub() {
         const pocket = document.createElement('div');
         pocket.className = `hub-pocket ${hasSecret ? 'has-secret' : ''}`;
         
-        // CORRECTION DE L'AFFICHAGE (position absolute + object-fit contain)
         pocket.innerHTML = `
             ${imgFile ? `<img src="${imagePath}" onerror="this.outerHTML='${fallbackHTML}'" loading="lazy" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background-color: #111;">` : fallbackHTML}
             
@@ -425,7 +424,6 @@ function renderDresseusesHub() {
         shelfContainer.appendChild(pocket);
     });
 
-    // Complète la grille pour toujours avoir 10 emplacements
     const emptySlots = CARDS_PER_PAGE - pageTrainers.length;
     for (let e = 0; e < emptySlots; e++) {
         const emptyPocket = document.createElement('div');
@@ -435,7 +433,6 @@ function renderDresseusesHub() {
         shelfContainer.appendChild(emptyPocket);
     }
 
-    // Pagination
     const navContainer = document.getElementById('dresseuses-pagination');
     if (navContainer) {
         navContainer.innerHTML = '';
@@ -479,13 +476,15 @@ function renderDresseuseClasseur() {
     
     const totalItems = trainerImages.length + (hasMysteryCard ? 1 : 0);
     
-    // Application des layouts adaptatifs Flexbox
-    if (totalItems === 1) container.className = 'binder-page layout-flex layout-max-1'; 
-    else if (totalItems >= 2 && totalItems <= 4) container.className = 'binder-page layout-flex layout-max-2'; 
-    else if (totalItems === 5 || totalItems === 6) container.className = 'binder-page layout-flex layout-max-3'; 
-    else container.className = 'binder-page layout-flex layout-max-4';
+    // 🔥 CORRECTION : On définit la classe limite, mais on l'applique sur le SOUS-CONTENEUR, pas sur la page !
+    let layoutClass = '';
+    if (totalItems === 1) layoutClass = 'layout-max-1'; 
+    else if (totalItems >= 2 && totalItems <= 4) layoutClass = 'layout-max-2'; 
+    else if (totalItems === 5 || totalItems === 6) layoutClass = 'layout-max-3'; 
+    else layoutClass = 'layout-max-4';
 
-    let htmlContent = '';
+    // ON CRÉE LE WRAPPER ICI (qui gère la grille) à l'intérieur de la div principale
+    let htmlContent = `<div class="layout-flex ${layoutClass}">`;
     
     trainerImages.forEach(imgFile => {
         const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
@@ -508,6 +507,10 @@ function renderDresseuseClasseur() {
         `;
     }
     
+    htmlContent += `</div>`; // On ferme le Wrapper Flexbox
+    
+    // On s'assure que le conteneur principal a SEULEMENT la classe pour le fond !
+    container.className = 'binder-page';
     container.innerHTML = htmlContent;
 }
 
