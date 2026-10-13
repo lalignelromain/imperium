@@ -369,7 +369,7 @@ function initEV5ProgressHub() {
    6. MODULE DRESSEUSES (HUB & CLASSEUR) - GALERIE & MULTI-SECRÈTES
 ==================================================================== */
 
-let currentPageDresseuses = 0; // Ajout de la variable de pagination
+let currentPageDresseuses = 0; 
 
 // REGISTRE DES CARTES SECRÈTES (MODE ÉDITION UNIQUEMENT)
 const REGISTRE_SECRET = {
@@ -386,21 +386,22 @@ const REGISTRE_SECRET = {
     "Sophora": ["sophora.jpg"]
 };
 
-// -> Le Hub des Dresseuses (dresseuses.html) au format Classeur 3x4
+// -> Le Hub des Dresseuses (dresseuses.html) au format Classeur 3x3 (PC) / 2x2 (Mobile)
 function renderDresseusesHub() {
     const shelfContainer = document.getElementById('shelf');
     if (!shelfContainer || typeof dresseusesData === 'undefined') return; 
 
     const trainers = Object.keys(dresseusesData).sort((a, b) => a.localeCompare(b, 'fr'));
     
-    const CARDS_PER_PAGE = 12; // Format 3x4
+    // DYNAMIQUE : 9 cartes (3x3) sur PC, 4 cartes (2x2) sur Mobile
+    const isMobile = window.innerWidth <= 900;
+    const CARDS_PER_PAGE = isMobile ? 4 : 9; 
     const totalPages = Math.ceil(trainers.length / CARDS_PER_PAGE);
 
-    // Sécurité si on dépasse la pagination suite à un tri ou filtre
-    if (currentPageDresseuses >= totalPages) currentPageDresseuses = totalPages - 1;
+    // Sécurité si on dépasse la pagination suite à un redimensionnement
+    if (currentPageDresseuses >= totalPages) currentPageDresseuses = Math.max(0, totalPages - 1);
     if (currentPageDresseuses < 0) currentPageDresseuses = 0;
 
-    // Découpage des dresseuses pour la page actuelle
     const pageTrainers = trainers.slice(currentPageDresseuses * CARDS_PER_PAGE, (currentPageDresseuses + 1) * CARDS_PER_PAGE);
 
     shelfContainer.innerHTML = '';
@@ -408,6 +409,13 @@ function renderDresseusesHub() {
     // Conteneur de la page du classeur
     const pageEl = document.createElement('div');
     pageEl.className = 'vaultx-page';
+    
+    // On force la grille en 3 colonnes pour le PC
+    if (!isMobile) {
+        pageEl.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        pageEl.style.maxWidth = '700px'; 
+    }
+
     let pageHTML = '';
 
     pageTrainers.forEach(trainerName => {
@@ -432,22 +440,17 @@ function renderDresseusesHub() {
             <div class="vaultx-pocket" style="position:relative; cursor:pointer;" onclick="window.location.href='classeur.html?dresseuse=${encodeURIComponent(trainerName)}'">
                 ${secretBadge}
                 
-                <!-- La pochette avec ombre d'insertion latérale (gauche) -->
                 <div style="width:100%; height:100%; overflow:hidden; border-radius:4px; position:relative; box-shadow: 0 2px 5px rgba(0,0,0,0.4); background-color: #111; border-left: 2px solid rgba(0,0,0,0.8);">
                     
                     ${imgFile ? `<img src="${imagePath}" onerror="this.outerHTML='${fallbackHTML}'" loading="lazy" style="width:100%; height:100%; object-fit:cover;">` : fallbackHTML}
                     
-                    <!-- Ligne d'ombre simulant l'ouverture de la pochette à gauche -->
                     <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.6), transparent); pointer-events:none;"></div>
-
-                    <!-- Calque de brillance (Gloss) -->
                     <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>
                 </div>
             </div>
         `;
     });
 
-    // Remplissage des cases vides pour maintenir la structure 3x4
     const emptySlots = CARDS_PER_PAGE - pageTrainers.length;
     for (let e = 0; e < emptySlots; e++) {
         pageHTML += `
@@ -459,43 +462,38 @@ function renderDresseusesHub() {
     pageEl.innerHTML = pageHTML;
     shelfContainer.appendChild(pageEl);
 
-    // Création des boutons de navigation (Précédent / Suivant)
+    // BOUTONS DE NAVIGATION ÉPURÉS (SANS TEXTE)
     if (totalPages > 1) {
         const navContainer = document.createElement('div');
-        navContainer.style = "display: flex; justify-content: center; align-items: center; gap: 20px; margin-top: 30px; width: 100%;";
+        navContainer.style = "display: flex; justify-content: center; gap: 20px; margin-top: 25px; width: 100%;";
+
+        const btnStyle = (disabled) => `
+            display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; 
+            border-radius: 50%; cursor: ${disabled ? 'not-allowed' : 'pointer'}; 
+            border: 1px solid rgba(255,255,255,0.1); background: rgba(20,24,32,0.8); 
+            color: #fff; opacity: ${disabled ? '0.2' : '0.85'}; 
+            transition: all 0.2s ease; backdrop-filter: blur(4px);
+        `;
 
         const btnPrev = document.createElement('button');
-        btnPrev.innerHTML = "◀ Précédent";
-        btnPrev.style = `padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: ${currentPageDresseuses === 0 ? 'not-allowed' : 'pointer'}; border: 1px solid #333; background: #1a1a1a; color: #fff; opacity: ${currentPageDresseuses === 0 ? '0.4' : '1'}; transition: background 0.2s;`;
+        btnPrev.innerHTML = "<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><path d='M15 18l-6-6 6-6'/></svg>";
+        btnPrev.style = btnStyle(currentPageDresseuses === 0);
         btnPrev.disabled = currentPageDresseuses === 0;
-        btnPrev.onmouseover = () => { if (!btnPrev.disabled) btnPrev.style.background = '#2a2a2a'; };
-        btnPrev.onmouseout = () => { if (!btnPrev.disabled) btnPrev.style.background = '#1a1a1a'; };
-        btnPrev.onclick = () => {
-            if (currentPageDresseuses > 0) {
-                currentPageDresseuses--;
-                renderDresseusesHub();
-            }
-        };
-
-        const pageIndicator = document.createElement('span');
-        pageIndicator.style = "color: #94a3b8; font-size: 0.95rem; font-weight: bold; font-family: monospace;";
-        pageIndicator.innerText = `PAGE ${currentPageDresseuses + 1} / ${totalPages}`;
+        
+        btnPrev.onmouseover = () => { if (!btnPrev.disabled) { btnPrev.style.background = '#f472b6'; btnPrev.style.color = '#000'; btnPrev.style.borderColor = '#f472b6'; btnPrev.style.transform = 'translateX(-3px)'; btnPrev.style.opacity = '1'; } };
+        btnPrev.onmouseout = () => { if (!btnPrev.disabled) { btnPrev.style.background = 'rgba(20,24,32,0.8)'; btnPrev.style.color = '#fff'; btnPrev.style.borderColor = 'rgba(255,255,255,0.1)'; btnPrev.style.transform = 'translateX(0)'; } };
+        btnPrev.onclick = () => { if (currentPageDresseuses > 0) { currentPageDresseuses--; renderDresseusesHub(); } };
 
         const btnNext = document.createElement('button');
-        btnNext.innerHTML = "Suivant ▶";
-        btnNext.style = `padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: ${currentPageDresseuses >= totalPages - 1 ? 'not-allowed' : 'pointer'}; border: 1px solid #333; background: #1a1a1a; color: #fff; opacity: ${currentPageDresseuses >= totalPages - 1 ? '0.4' : '1'}; transition: background 0.2s;`;
+        btnNext.innerHTML = "<svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><path d='M9 18l6-6-6-6'/></svg>";
+        btnNext.style = btnStyle(currentPageDresseuses >= totalPages - 1);
         btnNext.disabled = currentPageDresseuses >= totalPages - 1;
-        btnNext.onmouseover = () => { if (!btnNext.disabled) btnNext.style.background = '#2a2a2a'; };
-        btnNext.onmouseout = () => { if (!btnNext.disabled) btnNext.style.background = '#1a1a1a'; };
-        btnNext.onclick = () => {
-            if (currentPageDresseuses < totalPages - 1) {
-                currentPageDresseuses++;
-                renderDresseusesHub();
-            }
-        };
+        
+        btnNext.onmouseover = () => { if (!btnNext.disabled) { btnNext.style.background = '#f472b6'; btnNext.style.color = '#000'; btnNext.style.borderColor = '#f472b6'; btnNext.style.transform = 'translateX(3px)'; btnNext.style.opacity = '1'; } };
+        btnNext.onmouseout = () => { if (!btnNext.disabled) { btnNext.style.background = 'rgba(20,24,32,0.8)'; btnNext.style.color = '#fff'; btnNext.style.borderColor = 'rgba(255,255,255,0.1)'; btnNext.style.transform = 'translateX(0)'; } };
+        btnNext.onclick = () => { if (currentPageDresseuses < totalPages - 1) { currentPageDresseuses++; renderDresseusesHub(); } };
 
         navContainer.appendChild(btnPrev);
-        navContainer.appendChild(pageIndicator);
         navContainer.appendChild(btnNext);
         shelfContainer.appendChild(navContainer);
     }
@@ -712,7 +710,6 @@ function setupDock() {
     dock.id = 'floating-dock';
     dock.className = 'floating-dock';
     
-    // Détection de la page pour gérer la flèche Retour
     let backLink = '';
     if (window.location.pathname.includes('classeur.html')) {
         backLink = `<a href="dresseuses.html" class="dock-btn" title="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>`;
@@ -731,7 +728,6 @@ function setupDock() {
     document.getElementById('dock-btn-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     document.getElementById('dock-btn-lock').addEventListener('click', () => { if (auth) auth.signOut(); });
 
-    // Masquage automatique de tout ancien bouton
     document.querySelectorAll('a, button, div').forEach(el => {
         if (el.textContent && el.textContent.trim().toUpperCase().includes('RETOUR AU PANTHÉON')) {
             el.style.display = 'none';
@@ -749,7 +745,6 @@ function triggerLogin() {
     if (isEditMode || !auth) return;
     const provider = new firebase.auth.GoogleAuthProvider();
     
-    // ASTUCE : Indique à Google quel compte utiliser directement
     provider.setCustomParameters({
         login_hint: ADMIN_EMAIL
     });
@@ -757,9 +752,37 @@ function triggerLogin() {
     auth.signInWithPopup(provider).catch(err => console.error(err));
 }
 
+if (auth) {
+    auth.onAuthStateChanged(user => {
+        const lockBtn = document.getElementById('dock-btn-lock');
+        if (user && user.email === ADMIN_EMAIL) {
+            isEditMode = true;
+            document.body.classList.add('mode-edition');
+            if (lockBtn) lockBtn.style.display = 'flex';
+        } else {
+            isEditMode = false;
+            document.body.classList.remove('mode-edition');
+            if (lockBtn) lockBtn.style.display = 'none';
+        }
+        updateAllViews();
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     setupDock();
     setupAdminTrigger();
     initFirestoreSync();
     initEV5ProgressHub();
+});
+
+window.addEventListener('resize', () => {
+    const shelfContainer = document.getElementById('shelf');
+    if (shelfContainer) {
+        const isMobile = window.innerWidth <= 900;
+        if (isMobile !== (shelfContainer.dataset.mobile === 'true')) {
+            shelfContainer.dataset.mobile = isMobile;
+            currentPageDresseuses = 0; 
+            renderDresseusesHub();
+        }
+    }
 });
