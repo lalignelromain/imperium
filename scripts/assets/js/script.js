@@ -416,11 +416,12 @@ function renderDresseusesHub() {
         pocket.onclick = () => window.location.href = `classeur.html?dresseuse=${encodeURIComponent(trainerName)}`;
         
         pocket.innerHTML = `
-            <div style="width:100%; height:100%; overflow:hidden; border-radius:4px; position:relative; background-color: #111;">
-                ${imgFile ? `<img src="${imagePath}" onerror="this.outerHTML='${fallbackHTML}'" loading="lazy" style="width:100%; height:100%; object-fit:cover;">` : fallbackHTML}
-                <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.6), transparent); pointer-events:none;"></div>
-                <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>
-            </div>
+    <div style="width:100%; height:100%; overflow:hidden; border-radius:4px; position:relative; background-color: #111;">
+        ${imgFile ? `<img src="${imagePath}" onerror="this.outerHTML='${fallbackHTML}'" loading="lazy" style="width:100%; height:100%; object-fit:contain;">` : fallbackHTML}
+        <div style="position:absolute; top:0; left:0; width:6px; height:100%; background: linear-gradient(to right, rgba(0,0,0,0.6), transparent); pointer-events:none;"></div>
+        <div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>
+    </div>
+`;
         `;
         shelfContainer.appendChild(pocket);
     });
