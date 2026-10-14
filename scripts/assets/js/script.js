@@ -497,19 +497,15 @@ function renderDresseuseClasseur() {
         `;
     });
 
-    if (hasMysteryCard) {
-        htmlContent += `
-            <div class="binder-pocket mystery-pocket" onclick="openLightbox3D()">
-                <div class="mystery-visual">
-                    <div class="binder-pocket mystery-pocket" onclick="openLightbox(...)">
-                <div class="mystery-visual">
-                    <img src="./assets/cards/dresseuses/ludvina-front.png" alt="Carte Secrète" class="secret-cover-img">
-                    </div>
-                  </div>
-                </div>
+   if (hasMysteryCard) {
+    htmlContent += `
+        <div class="binder-pocket mystery-pocket" onclick="openLightbox3D()">
+            <div class="mystery-visual">
+                <img src="./assets/cards/dresseuses/ludvina-front.png" alt="Carte Secrète" class="secret-cover-img">
             </div>
-        `;
-    }
+        </div>
+    `;
+}
     
     htmlContent += `</div>`; // On ferme le Wrapper Flexbox
     
