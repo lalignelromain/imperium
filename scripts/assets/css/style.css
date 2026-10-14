@@ -156,26 +156,128 @@ body.mode-edition .card-item:hover { transform: translateY(-4px); }
 .dock-btn-lock:hover { background-color: rgba(229, 192, 92, 0.15) !important; }
 
 /* ==========================================
-   PANTHÉON
+   PANTHÉON (STYLE LISTE CATALOGUE)
 ========================================== */
-.pantheon-container { max-width: 1300px; margin: 0 auto; padding: 0 20px 40px; width: 100%; position: relative; z-index: 1; }
-.pantheon-section { margin-bottom: 44px; }
-.pantheon-section h2 { font-size: 1.4rem; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #2d333b; }
-.pantheon-item { background: #141820; border: 1px solid #2d333b; border-radius: 12px; padding: 16px; text-align: center; cursor: default; transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; width: 240px; }
-.pantheon-item.item-scelle img { width: 100%; height: 220px; object-fit: contain; background: transparent; padding: 0; border-radius: 0; filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65)); }
-.grade-badge { margin-bottom: 12px; display: inline-block; background: rgba(212, 175, 55, 0.12); border: 1px solid #d4af37; color: #d4af37; font-weight: 700; font-size: 0.78rem; padding: 4px 14px; border-radius: 20px; letter-spacing: 0.5px; box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
-.gradee-item { cursor: pointer; user-select: none; -webkit-user-select: none; }
-.flip-wrapper { width: 155px; height: 220px; margin: 0 auto; perspective: 1000px; -webkit-perspective: 1000px; display: flex; align-items: center; justify-content: center; background: transparent !important; }
-.flip-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); -webkit-transition: -webkit-transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; -webkit-transform-style: preserve-3d; background: transparent !important; will-change: transform; }
-.gradee-item.is-flipped .flip-inner { transform: rotateY(180deg); -webkit-transform: rotateY(180deg); }
-@media (hover: hover) and (pointer: fine) {
-    .pantheon-item:hover { transform: translateY(-4px); border-color: #d4af37; box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35); }
-    .gradee-item:hover .flip-inner { transform: rotateY(180deg); -webkit-transform: rotateY(180deg); }
-    .flip-front img, .flip-back img { filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.75)); }
+.pantheon-container { 
+    max-width: 950px; 
+    margin: 0 auto; 
+    padding: 0 20px 40px; 
+    width: 100%; 
+    position: relative; 
+    z-index: 1; 
 }
-.flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; top: 0; left: 0; display: flex; align-items: center; justify-content: center; background: transparent !important; transform: rotateY(0deg); -webkit-transform: rotateY(0deg); }
-.flip-back { transform: rotateY(180deg); -webkit-transform: rotateY(180deg); }
-.flip-front img, .flip-back img { max-width: 100%; max-height: 100%; width: auto; height: 100%; object-fit: contain; background: transparent !important; border: none !important; padding: 0 !important; pointer-events: none; -webkit-transform: translateZ(0); transform: translateZ(0); }
+
+.pantheon-section { 
+    margin-bottom: 50px; 
+    width: 100%; 
+}
+
+/* Titre des catégories */
+.category-title { 
+    font-size: 1.5rem; 
+    border-bottom: 2px solid #2d333b; 
+    padding-bottom: 12px; 
+    margin-bottom: 24px; 
+    color: #e5c05c; 
+    text-transform: uppercase; 
+    letter-spacing: 3px; 
+}
+
+.layout-catalogue { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px; 
+    width: 100%; 
+}
+
+/* La ligne d'un objet (Image à gauche, texte à droite) */
+.pantheon-item { 
+    display: flex; 
+    flex-direction: row; 
+    align-items: center; 
+    gap: 30px; 
+    background: linear-gradient(135deg, #141820 0%, #0c0f16 100%); 
+    border: 1px solid #2d333b; 
+    border-radius: 16px; 
+    padding: 24px; 
+    text-align: left; 
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s; 
+    width: 100%; 
+    box-sizing: border-box; 
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .pantheon-item:hover { 
+        transform: translateX(12px); 
+        border-color: #d4af37; 
+        box-shadow: -8px 12px 30px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(212, 175, 55, 0.05); 
+    }
+}
+
+/* Image et 3D de la carte */
+.pantheon-item img, .pantheon-item .flip-wrapper { 
+    width: 155px; 
+    height: auto; 
+    flex-shrink: 0; 
+    border-radius: 4.5%; 
+    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.6)); 
+}
+
+.pantheon-item.item-scelle img { 
+    width: 180px; 
+    height: auto; 
+    max-height: 220px; 
+    object-fit: contain; 
+    border-radius: 8px; 
+}
+
+/* Zone de texte à droite */
+.pantheon-item-info { 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    min-width: 0; 
+}
+
+.grade-badge { 
+    align-self: flex-start; 
+    margin-bottom: 12px; 
+    background: rgba(212, 175, 55, 0.12); 
+    border: 1px solid #d4af37; 
+    color: #d4af37; 
+    font-weight: 700; 
+    font-size: 0.78rem; 
+    padding: 6px 16px; 
+    border-radius: 20px; 
+    letter-spacing: 1px; 
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); 
+    text-transform: uppercase;
+    white-space: nowrap; 
+}
+
+.pantheon-item-title { 
+    font-size: 1.4rem; 
+    font-weight: 800; 
+    color: #fff; 
+    margin-bottom: 10px; 
+    letter-spacing: 0.5px; 
+    word-wrap: break-word; 
+}
+.pantheon-item-desc { 
+    font-size: 0.95rem; 
+    color: #94a3b8; 
+    line-height: 1.6; 
+}
+
+/* Mécanique 3D au clic */
+.gradee-item { cursor: pointer; perspective: 1000px; }
+.flip-wrapper { height: 220px; }
+.flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+.gradee-item.is-flipped .flip-inner { transform: rotateY(180deg); }
+.flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; top: 0; left: 0; }
+.flip-back { transform: rotateY(180deg); }
+.flip-front img, .flip-back img { width: 100%; height: 100%; object-fit: contain; }
 
 /* ====================================================================
    MODULE MASTER SET EV 5 ET PIKACHU 30TH (AFFICHEURS LARGES)
@@ -272,17 +374,15 @@ body.mode-edition .hof-pin-btn { display: flex; }
 /* ====================================================================
    MODULE : DRESSEUSES (HUB, CLASSEUR & SECRÈTES 3D)
 ==================================================================== */
-/* 1. LA GRILLE DU HUB (5x2) - Spécifique à l'étagère Dresseuses */
 #shelf.hub-grid { grid-template-columns: repeat(5, 1fr); max-width: 1000px; padding: 20px; }
 
-/* 🔥 SUPPRESSION DES COINS BLANCS ET FORCAGE ANTI-ROGNE 🔥 */
 .hub-pocket, .binder-pocket { 
     aspect-ratio: 734 / 1024; 
     border: 2px solid rgba(255,255,255,0.08); 
-    border-radius: 4.5% !important; /* Arrondi officiel TCG pour masquer le blanc */
+    border-radius: 4.5% !important; 
     position: relative; 
     cursor: pointer; 
-    overflow: hidden !important; /* L'emporte-pièce magique */
+    overflow: hidden !important; 
     transition: 0.2s; 
     display: flex; align-items: center; justify-content: center; 
     background-color: transparent !important;
@@ -301,22 +401,19 @@ body.mode-edition .hof-pin-btn { display: flex; }
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
-    border-radius: inherit !important; /* Copie l'arrondi du parent */
+    border-radius: inherit !important; 
     background-color: transparent !important;
-    transform: scale(1.015) !important; /* Micro-zoom pour rejeter le liseré blanc hors du cadre */
+    transform: scale(1.015) !important; 
 }
 
-/* 2. EFFET SLEEVE (Mode Édition) */
 body.mode-edition .hub-pocket.has-secret { border: 3px solid #ff00aa; box-shadow: inset 0 0 15px rgba(255, 0, 170, 0.4), 0 0 15px rgba(255, 0, 170, 0.6); }
 body.mode-edition .hub-pocket.has-secret::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, rgba(255,255,255,0.3) 0%, transparent 40%, rgba(255,0,170,0.2) 100%); z-index: 5; }
 
-/* 3. PAGINATION DU HUB DRESSEUSES */
 .pagination { display: flex; gap: 20px; margin-top: 30px; justify-content: center; width: 100%; }
 .pagination button { background: #1a1a1a; border: 1px solid #333; color: white; padding: 10px 20px; border-radius: 30px; cursor: pointer; transition: 0.2s; }
 .pagination button:hover:not(:disabled) { background: #ff00aa; color: #fff; border-color: #ff00aa; box-shadow: 0 0 15px rgba(255,0,170,0.5); }
 .pagination button:disabled { opacity: 0.3; cursor: not-allowed; }
 
-/* 4. LE CLASSEUR ADAPTATIF FLEXBOX */
 .binder-page { background: #111724; border: 2px solid #2d333b; border-radius: 12px; padding: 30px; box-shadow: 0 16px 36px rgba(0,0,0,0.8); width: 100%; }
 .layout-flex { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin: 0 auto; width: 100%; }
 
@@ -325,13 +422,12 @@ body.mode-edition .hub-pocket.has-secret::after { content: ''; position: absolut
 .layout-max-3 { max-width: 700px; }
 .layout-max-4 { max-width: 940px; }
 
-/* 5. LA CARTE MYSTÈRE VIP (Design RedLight District) */
 .mystery-pocket { 
     cursor: pointer; 
-    border: 2px solid #ff0033 !important; /* Le fameux rouge néon RedLight */
+    border: 2px solid #ff0033 !important; 
     box-shadow: 0 0 15px rgba(255, 0, 51, 0.45) !important; 
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; 
-    border-radius: 4.5% !important; /* Arrondi parfait pour Ludvina */
+    border-radius: 4.5% !important; 
     overflow: hidden !important; 
 }
 .mystery-pocket:hover { 
@@ -341,7 +437,7 @@ body.mode-edition .hub-pocket.has-secret::after { content: ''; position: absolut
 .mystery-visual { 
     width: 100%; 
     height: 100%; 
-    background: linear-gradient(135deg, #7a001a, #140005, #3d0014); /* Fond VIP très sombre */
+    background: linear-gradient(135deg, #7a001a, #140005, #3d0014); 
     display: flex; 
     flex-direction: column; 
     align-items: center; 
@@ -366,19 +462,17 @@ body.mode-edition .hub-pocket.has-secret::after { content: ''; position: absolut
     z-index: 2; 
 }
 
-/* 🔥 IMAGE SECRÈTE (LUDVINA) 🔥 */
 .secret-cover-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: inherit; /* S'adapte au 4.5% du RedLight */
+    border-radius: inherit; 
     transition: filter 0.3s ease, transform 0.3s ease;
 }
 .mystery-visual:hover .secret-cover-img {
     filter: brightness(1.15);
 }
 
-/* 6. LA LIGHTBOX 3D */
 .secret-lightbox { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; backdrop-filter: blur(10px); }
 .secret-lightbox.active { opacity: 1; pointer-events: all; }
 .flip-scene { width: 90vw; max-width: 450px; aspect-ratio: 734 / 1024; perspective: 2000px; margin-bottom: 20px; }
@@ -394,7 +488,7 @@ body.mode-edition .hub-pocket.has-secret::after { content: ''; position: absolut
 .secret-nav span { color: #ff0033; font-weight: bold; font-family: monospace; font-size: 1.1rem; }
 
 /* ====================================================================
-   FINITION MEWTWO (PSa & VaultX Standard)
+   FINITION MEWTWO (PSA & VaultX Standard)
 ==================================================================== */
 body.theme-mewtwo .psa-slab:hover { box-shadow: 0 30px 55px rgba(0, 0, 0, 0.95), 0 0 18px rgba(168, 85, 247, 0.45); }
 body.theme-mewtwo .psa-label-card { border: 4px solid #3f3f46; border-image: linear-gradient(135deg, #a1a1aa 0%, #27272a 25%, #52525b 50%, #18181b 75%, #71717a 100%) 1; }
@@ -483,9 +577,6 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned { pointer-event
     .dock-btn { width: 34px; height: 34px; }
     .hub-progress-wrapper { min-width: 100% !important; align-items: center !important; }
 
-    /* ====================================================================
-       AJUSTEMENTS MOBILE : DRESSEUSES & CLASSEUR (Max 767px)
-    ==================================================================== */
     #shelf.hub-grid {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
@@ -529,7 +620,7 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned { pointer-event
     .pagination {
         gap: 10px !important;
         flex-wrap: wrap !important;
-        margin-bottom: 85px !important; /* Dégagement du dock */
+        margin-bottom: 85px !important; 
     }
     
     .pagination button {
@@ -538,6 +629,21 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned { pointer-event
     }
     
     .collection-workspace {
-        padding-bottom: 100px !important; /* Dégagement du dock en bas de page */
+        padding-bottom: 100px !important; 
     }
+
+    /* RESPONSIVE MOBILE PANTHÉON LISTE CATALOGUE */
+    .pantheon-item { 
+        flex-direction: column !important; 
+        text-align: center !important; 
+        gap: 16px !important; 
+        padding: 20px 16px !important; 
+        max-width: 100% !important;
+    }
+    .pantheon-item:hover { transform: translateY(-5px) !important; }
+    .grade-badge { align-self: center !important; margin-bottom: 8px !important; }
+    .pantheon-item img, .pantheon-item .flip-wrapper { width: 130px !important; height: auto !important; }
+    .pantheon-item.item-scelle img { width: 150px !important; }
+    .pantheon-item-title { font-size: 1.2rem !important; }
+    .pantheon-item-desc { font-size: 0.85rem !important; line-height: 1.4 !important; }
 }
