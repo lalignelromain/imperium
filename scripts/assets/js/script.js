@@ -405,16 +405,16 @@ let currentSecretIndexDresseuse = 0;
 
 const REGISTRE_SECRET = {
     "Carolina": ["carolina.png"],
-    "Cynthia": ["cynthia.jpg"],
-    "Donna": ["donna.jpg"],
-    "Erika": ["erika.jpg"],
-    "Gladys": ["gladys.jpg"],
-    "Lillie": ["lillie.jpg"],
-    "Margie": ["margie.jpg"],
-    "Nacchara": ["irida.jpg"],
-    "Rosemary": ["rosemary.jpg"],
-    "Roxanne": ["roxanne.jpg"],
-    "Sophora": ["sophora.jpg"]
+    "Cynthia": ["cynthia.png"],
+    "Donna": ["donna.png"],
+    "Erika": ["erika.png"],
+    "Gladys": ["gladys.png"],
+    "Lillie": ["lillie.png"],
+    "Margie": ["margie.png"],
+    "Nacchara": ["nacchara.png"],
+    "Rosemary": ["rosemary.png"],
+    "Roxanne": ["roxanne.png"],
+    "Sophora": ["sophora.png"]
 };
 
 // -> Hub (dresseuses.html) - Grille 5x2
