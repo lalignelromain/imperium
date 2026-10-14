@@ -286,62 +286,120 @@ function renderLegacyCollection(pokemonName, containerId) {
 }
 
 /* ====================================================================
-   4. PANTHÉON GLOBAL
+   4. NOUVEAU RENDU DU PANTHÉON (Format Liste Catalogue Layout 7)
 ==================================================================== */
 function renderPantheon() {
-    if (typeof pantheonDatabase === 'undefined') return;
+    const scellesGrid = document.getElementById("scelles-grid");
+    const gradeesGrid = document.getElementById("gradees-grid");
 
-    const scellesContainer = document.getElementById('scelles-grid');
-    if (scellesContainer && pantheonDatabase.scelles) {
+    if (!scellesGrid || !gradeesGrid || typeof pantheonDatabase === 'undefined') return;
+    
+    scellesGrid.innerHTML = '';
+    gradeesGrid.innerHTML = '';
+
+    // 1. GÉNÉRATION DES ITEMS SCELLÉS
+    if (pantheonDatabase.scelles) {
         const scellesTries = [...pantheonDatabase.scelles].sort((a, b) => {
-            const numA = parseInt((a.nom.match(/#(\d+)#/) || [])[1], 10) || 999;
-            const numB = parseInt((b.nom.match(/#(\d+)#/) || [])[1], 10) || 999;
+            const matchA = a.nom.match(/#(\d+)#/);
+            const matchB = b.nom.match(/#(\d+)#/);
+            const numA = matchA ? parseInt(matchA[1], 10) : 999;
+            const numB = matchB ? parseInt(matchB[1], 10) : 999;
             return numA - numB;
         });
 
-        scellesContainer.innerHTML = scellesTries.map(item => {
-            const nomAffiche = item.nom.replace(/#\d+#\s*/, '');
-            return `
-                <div class="pantheon-item item-scelle">
-                    <img src="${resolveImg(item.image, item.langue)}" alt="${nomAffiche}" loading="lazy">
-                    <div class="item-info">
-                        <h4>${nomAffiche}</h4>
-                        <p style="font-size: 12px; color: #aaa;">${item.extension}</p>
-                        <p style="font-size: 11px; color: #666;">${item.annee} • ${item.langue.toUpperCase()}</p>
+        scellesTries.forEach(item => {
+            const titrePropre = item.nom.replace(/#\d+#\s*/g, '');
+            const isOwned = localStorage.getItem(`pantheon_${item.id}`) === 'true';
+            const opacityClass = isOwned ? 'is-owned' : 'not-owned';
+            
+            const html = `
+                <div class="pantheon-item item-scelle ${opacityClass}" id="${item.id}">
+                    <img src="${resolveImg(item.image, item.langue)}" alt="${titrePropre}">
+                    
+                    <div class="pantheon-item-info">
+                        <div class="grade-badge" style="border-color: #a855f7; color: #a855f7; background: rgba(168, 85, 247, 0.12);">
+                            SCELLÉ - ÉTAT MINT
+                        </div>
+                        <div class="pantheon-item-title">${titrePropre}</div>
+                        <div class="pantheon-item-desc">
+                            <span>Extension :</span> <strong>${item.extension} (${item.annee})</strong><br><br>
+                            <em>Conservé sous protection acrylique. Scellage d'origine scrupuleusement vérifié.</em>
+                        </div>
                     </div>
                 </div>
             `;
-        }).join('');
-    }
-
-    const gradeesContainer = document.getElementById('gradees-grid');
-    if (gradeesContainer && pantheonDatabase.gradees) {
-        gradeesContainer.innerHTML = '';
-        pantheonDatabase.gradees.forEach(item => {
-            const cardDiv = document.createElement('div');
-            cardDiv.className = 'pantheon-item gradee-item';
-            cardDiv.innerHTML = `
-                <div class="grade-badge">${item.societe} - ${item.note}</div>
-                <div class="flip-wrapper">
-                    <div class="flip-inner">
-                        <div class="flip-front"><img src="${resolveImg(item.imageFront, item.langue)}" alt="${item.nom} Recto" loading="lazy"></div>
-                        <div class="flip-back"><img src="${resolveImg(item.imageBack, item.langue)}" alt="${item.nom} Verso" loading="lazy"></div>
-                    </div>
-                </div>
-                <div class="item-info">
-                    <h4>${item.nom}</h4>
-                    <p style="font-size: 12px; color: #aaa;">${item.extension} (${item.numero})</p>
-                </div>
-            `;
-            cardDiv.addEventListener('click', () => {
-                if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-                    cardDiv.classList.toggle('is-flipped');
-                }
-            });
-            cardDiv.addEventListener('mouseleave', () => cardDiv.classList.remove('is-flipped'));
-            gradeesContainer.appendChild(cardDiv);
+            scellesGrid.insertAdjacentHTML("beforeend", html);
         });
     }
+
+    // 2. GÉNÉRATION DES CARTES GRADÉES
+    if (pantheonDatabase.gradees) {
+        pantheonDatabase.gradees.forEach(item => {
+            const isOwned = localStorage.getItem(`pantheon_${item.id}`) === 'true';
+            const opacityClass = isOwned ? 'is-owned' : 'not-owned';
+            
+            let badgeColor = "#d4af37"; 
+            let badgeBg = "rgba(212, 175, 55, 0.12)";
+            if(item.societe && item.societe.includes("PSA")) {
+                badgeColor = "#e74c3c"; 
+                badgeBg = "rgba(231, 76, 60, 0.12)";
+            } else if(item.societe && item.societe.includes("PCA")) {
+                badgeColor = "#38bdf8"; 
+                badgeBg = "rgba(56, 189, 248, 0.12)";
+            } else if(item.societe && item.societe.includes("AFG")) {
+                badgeColor = "#10b981"; 
+                badgeBg = "rgba(16, 185, 129, 0.12)";
+            }
+
+            const html = `
+                <div class="pantheon-item ${opacityClass}" id="${item.id}">
+                    
+                    <div class="flip-wrapper gradee-item" onclick="this.classList.toggle('is-flipped')">
+                        <div class="flip-inner">
+                            <div class="flip-front"><img src="${resolveImg(item.imageFront, item.langue)}" alt="${item.nom} - Face"></div>
+                            <div class="flip-back"><img src="${resolveImg(item.imageBack, item.langue)}" alt="${item.nom} - Dos"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="pantheon-item-info">
+                        <div class="grade-badge" style="border-color: ${badgeColor}; color: ${badgeColor}; background: ${badgeBg};">
+                            ${item.societe} - ${item.note}
+                        </div>
+                        <div class="pantheon-item-title">${item.nom}</div>
+                        <div class="pantheon-item-desc">
+                            <span>Extension :</span> <strong>${item.extension} (${item.annee})</strong><br>
+                            <span>Numérotation :</span> <strong>${item.numero}</strong><br><br>
+                            <em>Cliquez sur la carte pour voir son verso.</em>
+                        </div>
+                    </div>
+                    
+                </div>
+            `;
+            gradeesGrid.insertAdjacentHTML("beforeend", html);
+        });
+    }
+
+    // 3. ÉCOUTEURS DE CLICS (MODE ÉDITION)
+    document.querySelectorAll(".pantheon-item").forEach(el => {
+        el.addEventListener("click", (e) => {
+            if (e.target.closest('.gradee-item')) return; 
+
+            if (document.body.classList.contains("mode-edition")) {
+                const id = el.id;
+                const isCurrentlyOwned = el.classList.contains("is-owned");
+                
+                if (isCurrentlyOwned) {
+                    el.classList.remove("is-owned");
+                    el.classList.add("not-owned");
+                    localStorage.setItem(`pantheon_${id}`, 'false');
+                } else {
+                    el.classList.add("is-owned");
+                    el.classList.remove("not-owned");
+                    localStorage.setItem(`pantheon_${id}`, 'true');
+                }
+            }
+        });
+    });
 }
 
 /* ====================================================================
@@ -476,14 +534,12 @@ function renderDresseuseClasseur() {
     
     const totalItems = trainerImages.length + (hasMysteryCard ? 1 : 0);
     
-    // 🔥 CORRECTION : On définit la classe limite, mais on l'applique sur le SOUS-CONTENEUR, pas sur la page !
     let layoutClass = '';
     if (totalItems === 1) layoutClass = 'layout-max-1'; 
     else if (totalItems >= 2 && totalItems <= 4) layoutClass = 'layout-max-2'; 
     else if (totalItems === 5 || totalItems === 6) layoutClass = 'layout-max-3'; 
     else layoutClass = 'layout-max-4';
 
-    // ON CRÉE LE WRAPPER ICI (qui gère la grille) à l'intérieur de la div principale
     let htmlContent = `<div class="layout-flex ${layoutClass}">`;
     
     trainerImages.forEach(imgFile => {
@@ -507,9 +563,8 @@ function renderDresseuseClasseur() {
     `;
 }
     
-    htmlContent += `</div>`; // On ferme le Wrapper Flexbox
+    htmlContent += `</div>`; 
     
-    // On s'assure que le conteneur principal a SEULEMENT la classe pour le fond !
     container.className = 'binder-page';
     container.innerHTML = htmlContent;
 }
