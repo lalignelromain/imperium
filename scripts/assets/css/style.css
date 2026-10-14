@@ -589,4 +589,13 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned {
         padding: 8px 16px !important;
         font-size: 0.85rem !important;
     }
+
+    /* 4. Correction du chevauchement Pagination / Dock flottant */
+.pagination {
+    margin-bottom: 85px !important; /* Pousse les boutons au-dessus du dock */
+}
+
+.collection-workspace {
+    padding-bottom: 100px !important; /* Laisse de l'espace pour que la page défile plus bas */
+}
 }
