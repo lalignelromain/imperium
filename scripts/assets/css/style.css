@@ -545,6 +545,7 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned {
     
     /* 1. L'Étagère Panthéon (dresseuses.html) */
     #shelf.hub-grid {
+        display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
         max-width: 100% !important;
         gap: 12px !important;
