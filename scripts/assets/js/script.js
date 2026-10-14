@@ -501,7 +501,11 @@ function renderDresseuseClasseur() {
         htmlContent += `
             <div class="binder-pocket mystery-pocket" onclick="openLightbox3D()">
                 <div class="mystery-visual">
-                    <span>???</span>
+                    <div class="binder-pocket mystery-pocket" onclick="openLightbox(...)">
+                <div class="mystery-visual">
+                    <img src="./assets/cards/dresseuses/ludvina-front.png" alt="Carte Secrète" class="secret-cover-img">
+                    </div>
+                  </div>
                 </div>
             </div>
         `;
