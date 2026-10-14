@@ -297,7 +297,7 @@ function renderPantheon() {
     scellesGrid.innerHTML = '';
     gradeesGrid.innerHTML = '';
 
-    // 1. GÉNÉRATION DES ITEMS SCELLÉS
+    // 1. GÉNÉRATION DES ITEMS SCELLÉS (Toujours possédés 100%)
     if (pantheonDatabase.scelles) {
         const scellesTries = [...pantheonDatabase.scelles].sort((a, b) => {
             const matchA = a.nom.match(/#(\d+)#/);
@@ -309,11 +309,9 @@ function renderPantheon() {
 
         scellesTries.forEach(item => {
             const titrePropre = item.nom.replace(/#\d+#\s*/g, '');
-            const isOwned = localStorage.getItem(`pantheon_${item.id}`) === 'true';
-            const opacityClass = isOwned ? 'is-owned' : 'not-owned';
             
             const html = `
-                <div class="pantheon-item item-scelle ${opacityClass}" id="${item.id}">
+                <div class="pantheon-item item-scelle" id="${item.id}">
                     <img src="${resolveImg(item.image, item.langue)}" alt="${titrePropre}">
                     
                     <div class="pantheon-item-info">
@@ -332,12 +330,9 @@ function renderPantheon() {
         });
     }
 
-    // 2. GÉNÉRATION DES CARTES GRADÉES
+    // 2. GÉNÉRATION DES CARTES GRADÉES (Toujours possédées 100%)
     if (pantheonDatabase.gradees) {
         pantheonDatabase.gradees.forEach(item => {
-            const isOwned = localStorage.getItem(`pantheon_${item.id}`) === 'true';
-            const opacityClass = isOwned ? 'is-owned' : 'not-owned';
-            
             let badgeColor = "#d4af37"; 
             let badgeBg = "rgba(212, 175, 55, 0.12)";
             if(item.societe && item.societe.includes("PSA")) {
@@ -352,7 +347,7 @@ function renderPantheon() {
             }
 
             const html = `
-                <div class="pantheon-item ${opacityClass}" id="${item.id}">
+                <div class="pantheon-item" id="${item.id}">
                     
                     <div class="flip-wrapper gradee-item" onclick="this.classList.toggle('is-flipped')">
                         <div class="flip-inner">
@@ -378,30 +373,7 @@ function renderPantheon() {
             gradeesGrid.insertAdjacentHTML("beforeend", html);
         });
     }
-
-    // 3. ÉCOUTEURS DE CLICS (MODE ÉDITION)
-    document.querySelectorAll(".pantheon-item").forEach(el => {
-        el.addEventListener("click", (e) => {
-            if (e.target.closest('.gradee-item')) return; 
-
-            if (document.body.classList.contains("mode-edition")) {
-                const id = el.id;
-                const isCurrentlyOwned = el.classList.contains("is-owned");
-                
-                if (isCurrentlyOwned) {
-                    el.classList.remove("is-owned");
-                    el.classList.add("not-owned");
-                    localStorage.setItem(`pantheon_${id}`, 'false');
-                } else {
-                    el.classList.add("is-owned");
-                    el.classList.remove("not-owned");
-                    localStorage.setItem(`pantheon_${id}`, 'true');
-                }
-            }
-        });
-    });
 }
-
 /* ====================================================================
    5. PROGRESSION EV5 (HUB)
 ==================================================================== */
