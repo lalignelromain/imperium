@@ -374,7 +374,7 @@ let currentActiveTrainerDresseuse = null;
 let currentSecretIndexDresseuse = 0;
 
 const REGISTRE_SECRET = {
-    "Carolina": ["carolina.jpg"],
+    "Carolina": ["carolina.png"],
     "Cynthia": ["cynthia.jpg"],
     "Donna": ["donna.jpg"],
     "Erika": ["erika.jpg"],
