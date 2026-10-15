@@ -404,7 +404,7 @@ let currentActiveTrainerDresseuse = null;
 let currentSecretIndexDresseuse = 0;
 
 const REGISTRE_SECRET = {
-    "Alizee": ["alizee.png"],
+    "Alizée": ["alizee.png"],
     "Alyxia": ["alyxia.png"],
     "Anis": ["anis.png"],
     "Apia": ["apia.png"],
