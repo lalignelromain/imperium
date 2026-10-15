@@ -321,7 +321,6 @@ function renderPantheon() {
                         <div class="pantheon-item-title">${titrePropre}</div>
                         <div class="pantheon-item-desc">
                             <span>Extension :</span> <strong>${item.extension} (${item.annee})</strong><br><br>
-                            <em>Conservé sous protection acrylique. Scellage d'origine scrupuleusement vérifié.</em>
                         </div>
                     </div>
                 </div>
@@ -364,7 +363,6 @@ function renderPantheon() {
                         <div class="pantheon-item-desc">
                             <span>Extension :</span> <strong>${item.extension} (${item.annee})</strong><br>
                             <span>Numérotation :</span> <strong>${item.numero}</strong><br><br>
-                            <em>Cliquez sur la carte pour voir son verso.</em>
                         </div>
                     </div>
                     
