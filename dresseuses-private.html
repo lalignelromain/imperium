@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mewthology - Galerie Privée des Dresseuses</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050608">
+    
+    <link rel="stylesheet" href="scripts/assets/css/style.css?v=2">
+
+    <!-- SDK Firebase Compat -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="theme-mew">
+    <!-- Filigrane -->
+    <img src="scripts/assets/img/mew-icon.png" class="bg-watermark bg-mew" alt="">
+    
+    <header class="header-main">
+        <h1>GALERIE PRIVÉE</h1>
+        <div class="subtitle">Dresseuses Secrètes & Intégrales</div>
+    </header>
+
+    <main class="collection-workspace" style="display: flex; flex-direction: column; align-items: center; width: 100%; padding-bottom: 60px;">
+        
+        <!-- Grille des cartes secrètes -->
+        <div class="cards-grid" id="private-secret-grid" style="width: 100%; max-width: 1300px; padding: 20px;">
+            <!-- Généré dynamiquement par le script ci-dessous -->
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="dresseuses.html" class="btn-glass">← Retourner au Panthéon</a>
+        </div>
+
+    </main>
+
+    <script src="scripts/assets/js/dresseuses-data.js"></script>
+    <script src="scripts/assets/js/script.js"></script>
+
+    <script>
+        /* ====================================================================
+           GÉNÉRATION AUTOMATIQUE DE LA GALERIE PRIVÉE DES SECRÈTES
+           ==================================================================== */
+        document.addEventListener("DOMContentLoaded", () => {
+            // Un léger délai pour s'assurer que REGISTRE_SECRET de script.js est bien chargé
+            setTimeout(() => {
+                const gridContainer = document.getElementById('private-secret-grid');
+                if (!gridContainer || typeof REGISTRE_SECRET === 'undefined') return;
+
+                let htmlContent = '';
+
+                for (const [trainerName, secretImages] of Object.entries(REGISTRE_SECRET)) {
+                    if (!secretImages || secretImages.length === 0) continue;
+
+                    secretImages.forEach((imgFile, index) => {
+                        const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
+                        const cardTitle = secretImages.length > 1 ? `${trainerName} (Secrète ${index + 1})` : trainerName;
+
+                        htmlContent += `
+                            <div class="card-item is-owned" style="border-color: rgba(255, 0, 170, 0.4); box-shadow: 0 0 15px rgba(255, 0, 170, 0.2); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'" onclick="openLightbox('${imgSrc}')">
+                                <img src="${imgSrc}" alt="${cardTitle}" loading="lazy" onerror="this.src='scripts/assets/img/back-fr.png'">
+                                <div class="card-info">
+                                    <div class="card-name" style="color: #ff00aa;">${cardTitle}</div>
+                                    <div class="card-meta">Édition Secrète</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                gridContainer.innerHTML = htmlContent;
+            }, 100);
+        });
+    </script>
+</body>
+</html>
