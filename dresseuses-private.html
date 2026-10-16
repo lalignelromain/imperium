@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mewthology - Galerie Privée des Dresseuses</title>
+    <title>Mewthology - Salon Privé</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050608">
@@ -20,19 +20,49 @@
     <img src="scripts/assets/img/mew-icon.png" class="bg-watermark bg-mew" alt="">
     
     <header class="header-main">
-        <h1>GALERIE PRIVÉE</h1>
-        <div class="subtitle">Dresseuses Secrètes & Intégrales</div>
+        <h1>SALON PRIVÉ</h1>
+        <div class="subtitle">Zone Confidentielle</div>
     </header>
 
     <main class="collection-workspace" style="display: flex; flex-direction: column; align-items: center; width: 100%; padding-bottom: 60px;">
         
-        <!-- Grille des cartes secrètes -->
-        <div class="cards-grid" id="private-secret-grid" style="width: 100%; max-width: 1300px; padding: 20px;">
-            <!-- Généré dynamiquement par le script ci-dessous -->
+        <!-- ==========================================
+             1. ÉCRAN D'ACCUEIL / SALON (Visible par défaut)
+             ========================================== -->
+        <div id="welcome-lounge" style="width: 100%; max-width: 700px; margin-top: 4vh; text-align: center; padding: 0 15px;">
+            <div style="background: rgba(12, 15, 22, 0.85); border: 1px solid rgba(255, 0, 170, 0.3); border-radius: 18px; padding: 40px 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(255, 0, 170, 0.05); backdrop-filter: blur(12px);">
+                
+                <h2 style="color: #ff00aa; font-size: 1.8rem; margin-bottom: 15px; letter-spacing: 3px; text-transform: uppercase;">
+                    Bienvenue
+                </h2>
+                
+                <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.6; margin-bottom: 35px; max-width: 500px; margin-left: auto; margin-right: auto;">
+                    Cet espace est réservé au futur développement de l'interface privée.<br><br>
+                    Pour le moment, installez-vous et accédez directement à l'intégralité de la collection secrète.
+                </p>
+                
+                <button type="button" onclick="enterGallery()" class="btn-glass" style="font-size: 1.1rem; padding: 14px 30px; border-color: #ff00aa; color: #fff; background: rgba(255, 0, 170, 0.15); box-shadow: 0 0 20px rgba(255, 0, 170, 0.3);">
+                    ✨ Révéler la Galerie
+                </button>
+
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <a href="dresseuses.html" class="btn-glass" style="font-size: 0.85rem; border-color: rgba(255,255,255,0.1);">← Quitter le salon</a>
+            </div>
         </div>
 
-        <div style="text-align: center; margin-top: 30px;">
-            <a href="dresseuses.html" class="btn-glass">← Retourner au Panthéon</a>
+        <!-- ==========================================
+             2. GALERIE SECRÈTE (Cachée par défaut)
+             ========================================== -->
+        <div id="secret-gallery-view" style="display: none; width: 100%; flex-direction: column; align-items: center;">
+            <div class="cards-grid" id="private-secret-grid" style="width: 100%; max-width: 1300px; padding: 20px;">
+                <!-- Généré dynamiquement par le script -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button type="button" onclick="exitGallery()" class="btn-glass">← Retourner à l'accueil du salon</button>
+            </div>
         </div>
 
     </main>
@@ -42,10 +72,24 @@
 
     <script>
         /* ====================================================================
+           FONCTIONS DE TRANSITION (SALON <-> GALERIE)
+           ==================================================================== */
+        function enterGallery() {
+            document.getElementById('welcome-lounge').style.display = 'none';
+            document.getElementById('secret-gallery-view').style.display = 'flex';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function exitGallery() {
+            document.getElementById('secret-gallery-view').style.display = 'none';
+            document.getElementById('welcome-lounge').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* ====================================================================
            GÉNÉRATION AUTOMATIQUE DE LA GALERIE PRIVÉE DES SECRÈTES
            ==================================================================== */
         document.addEventListener("DOMContentLoaded", () => {
-            // Un léger délai pour s'assurer que REGISTRE_SECRET de script.js est bien chargé
             setTimeout(() => {
                 const gridContainer = document.getElementById('private-secret-grid');
                 if (!gridContainer || typeof REGISTRE_SECRET === 'undefined') return;
