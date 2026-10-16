@@ -812,14 +812,18 @@ function triggerLogin() {
 if (auth) {
     auth.onAuthStateChanged(user => {
         const lockBtn = document.getElementById('dock-btn-lock');
+        const fabPrivateBtn = document.getElementById('fabPrivateBtn');
+        
         if (user && user.email === ADMIN_EMAIL) {
             isEditMode = true;
             document.body.classList.add('mode-edition');
             if (lockBtn) lockBtn.style.display = 'flex';
+            if (fabPrivateBtn) fabPrivateBtn.style.display = 'flex';
         } else {
             isEditMode = false;
             document.body.classList.remove('mode-edition');
             if (lockBtn) lockBtn.style.display = 'none';
+            if (fabPrivateBtn) fabPrivateBtn.style.display = 'none';
         }
         updateAllViews();
     });
