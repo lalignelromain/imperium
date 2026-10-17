@@ -6,88 +6,327 @@
     <title>Mewthology - Salon Privé</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#050608">
+    <meta name="theme-color" content="#000000">
     
+    <!-- Ton CSS global (pour la galerie et le reste du site) -->
     <link rel="stylesheet" href="scripts/assets/css/style.css?v=2">
 
     <!-- SDK Firebase Compat -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        /* ==========================================
+           MÉCANIQUE DU SLIDER PLEIN ÉCRAN
+        ========================================== */
+        body.page-private {
+            font-family: 'Montserrat', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            overflow: hidden; /* Bloque le scroll global */
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #000000;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            transform: translateX(50px);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+            z-index: 10;
+        }
+
+        /* ==========================================
+           DESIGN DE L'ANTICHAMBRE (SLIDE 1)
+        ========================================== */
+        .smoke-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+            filter: blur(40px) brightness(1.2); 
+            mix-blend-mode: screen;
+        }
+
+        .smoke-blob {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        .smoke-1 {
+            width: 700px; height: 700px;
+            bottom: -30%; left: 10%;
+            background: #652CA0; 
+            animation: fadeSmoke 2s forwards, riseSmokeLeft 14s infinite alternate ease-in-out;
+        }
+
+        .smoke-2 {
+            width: 800px; height: 800px;
+            bottom: -40%; right: 5%;
+            background: #2B124B; 
+            animation: fadeSmoke 2s forwards, riseSmokeRight 16s infinite alternate ease-in-out;
+            animation-delay: 1s;
+        }
+
+        .smoke-3 {
+            width: 1000px; height: 500px;
+            bottom: -20%; left: 0%;
+            background: #2B124B; 
+            animation: fadeSmoke 2s forwards, pulseBase 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes fadeSmoke { to { opacity: 0.9; } }
+        @keyframes riseSmokeLeft {
+            0% { transform: translate(0, 0) scale(0.9); }
+            50% { transform: translate(150px, -400px) scale(1.2); } 
+            100% { transform: translate(50px, -200px) scale(1); }
+        }
+        @keyframes riseSmokeRight {
+            0% { transform: translate(0, 0) scale(0.8); }
+            50% { transform: translate(-200px, -450px) scale(1.3); } 
+            100% { transform: translate(-100px, -250px) scale(1.1); }
+        }
+        @keyframes pulseBase {
+            0% { transform: scale(1) translateY(0); }
+            100% { transform: scale(1.1) translateY(-50px); }
+        }
+
+        .model-character {
+            position: absolute;
+            bottom: 0;
+            right: 5%;
+            height: 85vh;
+            max-width: 45vw;
+            object-fit: contain;
+            object-position: bottom right;
+            z-index: 5;
+            opacity: 0;
+            transform: translateX(150px);
+            filter: drop-shadow(-10px 10px 20px rgba(0,0,0,0.8));
+        }
+
+        .slide.active .model-character {
+            animation: slideInModel 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+        }
+
+        @keyframes slideInModel { to { opacity: 1; transform: translateX(0); } }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 0 20px;
+            transform: translateX(-15%); 
+        }
+
+        .massive-title {
+            font-size: clamp(4rem, 12vw, 10rem);
+            font-weight: 900;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            margin-bottom: 35px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .slide.active .massive-title {
+            animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+        }
+
+        .massive-title span {
+            display: block;
+            text-shadow: 0 5px 20px rgba(255, 255, 255, 0.1); 
+        }
+
+        .massive-title .highlight { color: #652CA0; }
+
+        .btn-premium {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #2B124B; 
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            border-radius: 50px; 
+            padding: 16px 50px;
+            font-size: 0.95rem; 
+            font-weight: 500; 
+            text-transform: uppercase;
+            letter-spacing: 5px; 
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(43, 18, 75, 0.6);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide.active .btn-premium {
+            animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+        }
+
+        .btn-premium:hover {
+            background: #652CA0; 
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(101, 44, 160, 0.8); 
+            letter-spacing: 7px; 
+        }
+
+        .btn-premium::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: skewX(-25deg);
+            animation: shineButton 4s infinite;
+        }
+
+        @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
+        @keyframes shineButton { 0% { left: -100%; } 20%, 100% { left: 200%; } }
+
+        /* ==========================================
+           DESIGN DE LA GALERIE (SLIDE 2)
+        ========================================== */
+        .slide-gallery {
+            background-color: #050608; /* Fond légèrement différent pour distinguer les zones */
+            overflow-y: auto; /* Permet le scroll uniquement dans cette slide */
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 20px;
+        }
+
+        .btn-back-gallery {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .btn-back-gallery:hover {
+            background: rgba(101, 44, 160, 0.4);
+            border-color: #652CA0;
+        }
+    </style>
 </head>
-<body class="theme-mew">
-    <!-- Filigrane -->
-    <img src="scripts/assets/img/mew-icon.png" class="bg-watermark bg-mew" alt="">
-    
-    <header class="header-main">
-        <h1>SALON PRIVÉ</h1>
-        <div class="subtitle">Zone Confidentielle</div>
-    </header>
 
-    <main class="collection-workspace" style="display: flex; flex-direction: column; align-items: center; width: 100%; padding-bottom: 60px;">
-        
+<body class="theme-mew page-private">
+
+    <div class="slider-container">
+
         <!-- ==========================================
-             1. ÉCRAN D'ACCUEIL / SALON (Visible par défaut)
+             SLIDE 1 : LE SALON PRIVÉ (ACCUEIL)
              ========================================== -->
-        <div id="welcome-lounge" style="width: 100%; max-width: 700px; margin-top: 4vh; text-align: center; padding: 0 15px;">
-            <div style="background: rgba(12, 15, 22, 0.85); border: 1px solid rgba(255, 0, 170, 0.3); border-radius: 18px; padding: 40px 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(255, 0, 170, 0.05); backdrop-filter: blur(12px);">
+        <div id="slide-1" class="slide active">
+            
+            <div class="smoke-container">
+                <div class="smoke-blob smoke-1"></div>
+                <div class="smoke-blob smoke-2"></div>
+                <div class="smoke-blob smoke-3"></div>
+            </div>
+
+            <!-- Assure-toi que le chemin vers ton image est correct -->
+            <img src="./assets/img/lulud.png" alt="Ludvina" class="model-character" onerror="this.src='lulud.png'">
+
+            <div class="hero-content">
+                <h1 class="massive-title">
+                    <span>SALON</span>
+                    <span class="highlight">PRIVÉ</span>
+                </h1>
                 
-                <h2 style="color: #ff00aa; font-size: 1.8rem; margin-bottom: 15px; letter-spacing: 3px; text-transform: uppercase;">
-                    Bienvenue
-                </h2>
-                
-                <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.6; margin-bottom: 35px; max-width: 500px; margin-left: auto; margin-right: auto;">
-                    Cet espace est réservé au futur développement de l'interface privée.<br><br>
-                    Pour le moment, installez-vous et accédez directement à l'intégralité de la collection secrète.
-                </p>
-                
-                <button type="button" onclick="enterGallery()" class="btn-glass" style="font-size: 1.1rem; padding: 14px 30px; border-color: #ff00aa; color: #fff; background: rgba(255, 0, 170, 0.15); box-shadow: 0 0 20px rgba(255, 0, 170, 0.3);">
-                    ✨ Révéler la Galerie
+                <button type="button" class="btn-premium" onclick="goToSlide('slide-2')">
+                    Révéler la Galerie
                 </button>
-
-            </div>
-            
-            <div style="margin-top: 30px;">
-                <a href="dresseuses.html" class="btn-glass" style="font-size: 0.85rem; border-color: rgba(255,255,255,0.1);">← Quitter le salon</a>
             </div>
         </div>
 
         <!-- ==========================================
-             2. GALERIE SECRÈTE (Cachée par défaut)
+             SLIDE 2 : LA GALERIE SECRÈTE
              ========================================== -->
-        <div id="secret-gallery-view" style="display: none; width: 100%; flex-direction: column; align-items: center;">
-            <div class="cards-grid" id="private-secret-grid" style="width: 100%; max-width: 1300px; padding: 20px;">
-                <!-- Généré dynamiquement par le script -->
-            </div>
+        <div id="slide-2" class="slide slide-gallery">
             
-            <div style="text-align: center; margin-top: 30px;">
-                <button type="button" onclick="exitGallery()" class="btn-glass">← Retourner à l'accueil du salon</button>
-            </div>
+            <button class="btn-back-gallery" onclick="goToSlide('slide-1')">
+                ← Verrouiller et Quitter
+            </button>
+
+            <header class="header-main" style="padding-top: 40px; padding-bottom: 20px; text-align: center;">
+                <h2 style="font-size: 2.5rem; color: #fff; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 10px;">
+                    Registre Secret
+                </h2>
+                <p style="color: #652CA0; font-weight: bold; letter-spacing: 2px;">
+                    COLLECTION INTÉGRALE DES DRESSEUSES
+                </p>
+            </header>
+
+            <main class="collection-workspace" style="width: 100%; display: flex; justify-content: center; padding-bottom: 60px;">
+                <div class="cards-grid" id="private-secret-grid" style="width: 100%; max-width: 1300px; padding: 20px;">
+                    <!-- Les cartes secrètes seront générées ici par JavaScript -->
+                </div>
+            </main>
+            
         </div>
 
-    </main>
+    </div>
 
+    <!-- Scripts de données -->
     <script src="scripts/assets/js/dresseuses-data.js"></script>
     <script src="scripts/assets/js/script.js"></script>
 
     <script>
         /* ====================================================================
-           FONCTIONS DE TRANSITION (SALON <-> GALERIE)
+           MÉCANIQUE DU SLIDER PLEIN ÉCRAN
            ==================================================================== */
-        function enterGallery() {
-            document.getElementById('welcome-lounge').style.display = 'none';
-            document.getElementById('secret-gallery-view').style.display = 'flex';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function exitGallery() {
-            document.getElementById('secret-gallery-view').style.display = 'none';
-            document.getElementById('welcome-lounge').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function goToSlide(slideId) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById(slideId).classList.add('active');
         }
 
         /* ====================================================================
-           GÉNÉRATION AUTOMATIQUE DE LA GALERIE PRIVÉE DES SECRÈTES
+           GÉNÉRATION DE LA GALERIE SECRÈTE (Identique à ta base de données)
            ==================================================================== */
         document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
@@ -104,17 +343,16 @@
                         const cardTitle = secretImages.length > 1 ? `${trainerName} (Secrète ${index + 1})` : trainerName;
 
                         htmlContent += `
-                            <div class="card-item is-owned" style="border-color: rgba(255, 0, 170, 0.4); box-shadow: 0 0 15px rgba(255, 0, 170, 0.2); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'" onclick="openLightbox('${imgSrc}')">
+                            <div class="card-item is-owned" style="border-color: #652CA0; box-shadow: 0 0 15px rgba(101, 44, 160, 0.3); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'" onclick="openLightbox('${imgSrc}')">
                                 <img src="${imgSrc}" alt="${cardTitle}" loading="lazy" onerror="this.src='scripts/assets/img/back-fr.png'">
                                 <div class="card-info">
-                                    <div class="card-name" style="color: #ff00aa;">${cardTitle}</div>
+                                    <div class="card-name" style="color: #652CA0;">${cardTitle}</div>
                                     <div class="card-meta">Édition Secrète</div>
                                 </div>
                             </div>
                         `;
                     });
                 }
-
                 gridContainer.innerHTML = htmlContent;
             }, 100);
         });
