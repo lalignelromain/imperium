@@ -9,35 +9,42 @@
     <meta name="theme-color" content="#000000">
     
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="scripts/assets/css/style.css?v=4">
+    <link rel="stylesheet" href="scripts/assets/css/style.css?v=7">
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <style>
+        /* ==========================================
+           MÉCANIQUE DU SLIDER PLEIN ÉCRAN
+        ========================================== */
         body.page-private {
             font-family: 'Montserrat', sans-serif;
             background-color: #000000;
             color: #ffffff;
+            
+            /* BLOQUE TOUT SCROLL PARALLAXE OU FANTÔME */
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
             overflow: hidden;
-            height: 100vh;
-            width: 100vw;
+            
             margin: 0;
             padding: 0;
         }
 
         .slider-container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%;
+            height: 100%;
             overflow: hidden;
             background-color: #000000;
         }
 
         .slide {
             position: absolute;
-            top: 0; left: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             width: 100%; height: 100%;
             opacity: 0;
             visibility: hidden;
@@ -54,11 +61,15 @@
             z-index: 10;
         }
 
+        /* ==========================================
+           DESIGN DE L'ANTICHAMBRE (SLIDE 1) - CENTRÉ
+        ========================================== */
         #slide-1 {
             background: radial-gradient(circle at 75% 50%, #210d3a 0%, #05020a 55%, #000000 100%);
             display: flex;
             flex-direction: row;
             align-items: center;
+            overflow: hidden; 
         }
 
         .hero-content {
@@ -72,6 +83,7 @@
             text-align: left;
             padding: 0 10vw;
             max-width: 50vw;
+            pointer-events: none; /* Laisse passer le clic à travers le texte */
         }
 
         .massive-title {
@@ -103,20 +115,27 @@
 
         .hotesse-container {
             position: absolute; 
-            bottom: 0; right: 5%; 
-            height: 92vh; width: auto; 
+            /* CENTRAGE VERTICAL PARFAIT SUR PC */
+            top: 50%;
+            transform: translateY(-50%);
+            right: 5%; 
+            height: 85vh; 
+            width: auto; 
             z-index: 5;
             display: block; 
             cursor: pointer; 
+            pointer-events: auto; /* Capte le clic */
         }
 
         .model-character {
             height: 100%; width: auto; 
             display: block; 
             object-fit: contain;
-            object-position: bottom right;
+            /* L'image se centre verticalement dans son conteneur */
+            object-position: center right; 
             filter: drop-shadow(-20px 20px 40px rgba(0,0,0,0.9));
-            opacity: 0; transform: translateX(50px);
+            opacity: 0; 
+            transform: translateX(50px);
             transition: opacity 1.5s ease 0.5s, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, filter 0.4s ease;
         }
 
@@ -130,9 +149,13 @@
 
         @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
 
+        /* ==========================================
+           DESIGN DE LA GALERIE (SLIDE 2)
+        ========================================== */
         .slide-gallery {
             background-color: #05020a;
             overflow-y: auto; 
+            -webkit-overflow-scrolling: touch; 
             align-items: center;
             justify-content: flex-start;
             padding-top: 20px;
@@ -144,7 +167,7 @@
             gap: 30px;
             max-width: 1300px;
             width: 100%;
-            padding: 20px 20px 120px 20px;
+            padding: 20px 20px 40px 20px;
             margin: 0 auto;
             justify-items: center;
         }
@@ -173,65 +196,99 @@
         .fullart-title { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,1); line-height: 1.1; margin-bottom: 5px; }
         .fullart-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; color: #a76cf2; letter-spacing: 2px; font-weight: 600; text-transform: uppercase; }
 
+        /* ==========================================
+           LA MODALE (POP-UP ZOOM)
+        ========================================== */
         .modal-overlay {
             position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
             opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
         }
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-close { position: absolute; top: 25px; right: 30px; color: #fff; font-size: 3rem; font-weight: 300; cursor: pointer; transition: transform 0.3s ease, color 0.3s ease; z-index: 10000; font-family: 'Montserrat', sans-serif; line-height: 1; }
-        .modal-close:hover { transform: scale(1.2); color: #a76cf2; }
-        .modal-image-container { position: relative; max-width: 90vw; max-height: 75vh; transform: scale(0.95); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-        .modal-overlay.active .modal-image-container { transform: scale(1); }
-        .modal-main-img { max-width: 100%; max-height: 75vh; object-fit: contain; border-radius: 8px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); border: 2px solid rgba(167, 108, 242, 0.3); }
+        
+        .modal-overlay.active {
+            opacity: 1; pointer-events: auto;
+        }
 
-        .modal-thumbnails { display: none; gap: 15px; margin-top: 30px; align-items: center; justify-content: center; }
-        .thumb { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; cursor: pointer; transition: all 0.3s ease; }
+        .modal-close {
+            position: absolute; top: 25px; right: 30px; color: #fff; font-size: 3rem;
+            font-weight: 300; cursor: pointer; transition: transform 0.3s ease, color 0.3s ease;
+            z-index: 10000; font-family: 'Montserrat', sans-serif; line-height: 1;
+        }
+        .modal-close:hover { transform: scale(1.2); color: #a76cf2; }
+
+        .modal-image-container {
+            position: relative; max-width: 90vw; max-height: 75vh;
+            transform: scale(0.95); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-overlay.active .modal-image-container {
+            transform: scale(1);
+        }
+
+        .modal-main-img {
+            max-width: 100%; max-height: 75vh; object-fit: contain;
+            border-radius: 8px; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            border: 2px solid rgba(167, 108, 242, 0.3);
+        }
+
+        .modal-thumbnails {
+            display: none;
+            gap: 15px; margin-top: 30px; align-items: center; justify-content: center;
+        }
+        
+        .thumb {
+            width: 60px; height: 60px; border-radius: 6px; object-fit: cover;
+            cursor: pointer; transition: all 0.3s ease;
+        }
         .thumb.active { border: 2px solid #a76cf2; box-shadow: 0 0 15px rgba(101, 44, 160, 0.5); opacity: 1; }
 
         /* ==========================================
-           RESPONSIVE MOBILE / MEDIA QUERIES (REFAIT)
+           RESPONSIVE MOBILE / MEDIA QUERIES
         ========================================== */
         @media (max-width: 768px) {
-            /* Slide 1 - Le Titre prend sa place en haut, Ludvina en bas */
             #slide-1 { 
                 display: block; 
                 position: relative; 
             }
             .hero-content { 
                 position: absolute; 
-                top: 8vh; 
-                left: 5vw; 
-                max-width: 90vw; 
-                text-align: left; 
-                padding: 0; 
+                top: 0; 
+                left: 0; 
+                width: 100%; 
+                height: 100%; 
+                padding: 0 5vw; 
+                align-items: flex-start;
+                justify-content: center; 
                 z-index: 10;
+                pointer-events: none; 
             }
             .massive-title { 
-                font-size: 3.5rem; 
+                font-size: clamp(3rem, 12vw, 4rem); 
                 text-align: left; 
+                margin-bottom: 0;
             }
+            
             .hotesse-container { 
                 position: absolute; 
-                bottom: 90px; /* <--- MODIFIÉ ICI : Ludvina remonte de 90px pour libérer la place */
+                /* CENTRAGE VERTICAL PARFAIT SUR MOBILE */
+                top: 50% !important; 
+                transform: translateY(-50%) !important; 
+                bottom: auto !important; 
                 right: -5vw; 
                 width: 100vw; 
-                height: 65vh; 
+                height: 80dvh; 
                 display: flex; 
                 justify-content: flex-end; 
+                z-index: 5;
+                pointer-events: auto; 
             }
             .model-character { 
                 object-fit: contain; 
-                object-position: bottom right; 
-                max-height: 100%; 
+                object-position: center right; 
+                height: 100%; 
                 width: auto; 
             }
             
-            /* Slide 2 - Grille propre sur 2 colonnes */
-            .slide-gallery { 
-                padding-top: 5px; 
-            }
             .slide-gallery header.header-main { 
                 padding: 25px 15px 10px !important; 
             }
@@ -247,12 +304,12 @@
                 display: grid !important; 
                 grid-template-columns: repeat(2, 1fr) !important; 
                 gap: 15px !important; 
-                padding: 10px 10px 100px 10px !important; 
+                padding: 10px 10px 40px 10px !important; 
             }
             .card-fullart { 
                 width: 100% !important; 
                 height: auto !important; 
-                aspect-ratio: 63/88; /* Respecte le format carte */
+                aspect-ratio: 63/88; 
                 padding: 10px !important; 
                 max-width: none !important;
                 border-width: 2px !important;
@@ -298,4 +355,89 @@
                 </p>
             </header>
 
-            <main class="collection-workspace" style="width:
+            <main class="collection-workspace" style="width: 100%; display: flex; justify-content: center;">
+                <div class="cards-grid" id="private-secret-grid">
+                    <!-- Injecté par JavaScript -->
+                </div>
+            </main>
+        </div>
+
+    </div>
+
+    <!-- LA MODALE -->
+    <div id="modal-zoom" class="modal-overlay">
+        <span class="modal-close" onclick="fermerModale()">&times;</span>
+        
+        <div class="modal-image-container">
+            <img id="image-principale" class="modal-main-img" src="" alt="Vue détaillée">
+        </div>
+
+        <div class="modal-thumbnails" id="piste-miniatures"></div>
+    </div>
+
+    <script src="scripts/assets/js/dresseuses-data.js"></script>
+    <script src="scripts/assets/js/script.js"></script>
+
+    <script>
+        function goToSlide(slideId) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById(slideId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                const gridContainer = document.getElementById('private-secret-grid');
+                if (!gridContainer || typeof REGISTRE_SECRET === 'undefined') return;
+
+                let htmlContent = '';
+
+                for (const [trainerName, secretImages] of Object.entries(REGISTRE_SECRET)) {
+                    if (!secretImages || secretImages.length === 0) continue;
+
+                    secretImages.forEach((imgFile, index) => {
+                        const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
+                        const cardTitle = secretImages.length > 1 ? `${trainerName} (${index + 1})` : trainerName;
+
+                        htmlContent += `
+                            <div class="card-fullart" onclick="ouvrirModale('${imgSrc}')">
+                                <img src="${imgSrc}" alt="${cardTitle}" loading="lazy" onerror="this.src='scripts/assets/img/back-fr.png'">
+                                <div class="fullart-content">
+                                    <div class="fullart-title">${cardTitle}</div>
+                                    <div class="fullart-subtitle">Édition Secrète</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                gridContainer.innerHTML = htmlContent;
+            }, 100);
+        });
+
+        const modale = document.getElementById('modal-zoom');
+        const imgPrincipale = document.getElementById('image-principale');
+        const pisteMiniatures = document.getElementById('piste-miniatures');
+
+        function ouvrirModale(imageSrc) {
+            imgPrincipale.src = imageSrc;
+            pisteMiniatures.innerHTML = `<img src="${imageSrc}" class="thumb active" alt="Illustration Secrète">`;
+            modale.classList.add('active');
+        }
+
+        function fermerModale() {
+            modale.classList.remove('active');
+            setTimeout(() => { 
+                if(!modale.classList.contains('active')) {
+                    imgPrincipale.src = ''; 
+                }
+            }, 400);
+        }
+
+        modale.addEventListener('click', function(e) {
+            if (e.target === modale || e.target.classList.contains('modal-image-container')) {
+                fermerModale();
+            }
+        });
+    </script>
+</body>
+</html>
