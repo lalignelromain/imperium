@@ -8,6 +8,9 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     
+    <!-- Polices Google ajoutées pour le design Luxe -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <!-- Ton CSS global (pour la galerie et le reste du site) -->
     <link rel="stylesheet" href="scripts/assets/css/style.css?v=2">
 
@@ -61,96 +64,29 @@
         /* ==========================================
            DESIGN DE L'ANTICHAMBRE (SLIDE 1)
         ========================================== */
-        .smoke-container {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            overflow: hidden;
-            filter: blur(40px) brightness(1.2); 
-            mix-blend-mode: screen;
+        #slide-1 {
+            background: radial-gradient(circle at 75% 50%, #210d3a 0%, #05020a 55%, #000000 100%);
+            display: flex;
+            flex-direction: row; /* Aligne le texte à gauche et l'image à droite */
+            align-items: center;
         }
-
-        .smoke-blob {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0;
-        }
-
-        .smoke-1 {
-            width: 700px; height: 700px;
-            bottom: -30%; left: 10%;
-            background: #652CA0; 
-            animation: fadeSmoke 2s forwards, riseSmokeLeft 14s infinite alternate ease-in-out;
-        }
-
-        .smoke-2 {
-            width: 800px; height: 800px;
-            bottom: -40%; right: 5%;
-            background: #2B124B; 
-            animation: fadeSmoke 2s forwards, riseSmokeRight 16s infinite alternate ease-in-out;
-            animation-delay: 1s;
-        }
-
-        .smoke-3 {
-            width: 1000px; height: 500px;
-            bottom: -20%; left: 0%;
-            background: #2B124B; 
-            animation: fadeSmoke 2s forwards, pulseBase 10s infinite alternate ease-in-out;
-        }
-
-        @keyframes fadeSmoke { to { opacity: 0.9; } }
-        @keyframes riseSmokeLeft {
-            0% { transform: translate(0, 0) scale(0.9); }
-            50% { transform: translate(150px, -400px) scale(1.2); } 
-            100% { transform: translate(50px, -200px) scale(1); }
-        }
-        @keyframes riseSmokeRight {
-            0% { transform: translate(0, 0) scale(0.8); }
-            50% { transform: translate(-200px, -450px) scale(1.3); } 
-            100% { transform: translate(-100px, -250px) scale(1.1); }
-        }
-        @keyframes pulseBase {
-            0% { transform: scale(1) translateY(0); }
-            100% { transform: scale(1.1) translateY(-50px); }
-        }
-
-        .model-character {
-            position: absolute;
-            bottom: 0;
-            right: 5%;
-            height: 85vh;
-            max-width: 45vw;
-            object-fit: contain;
-            object-position: bottom right;
-            z-index: 5;
-            opacity: 0;
-            transform: translateX(150px);
-            filter: drop-shadow(-10px 10px 20px rgba(0,0,0,0.8));
-        }
-
-        .slide.active .model-character {
-            animation: slideInModel 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
-        }
-
-        @keyframes slideInModel { to { opacity: 1; transform: translateX(0); } }
 
         .hero-content {
             position: relative;
             z-index: 10;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
             height: 100%;
-            text-align: center;
-            padding: 0 20px;
-            transform: translateX(-15%); 
+            text-align: left;
+            padding: 0 10vw; /* Écarte le texte du bord */
+            max-width: 50vw;
         }
 
         .massive-title {
-            font-size: clamp(4rem, 12vw, 10rem);
+            font-family: 'Cinzel', serif;
+            font-size: clamp(4rem, 10vw, 8rem);
             font-weight: 900;
             line-height: 1;
             text-transform: uppercase;
@@ -161,96 +97,144 @@
         }
 
         .slide.active .massive-title {
-            animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+            animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
         }
 
         .massive-title span {
             display: block;
-            text-shadow: 0 5px 20px rgba(255, 255, 255, 0.1); 
+            text-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);
         }
 
-        .massive-title .highlight { color: #652CA0; }
-
-        .btn-premium {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: #2B124B; 
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2); 
-            border-radius: 50px; 
-            padding: 16px 50px;
-            font-size: 0.95rem; 
-            font-weight: 500; 
-            text-transform: uppercase;
-            letter-spacing: 5px; 
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(43, 18, 75, 0.6);
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
+        .massive-title .highlight { 
+            background: linear-gradient(to right, #ffffff, #8e54e9);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
         }
 
-        .slide.active .btn-premium {
-            animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+        /* L'Hôtesse cliquable */
+        .hotesse-container {
+            position: absolute; 
+            bottom: 0; right: 5%; 
+            height: 95vh; width: auto; 
+            z-index: 5;
+            display: block; 
+            cursor: pointer; 
         }
 
-        .btn-premium:hover {
-            background: #652CA0; 
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateY(-4px);
-            box-shadow: 0 15px 40px rgba(101, 44, 160, 0.8); 
-            letter-spacing: 7px; 
+        .model-character {
+            height: 100%; width: auto; 
+            display: block; 
+            object-fit: contain;
+            object-position: bottom right;
+            filter: drop-shadow(-20px 20px 40px rgba(0,0,0,0.9));
+            opacity: 0; transform: translateX(50px);
+            transition: opacity 1.5s ease 0.5s, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, filter 0.4s ease;
         }
 
-        .btn-premium::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transform: skewX(-25deg);
-            animation: shineButton 4s infinite;
+        .slide.active .model-character {
+            opacity: 1; transform: translateX(0);
+        }
+
+        .hotesse-container:hover .model-character { 
+            filter: drop-shadow(-20px 20px 40px rgba(0,0,0,0.9)) brightness(1.15); 
         }
 
         @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
-        @keyframes shineButton { 0% { left: -100%; } 20%, 100% { left: 200%; } }
 
         /* ==========================================
            DESIGN DE LA GALERIE (SLIDE 2)
         ========================================== */
         .slide-gallery {
-            background-color: #050608; /* Fond légèrement différent pour distinguer les zones */
-            overflow-y: auto; /* Permet le scroll uniquement dans cette slide */
+            background-color: #05020a;
+            overflow-y: auto; 
             align-items: center;
             justify-content: flex-start;
             padding-top: 20px;
         }
 
-        .btn-back-gallery {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
+        /* Design des Cartes Full-Art générées par JS */
+        .card-fullart {
+            width: 300px; height: 420px; border-radius: 12px; overflow: hidden;
+            position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s ease; 
+            cursor: pointer; display: flex; flex-direction: column; justify-content: flex-end; padding: 30px 25px;
+        }
+        .card-fullart img { 
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; z-index: 1; 
+        }
+        .card-fullart::after { 
+            content:''; position:absolute; inset:0; 
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 40%, transparent 100%); 
+            z-index: 2; transition: opacity 0.5s;
+        }
+        .card-fullart:hover { transform: translateY(-15px); box-shadow: 0 25px 50px rgba(101, 44, 160, 0.4); border-color: rgba(167, 108, 242, 0.6); }
+        .card-fullart:hover img { transform: scale(1.08); }
+        .card-fullart:hover::after { opacity: 0.8; }
+
+        .fullart-content { position: relative; z-index: 3; transform: translateY(10px); transition: transform 0.4s ease; }
+        .card-fullart:hover .fullart-content { transform: translateY(0); }
+        
+        .fullart-title { 
+            font-family: 'Cinzel', serif; font-size: 2.2rem; color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,1); line-height: 1; margin-bottom: 5px; 
+        }
+        .fullart-subtitle { 
+            font-family: 'Montserrat', sans-serif; font-size: 0.75rem; color: #a76cf2; letter-spacing: 3px; font-weight: 600; text-transform: uppercase; 
         }
 
-        .btn-back-gallery:hover {
-            background: rgba(101, 44, 160, 0.4);
-            border-color: #652CA0;
+        .cards-grid {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 50px; max-width: 1400px; padding-bottom: 100px; margin-top: 40px;
         }
+
+        /* ==========================================
+           LA MODALE (POP-UP ZOOM)
+        ========================================== */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1; pointer-events: auto;
+        }
+
+        .modal-close {
+            position: absolute; top: 30px; right: 40px; color: #fff; font-size: 3rem;
+            font-weight: 300; cursor: pointer; transition: transform 0.3s ease, color 0.3s ease;
+            z-index: 10000; font-family: 'Montserrat', sans-serif; line-height: 1;
+        }
+        .modal-close:hover { transform: scale(1.2); color: #a76cf2; }
+
+        .modal-image-container {
+            position: relative; max-width: 90vw; max-height: 75vh;
+            transform: scale(0.95); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-overlay.active .modal-image-container {
+            transform: scale(1);
+        }
+
+        .modal-main-img {
+            max-width: 100%; max-height: 75vh; object-fit: contain;
+            border-radius: 8px; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Emplacements pour la future galerie étendue */
+        .modal-thumbnails {
+            display: none; /* Masqué pour l'instant comme tu l'as demandé */
+            gap: 15px; margin-top: 30px; align-items: center; justify-content: center;
+        }
+        
+        .thumb {
+            width: 60px; height: 60px; border-radius: 6px; object-fit: cover;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        
+        .thumb.active { border: 2px solid #a76cf2; box-shadow: 0 0 15px rgba(101, 44, 160, 0.5); opacity: 1; }
+        .thumb.future-slot { background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); opacity: 0.5; cursor: default; }
+        .thumb.future-slot:hover { background: rgba(255,255,255,0.08); }
     </style>
 </head>
 
@@ -263,25 +247,18 @@
              ========================================== -->
         <div id="slide-1" class="slide active">
             
-            <div class="smoke-container">
-                <div class="smoke-blob smoke-1"></div>
-                <div class="smoke-blob smoke-2"></div>
-                <div class="smoke-blob smoke-3"></div>
-            </div>
-
-            <!-- Assure-toi que le chemin vers ton image est correct -->
-            <img src="./assets/cards/dresseuses/lulud.png" alt="Ludvina" class="model-character" onerror="this.src='lulud.png'">
-
             <div class="hero-content">
                 <h1 class="massive-title">
                     <span>SALON</span>
                     <span class="highlight">PRIVÉ</span>
                 </h1>
-                
-                <button type="button" class="btn-premium" onclick="goToSlide('slide-2')">
-                    Révéler la Galerie
-                </button>
             </div>
+
+            <!-- Clic sur Ludvina remplace le bouton -->
+            <div class="hotesse-container" onclick="goToSlide('slide-2')" title="Accéder à la collection">
+                <img src="./assets/cards/dresseuses/lulud.png" alt="Ludvina" class="model-character" onerror="this.src='lulud.png'">
+            </div>
+
         </div>
 
         <!-- ==========================================
@@ -289,27 +266,38 @@
              ========================================== -->
         <div id="slide-2" class="slide slide-gallery">
             
-            <button class="btn-back-gallery" onclick="goToSlide('slide-1')">
-                ← Verrouiller et Quitter
-            </button>
-
             <header class="header-main" style="padding-top: 40px; padding-bottom: 20px; text-align: center;">
-                <h2 style="font-size: 2.5rem; color: #fff; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 10px;">
+                <h2 style="font-family: 'Cinzel', serif; font-size: 3rem; color: #fff; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 10px;">
                     Registre Secret
                 </h2>
-                <p style="color: #652CA0; font-weight: bold; letter-spacing: 2px;">
+                <p style="color: #a76cf2; font-weight: bold; letter-spacing: 3px; font-family: 'Montserrat', sans-serif;">
                     COLLECTION INTÉGRALE DES DRESSEUSES
                 </p>
             </header>
 
             <main class="collection-workspace" style="width: 100%; display: flex; justify-content: center; padding-bottom: 60px;">
                 <div class="cards-grid" id="private-secret-grid" style="width: 100%; max-width: 1300px; padding: 20px;">
-                    <!-- Les cartes secrètes seront générées ici par JavaScript -->
+                    <!-- Les cartes secrètes Full-Art seront générées ici par JavaScript -->
                 </div>
             </main>
             
         </div>
 
+    </div>
+
+    <!-- ==========================================
+         LA MODALE (HORS DU SLIDER)
+         ========================================== -->
+    <div id="modal-zoom" class="modal-overlay">
+        <span class="modal-close" onclick="fermerModale()">&times;</span>
+        
+        <div class="modal-image-container">
+            <img id="image-principale" class="modal-main-img" src="" alt="Vue détaillée">
+        </div>
+
+        <div class="modal-thumbnails" id="piste-miniatures">
+            <!-- Injecté via JavaScript -->
+        </div>
     </div>
 
     <!-- Scripts de données -->
@@ -326,7 +314,7 @@
         }
 
         /* ====================================================================
-           GÉNÉRATION DE LA GALERIE SECRÈTE (Identique à ta base de données)
+           GÉNÉRATION DE LA GALERIE SECRÈTE (DESIGN FULL-ART)
            ==================================================================== */
         document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
@@ -340,14 +328,16 @@
 
                     secretImages.forEach((imgFile, index) => {
                         const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
-                        const cardTitle = secretImages.length > 1 ? `${trainerName} (Secrète ${index + 1})` : trainerName;
+                        // Titre adapté si plusieurs images pour la même dresseuse
+                        const cardTitle = secretImages.length > 1 ? `${trainerName} (${index + 1})` : trainerName;
 
+                        // Nouvelle structure de carte Full-Art avec appel à la modale
                         htmlContent += `
-                            <div class="card-item is-owned" style="border-color: #652CA0; box-shadow: 0 0 15px rgba(101, 44, 160, 0.3); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'" onclick="openLightbox('${imgSrc}')">
+                            <div class="card-fullart" onclick="ouvrirModale('${imgSrc}')">
                                 <img src="${imgSrc}" alt="${cardTitle}" loading="lazy" onerror="this.src='scripts/assets/img/back-fr.png'">
-                                <div class="card-info">
-                                    <div class="card-name" style="color: #652CA0;">${cardTitle}</div>
-                                    <div class="card-meta">Édition Secrète</div>
+                                <div class="fullart-content">
+                                    <div class="fullart-title">${cardTitle}</div>
+                                    <div class="fullart-subtitle">Édition Secrète</div>
                                 </div>
                             </div>
                         `;
@@ -355,6 +345,42 @@
                 }
                 gridContainer.innerHTML = htmlContent;
             }, 100);
+        });
+
+        /* ====================================================================
+           GESTION DE LA MODALE
+           ==================================================================== */
+        const modale = document.getElementById('modal-zoom');
+        const imgPrincipale = document.getElementById('image-principale');
+        const pisteMiniatures = document.getElementById('piste-miniatures');
+
+        function ouvrirModale(imageSrc) {
+            imgPrincipale.src = imageSrc;
+            
+            // Prépare les miniatures pour le futur
+            pisteMiniatures.innerHTML = `
+                <img src="${imageSrc}" class="thumb active" alt="Illustration Secrète">
+                <div class="thumb future-slot" title="Emplacement verrouillé"></div>
+                <div class="thumb future-slot" title="Emplacement verrouillé"></div>
+            `;
+
+            modale.classList.add('active');
+        }
+
+        function fermerModale() {
+            modale.classList.remove('active');
+            setTimeout(() => { 
+                if(!modale.classList.contains('active')) {
+                    imgPrincipale.src = ''; 
+                }
+            }, 400);
+        }
+
+        // Fermeture au clic à l'extérieur de l'image
+        modale.addEventListener('click', function(e) {
+            if (e.target === modale || e.target.classList.contains('modal-image-container')) {
+                fermerModale();
+            }
         });
     </script>
 </body>
