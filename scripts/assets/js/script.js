@@ -372,6 +372,7 @@ function renderPantheon() {
         });
     }
 }
+
 /* ====================================================================
    5. PROGRESSION EV5 (HUB)
 ==================================================================== */
@@ -396,7 +397,6 @@ function initEV5ProgressHub() {
 /* ====================================================================
    6. MODULE DRESSEUSES (HUB, CLASSEUR & SECRÈTES 3D)
 ==================================================================== */
-
 let currentPageDresseuses = 0; 
 let currentActiveTrainerDresseuse = null;
 let currentSecretIndexDresseuse = 0;
@@ -439,7 +439,7 @@ const REGISTRE_SECRET = {
     "Sophora": ["sophora.png"]
 };
 
-// -> Hub (dresseuses.html) - Grille 5x2
+// -> Hub (dresseuses.html)
 function renderDresseusesHub() {
     const shelfContainer = document.getElementById('shelf');
     if (!shelfContainer || typeof dresseusesData === 'undefined') return; 
@@ -505,7 +505,7 @@ function renderDresseusesHub() {
     }
 }
 
-// -> Classeur (classeur.html) - Flexbox Adaptatif
+// -> Classeur (classeur.html) - Flexbox Adaptatif CORRIGÉ (suppression du style inline)
 function renderDresseuseClasseur() {
     const container = document.getElementById('pages-container');
     const titleEl = document.getElementById('interior-title');
@@ -534,7 +534,8 @@ function renderDresseuseClasseur() {
     else if (totalItems === 5 || totalItems === 6) layoutClass = 'layout-max-3'; 
     else layoutClass = 'layout-max-4';
 
-    let htmlContent = `<div class="layout-flex ${layoutClass}" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%;">`;
+    // ICI LE FIX IMPORTANT : Plus de 'style=' inline qui forçait la disposition verticale/horizontale moche
+    let htmlContent = `<div class="layout-flex ${layoutClass}">`;
     
     trainerImages.forEach(imgFile => {
         const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
@@ -634,7 +635,7 @@ window.updateSecretImage3D = function() {
     }
 };
 
-// -> Lightbox Classique Globale (Utilisée par Pikachu & autres modules)
+// -> Lightbox Classique Globale
 window.openLightbox = function(imgSrc) {
     let overlay = document.getElementById('lightbox-overlay-standard');
     if (!overlay) {
@@ -659,7 +660,7 @@ window.openLightbox = function(imgSrc) {
 };
 
 /* ====================================================================
-   8. MODULE PIKACHU 30TH (SLEEVE GLOSS & ZOOM SIMPLE)
+   8. MODULE PIKACHU 30TH
 ==================================================================== */
 function renderPikachuBinder() {
     const container = document.getElementById('pikachu-binder-container');
@@ -682,7 +683,6 @@ function renderPikachuBinder() {
             const statusClass = isOwned ? 'is-owned' : 'not-owned';
             const imgSrc = `./assets/cards/pikachu/${c.id}.jpg`;
 
-            // Filtre gris et opacité réduite si carte non possédée
             const imgStyle = isOwned ? 'width:100%; height:100%; object-fit:cover;' : 'width:100%; height:100%; object-fit:cover; filter: grayscale(100%) opacity(35%);';
 
             pageHTML += `
@@ -690,7 +690,6 @@ function renderPikachuBinder() {
                     <div style="width:100%; height:100%; overflow:hidden; border-radius:4px; position:relative; box-shadow: 0 2px 5px rgba(0,0,0,0.4); background-color: #111;">
                         <img src="${imgSrc}" alt="${c.nom}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy" style="${imgStyle}">
                         
-                        <!-- L'effet Sleeve Gloss ne s'affiche QUE si la carte est possédée -->
                         ${isOwned ? `<div style="position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(115deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 45%); pointer-events:none;"></div>` : ''}
                     </div>
                 </div>
@@ -718,7 +717,7 @@ window.handlePikachuClick = function(id, imgSrc) {
         updateAllViews(); 
     } else {
         if (localCollection.has(id)) {
-            openLightbox(imgSrc); // Utilise la Lightbox Classique
+            openLightbox(imgSrc);
         }
     }
 };
@@ -762,7 +761,7 @@ function updateAllViews() {
 }
 
 /* ====================================================================
-   GÉNÉRATION DE LA NAVBAR GLOBALE (DOCK) - NOUVELLE LOGIQUE
+   GÉNÉRATION DE LA NAVBAR GLOBALE (DOCK)
 ==================================================================== */
 function setupDock() {
     if (document.getElementById('floating-dock')) return;
@@ -770,36 +769,30 @@ function setupDock() {
     dock.id = 'floating-dock';
     dock.className = 'floating-dock';
     
-    // On analyse l'URL pour savoir où l'on est
     const path = window.location.pathname;
     const isIndex = path.endsWith('index.html') || path.endsWith('/');
     const isDresseuses = path.includes('dresseuses.html');
 
-    // 1. Bouton Retour (Masqué sur l'accueil) - Utilise l'historique du navigateur
     let backBtn = '';
     if (!isIndex) {
         backBtn = `<a href="#" onclick="if(document.referrer) { history.back(); } else { window.location.href='index.html'; }; return false;" class="dock-btn" title="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>`;
     }
 
-    // 2. Bouton Accueil (Masqué sur l'accueil)
     let homeBtn = '';
     if (!isIndex) {
         homeBtn = `<a href="index.html" class="dock-btn" title="Accueil"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></a>`;
     }
 
-    // 3. Bouton Salon Privé (Réservé à la page Dresseuses, Masqué par défaut)
     let privateBtn = '';
     if (isDresseuses) {
         privateBtn = `<a href="dresseuses-private.html" id="dock-btn-private" class="dock-btn" title="Salon Privé" style="display: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></a>`;
     }
 
-    // 4. Bouton Haut de Page (Toujours présent)
     let topBtn = `<button type="button" id="dock-btn-top" class="dock-btn" title="Haut de page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></button>`;
 
-    // 5. Bouton Déconnexion / Cadenas (Masqué par défaut) - CORRIGÉ AVEC LE NOUVEAU DESIGN PROPRE
+    // ICI LE FIX IMPORTANT : L'icône de cadenas dorée est propre et claire
     let lockBtn = `<button type="button" id="dock-btn-lock" class="dock-btn" title="Verrouiller (Déconnexion)" style="display: none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></button>`;
 
-    // Injection dans le HTML (L'ordre est respecté)
     dock.innerHTML = `
         ${backBtn}
         ${homeBtn}
@@ -809,7 +802,6 @@ function setupDock() {
     `;
     document.body.appendChild(dock);
     
-    // Activation des clics
     document.getElementById('dock-btn-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     
     const lockElement = document.getElementById('dock-btn-lock');
@@ -817,7 +809,6 @@ function setupDock() {
         lockElement.addEventListener('click', () => { if (auth) auth.signOut(); });
     }
 
-    // Nettoyage de l'ancien bouton retour en dur s'il en reste
     document.querySelectorAll('a, button, div').forEach(el => {
         if (el.textContent && el.textContent.trim().toUpperCase().includes('RETOUR AU PANTHÉON')) {
             el.style.display = 'none';
@@ -843,7 +834,7 @@ function triggerLogin() {
 }
 
 /* ====================================================================
-   GESTION DE LA CONNEXION (Mise à jour pour Navbar)
+   GESTION DE L'AFFICHAGE SELON LA CONNEXION
 ==================================================================== */
 if (auth) {
     auth.onAuthStateChanged(user => {
