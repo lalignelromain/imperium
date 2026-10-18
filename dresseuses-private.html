@@ -8,11 +8,11 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     
-    <!-- Polices Google ajoutées pour le design Luxe -->
+    <!-- Polices Google -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     
-    <!-- Ton CSS global (pour la galerie et le reste du site) -->
-    <link rel="stylesheet" href="scripts/assets/css/style.css?v=2">
+    <!-- CSS Global -->
+    <link rel="stylesheet" href="scripts/assets/css/style.css?v=3">
 
     <!-- SDK Firebase Compat -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -24,10 +24,10 @@
            MÉCANIQUE DU SLIDER PLEIN ÉCRAN
         ========================================== */
         body.page-private {
-            font-family: 'Montserrat', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background-color: #000000;
             color: #ffffff;
-            overflow: hidden; /* Bloque le scroll global */
+            overflow: hidden;
             height: 100vh;
             width: 100vw;
             margin: 0;
@@ -67,7 +67,7 @@
         #slide-1 {
             background: radial-gradient(circle at 75% 50%, #210d3a 0%, #05020a 55%, #000000 100%);
             display: flex;
-            flex-direction: row; /* Aligne le texte à gauche et l'image à droite */
+            flex-direction: row;
             align-items: center;
         }
 
@@ -80,13 +80,13 @@
             justify-content: center;
             height: 100%;
             text-align: left;
-            padding: 0 10vw; /* Écarte le texte du bord */
+            padding: 0 10vw;
             max-width: 50vw;
         }
 
         .massive-title {
             font-family: 'Cinzel', serif;
-            font-size: clamp(4rem, 10vw, 8rem);
+            font-size: clamp(3.5rem, 8vw, 8rem);
             font-weight: 900;
             line-height: 1;
             text-transform: uppercase;
@@ -111,11 +111,10 @@
             -webkit-text-fill-color: transparent; 
         }
 
-        /* L'Hôtesse cliquable */
         .hotesse-container {
             position: absolute; 
             bottom: 0; right: 5%; 
-            height: 95vh; width: auto; 
+            height: 92vh; width: auto; 
             z-index: 5;
             display: block; 
             cursor: pointer; 
@@ -152,45 +151,50 @@
             padding-top: 20px;
         }
 
-        /* Design des Cartes Full-Art générées par JS */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 30px;
+            max-width: 1300px;
+            width: 100%;
+            padding: 20px 20px 120px 20px; /* Espace bas pour laisser respirer la navbar */
+            margin: 0 auto;
+            justify-items: center;
+        }
+
         .card-fullart {
-            width: 300px; height: 420px; border-radius: 12px; overflow: hidden;
+            width: 100%; max-width: 270px; height: 380px; border-radius: 12px; overflow: hidden;
             position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); 
-            border: 1px solid rgba(255,255,255,0.1); 
-            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.5s ease; 
-            cursor: pointer; display: flex; flex-direction: column; justify-content: flex-end; padding: 30px 25px;
+            border: 3px solid rgba(167, 108, 242, 0.3); 
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease, border-color 0.4s ease; 
+            cursor: pointer; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px 20px;
         }
         .card-fullart img { 
-            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; z-index: 1; 
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; z-index: 1; 
         }
         .card-fullart::after { 
             content:''; position:absolute; inset:0; 
             background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 40%, transparent 100%); 
-            z-index: 2; transition: opacity 0.5s;
+            z-index: 2; transition: opacity 0.4s;
         }
-        .card-fullart:hover { transform: translateY(-15px); box-shadow: 0 25px 50px rgba(101, 44, 160, 0.4); border-color: rgba(167, 108, 242, 0.6); }
-        .card-fullart:hover img { transform: scale(1.08); }
-        .card-fullart:hover::after { opacity: 0.8; }
+        .card-fullart:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(101, 44, 160, 0.5); border-color: #a76cf2; }
+        .card-fullart:hover img { transform: scale(1.06); }
 
-        .fullart-content { position: relative; z-index: 3; transform: translateY(10px); transition: transform 0.4s ease; }
+        .fullart-content { position: relative; z-index: 3; transform: translateY(5px); transition: transform 0.3s ease; }
         .card-fullart:hover .fullart-content { transform: translateY(0); }
         
         .fullart-title { 
-            font-family: 'Cinzel', serif; font-size: 2.2rem; color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,1); line-height: 1; margin-bottom: 5px; 
+            font-family: 'Cinzel', serif; font-size: 1.8rem; color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,1); line-height: 1.1; margin-bottom: 5px; 
         }
         .fullart-subtitle { 
-            font-family: 'Montserrat', sans-serif; font-size: 0.75rem; color: #a76cf2; letter-spacing: 3px; font-weight: 600; text-transform: uppercase; 
-        }
-
-        .cards-grid {
-            display: flex; flex-wrap: wrap; justify-content: center; gap: 50px; max-width: 1400px; padding-bottom: 100px; margin-top: 40px;
+            font-family: 'Montserrat', sans-serif; font-size: 0.7rem; color: #a76cf2; letter-spacing: 2px; font-weight: 600; text-transform: uppercase; 
         }
 
         /* ==========================================
            LA MODALE (POP-UP ZOOM)
         ========================================== */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9);
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
             opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
@@ -201,7 +205,7 @@
         }
 
         .modal-close {
-            position: absolute; top: 30px; right: 40px; color: #fff; font-size: 3rem;
+            position: absolute; top: 25px; right: 30px; color: #fff; font-size: 3rem;
             font-weight: 300; cursor: pointer; transition: transform 0.3s ease, color 0.3s ease;
             z-index: 10000; font-family: 'Montserrat', sans-serif; line-height: 1;
         }
@@ -218,12 +222,11 @@
         .modal-main-img {
             max-width: 100%; max-height: 75vh; object-fit: contain;
             border-radius: 8px; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 2px solid rgba(167, 108, 242, 0.3);
         }
 
-        /* Emplacements pour la future galerie étendue */
         .modal-thumbnails {
-            display: none; /* Masqué pour l'instant comme tu l'as demandé */
+            display: none;
             gap: 15px; margin-top: 30px; align-items: center; justify-content: center;
         }
         
@@ -231,53 +234,100 @@
             width: 60px; height: 60px; border-radius: 6px; object-fit: cover;
             cursor: pointer; transition: all 0.3s ease;
         }
-        
         .thumb.active { border: 2px solid #a76cf2; box-shadow: 0 0 15px rgba(101, 44, 160, 0.5); opacity: 1; }
-        .thumb.future-slot { background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); opacity: 0.5; cursor: default; }
-        .thumb.future-slot:hover { background: rgba(255,255,255,0.08); }
 
         /* ==========================================
            RESPONSIVE MOBILE / MEDIA QUERIES
         ========================================== */
         @media (max-width: 1024px) {
-            /* Tablettes */
-            .massive-title { font-size: clamp(3.5rem, 8vw, 6rem); }
+            .massive-title { font-size: clamp(3rem, 7vw, 6rem); }
             .hero-content { padding: 0 5vw; max-width: 60vw; }
-            .hotesse-container { height: 85vh; right: -5%; }
-            .cards-grid { gap: 30px; padding: 20px; }
-            .card-fullart { width: 280px; height: 390px; }
+            .hotesse-container { height: 85vh; right: -2%; }
         }
 
         @media (max-width: 768px) {
-            /* Smartphones (Orientation Paysage ou petits écrans) */
-            #slide-1 { flex-direction: column; justify-content: flex-start; padding-top: 10vh; }
-            .hero-content { align-items: center; text-align: center; max-width: 90vw; padding: 0 20px; height: auto; z-index: 15; }
-            .massive-title { font-size: 3.5rem; margin-bottom: 20px; }
+            /* Slide 1 : Antichambre repensée pour mobile */
+            #slide-1 { 
+                flex-direction: column; 
+                justify-content: space-between; 
+                align-items: center; 
+                padding-top: 40px;
+                text-align: center;
+            }
+            .hero-content { 
+                align-items: center; 
+                text-align: center; 
+                max-width: 100%; 
+                padding: 0 20px; 
+                height: auto; 
+                z-index: 15; 
+                flex-grow: 0;
+            }
+            .massive-title { 
+                font-size: 3rem; 
+                margin-bottom: 0; 
+                letter-spacing: -1px;
+            }
             
-            .hotesse-container { position: relative; height: 65vh; width: 100%; right: 0; bottom: 0; display: flex; justify-content: center; margin-top: auto; }
-            .model-character { object-position: bottom center; width: auto; max-width: 100%; }
+            .hotesse-container { 
+                position: relative; 
+                height: 62vh; 
+                width: 100%; 
+                right: auto; 
+                bottom: 0; 
+                display: flex; 
+                justify-content: center; 
+            }
+            .model-character { 
+                object-position: bottom center; 
+                height: 100%; 
+                max-height: 62vh; 
+            }
             
-            .header-main { padding-top: 30px !important; }
-            .header-main h2 { font-size: 2.2rem !important; }
-            .header-main p { font-size: 0.75rem !important; }
+            /* Slide 2 : Galerie mobile épurée */
+            .slide-gallery header.header-main { 
+                padding: 25px 15px 10px !important; 
+            }
+            .slide-gallery header.header-main h2 { 
+                font-size: 1.8rem !important; 
+                letter-spacing: 2px !important; 
+            }
+            .slide-gallery header.header-main p { 
+                font-size: 0.65rem !important; 
+                letter-spacing: 1.5px !important; 
+            }
             
-            .cards-grid { gap: 20px; padding: 15px; margin-top: 20px; }
-            .card-fullart { width: calc(50% - 10px); height: 320px; min-width: 160px; padding: 20px 15px; }
-            .fullart-title { font-size: 1.5rem; }
-            .fullart-subtitle { font-size: 0.6rem; letter-spacing: 1px; }
+            .cards-grid { 
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important; 
+                gap: 12px !important; 
+                padding: 15px 10px 110px 10px !important; 
+            }
+            .card-fullart { 
+                width: 100% !important; 
+                max-width: none !important; 
+                height: 240px !important; 
+                padding: 15px 10px !important; 
+            }
+            .fullart-title { 
+                font-size: 1.1rem !important; 
+            }
+            .fullart-subtitle { 
+                font-size: 0.55rem !important; 
+                letter-spacing: 1px !important; 
+            }
 
-            .modal-close { top: 15px; right: 20px; font-size: 2.5rem; }
-            .modal-image-container { max-width: 95vw; max-height: 80vh; }
+            .modal-close { top: 15px; right: 20px; font-size: 2.2rem; }
         }
 
         @media (max-width: 480px) {
-            /* Très petits smartphones (Portrait) */
-            .massive-title { font-size: 2.8rem; }
-            .hotesse-container { height: 60vh; }
-            
-            /* On passe les cartes en 1 seule colonne pour une meilleure lisibilité */
-            .card-fullart { width: 100%; max-width: 320px; height: 380px; }
-            .fullart-title { font-size: 1.8rem; }
+            .massive-title { font-size: 2.5rem; }
+            .cards-grid { 
+                grid-template-columns: 1fr !important; 
+                max-width: 320px; 
+            }
+            .card-fullart { 
+                height: 320px !important; 
+            }
         }
     </style>
 </head>
@@ -298,7 +348,7 @@
                 </h1>
             </div>
 
-            <!-- Clic sur Ludvina remplace le bouton -->
+            <!-- Clic sur Ludvina bascule vers la galerie -->
             <div class="hotesse-container" onclick="goToSlide('slide-2')" title="Accéder à la collection">
                 <img src="./assets/cards/dresseuses/lulud.png" alt="Ludvina" class="model-character" onerror="this.src='lulud.png'">
             </div>
@@ -310,18 +360,18 @@
              ========================================== -->
         <div id="slide-2" class="slide slide-gallery">
             
-            <header class="header-main" style="padding-top: 40px; padding-bottom: 20px; text-align: center;">
-                <h2 style="font-family: 'Cinzel', serif; font-size: 3rem; color: #fff; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 10px;">
+            <header class="header-main" style="text-align: center;">
+                <h2 style="font-family: 'Cinzel', serif; font-size: 2.8rem; color: #fff; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 5px;">
                     Registre Secret
                 </h2>
-                <p style="color: #a76cf2; font-weight: bold; letter-spacing: 3px; font-family: 'Montserrat', sans-serif;">
+                <p style="color: #a76cf2; font-weight: bold; letter-spacing: 2px; font-family: 'Montserrat', sans-serif;">
                     COLLECTION INTÉGRALE DES DRESSEUSES
                 </p>
             </header>
 
-            <main class="collection-workspace" style="width: 100%; display: flex; justify-content: center; padding-bottom: 60px;">
-                <div class="cards-grid" id="private-secret-grid" style="width: 100%; max-width: 1300px; padding: 20px;">
-                    <!-- Les cartes secrètes Full-Art seront générées ici par JavaScript -->
+            <main class="collection-workspace" style="width: 100%; display: flex; justify-content: center;">
+                <div class="cards-grid" id="private-secret-grid">
+                    <!-- Généré dynamiquement par JavaScript -->
                 </div>
             </main>
             
@@ -330,7 +380,7 @@
     </div>
 
     <!-- ==========================================
-         LA MODALE (HORS DU SLIDER)
+         LA MODALE (ZOOM)
          ========================================== -->
     <div id="modal-zoom" class="modal-overlay">
         <span class="modal-close" onclick="fermerModale()">&times;</span>
@@ -344,7 +394,7 @@
         </div>
     </div>
 
-    <!-- Scripts de données -->
+    <!-- Scripts de données & Moteur -->
     <script src="scripts/assets/js/dresseuses-data.js"></script>
     <script src="scripts/assets/js/script.js"></script>
 
@@ -355,6 +405,7 @@
         function goToSlide(slideId) {
             document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
             document.getElementById(slideId).classList.add('active');
+            window.scrollTo(0, 0);
         }
 
         /* ====================================================================
@@ -372,10 +423,8 @@
 
                     secretImages.forEach((imgFile, index) => {
                         const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
-                        // Titre adapté si plusieurs images pour la même dresseuse
                         const cardTitle = secretImages.length > 1 ? `${trainerName} (${index + 1})` : trainerName;
 
-                        // Nouvelle structure de carte Full-Art avec appel à la modale
                         htmlContent += `
                             <div class="card-fullart" onclick="ouvrirModale('${imgSrc}')">
                                 <img src="${imgSrc}" alt="${cardTitle}" loading="lazy" onerror="this.src='scripts/assets/img/back-fr.png'">
@@ -401,11 +450,8 @@
         function ouvrirModale(imageSrc) {
             imgPrincipale.src = imageSrc;
             
-            // Prépare les miniatures pour le futur
             pisteMiniatures.innerHTML = `
                 <img src="${imageSrc}" class="thumb active" alt="Illustration Secrète">
-                <div class="thumb future-slot" title="Emplacement verrouillé"></div>
-                <div class="thumb future-slot" title="Emplacement verrouillé"></div>
             `;
 
             modale.classList.add('active');
@@ -420,7 +466,6 @@
             }, 400);
         }
 
-        // Fermeture au clic à l'extérieur de l'image
         modale.addEventListener('click', function(e) {
             if (e.target === modale || e.target.classList.contains('modal-image-container')) {
                 fermerModale();
