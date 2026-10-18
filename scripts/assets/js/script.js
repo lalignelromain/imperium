@@ -761,30 +761,63 @@ function updateAllViews() {
     initPika30ProgressHub();
 }
 
+/* ====================================================================
+   GÉNÉRATION DE LA NAVBAR GLOBALE (DOCK) - NOUVELLE LOGIQUE
+==================================================================== */
 function setupDock() {
     if (document.getElementById('floating-dock')) return;
     const dock = document.createElement('nav');
     dock.id = 'floating-dock';
     dock.className = 'floating-dock';
     
-    let backLink = '';
-    if (window.location.pathname.includes('classeur.html')) {
-        backLink = `<a href="dresseuses.html" class="dock-btn" title="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>`;
-    } else if (!window.location.pathname.includes('index.html') && window.location.pathname.length > 1) {
-        backLink = `<a href="index.html" class="dock-btn" title="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>`;
+    // On analyse l'URL pour savoir où l'on est
+    const path = window.location.pathname;
+    const isIndex = path.endsWith('index.html') || path.endsWith('/');
+    const isDresseuses = path.includes('dresseuses.html');
+
+    // 1. Bouton Retour (Masqué sur l'accueil) - Utilise l'historique du navigateur
+    let backBtn = '';
+    if (!isIndex) {
+        backBtn = `<a href="#" onclick="if(document.referrer) { history.back(); } else { window.location.href='index.html'; }; return false;" class="dock-btn" title="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>`;
     }
 
+    // 2. Bouton Accueil (Masqué sur l'accueil)
+    let homeBtn = '';
+    if (!isIndex) {
+        homeBtn = `<a href="index.html" class="dock-btn" title="Accueil"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></a>`;
+    }
+
+    // 3. Bouton Salon Privé (Réservé à la page Dresseuses, Masqué par défaut)
+    let privateBtn = '';
+    if (isDresseuses) {
+        privateBtn = `<a href="dresseuses-private.html" id="dock-btn-private" class="dock-btn" title="Salon Privé" style="display: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></a>`;
+    }
+
+    // 4. Bouton Haut de Page (Toujours présent)
+    let topBtn = `<button type="button" id="dock-btn-top" class="dock-btn" title="Haut de page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></button>`;
+
+    // 5. Bouton Déconnexion / Cadenas (Masqué par défaut)
+    let lockBtn = `<button type="button" id="dock-btn-lock" class="dock-btn" title="Verrouiller (Déconnexion)" style="display: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 17A4 4 0 0 0 7 13a4 4 0 0 0 4-4M17 11V7a5 5 0 0 0-10 0v4"/></svg></button>`;
+
+    // Injection dans le HTML (L'ordre est respecté)
     dock.innerHTML = `
-        ${backLink}
-        <a href="index.html" class="dock-btn" title="Accueil"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></a>
-        <button type="button" id="dock-btn-top" class="dock-btn" title="Haut de page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></button>
-        <button type="button" id="dock-btn-lock" class="dock-btn dock-btn-lock" style="display: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></button>
+        ${backBtn}
+        ${homeBtn}
+        ${privateBtn}
+        ${topBtn}
+        ${lockBtn}
     `;
     document.body.appendChild(dock);
     
+    // Activation des clics
     document.getElementById('dock-btn-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-    document.getElementById('dock-btn-lock').addEventListener('click', () => { if (auth) auth.signOut(); });
+    
+    const lockElement = document.getElementById('dock-btn-lock');
+    if (lockElement) {
+        lockElement.addEventListener('click', () => { if (auth) auth.signOut(); });
+    }
 
+    // Nettoyage de l'ancien bouton retour en dur s'il en reste
     document.querySelectorAll('a, button, div').forEach(el => {
         if (el.textContent && el.textContent.trim().toUpperCase().includes('RETOUR AU PANTHÉON')) {
             el.style.display = 'none';
@@ -809,21 +842,24 @@ function triggerLogin() {
     auth.signInWithPopup(provider).catch(err => console.error(err));
 }
 
+/* ====================================================================
+   GESTION DE L'AFFICHAGE SELON LA CONNEXION (Mise à jour pour Navbar)
+==================================================================== */
 if (auth) {
     auth.onAuthStateChanged(user => {
         const lockBtn = document.getElementById('dock-btn-lock');
-        const fabPrivateBtn = document.getElementById('fabPrivateBtn');
+        const dockPrivateBtn = document.getElementById('dock-btn-private');
         
         if (user && user.email === ADMIN_EMAIL) {
             isEditMode = true;
             document.body.classList.add('mode-edition');
             if (lockBtn) lockBtn.style.display = 'flex';
-            if (fabPrivateBtn) fabPrivateBtn.style.display = 'flex';
+            if (dockPrivateBtn) dockPrivateBtn.style.display = 'flex';
         } else {
             isEditMode = false;
             document.body.classList.remove('mode-edition');
             if (lockBtn) lockBtn.style.display = 'none';
-            if (fabPrivateBtn) fabPrivateBtn.style.display = 'none';
+            if (dockPrivateBtn) dockPrivateBtn.style.display = 'none';
         }
         updateAllViews();
     });
