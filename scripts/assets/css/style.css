@@ -106,13 +106,13 @@ body.mode-edition .header-main h1 { -webkit-text-stroke: 1.2px #e5c05c; animatio
 .hub-card.pantheon-card   { --th-color: #e5c05c; --th-glow: rgba(229, 192, 92, 0.45); grid-column: span 3; }
 .hub-card.mew-card        { --th-color: #fea6ca; --th-glow: rgba(254, 166, 202, 0.45); grid-column: span 2; }
 
-/* MODIFICATION COULEUR MEWTWO : Violet profond (#7a429c) pour bien le différencier des Dresseuses (#a76cf2) */
+/* MODIFICATION COULEUR MEWTWO : Violet profond (#7a429c) */
 .hub-card.mewtwo-card     { --th-color: #7a429c; --th-glow: rgba(122, 66, 156, 0.55); grid-column: span 2; }
 .hub-card.dresseuses-card { --th-color: #a76cf2; --th-glow: rgba(167, 108, 242, 0.7); grid-column: span 2; }
 .hub-card.masterset-card  { --th-color: #00f0ff; grid-column: 1 / -1 !important; }
 .hub-card.pikachu-card    { --th-color: #facc15; grid-column: 1 / -1 !important; }
 
-/* MODIFICATION HAUTEUR HUB CARDS : J'ai réduit le min-height de 115px à 95px */
+/* MODIFICATION HAUTEUR HUB CARDS : Réduit à 95px */
 .hub-card {
     width: 100%; min-height: 95px; background: rgba(12, 15, 22, 0.5); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 14px 14px; text-decoration: none; color: inherit;
@@ -451,7 +451,7 @@ body.mode-edition .hub-pocket.has-secret::after { content: ''; position: absolut
 /* MAUVE: Pochettes mystères (Secrètes) */
 .mystery-pocket { 
     cursor: pointer; 
-    border: 3px solid #a76cf2 !important; /* Ajustement épaisseur à 3px */
+    border: 3px solid #a76cf2 !important; 
     box-shadow: 0 0 15px rgba(167, 108, 242, 0.45) !important; 
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; 
     border-radius: 4.5% !important; 
