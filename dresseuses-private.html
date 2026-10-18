@@ -329,6 +329,31 @@
                 height: 320px !important; 
             }
         }
+
+        /* ==========================================
+   CORRECTION NAVBAR & LUDVINA (SALON PRIVÉ)
+========================================== */
+/* Sur PC : Navbar à gauche sous le texte */
+body.page-private .floating-dock {
+    right: auto !important;
+    left: 25px !important;
+}
+
+@media (max-width: 768px) {
+    /* Sur Mobile : Navbar centrée */
+    body.page-private .floating-dock {
+        right: auto !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 92vw !important;
+        bottom: 15px !important;
+        justify-content: space-evenly !important;
+    }
+    /* Sur Mobile : On remonte les talons de Ludvina au-dessus de la navbar */
+    .hotesse-container {
+        bottom: 65px !important;
+    }
+}
     </style>
 </head>
 
