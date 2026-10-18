@@ -534,12 +534,10 @@ function renderDresseuseClasseur() {
     else if (totalItems === 5 || totalItems === 6) layoutClass = 'layout-max-3'; 
     else layoutClass = 'layout-max-4';
 
-    // FORCAGE DU DISPLAY FLEX ROW POUR EVITER L'EMPILAGE VERTICAL
     let htmlContent = `<div class="layout-flex ${layoutClass}" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%;">`;
     
     trainerImages.forEach(imgFile => {
         const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
-        // AJOUT DU ONCLICK OPENLIGHTBOX ICI :
         htmlContent += `
             <div class="binder-pocket" onclick="openLightbox('${imgSrc}')" title="Zoomer">
                 <div style="width:100%; height:100%; overflow:hidden; border-radius:3px; position:relative;">
@@ -798,8 +796,8 @@ function setupDock() {
     // 4. Bouton Haut de Page (Toujours présent)
     let topBtn = `<button type="button" id="dock-btn-top" class="dock-btn" title="Haut de page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></button>`;
 
-    // 5. Bouton Déconnexion / Cadenas (Masqué par défaut)
-    let lockBtn = `<button type="button" id="dock-btn-lock" class="dock-btn" title="Verrouiller (Déconnexion)" style="display: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 17A4 4 0 0 0 7 13a4 4 0 0 0 4-4M17 11V7a5 5 0 0 0-10 0v4"/></svg></button>`;
+    // 5. Bouton Déconnexion / Cadenas (Masqué par défaut) - CORRIGÉ AVEC LE NOUVEAU DESIGN PROPRE
+    let lockBtn = `<button type="button" id="dock-btn-lock" class="dock-btn" title="Verrouiller (Déconnexion)" style="display: none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></button>`;
 
     // Injection dans le HTML (L'ordre est respecté)
     dock.innerHTML = `
@@ -845,7 +843,7 @@ function triggerLogin() {
 }
 
 /* ====================================================================
-   GESTION DE L'AFFICHAGE SELON LA CONNEXION (Mise à jour pour Navbar)
+   GESTION DE LA CONNEXION (Mise à jour pour Navbar)
 ==================================================================== */
 if (auth) {
     auth.onAuthStateChanged(user => {
