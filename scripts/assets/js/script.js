@@ -505,7 +505,7 @@ function renderDresseusesHub() {
     }
 }
 
-// -> Classeur (classeur.html) - Flexbox Adaptatif CORRIGÉ (suppression du style inline)
+// -> Classeur (classeur.html)
 function renderDresseuseClasseur() {
     const container = document.getElementById('pages-container');
     const titleEl = document.getElementById('interior-title');
@@ -534,7 +534,6 @@ function renderDresseuseClasseur() {
     else if (totalItems === 5 || totalItems === 6) layoutClass = 'layout-max-3'; 
     else layoutClass = 'layout-max-4';
 
-    // ICI LE FIX IMPORTANT : Plus de 'style=' inline qui forçait la disposition verticale/horizontale moche
     let htmlContent = `<div class="layout-flex ${layoutClass}">`;
     
     trainerImages.forEach(imgFile => {
@@ -765,13 +764,18 @@ function updateAllViews() {
 ==================================================================== */
 function setupDock() {
     if (document.getElementById('floating-dock')) return;
+    
+    const path = window.location.pathname;
+
+    // SUPPRESSION DE LA NAVBAR SUR LE SALON PRIVÉ
+    if (path.includes('dresseuses-private.html')) return;
+
+    const isIndex = path.endsWith('index.html') || path.endsWith('/');
+    const isDresseuses = path.includes('dresseuses.html');
+
     const dock = document.createElement('nav');
     dock.id = 'floating-dock';
     dock.className = 'floating-dock';
-    
-    const path = window.location.pathname;
-    const isIndex = path.endsWith('index.html') || path.endsWith('/');
-    const isDresseuses = path.includes('dresseuses.html');
 
     let backBtn = '';
     if (!isIndex) {
@@ -790,7 +794,6 @@ function setupDock() {
 
     let topBtn = `<button type="button" id="dock-btn-top" class="dock-btn" title="Haut de page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></button>`;
 
-    // ICI LE FIX IMPORTANT : L'icône de cadenas dorée est propre et claire
     let lockBtn = `<button type="button" id="dock-btn-lock" class="dock-btn" title="Verrouiller (Déconnexion)" style="display: none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></button>`;
 
     dock.innerHTML = `
