@@ -235,6 +235,50 @@
         .thumb.active { border: 2px solid #a76cf2; box-shadow: 0 0 15px rgba(101, 44, 160, 0.5); opacity: 1; }
         .thumb.future-slot { background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); opacity: 0.5; cursor: default; }
         .thumb.future-slot:hover { background: rgba(255,255,255,0.08); }
+
+        /* ==========================================
+           RESPONSIVE MOBILE / MEDIA QUERIES
+        ========================================== */
+        @media (max-width: 1024px) {
+            /* Tablettes */
+            .massive-title { font-size: clamp(3.5rem, 8vw, 6rem); }
+            .hero-content { padding: 0 5vw; max-width: 60vw; }
+            .hotesse-container { height: 85vh; right: -5%; }
+            .cards-grid { gap: 30px; padding: 20px; }
+            .card-fullart { width: 280px; height: 390px; }
+        }
+
+        @media (max-width: 768px) {
+            /* Smartphones (Orientation Paysage ou petits écrans) */
+            #slide-1 { flex-direction: column; justify-content: flex-start; padding-top: 10vh; }
+            .hero-content { align-items: center; text-align: center; max-width: 90vw; padding: 0 20px; height: auto; z-index: 15; }
+            .massive-title { font-size: 3.5rem; margin-bottom: 20px; }
+            
+            .hotesse-container { position: relative; height: 65vh; width: 100%; right: 0; bottom: 0; display: flex; justify-content: center; margin-top: auto; }
+            .model-character { object-position: bottom center; width: auto; max-width: 100%; }
+            
+            .header-main { padding-top: 30px !important; }
+            .header-main h2 { font-size: 2.2rem !important; }
+            .header-main p { font-size: 0.75rem !important; }
+            
+            .cards-grid { gap: 20px; padding: 15px; margin-top: 20px; }
+            .card-fullart { width: calc(50% - 10px); height: 320px; min-width: 160px; padding: 20px 15px; }
+            .fullart-title { font-size: 1.5rem; }
+            .fullart-subtitle { font-size: 0.6rem; letter-spacing: 1px; }
+
+            .modal-close { top: 15px; right: 20px; font-size: 2.5rem; }
+            .modal-image-container { max-width: 95vw; max-height: 80vh; }
+        }
+
+        @media (max-width: 480px) {
+            /* Très petits smartphones (Portrait) */
+            .massive-title { font-size: 2.8rem; }
+            .hotesse-container { height: 60vh; }
+            
+            /* On passe les cartes en 1 seule colonne pour une meilleure lisibilité */
+            .card-fullart { width: 100%; max-width: 320px; height: 380px; }
+            .fullart-title { font-size: 1.8rem; }
+        }
     </style>
 </head>
 
