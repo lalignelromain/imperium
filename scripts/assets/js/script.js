@@ -534,12 +534,14 @@ function renderDresseuseClasseur() {
     else if (totalItems === 5 || totalItems === 6) layoutClass = 'layout-max-3'; 
     else layoutClass = 'layout-max-4';
 
-    let htmlContent = `<div class="layout-flex ${layoutClass}">`;
+    // FORCAGE DU DISPLAY FLEX ROW POUR EVITER L'EMPILAGE VERTICAL
+    let htmlContent = `<div class="layout-flex ${layoutClass}" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px; width: 100%;">`;
     
     trainerImages.forEach(imgFile => {
         const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
+        // AJOUT DU ONCLICK OPENLIGHTBOX ICI :
         htmlContent += `
-            <div class="binder-pocket">
+            <div class="binder-pocket" onclick="openLightbox('${imgSrc}')" title="Zoomer">
                 <div style="width:100%; height:100%; overflow:hidden; border-radius:3px; position:relative;">
                     <img src="${imgSrc}" alt="${trainerName}" onerror="this.src='./scripts/assets/img/back-fr.png'" loading="lazy" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain;">
                 </div>
@@ -549,13 +551,13 @@ function renderDresseuseClasseur() {
 
    if (hasMysteryCard) {
     htmlContent += `
-        <div class="binder-pocket mystery-pocket" onclick="openLightbox3D()">
+        <div class="binder-pocket mystery-pocket" onclick="openLightbox3D()" title="Ouvrir le Registre Secret">
             <div class="mystery-visual">
                 <img src="./assets/cards/dresseuses/ludvina-front.png" alt="Carte Secrète" class="secret-cover-img">
             </div>
         </div>
     `;
-}
+    }
     
     htmlContent += `</div>`; 
     
