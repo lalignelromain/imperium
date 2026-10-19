@@ -378,7 +378,7 @@
     <script src="scripts/assets/js/dresseuses-data.js"></script>
     <script src="scripts/assets/js/script.js"></script>
 
-    <script>
+   <script>
         function goToSlide(slideId) {
             document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
             document.getElementById(slideId).classList.add('active');
@@ -392,23 +392,23 @@
 
                 let htmlContent = '';
 
+                // On boucle sur chaque dresseuse du registre
                 for (const [trainerName, secretImages] of Object.entries(REGISTRE_SECRET)) {
                     if (!secretImages || secretImages.length === 0) continue;
 
-                    secretImages.forEach((imgFile, index) => {
-                        const imgSrc = `./assets/cards/dresseuses/${imgFile}`;
-                        const cardTitle = secretImages.length > 1 ? `${trainerName} (${index + 1})` : trainerName;
+                    // 1. On ne prend QUE la première image pour l'affichage dans la grille
+                    const coverImgSrc = `./assets/cards/dresseuses/${secretImages[0]}`;
 
-                        htmlContent += `
-                            <div class="card-fullart" onclick="ouvrirModale('${imgSrc}')">
-                                <img src="${imgSrc}" alt="${cardTitle}" loading="lazy" onerror="this.src='scripts/assets/img/back-fr.png'">
-                                <div class="fullart-content">
-                                    <div class="fullart-title">${cardTitle}</div>
-                                    <div class="fullart-subtitle">Édition Secrète</div>
-                                </div>
+                    // 2. On passe le NOM de la dresseuse à la modale (et non plus juste l'image)
+                    htmlContent += `
+                        <div class="card-fullart" onclick="ouvrirModale('${trainerName}')">
+                            <img src="${coverImgSrc}" alt="${trainerName}" loading="lazy" onerror="this.src='scripts/assets/img/back-fr.png'">
+                            <div class="fullart-content">
+                                <div class="fullart-title">${trainerName}</div>
+                                <div class="fullart-subtitle">Édition Secrète</div>
                             </div>
-                        `;
-                    });
+                        </div>
+                    `;
                 }
                 gridContainer.innerHTML = htmlContent;
             }, 100);
@@ -418,10 +418,39 @@
         const imgPrincipale = document.getElementById('image-principale');
         const pisteMiniatures = document.getElementById('piste-miniatures');
 
-        function ouvrirModale(imageSrc) {
-            imgPrincipale.src = imageSrc;
-            pisteMiniatures.innerHTML = `<img src="${imageSrc}" class="thumb active" alt="Illustration Secrète">`;
+        function ouvrirModale(trainerName) {
+            const secretImages = REGISTRE_SECRET[trainerName];
+            if (!secretImages || secretImages.length === 0) return;
+
+            // On affiche la première image par défaut
+            imgPrincipale.src = `./assets/cards/dresseuses/${secretImages[0]}`;
+
+            // S'il y a plusieurs cartes pour cette dresseuse, on génère les miniatures
+            if (secretImages.length > 1) {
+                let thumbsHTML = '';
+                secretImages.forEach((imgFile, index) => {
+                    const thumbSrc = `./assets/cards/dresseuses/${imgFile}`;
+                    const activeClass = index === 0 ? 'active' : '';
+                    thumbsHTML += `<img src="${thumbSrc}" class="thumb ${activeClass}" alt="${trainerName} ${index + 1}" onclick="changerImageModale(event, '${thumbSrc}', this)">`;
+                });
+                pisteMiniatures.innerHTML = thumbsHTML;
+                pisteMiniatures.style.display = 'flex'; // Affiche la piste
+            } else {
+                pisteMiniatures.innerHTML = '';
+                pisteMiniatures.style.display = 'none'; // Cache la piste s'il n'y a qu'une carte
+            }
+
             modale.classList.add('active');
+        }
+
+        // Fonction pour changer l'image principale quand on clique sur une miniature
+        function changerImageModale(event, src, thumbElement) {
+            event.stopPropagation(); // Évite que le clic ne ferme la modale
+            imgPrincipale.src = src;
+            
+            // Met à jour la miniature active (bordure violette)
+            document.querySelectorAll('.modal-thumbnails .thumb').forEach(t => t.classList.remove('active'));
+            thumbElement.classList.add('active');
         }
 
         function fermerModale() {
@@ -429,11 +458,13 @@
             setTimeout(() => { 
                 if(!modale.classList.contains('active')) {
                     imgPrincipale.src = ''; 
+                    pisteMiniatures.innerHTML = ''; // Nettoie les miniatures
                 }
             }, 400);
         }
 
         modale.addEventListener('click', function(e) {
+            // Ferme la modale uniquement si on clique en dehors de l'image et des miniatures
             if (e.target === modale || e.target.classList.contains('modal-image-container')) {
                 fermerModale();
             }
