@@ -208,6 +208,70 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned { pointer-event
 #dock-btn-lock { color: #d4af37 !important; border-color: rgba(212, 175, 55, 0.4); }
 #dock-btn-lock:hover { background: rgba(212, 175, 55, 0.2); border-color: #d4af37; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.5); }
 
+/* ==========================================
+   GESTION INTELLIGENTE DE LA NAVBAR 
+========================================== */
+
+/* 1. Bouton Home : Masqué UNIQUEMENT sur l'accueil */
+.page-index #btn-home {
+    display: none !important;
+}
+
+/* 2. Bouton Édition : Masqué PAR DÉFAUT partout */
+#btn-edit {
+    display: none;
+}
+
+/* 3. Bouton Édition : Affiché UNIQUEMENT sur les pages où il est utile */
+.page-pokedex #btn-edit,
+.page-masterset #btn-edit,
+.page-pikachu #btn-edit,
+.page-mew #btn-edit {
+    display: flex;
+}
+
+/* 4. Le bouton retour en arrière (complètement désactivé partout) */
+#btn-back-history {
+    display: none !important; 
+}
+
+/* ==========================================
+   MÉCANIQUE SECRÈTE VIP (Appui Long)
+========================================== */
+
+/* Rendre le mot déclencheur (ex: Trainers) incliquable nativement pour le mobile */
+#title-trainers {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    cursor: pointer;
+}
+
+/* Le Cadenas VIP de la Navbar (Caché par défaut) */
+.hidden-padlock {
+    width: 24px;
+    height: 24px;
+    color: #a76cf2;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.5);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-left: 15px; 
+    cursor: pointer;
+}
+
+.hidden-padlock.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
+    filter: drop-shadow(0 0 8px rgba(167, 108, 242, 0.6));
+}
+
+.hidden-padlock.visible:hover {
+    filter: drop-shadow(0 0 12px rgba(167, 108, 242, 1));
+}
+
+
 /* ADJUSTED MEDIA QUERIES FOR SLEEKER CARDS */
 @media (max-width: 1650px) and (min-width: 1025px) {
     .hub-container { padding: 10px 40px; }
