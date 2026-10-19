@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mewthology - Salon Privé</title>
+    <title>Mewthology - Club Privé</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="scripts/assets/css/style.css?v=7">
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -62,10 +62,10 @@
         }
 
         /* ==========================================
-           DESIGN DE L'ANTICHAMBRE (SLIDE 1) - CENTRÉ
+           DESIGN DE L'ANTICHAMBRE (SLIDE 1)
         ========================================== */
         #slide-1 {
-            background: radial-gradient(circle at 75% 50%, #210d3a 0%, #05020a 55%, #000000 100%);
+            background: radial-gradient(circle at 75% 50%, #1a0a2e 0%, #030105 55%, #000000 100%);
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -93,7 +93,7 @@
             line-height: 1;
             text-transform: uppercase;
             letter-spacing: -2px;
-            margin-bottom: 35px;
+            margin-bottom: 5px; /* Réduit pour coller au sous-titre */
             opacity: 0;
             transform: translateY(30px);
         }
@@ -104,18 +104,33 @@
 
         .massive-title span {
             display: block;
-            text-shadow: 0 5px 20px rgba(0, 0, 0, 0.8);
+            /* Le dégradé sombre et mat validé */
+            background: linear-gradient(180deg, #85709c 0%, #5f457a 50%, #372152 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* Profondeur sans halo lumineux */
+            filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.95)) drop-shadow(0 5px 30px rgba(20, 5, 40, 0.8));
         }
 
-        .massive-title .highlight { 
-            background: linear-gradient(to right, #ffffff, #8e54e9);
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
+        .hub-subtitle {
+            font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+            color: #a76cf2;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 15px;
+            border-left: 3px solid #a76cf2;
+            padding-left: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .slide.active .hub-subtitle {
+            animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
         }
 
         .hotesse-container {
             position: absolute; 
-            /* CENTRAGE VERTICAL PARFAIT SUR PC */
             top: 50%;
             transform: translateY(-50%);
             right: 5%; 
@@ -131,9 +146,11 @@
             height: 100%; width: auto; 
             display: block; 
             object-fit: contain;
-            /* L'image se centre verticalement dans son conteneur */
             object-position: center right; 
-            filter: drop-shadow(-20px 20px 40px rgba(0,0,0,0.9));
+            
+            /* Piqué HD et ombre d'assise profonde pour Ludvina */
+            filter: drop-shadow(-15px 15px 20px rgba(0,0,0,1)) contrast(1.15) saturate(1.1) brightness(1.05);
+            
             opacity: 0; 
             transform: translateX(50px);
             transition: opacity 1.5s ease 0.5s, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, filter 0.4s ease;
@@ -144,7 +161,33 @@
         }
 
         .hotesse-container:hover .model-character { 
-            filter: drop-shadow(-20px 20px 40px rgba(0,0,0,0.9)) brightness(1.15); 
+            /* On garde les réglages de netteté et on booste juste un peu la luminosité au survol */
+            filter: drop-shadow(-15px 15px 20px rgba(0,0,0,1)) contrast(1.15) saturate(1.1) brightness(1.2); 
+        }
+
+        /* ==========================================
+           PARTICULES (Les 120 lucioles nettes)
+        ========================================== */
+        .particles-container {
+            position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            bottom: -20px;
+            background: #a76cf2; 
+            box-shadow: 0 0 4px 1px rgba(167, 108, 242, 0.9), 
+                        0 0 12px 3px rgba(167, 108, 242, 0.5);
+            animation: floatUp linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
         }
 
         @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
@@ -153,7 +196,7 @@
            DESIGN DE LA GALERIE (SLIDE 2)
         ========================================== */
         .slide-gallery {
-            background-color: #05020a;
+            background-color: #030105;
             overflow-y: auto; 
             -webkit-overflow-scrolling: touch; 
             align-items: center;
@@ -287,7 +330,6 @@
             
             .hotesse-container { 
                 position: absolute; 
-                /* CENTRAGE VERTICAL PARFAIT SUR MOBILE */
                 top: 50% !important; 
                 transform: translateY(-50%) !important; 
                 bottom: auto !important; 
@@ -349,11 +391,15 @@
 
         <!-- SLIDE 1 : ACCUEIL -->
         <div id="slide-1" class="slide active">
+            <!-- Particules générées dynamiquement -->
+            <div class="particles-container" id="particles"></div>
+            
             <div class="hero-content">
                 <h1 class="massive-title">
-                    <span>SALON</span>
+                    <span>CLUB</span>
                     <span class="highlight">PRIVÉ</span>
                 </h1>
+                <div class="hub-subtitle">Accès réservé aux membres</div>
             </div>
 
             <div class="hotesse-container" onclick="goToSlide('slide-2')" title="Accéder à la collection">
@@ -365,10 +411,10 @@
         <div id="slide-2" class="slide slide-gallery">
             <header class="header-main" style="text-align: center;">
                 <h2 style="font-family: 'Cinzel', serif; font-size: 2.8rem; color: #fff; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 5px;">
-                    Registre Secret
+                    Archives Privées
                 </h2>
                 <p style="color: #a76cf2; font-weight: bold; letter-spacing: 2px; font-family: 'Montserrat', sans-serif;">
-                    COLLECTION INTÉGRALE DES DRESSEUSES
+                    L'ÉLITE DES DRESSEUSES
                 </p>
             </header>
 
@@ -403,6 +449,26 @@
         }
 
         document.addEventListener("DOMContentLoaded", () => {
+            // Générateur des 120 particules du Hub Privé
+            const container = document.getElementById('particles');
+            if(container) {
+                const particleCount = 120;
+                for (let i = 0; i < particleCount; i++) {
+                    let particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    let size = Math.random() * 3 + 2;
+                    particle.style.width = size + 'px';
+                    particle.style.height = size + 'px';
+                    particle.style.left = Math.random() * 100 + 'vw';
+                    particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                    particle.style.animationDelay = (Math.random() * 10) + 's';
+
+                    container.appendChild(particle);
+                }
+            }
+
+            // Génération de la galerie de cartes
             setTimeout(() => {
                 const gridContainer = document.getElementById('private-secret-grid');
                 if (!gridContainer || typeof REGISTRE_SECRET === 'undefined') return;
