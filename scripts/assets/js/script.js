@@ -417,7 +417,7 @@ const REGISTRE_SECRET = {
     "Cynthia": ["cynthia.png"],
     "Donna": ["donna.png"],
     "Dracéna": ["dracena.png"],
-    "Écho": ["echo.png", "echo1.jpg"],
+    "Écho": ["echo1.jpg", "echo.png"],
     "Élige": ["elige.png"],
     "Elsa-Mina": ["elsamina.png"],
     "Erika": ["erika.png"],
