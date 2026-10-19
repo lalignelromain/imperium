@@ -760,66 +760,6 @@ function updateAllViews() {
     initPika30ProgressHub();
 }
 
-/* ====================================================================
-   GÉNÉRATION DE LA NAVBAR GLOBALE (DOCK)
-==================================================================== */
-function setupDock() {
-    if (document.getElementById('floating-dock')) return;
-    
-    const path = window.location.pathname;
-
-    // SUPPRESSION DE LA NAVBAR SUR LE SALON PRIVÉ
-    if (path.includes('dresseuses-private.html')) return;
-
-    const isIndex = path.endsWith('index.html') || path.endsWith('/');
-    const isDresseuses = path.includes('dresseuses.html');
-
-    const dock = document.createElement('nav');
-    dock.id = 'floating-dock';
-    dock.className = 'floating-dock';
-
-    let backBtn = '';
-    if (!isIndex) {
-        backBtn = `<a href="#" onclick="if(document.referrer) { history.back(); } else { window.location.href='index.html'; }; return false;" class="dock-btn" title="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>`;
-    }
-
-    let homeBtn = '';
-    if (!isIndex) {
-        homeBtn = `<a href="index.html" class="dock-btn" title="Accueil"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></a>`;
-    }
-
-    let privateBtn = '';
-    if (isDresseuses) {
-        privateBtn = `<a href="dresseuses-private.html" id="dock-btn-private" class="dock-btn" title="Salon Privé" style="display: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></a>`;
-    }
-
-    let topBtn = `<button type="button" id="dock-btn-top" class="dock-btn" title="Haut de page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg></button>`;
-
-    let lockBtn = `<button type="button" id="dock-btn-lock" class="dock-btn" title="Verrouiller (Déconnexion)" style="display: none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></button>`;
-
-    dock.innerHTML = `
-        ${backBtn}
-        ${homeBtn}
-        ${privateBtn}
-        ${topBtn}
-        ${lockBtn}
-    `;
-    document.body.appendChild(dock);
-    
-    document.getElementById('dock-btn-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-    
-    const lockElement = document.getElementById('dock-btn-lock');
-    if (lockElement) {
-        lockElement.addEventListener('click', () => { if (auth) auth.signOut(); });
-    }
-
-    document.querySelectorAll('a, button, div').forEach(el => {
-        if (el.textContent && el.textContent.trim().toUpperCase().includes('RETOUR AU PANTHÉON')) {
-            el.style.display = 'none';
-        }
-    });
-}
-
 function setupAdminTrigger() {
     const mainTitle = document.querySelector('.header-main h1');
     if (!mainTitle) return;
@@ -838,30 +778,22 @@ function triggerLogin() {
 }
 
 /* ====================================================================
-   GESTION DE L'AFFICHAGE SELON LA CONNEXION
+   GESTION DE L'AFFICHAGE SELON LA CONNEXION (MODE ÉDITION)
 ==================================================================== */
 if (auth) {
     auth.onAuthStateChanged(user => {
-        const lockBtn = document.getElementById('dock-btn-lock');
-        const dockPrivateBtn = document.getElementById('dock-btn-private');
-        
         if (user && user.email === ADMIN_EMAIL) {
             isEditMode = true;
             document.body.classList.add('mode-edition');
-            if (lockBtn) lockBtn.style.display = 'flex';
-            if (dockPrivateBtn) dockPrivateBtn.style.display = 'flex';
         } else {
             isEditMode = false;
             document.body.classList.remove('mode-edition');
-            if (lockBtn) lockBtn.style.display = 'none';
-            if (dockPrivateBtn) dockPrivateBtn.style.display = 'none';
         }
         updateAllViews();
     });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    setupDock();
     setupAdminTrigger();
     initFirestoreSync();
     initEV5ProgressHub();
