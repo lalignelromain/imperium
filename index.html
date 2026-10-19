@@ -22,9 +22,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
-<body>
 
-    <!-- Les filigranes Mew et Mewtwo ont été définitivement supprimés -->
+<!-- AJOUT : La classe .page-index pour le CSS contextuel de la navbar -->
+<body class="page-index">
 
     <!-- En-tête Principal -->
     <header class="header-main">
@@ -54,7 +54,9 @@
                 <h2>MEWTWO</h2>
                 <p>Puissance</p>
             </a>
-            <a href="dresseuses.html" class="hub-card dresseuses-card">
+            
+            <!-- AJOUT : id="title-trainers" et blocage du menu contextuel (oncontextmenu) -->
+            <a href="dresseuses.html" class="hub-card dresseuses-card" id="title-trainers" oncontextmenu="return false;">
                 <h2>TRAINERS</h2>
                 <p>Full Art</p>
             </a>
@@ -89,8 +91,85 @@
         </nav>
     </main>
 
+    <!-- ==========================================
+         BARRE DE NAVIGATION FLOTTANTE (DOCK)
+    ========================================== -->
+    <div class="floating-dock">
+        <!-- Bouton Home (Masqué sur l'index grâce à la classe .page-index du body) -->
+        <a href="index.html" id="btn-home" class="dock-btn" title="Accueil">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+        </a>
+
+        <!-- Bouton Édition (Masqué par défaut partout, allumé via CSS sur les bonnes pages) -->
+        <div id="btn-edit" class="dock-btn" title="Mode Édition">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+        </div>
+
+        <!-- Bouton To Top (Retour en haut) -->
+        <div id="btn-to-top" class="dock-btn" title="Retour en haut" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;">
+                <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+        </div>
+
+        <!-- LE CADENAS VIP SECRETS (Caché par défaut) -->
+        <div id="vip-padlock" class="hidden-padlock" title="Accès Club Privé">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+        </div>
+    </div>
+
     <!-- Moteur Principal -->
     <script src="./scripts/assets/js/pikachu-data.js"></script>
     <script src="./scripts/assets/js/script.js"></script>
+
+    <!-- SCRIPT DU PASS VIP (APPUI LONG) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const triggerElement = document.getElementById('title-trainers');
+            const vipPadlock = document.getElementById('vip-padlock');
+            let pressTimer;
+
+            function startPress(e) {
+                // On lance le chrono (800ms)
+                pressTimer = window.setTimeout(() => {
+                    vipPadlock.classList.add('visible');
+                    // Vibration légère sur mobile
+                    if (navigator.vibrate) navigator.vibrate(50);
+                }, 800); 
+            }
+
+            function cancelPress() {
+                clearTimeout(pressTimer);
+            }
+
+            if(triggerElement) {
+                // Événements Tactiles
+                triggerElement.addEventListener('touchstart', startPress, { passive: true });
+                triggerElement.addEventListener('touchend', cancelPress);
+                triggerElement.addEventListener('touchmove', cancelPress);
+
+                // Événements Souris (Click long sur PC)
+                triggerElement.addEventListener('mousedown', startPress);
+                triggerElement.addEventListener('mouseup', cancelPress);
+                triggerElement.addEventListener('mouseleave', cancelPress);
+            }
+
+            // Au clic sur le cadenas, on ouvre le boudoir VIP
+            if(vipPadlock) {
+                vipPadlock.addEventListener('click', () => {
+                    window.location.href = 'dresseuses-private.html';
+                });
+            }
+        });
+    </script>
 </body>
 </html>
