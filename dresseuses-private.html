@@ -216,12 +216,18 @@
         }
 
         .card-fullart {
-            width: 100%; max-width: 270px; height: 380px; border-radius: 12px; overflow: hidden;
-            position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); 
-            border: 3px solid rgba(167, 108, 242, 0.3); 
+            width: 100%; 
+            max-width: 270px; 
+            height: auto; /* Supprime la hauteur fixe */
+            aspect-ratio: 734 / 1024; /* Les proportions PARFAITES d'une carte Pokémon */
+            border-radius: 4.5%; /* Les coins arrondis PARFAITS */
+            overflow: hidden;
+            position: relative; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8); 
+            border: 2px solid rgba(167, 108, 242, 0.4); /* Bordure fine au contact de l'image */
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease, border-color 0.4s ease; 
             cursor: pointer; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px 20px;
-            background-color: #0b0f17; /* AJOUT : Fond opaque pour cacher les bords transparents */
+            background: transparent; /* On supprime le fond qui bavait */
         }
         
         /* EFFET VERRE DÉPOLI SUR L'IMAGE */
@@ -231,27 +237,28 @@
             width: 100%; 
             height: 100%; 
             object-fit: cover; 
-            filter: blur(15px) brightness(0.6); 
-            transform: scale(1.1); 
+            filter: blur(12px) brightness(0.6); 
+            transform: scale(1.08); /* Léger scale au repos pour éviter les bords transparents du flou */
             transition: transform 0.6s ease, filter 0.6s ease; 
             z-index: 1; 
         }
         
         .card-fullart::after { 
             content:''; position:absolute; inset:0; 
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 40%, transparent 100%); 
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 40%, transparent 100%); 
             z-index: 2; transition: opacity 0.4s;
+            pointer-events: none;
         }
         
         .card-fullart:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(101, 44, 160, 0.5); border-color: #a76cf2; }
         
-        /* RÉVÉLATION DE L'IMAGE AU SURVOL */
+        /* RÉVÉLATION DE L'IMAGE AU SURVOL : S'ADAPTE PARFAITEMENT AU CONTENEUR */
         .card-fullart:hover img { 
             filter: blur(0px) brightness(1); 
-            transform: scale(1.06); 
+            transform: scale(1); /* Revient exactement à 100% de la taille pour épouser les bords */
         }
 
-        .fullart-content { position: relative; z-index: 3; transform: translateY(5px); transition: transform 0.3s ease; }
+        .fullart-content { position: relative; z-index: 3; transform: translateY(5px); transition: transform 0.3s ease; pointer-events: none; }
         .card-fullart:hover .fullart-content { transform: translateY(0); }
         
         .fullart-title { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,1); line-height: 1.1; margin-bottom: 5px; }
@@ -279,7 +286,7 @@
         .modal-close:hover { transform: scale(1.2); color: #a76cf2; }
 
         .modal-image-container {
-            position: relative; max-width: 90vw; max-height: 75vh;
+            position: relative; max-width: 90vw; max-height: 80vh;
             transform: scale(0.95); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .modal-overlay.active .modal-image-container {
@@ -287,10 +294,13 @@
         }
 
         .modal-main-img {
-            max-width: 100%; max-height: 75vh; object-fit: contain;
-            border-radius: 8px; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            max-width: 100%; max-height: 80vh; 
+            aspect-ratio: 734 / 1024; /* Contour modale parfait */
+            object-fit: contain;
+            border-radius: 4.5%; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
             border: 2px solid rgba(167, 108, 242, 0.3);
-            background-color: #0b0f17; /* AJOUT : Fond opaque pour cacher les bords transparents de l'image agrandie */
+            background: transparent;
         }
 
         .modal-thumbnails {
@@ -370,8 +380,9 @@
             .card-fullart { 
                 width: 100% !important; 
                 height: auto !important; 
-                aspect-ratio: 63/88; 
-                padding: 10px !important; 
+                aspect-ratio: 734 / 1024 !important; /* L'astuce est là ! */
+                border-radius: 4.5% !important;
+                padding: 15px !important; 
                 max-width: none !important;
                 border-width: 2px !important;
             }
@@ -577,3 +588,4 @@
     </script>
 </body>
 </html>
+```<L'intégration <FollowUp Pokémon. au bordure carte d'une de devrait en l'aspect-ratio la label="On y est !" maintenant millimètre parfaitement près, préservant query="Cette fois, c'est la bonne ! Les contours épousent-ils parfaitement la carte ?" vraie épouser/>
