@@ -69,8 +69,11 @@ body.mode-edition .card-item:hover { transform: translateY(-4px); }
 .gradee-item { cursor: pointer; perspective: 1000px; }
 .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
 .gradee-item.is-flipped .flip-inner { transform: rotateY(180deg); }
-.flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; top: 0; left: 0; }
-.flip-back { transform: rotateY(180deg); }
+
+/* AJOUT : Séparation Z et background opaque pour les flips du Panthéon */
+.flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; top: 0; left: 0; background: #0b0f17; transform: translateZ(0); -webkit-transform: translateZ(0); }
+.flip-front { transform: translateZ(1px); -webkit-transform: translateZ(1px); }
+.flip-back { transform: rotateY(180deg) translateZ(1px); -webkit-transform: rotateY(180deg) translateZ(1px); }
 .flip-front img, .flip-back img { width: 100%; height: 100%; object-fit: contain; }
 
 /* ADJUSTED LARGE CARDS */
@@ -124,8 +127,12 @@ body.mode-edition .card-item:hover { transform: translateY(-4px); }
 .vaultx-pocket.is-empty { background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0.015) 5px, rgba(0, 0, 0, 0.3) 5px, rgba(0, 0, 0, 0.3) 10px); border: 1px dashed rgba(255, 255, 255, 0.05); pointer-events: none; }
 .card-flipper { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
 .vaultx-pocket.is-flipped .card-flipper { transform: rotateY(180deg); }
-.face-fr, .face-jp { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.face-jp { transform: rotateY(180deg); }
+
+/* AJOUT : Séparation Z pour Vault-X Binder Flip */
+.face-fr, .face-jp { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; background: #0b0f17; transform: translateZ(0); -webkit-transform: translateZ(0); }
+.face-fr { transform: translateZ(1px); -webkit-transform: translateZ(1px); }
+.face-jp { transform: rotateY(180deg) translateZ(1px); -webkit-transform: rotateY(180deg) translateZ(1px); }
+
 .flip-btn-trigger { position: absolute; bottom: 6px; left: 6px; width: 28px; height: 28px; background: rgba(12, 16, 24, 0.65); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 50%; color: #f1f5f9; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 15; backdrop-filter: blur(4px); transition: all 0.25s ease; }
 .flip-btn-trigger svg { width: 14px; height: 14px; transition: transform 0.3s ease; }
 .flip-btn-trigger:hover { background: rgba(244, 114, 182, 0.9); color: #000; border-color: #f472b6; }
@@ -146,7 +153,10 @@ body.mode-edition .hof-pin-btn { display: flex; }
 .binder-pocket { width: 220px; max-width: 100%; flex-shrink: 0; }
 .hub-pocket:hover { transform: translateY(-4px); border-color: #a76cf2; box-shadow: 0 0 15px rgba(167, 108, 242, 0.4); }
 .hub-pocket .fallback-img, .binder-pocket .fallback-img { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e293b, #0f172a); color: #94a3b8; font-weight: bold; text-align: center; }
-.hub-pocket img, .binder-pocket img { width: 100% !important; height: 100% !important; object-fit: contain !important; position: absolute !important; top: 0 !important; left: 0 !important; border-radius: inherit !important; background-color: transparent !important; transform: scale(1.015) !important; }
+
+/* AJOUT : object-fit cover et background opaque pour boucher les pixels transparents */
+.hub-pocket img, .binder-pocket img { width: 100% !important; height: 100% !important; object-fit: cover !important; position: absolute !important; top: 0 !important; left: 0 !important; border-radius: inherit !important; background-color: #0b0d13 !important; transform: scale(1.015) !important; }
+
 body.mode-edition .hub-pocket.has-secret { border: 3px solid #652CA0; box-shadow: inset 0 0 15px rgba(101, 44, 160, 0.4), 0 0 15px rgba(101, 44, 160, 0.6); }
 body.mode-edition .hub-pocket.has-secret::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(115deg, rgba(255,255,255,0.3) 0%, transparent 40%, rgba(101, 44, 160, 0.2) 100%); z-index: 5; }
 
@@ -174,8 +184,12 @@ body.mode-edition .hub-pocket.has-secret::after { content: ''; position: absolut
 .flip-card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s; cursor: pointer; transform: scale(0.8) translateY(50px); opacity: 0; }
 .secret-lightbox.active .flip-card { transform: scale(1) translateY(0) rotateY(0deg); opacity: 1; }
 .secret-lightbox.active .flip-card.is-flipped { transform: scale(1) translateY(0) rotateY(180deg); }
-.flip-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 4.5%; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.9); border: 1px solid rgba(255,255,255,0.1); }
-.flip-back { transform: rotateY(180deg); background: #000; }
+
+/* AJOUT : Séparation Z et background opaque pour Lightbox 3D */
+.flip-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 4.5%; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.9); border: 1px solid rgba(255,255,255,0.1); background: #0b0f17; transform: translateZ(0); -webkit-transform: translateZ(0); }
+.flip-front { transform: translateZ(1px); -webkit-transform: translateZ(1px); }
+.flip-back { transform: rotateY(180deg) translateZ(1px); -webkit-transform: rotateY(180deg) translateZ(1px); background: #000; }
+
 .secret-nav { display: flex; align-items: center; gap: 20px; opacity: 0; transform: translateY(10px); transition: 0.4s; pointer-events: none; }
 .secret-nav.visible { opacity: 1; transform: translateY(0); pointer-events: all; }
 .secret-nav button { background: rgba(167, 108, 242, 0.2); border: 1px solid #a76cf2; color: #fff; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
@@ -211,73 +225,19 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned { pointer-event
 /* ==========================================
    GESTION INTELLIGENTE DE LA NAVBAR 
 ========================================== */
-
-/* 1. Bouton Home & To-Top : Masqués UNIQUEMENT sur l'accueil */
-.page-index #btn-home,
-.page-index #btn-to-top {
-    display: none !important;
-}
-
-/* 2. Bouton Édition & Cadenas : Masqués PAR DÉFAUT partout */
-#btn-edit,
-#dock-btn-lock {
-    display: none;
-}
-
-/* 3. Bouton Édition : Affiché UNIQUEMENT sur les pages où il est utile */
-.page-pokedex #btn-edit,
-.page-masterset #btn-edit,
-.page-pikachu #btn-edit,
-.page-mew #btn-edit {
-    display: flex;
-}
-
-/* 4. Cadenas de déconnexion : Affiché UNIQUEMENT quand le mode édition est actif */
-body.mode-edition #dock-btn-lock {
-    display: flex !important;
-}
-
-/* 5. Le bouton retour en arrière (complètement désactivé partout) */
-#btn-back-history {
-    display: none !important; 
-}
+.page-index #btn-home, .page-index #btn-to-top { display: none !important; }
+#btn-edit, #dock-btn-lock { display: none; }
+.page-pokedex #btn-edit, .page-masterset #btn-edit, .page-pikachu #btn-edit, .page-mew #btn-edit { display: flex; }
+body.mode-edition #dock-btn-lock { display: flex !important; }
+#btn-back-history { display: none !important; }
 
 /* ==========================================
    MÉCANIQUE SECRÈTE VIP (Appui Long)
 ========================================== */
-
-/* Rendre le mot déclencheur (ex: Trainers) incliquable nativement pour le mobile */
-#title-trainers {
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
-    cursor: pointer;
-}
-
-/* Le Cadenas VIP de la Navbar (Caché par défaut) */
-.hidden-padlock {
-    width: 24px;
-    height: 24px;
-    color: #a76cf2;
-    opacity: 0;
-    pointer-events: none;
-    transform: scale(0.5);
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    margin-left: 15px; 
-    cursor: pointer;
-}
-
-.hidden-padlock.visible {
-    opacity: 1;
-    pointer-events: auto;
-    transform: scale(1);
-    filter: drop-shadow(0 0 8px rgba(167, 108, 242, 0.6));
-}
-
-.hidden-padlock.visible:hover {
-    filter: drop-shadow(0 0 12px rgba(167, 108, 242, 1));
-}
-
+#title-trainers { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; cursor: pointer; }
+.hidden-padlock { width: 24px; height: 24px; color: #a76cf2; opacity: 0; pointer-events: none; transform: scale(0.5); transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); margin-left: 15px; cursor: pointer; }
+.hidden-padlock.visible { opacity: 1; pointer-events: auto; transform: scale(1); filter: drop-shadow(0 0 8px rgba(167, 108, 242, 0.6)); }
+.hidden-padlock.visible:hover { filter: drop-shadow(0 0 12px rgba(167, 108, 242, 1)); }
 
 /* ADJUSTED MEDIA QUERIES FOR SLEEKER CARDS */
 @media (max-width: 1650px) and (min-width: 1025px) {
