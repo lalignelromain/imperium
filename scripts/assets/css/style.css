@@ -212,13 +212,15 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned { pointer-event
    GESTION INTELLIGENTE DE LA NAVBAR 
 ========================================== */
 
-/* 1. Bouton Home : Masqué UNIQUEMENT sur l'accueil */
-.page-index #btn-home {
+/* 1. Bouton Home & To-Top : Masqués UNIQUEMENT sur l'accueil */
+.page-index #btn-home,
+.page-index #btn-to-top {
     display: none !important;
 }
 
-/* 2. Bouton Édition : Masqué PAR DÉFAUT partout */
-#btn-edit {
+/* 2. Bouton Édition & Cadenas : Masqués PAR DÉFAUT partout */
+#btn-edit,
+#dock-btn-lock {
     display: none;
 }
 
@@ -230,7 +232,12 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned { pointer-event
     display: flex;
 }
 
-/* 4. Le bouton retour en arrière (complètement désactivé partout) */
+/* 4. Cadenas de déconnexion : Affiché UNIQUEMENT quand le mode édition est actif */
+body.mode-edition #dock-btn-lock {
+    display: flex !important;
+}
+
+/* 5. Le bouton retour en arrière (complètement désactivé partout) */
 #btn-back-history {
     display: none !important; 
 }
