@@ -797,4 +797,18 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAdminTrigger();
     initFirestoreSync();
     initEV5ProgressHub();
+
+    // Permet de se déconnecter en cliquant sur le cadenas doré
+    const lockElement = document.getElementById('dock-btn-lock');
+    if (lockElement) {
+        lockElement.addEventListener('click', () => {
+            if (auth) {
+                auth.signOut().then(() => {
+                    console.log("Déconnexion réussie");
+                }).catch((error) => {
+                    console.error("Erreur lors de la déconnexion", error);
+                });
+            }
+        });
+    }
 });
