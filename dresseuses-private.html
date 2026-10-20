@@ -218,16 +218,16 @@
         .card-fullart {
             width: 100%; 
             max-width: 270px; 
-            height: auto; /* Supprime la hauteur fixe */
+            height: auto; 
             aspect-ratio: 734 / 1024; /* Les proportions PARFAITES d'une carte Pokémon */
             border-radius: 4.5%; /* Les coins arrondis PARFAITS */
             overflow: hidden;
             position: relative; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.8); 
-            border: 2px solid rgba(167, 108, 242, 0.4); /* Bordure fine au contact de l'image */
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease, border-color 0.4s ease; 
+            border: none; /* Suppression totale de la bordure */
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease; 
             cursor: pointer; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px 20px;
-            background: transparent; /* On supprime le fond qui bavait */
+            background: transparent; 
         }
         
         /* EFFET VERRE DÉPOLI SUR L'IMAGE */
@@ -250,7 +250,7 @@
             pointer-events: none;
         }
         
-        .card-fullart:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(101, 44, 160, 0.5); border-color: #a76cf2; }
+        .card-fullart:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(101, 44, 160, 0.5); }
         
         /* RÉVÉLATION DE L'IMAGE AU SURVOL : S'ADAPTE PARFAITEMENT AU CONTENEUR */
         .card-fullart:hover img { 
@@ -299,7 +299,7 @@
             object-fit: contain;
             border-radius: 4.5%; 
             box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            border: 2px solid rgba(167, 108, 242, 0.3);
+            border: none; /* Suppression totale de la bordure */
             background: transparent;
         }
 
@@ -380,11 +380,11 @@
             .card-fullart { 
                 width: 100% !important; 
                 height: auto !important; 
-                aspect-ratio: 734 / 1024 !important; /* L'astuce est là ! */
+                aspect-ratio: 734 / 1024 !important; 
                 border-radius: 4.5% !important;
                 padding: 15px !important; 
                 max-width: none !important;
-                border-width: 2px !important;
+                border: none !important; /* Suppression totale de la bordure sur mobile */
             }
             .fullart-title { font-size: 1.2rem !important; margin-bottom: 2px; }
             .fullart-subtitle { font-size: 0.6rem !important; letter-spacing: 1px !important; }
@@ -588,4 +588,4 @@
     </script>
 </body>
 </html>
-```<L'intégration <FollowUp Pokémon. au bordure carte d'une de devrait en l'aspect-ratio la label="On y est !" maintenant millimètre parfaitement près, préservant query="Cette fois, c'est la bonne ! Les contours épousent-ils parfaitement la carte ?" vraie épouser/>
+```<br><br><FollowUp label="Impeccable !" query="C'est parfait comme ça, il n'y a plus aucune bordure qui traîne !"/>
