@@ -139,18 +139,22 @@
     <script src="./scripts/assets/js/pikachu-data.js"></script>
     <script src="./scripts/assets/js/script.js"></script>
 
-    <!-- SCRIPT DU PASS VIP (APPUI LONG) -->
+   <!-- SCRIPT DU PASS VIP (APPUI LONG) -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const triggerElement = document.getElementById('title-trainers');
             const vipPadlock = document.getElementById('vip-padlock');
             let pressTimer;
+            let isLongPress = false; // Mémorise si on a fait un appui long
+
+            // Empêcher l'image fantôme de s'afficher au drag
+            if(triggerElement) triggerElement.setAttribute('draggable', 'false');
 
             function startPress(e) {
-                // On lance le chrono (800ms)
+                isLongPress = false;
                 pressTimer = window.setTimeout(() => {
+                    isLongPress = true;
                     vipPadlock.classList.add('visible');
-                    // Vibration légère sur mobile
                     if (navigator.vibrate) navigator.vibrate(50);
                 }, 800); 
             }
@@ -160,18 +164,30 @@
             }
 
             if(triggerElement) {
-                // Événements Tactiles
                 triggerElement.addEventListener('touchstart', startPress, { passive: true });
                 triggerElement.addEventListener('touchend', cancelPress);
                 triggerElement.addEventListener('touchmove', cancelPress);
 
-                // Événements Souris (Click long sur PC)
                 triggerElement.addEventListener('mousedown', startPress);
                 triggerElement.addEventListener('mouseup', cancelPress);
                 triggerElement.addEventListener('mouseleave', cancelPress);
+
+                // La magie est ici : si c'est un appui long, on annule l'ouverture normale de la page
+                triggerElement.addEventListener('click', (e) => {
+                    if(isLongPress) {
+                        e.preventDefault(); 
+                        isLongPress = false;
+                    }
+                });
             }
 
-            // Au clic sur le cadenas, on ouvre le boudoir VIP
+            // Permet de cacher le cadenas mauve en cliquant n'importe où ailleurs
+            document.addEventListener('click', (e) => {
+                if (triggerElement && !triggerElement.contains(e.target) && !vipPadlock.contains(e.target)) {
+                    vipPadlock.classList.remove('visible');
+                }
+            });
+
             if(vipPadlock) {
                 vipPadlock.addEventListener('click', () => {
                     window.location.href = 'dresseuses-private.html';
