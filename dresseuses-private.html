@@ -34,163 +34,112 @@
         }
 
         .slider-container {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000000;
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            overflow: hidden; background-color: #000000;
         }
 
         .slide {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100%; height: 100%;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex;
-            flex-direction: column;
-            transform: translateX(50px);
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.8s ease;
+            display: flex; flex-direction: column;
         }
 
         .slide.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateX(0);
-            z-index: 10;
+            opacity: 1; visibility: visible; z-index: 10;
         }
 
         /* ==========================================
            DESIGN DE L'ANTICHAMBRE (SLIDE 1)
         ========================================== */
         #slide-1 {
-            background: radial-gradient(circle at 75% 50%, #1a0a2e 0%, #030105 55%, #000000 100%);
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            overflow: hidden; 
+            background-color: #000; 
         }
 
+        .ui-layer {
+            position: absolute; inset: 0; z-index: 5;
+            display: flex; align-items: center;
+        }
+
+        /* --- Titres --- */
         .hero-content {
-            position: relative;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-            height: 100%;
-            text-align: left;
-            padding: 0 10vw;
-            max-width: 50vw;
-            pointer-events: none; /* Laisse passer le clic à travers le texte */
-        }
-
-        .massive-title {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(3.5rem, 8vw, 8rem);
-            font-weight: 900;
-            line-height: 1;
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            margin-bottom: 5px; /* Réduit pour coller au sous-titre */
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .slide.active .massive-title {
-            animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
-        }
-
-        .massive-title span {
-            display: block;
-            /* Le dégradé sombre et mat validé */
-            background: linear-gradient(180deg, #85709c 0%, #5f457a 50%, #372152 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            /* Profondeur sans halo lumineux */
-            filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.95)) drop-shadow(0 5px 30px rgba(20, 5, 40, 0.8));
-        }
-
-        .hub-subtitle {
-            font-size: clamp(0.8rem, 1.5vw, 1.2rem);
-            color: #a76cf2;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-top: 15px;
-            border-left: 3px solid #a76cf2;
-            padding-left: 15px;
-            opacity: 0;
-            transform: translateY(20px);
+            position: relative; z-index: 10; padding: 0 10vw; max-width: 50vw;
+            pointer-events: none;
         }
         
-        .slide.active .hub-subtitle {
-            animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+        .massive-title {
+            font-family: 'Cinzel', serif; 
+            font-size: clamp(2.5rem, 6vw, 5.5rem); 
+            font-weight: 700; 
+            line-height: 1.1; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            margin-bottom: 8px;
+            background: linear-gradient(180deg, #9b87b0 0%, #6f548f 50%, #462c66 100%); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); 
+        }
+        
+        .hub-subtitle {
+            font-size: clamp(0.7rem, 1.2vw, 1rem); 
+            color: #bfa3ed; 
+            letter-spacing: 6px; 
+            text-transform: uppercase; 
+            font-weight: 400; 
+            margin-top: 15px;
+            border-left: 2px solid #a76cf2; 
+            padding-left: 15px;
+            opacity: 0.9;
         }
 
+        /* --- Ludvina Centrée et Rabaissée --- */
         .hotesse-container {
             position: absolute; 
-            top: 50%;
-            transform: translateY(-50%);
-            right: 5%; 
+            top: 58%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
             height: 85vh; 
             width: auto; 
-            z-index: 5;
-            display: block; 
-            cursor: pointer; 
-            pointer-events: auto; /* Capte le clic */
+            z-index: 10; 
+            cursor: pointer;
+            pointer-events: auto;
         }
-
+        
         .model-character {
             height: 100%; width: auto; 
-            display: block; 
-            object-fit: contain;
-            object-position: center right; 
-            
-            /* Piqué HD et ombre d'assise profonde pour Ludvina */
-            filter: drop-shadow(-15px 15px 20px rgba(0,0,0,1)) contrast(1.15) saturate(1.1) brightness(1.05);
-            
-            opacity: 0; 
-            transform: translateX(50px);
-            transition: opacity 1.5s ease 0.5s, transform 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s, filter 0.4s ease;
+            object-fit: contain; 
+            object-position: center;
+            filter: drop-shadow(-10px 10px 30px rgba(0,0,0,0.65)) contrast(1.02) saturate(1.05) brightness(0.95);
+            transition: filter 0.5s ease;
         }
-
-        .slide.active .model-character {
-            opacity: 1; transform: translateX(0);
-        }
-
-        .hotesse-container:hover .model-character { 
-            /* On garde les réglages de netteté et on booste juste un peu la luminosité au survol */
-            filter: drop-shadow(-15px 15px 20px rgba(0,0,0,1)) contrast(1.15) saturate(1.1) brightness(1.2); 
+        .hotesse-container:hover .model-character {
+            filter: drop-shadow(-12px 15px 40px rgba(0,0,0,0.85)) contrast(1.1) saturate(1.1) brightness(1.1); 
         }
 
         /* ==========================================
-           PARTICULES (Les 120 lucioles nettes)
+           COUCHE VIDÉO DE TRANSITION
         ========================================== */
-        .particles-container {
-            position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
+        .video-container {
+            position: absolute; inset: 0; width: 100%; height: 100%;
+            z-index: 50; background-color: #000;
+            
+            opacity: 0; pointer-events: none; 
+            transition: opacity 0.5s ease; 
         }
 
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            bottom: -20px;
-            background: #a76cf2; 
-            box-shadow: 0 0 4px 1px rgba(167, 108, 242, 0.9), 
-                        0 0 12px 3px rgba(167, 108, 242, 0.5);
-            animation: floatUp linear infinite;
-            opacity: 0;
+        .video-container.playing {
+            opacity: 1; pointer-events: auto; 
         }
 
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(0.5); opacity: 0; }
-            15% { opacity: 1; }
-            85% { opacity: 1; }
-            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        .video-container.fade-out {
+            opacity: 0; pointer-events: none; 
+            transition: opacity 0.8s ease; 
         }
 
-        @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
+        .video-container video {
+            width: 100%; height: 100%;
+            object-fit: cover; 
+        }
 
         /* ==========================================
            DESIGN DE LA GALERIE (SLIDE 2)
@@ -216,49 +165,31 @@
         }
 
         .card-fullart {
-            width: 100%; 
-            max-width: 270px; 
-            height: auto; 
-            aspect-ratio: 734 / 1024; /* Les proportions PARFAITES d'une carte Pokémon */
-            border-radius: 4.5%; /* Les coins arrondis PARFAITS */
-            overflow: hidden;
-            position: relative; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.8); 
-            border: none; /* Suppression totale de la bordure */
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease; 
+            width: 100%; max-width: 270px; height: 380px; border-radius: 12px; overflow: hidden;
+            position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); 
+            border: 3px solid rgba(167, 108, 242, 0.3); 
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease, border-color 0.4s ease; 
             cursor: pointer; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px 20px;
-            background: transparent; 
         }
         
-        /* EFFET VERRE DÉPOLI SUR L'IMAGE */
         .card-fullart img { 
-            position: absolute; 
-            inset: 0; 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            filter: blur(12px) brightness(0.6); 
-            transform: scale(1.08); /* Léger scale au repos pour éviter les bords transparents du flou */
-            transition: transform 0.6s ease, filter 0.6s ease; 
-            z-index: 1; 
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; 
+            filter: blur(15px) brightness(0.6); transform: scale(1.1); transition: transform 0.6s ease, filter 0.6s ease; z-index: 1; 
         }
         
         .card-fullart::after { 
             content:''; position:absolute; inset:0; 
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 40%, transparent 100%); 
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 40%, transparent 100%); 
             z-index: 2; transition: opacity 0.4s;
-            pointer-events: none;
         }
         
-        .card-fullart:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(101, 44, 160, 0.5); }
+        .card-fullart:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(101, 44, 160, 0.5); border-color: #a76cf2; }
         
-        /* RÉVÉLATION DE L'IMAGE AU SURVOL : S'ADAPTE PARFAITEMENT AU CONTENEUR */
         .card-fullart:hover img { 
-            filter: blur(0px) brightness(1); 
-            transform: scale(1); /* Revient exactement à 100% de la taille pour épouser les bords */
+            filter: blur(0px) brightness(1); transform: scale(1.06); 
         }
 
-        .fullart-content { position: relative; z-index: 3; transform: translateY(5px); transition: transform 0.3s ease; pointer-events: none; }
+        .fullart-content { position: relative; z-index: 3; transform: translateY(5px); transition: transform 0.3s ease; }
         .card-fullart:hover .fullart-content { transform: translateY(0); }
         
         .fullart-title { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,1); line-height: 1.1; margin-bottom: 5px; }
@@ -274,9 +205,7 @@
             opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
         }
         
-        .modal-overlay.active {
-            opacity: 1; pointer-events: auto;
-        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
         .modal-close {
             position: absolute; top: 25px; right: 30px; color: #fff; font-size: 3rem;
@@ -286,26 +215,19 @@
         .modal-close:hover { transform: scale(1.2); color: #a76cf2; }
 
         .modal-image-container {
-            position: relative; max-width: 90vw; max-height: 80vh;
+            position: relative; max-width: 90vw; max-height: 75vh;
             transform: scale(0.95); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .modal-overlay.active .modal-image-container {
-            transform: scale(1);
-        }
+        .modal-overlay.active .modal-image-container { transform: scale(1); }
 
         .modal-main-img {
-            max-width: 100%; max-height: 80vh; 
-            aspect-ratio: 734 / 1024; /* Contour modale parfait */
-            object-fit: contain;
-            border-radius: 4.5%; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-            border: none; /* Suppression totale de la bordure */
-            background: transparent;
+            max-width: 100%; max-height: 75vh; object-fit: contain;
+            border-radius: 8px; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            border: 2px solid rgba(167, 108, 242, 0.3);
         }
 
         .modal-thumbnails {
-            display: none;
-            gap: 15px; margin-top: 30px; align-items: center; justify-content: center;
+            display: none; gap: 15px; margin-top: 30px; align-items: center; justify-content: center;
         }
         
         .thumb {
@@ -318,73 +240,32 @@
            RESPONSIVE MOBILE / MEDIA QUERIES
         ========================================== */
         @media (max-width: 768px) {
-            #slide-1 { 
-                display: block; 
-                position: relative; 
-            }
+            /* Fix Intro */
+            #slide-1 { display: block; position: relative; }
             .hero-content { 
-                position: absolute; 
-                top: 0; 
-                left: 0; 
-                width: 100%; 
-                height: 100%; 
-                padding: 0 5vw; 
-                align-items: flex-start;
-                justify-content: center; 
-                z-index: 10;
-                pointer-events: none; 
+                position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+                padding: 0 5vw; align-items: flex-start; justify-content: center; z-index: 10;
             }
-            .massive-title { 
-                font-size: clamp(3rem, 12vw, 4rem); 
-                text-align: left; 
-                margin-bottom: 0;
-            }
+            .massive-title { font-size: clamp(2rem, 10vw, 3rem); text-align: left; margin-bottom: 0; }
             
             .hotesse-container { 
-                position: absolute; 
-                top: 50% !important; 
-                transform: translateY(-50%) !important; 
-                bottom: auto !important; 
-                right: -5vw; 
-                width: 100vw; 
-                height: 80dvh; 
-                display: flex; 
-                justify-content: flex-end; 
-                z-index: 5;
-                pointer-events: auto; 
+                top: 58% !important; left: 50% !important; transform: translate(-50%, -50%) !important; 
+                right: auto !important; width: 100vw; height: 80dvh; display: flex; justify-content: center; 
             }
-            .model-character { 
-                object-fit: contain; 
-                object-position: center right; 
-                height: 100%; 
-                width: auto; 
-            }
+            .model-character { height: 100%; width: auto; object-fit: contain; object-position: center; }
             
-            .slide-gallery header.header-main { 
-                padding: 25px 15px 10px !important; 
-            }
-            .slide-gallery header.header-main h2 { 
-                font-size: 1.8rem !important; 
-                letter-spacing: 2px !important; 
-            }
-            .slide-gallery header.header-main p { 
-                font-size: 0.65rem !important; 
-                letter-spacing: 1.5px !important; 
-            }
+            /* Fix Galerie */
+            .slide-gallery header.header-main { padding: 25px 15px 10px !important; }
+            .slide-gallery header.header-main h2 { font-size: 1.8rem !important; letter-spacing: 2px !important; }
+            .slide-gallery header.header-main p { font-size: 0.65rem !important; letter-spacing: 1.5px !important; }
+            
             .cards-grid { 
-                display: grid !important; 
-                grid-template-columns: repeat(2, 1fr) !important; 
-                gap: 15px !important; 
-                padding: 10px 10px 40px 10px !important; 
+                display: grid !important; grid-template-columns: repeat(2, 1fr) !important; 
+                gap: 15px !important; padding: 10px 10px 40px 10px !important; 
             }
             .card-fullart { 
-                width: 100% !important; 
-                height: auto !important; 
-                aspect-ratio: 734 / 1024 !important; 
-                border-radius: 4.5% !important;
-                padding: 15px !important; 
-                max-width: none !important;
-                border: none !important; /* Suppression totale de la bordure sur mobile */
+                width: 100% !important; height: auto !important; aspect-ratio: 63/88; 
+                padding: 10px !important; max-width: none !important; border-width: 2px !important;
             }
             .fullart-title { font-size: 1.2rem !important; margin-bottom: 2px; }
             .fullart-subtitle { font-size: 0.6rem !important; letter-spacing: 1px !important; }
@@ -404,19 +285,22 @@
 
         <!-- SLIDE 1 : ACCUEIL -->
         <div id="slide-1" class="slide active">
-            <!-- Particules générées dynamiquement -->
-            <div class="particles-container" id="particles"></div>
             
-            <div class="hero-content">
-                <h1 class="massive-title">
-                    <span>CLUB</span>
-                    <span class="highlight">PRIVÉ</span>
-                </h1>
-                <div class="hub-subtitle">Accès réservé aux membres</div>
-            </div>
+            <!-- FOND FIXE (Capture vidéo avec le nouveau chemin) -->
+            <img src="scripts/assets/img/bg-boudoir.jpg" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;" alt="Décor du Club">
 
-            <div class="hotesse-container" onclick="goToSlide('slide-2')" title="Accéder à la collection">
-                <img src="./assets/cards/dresseuses/lulud.png" alt="Ludvina" class="model-character" onerror="this.src='lulud.png'">
+            <div class="ui-layer">
+                <div class="hero-content">
+                    <h1 class="massive-title">
+                        <span style="display:block;">CLUB</span>
+                        <span style="display:block;" class="highlight">PRIVÉ</span>
+                    </h1>
+                    <div class="hub-subtitle">Accès réservé aux membres</div>
+                </div>
+
+                <div class="hotesse-container" onclick="lancerVideo()" title="Entrer">
+                    <img src="./assets/cards/dresseuses/lulud.png" alt="Ludvina" class="model-character" onerror="this.src='lulud.png'">
+                </div>
             </div>
         </div>
 
@@ -438,6 +322,14 @@
             </main>
         </div>
 
+        <!-- COUCHE VIDÉO DE TRANSITION (Nouveaux chemins) -->
+        <div class="video-container" id="intro-video-container">
+            <video id="intro-video" muted playsinline disablePictureInPicture>
+                <source src="scripts/assets/video/intro-mobile.mp4" type="video/mp4" media="(max-width: 768px)">
+                <source src="scripts/assets/video/intro-desktop.mp4" type="video/mp4">
+            </video>
+        </div>
+
     </div>
 
     <!-- LA MODALE -->
@@ -455,7 +347,7 @@
          BARRE DE NAVIGATION DU SALON PRIVÉ
     ========================================== -->
     <div class="floating-dock">
-        <!-- Bouton Verrouiller et Quitter le Salon (Renvoie à l'accueil) -->
+        <!-- Bouton Verrouiller et Quitter le Salon -->
         <a href="index.html" class="dock-btn" title="Verrouiller et Quitter" style="color: #a76cf2; border-color: rgba(167, 108, 242, 0.4);">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -474,48 +366,68 @@
     <script src="scripts/assets/js/dresseuses-data.js"></script>
     <script src="scripts/assets/js/script.js"></script>
 
-   <script>
-        function goToSlide(slideId) {
-            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
-            document.getElementById(slideId).classList.add('active');
-            window.scrollTo(0, 0);
+    <script>
+        // ==========================================
+        // 1. GESTION DE LA VIDÉO ET DE LA TRANSITION
+        // ==========================================
+        const video = document.getElementById('intro-video');
+        const videoContainer = document.getElementById('intro-video-container');
+        const slide1 = document.getElementById('slide-1');
+        const slide2 = document.getElementById('slide-2');
+        let isTransitioning = false;
+        
+        const FADE_OFFSET = 0.4; 
+
+        function lancerVideo() {
+            videoContainer.classList.remove('fade-out');
+            videoContainer.classList.add('playing');
+            
+            video.currentTime = 0;
+            video.play();
+            isTransitioning = false;
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            // Générateur des 120 particules du Hub Privé
-            const container = document.getElementById('particles');
-            if(container) {
-                const particleCount = 120;
-                for (let i = 0; i < particleCount; i++) {
-                    let particle = document.createElement('div');
-                    particle.classList.add('particle');
-                    
-                    let size = Math.random() * 3 + 2;
-                    particle.style.width = size + 'px';
-                    particle.style.height = size + 'px';
-                    particle.style.left = Math.random() * 100 + 'vw';
-                    particle.style.animationDuration = (Math.random() * 15 + 10) + 's';
-                    particle.style.animationDelay = (Math.random() * -20) + 's';
-
-                    container.appendChild(particle);
+        video.addEventListener('timeupdate', () => {
+            if (!isTransitioning && video.duration > 0) {
+                if ((video.duration - video.currentTime) <= FADE_OFFSET) {
+                    triggerTransition();
                 }
             }
+        });
 
-            // Génération de la galerie de cartes
+        video.addEventListener('ended', () => {
+            if (!isTransitioning) triggerTransition();
+        });
+
+        function triggerTransition() {
+            isTransitioning = true;
+            
+            videoContainer.classList.remove('playing');
+            videoContainer.classList.add('fade-out');
+            
+            slide1.classList.remove('active');
+            slide2.classList.add('active');
+
+            setTimeout(() => {
+                video.pause();
+            }, 1000); 
+        }
+
+        // ==========================================
+        // 2. GÉNÉRATION DE LA GALERIE (FIREBASE/DATA)
+        // ==========================================
+        document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 const gridContainer = document.getElementById('private-secret-grid');
                 if (!gridContainer || typeof REGISTRE_SECRET === 'undefined') return;
 
                 let htmlContent = '';
 
-                // On boucle sur chaque dresseuse du registre
                 for (const [trainerName, secretImages] of Object.entries(REGISTRE_SECRET)) {
                     if (!secretImages || secretImages.length === 0) continue;
 
-                    // 1. On ne prend QUE la première image pour l'affichage dans la grille
                     const coverImgSrc = `./assets/cards/dresseuses/${secretImages[0]}`;
 
-                    // 2. On passe le NOM de la dresseuse à la modale (et non plus juste l'image)
                     htmlContent += `
                         <div class="card-fullart" onclick="ouvrirModale('${trainerName}')">
                             <img src="${coverImgSrc}" alt="${trainerName}" loading="lazy" onerror="this.src='scripts/assets/img/back-fr.png'">
@@ -530,6 +442,9 @@
             }, 100);
         });
 
+        // ==========================================
+        // 3. GESTION DE LA MODALE
+        // ==========================================
         const modale = document.getElementById('modal-zoom');
         const imgPrincipale = document.getElementById('image-principale');
         const pisteMiniatures = document.getElementById('piste-miniatures');
@@ -538,10 +453,8 @@
             const secretImages = REGISTRE_SECRET[trainerName];
             if (!secretImages || secretImages.length === 0) return;
 
-            // On affiche la première image par défaut
             imgPrincipale.src = `./assets/cards/dresseuses/${secretImages[0]}`;
 
-            // S'il y a plusieurs cartes pour cette dresseuse, on génère les miniatures
             if (secretImages.length > 1) {
                 let thumbsHTML = '';
                 secretImages.forEach((imgFile, index) => {
@@ -550,21 +463,19 @@
                     thumbsHTML += `<img src="${thumbSrc}" class="thumb ${activeClass}" alt="${trainerName} ${index + 1}" onclick="changerImageModale(event, '${thumbSrc}', this)">`;
                 });
                 pisteMiniatures.innerHTML = thumbsHTML;
-                pisteMiniatures.style.display = 'flex'; // Affiche la piste
+                pisteMiniatures.style.display = 'flex'; 
             } else {
                 pisteMiniatures.innerHTML = '';
-                pisteMiniatures.style.display = 'none'; // Cache la piste s'il n'y a qu'une carte
+                pisteMiniatures.style.display = 'none'; 
             }
 
             modale.classList.add('active');
         }
 
-        // Fonction pour changer l'image principale quand on clique sur une miniature
         function changerImageModale(event, src, thumbElement) {
-            event.stopPropagation(); // Évite que le clic ne ferme la modale
+            event.stopPropagation(); 
             imgPrincipale.src = src;
             
-            // Met à jour la miniature active (bordure violette)
             document.querySelectorAll('.modal-thumbnails .thumb').forEach(t => t.classList.remove('active'));
             thumbElement.classList.add('active');
         }
@@ -574,13 +485,12 @@
             setTimeout(() => { 
                 if(!modale.classList.contains('active')) {
                     imgPrincipale.src = ''; 
-                    pisteMiniatures.innerHTML = ''; // Nettoie les miniatures
+                    pisteMiniatures.innerHTML = ''; 
                 }
             }, 400);
         }
 
         modale.addEventListener('click', function(e) {
-            // Ferme la modale uniquement si on clique en dehors de l'image et des miniatures
             if (e.target === modale || e.target.classList.contains('modal-image-container')) {
                 fermerModale();
             }
@@ -588,4 +498,3 @@
     </script>
 </body>
 </html>
-```<br><br><FollowUp label="Impeccable !" query="C'est parfait comme ça, il n'y a plus aucune bordure qui traîne !"/>
