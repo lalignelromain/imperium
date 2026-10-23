@@ -35,7 +35,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-coffret-jour",
-            nom: "#04# Coffret Journée Pokémon 2026",
+            nom: "#05# Coffret Journée Pokémon 2026",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
@@ -43,7 +43,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-etb-30",
-            nom: "#05# Coffret Dresseur D'Élite (ETB)",
+            nom: "#06# Coffret Dresseur D'Élite (ETB)",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
@@ -51,7 +51,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-coffret-cla",
-            nom: "#09# Coffret Classeur",
+            nom: "#10# Coffret Classeur",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
@@ -59,7 +59,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-tin-mew",
-            nom: "#07# Mini-Tin<br>Illustration Mew Jour",
+            nom: "#08# Mini-Tin<br>Illustration Mew Jour",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
@@ -67,7 +67,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-tin-mewtwo",
-            nom: "#08# Mini-Tin<br>Illustration Mewtwo Nuit",
+            nom: "#09# Mini-Tin<br>Illustration Mewtwo Nuit",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
@@ -75,11 +75,19 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-bundle-30",
-            nom: "#06# Coffret Bundle",
+            nom: "#07# Coffret Bundle",
             extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
             image: "./scripts/assets/img/bundle-30.jpg"
+        },
+        {
+            id: "scelle-etb-rivalites",
+            nom: "#04# Coffret Dresseur D'Élite (ETB)",
+            extension: "Rivalités Destinées",
+            annee: 2025,
+            langue: "fr",
+            image: "./scripts/assets/img/etb-riv.png"
         }
     ],
 
