@@ -535,12 +535,17 @@
             updateTransform(true);
         }
 
+        // --- Clic Bureau : Zoomer/Dézoomer ---
         imgPrincipale.addEventListener('click', function(e) {
             if (window.innerWidth <= 768) return; 
             if (hasMoved) return; 
-            if (currentScale > 1) { resetZoom(); } 
-            else {
-                currentScale = 2.2; 
+            
+            if (currentScale > 1) {
+                resetZoom();
+            } else {
+                currentScale = 2.5; 
+                translateX = 0;
+                translateY = 0;
                 imgPrincipale.classList.add('grab');
                 updateTransform(true);
             }
