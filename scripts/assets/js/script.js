@@ -461,10 +461,10 @@ const REGISTRE_SECRET = {
 };
 
 const CARTES_ORPHELINES = [
-    "hasard1.jpeg", "hasard2.jpeg", "hasard3.jpeg", "hasard4.jpeg",
-    "hasard5.jpeg", "hasard6.jpeg", "hasard7.jpeg", "hasard8.jpeg",
-    "hasard9.jpeg", "hasard10.jpeg", "hasard11.jpeg", "hasard12.jpeg",
-    "hasard13.jpeg", "hasard14.jpeg", "hasard15.jpeg", "hasard16.jpeg"
+    "hasard1.jpg", "hasard2.jpg", "hasard3.jpg", "hasard4.jpg",
+    "hasard5.jpg", "hasard6.jpg", "hasard7.jpg", "hasard8.jpg",
+    "hasard9.jpg", "hasard10.jpg", "hasard11.jpg", "hasard12.jpg",
+    "hasard13.jpg", "hasard14.jpg", "hasard15.jpg", "hasard16.jpg"
 ];
 
 // -> Hub (dresseuses.html)
