@@ -171,13 +171,14 @@
         .pagination-container button:disabled { opacity: 0.3; cursor: not-allowed; border-color: rgba(255, 255, 255, 0.1); }
 
         /* ==========================================
-           LA MODALE (POP-UP ZOOM)
+           LA MODALE (POP-UP ZOOM) - CORRIGÉE (SANS EFFET FENÊTRE)
         ========================================== */
         .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.92);
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
             z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
             opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+            overflow: hidden;
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
@@ -189,16 +190,23 @@
         .modal-close:hover { transform: scale(1.2); color: #a76cf2; }
 
         .modal-image-container {
-            position: relative; max-width: 90vw; max-height: 75vh;
-            transform: scale(0.95); transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: hidden; display: flex; align-items: center; justify-content: center;
+            position: relative; 
+            width: 90vw; 
+            height: 75vh;
+            display: flex; align-items: center; justify-content: center;
+            overflow: visible; 
         }
         .modal-overlay.active .modal-image-container { transform: scale(1); }
 
         .modal-main-img {
-            max-width: 100%; max-height: 75vh; object-fit: contain;
-            border-radius: 8px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); border: none;
-            cursor: zoom-in; will-change: transform;
+            max-width: 100%; 
+            max-height: 100%; 
+            object-fit: contain;
+            border-radius: 8px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8); 
+            border: none;
+            cursor: zoom-in; 
+            will-change: transform;
             transform-origin: center center;
             transition: transform 0.3s ease;
         }
@@ -206,7 +214,8 @@
         .modal-main-img.grabbing { cursor: grabbing; }
 
         .modal-thumbnails {
-            display: none; gap: 15px; margin-top: 20px; align-items: center; justify-content: center; flex-wrap: wrap; max-width: 90vw;
+            display: none; gap: 15px; margin-top: 15px; align-items: center; justify-content: center; flex-wrap: wrap; max-width: 90vw;
+            z-index: 10001;
         }
         .thumb {
             width: 50px; height: 50px; border-radius: 6px; object-fit: cover;
@@ -537,7 +546,7 @@
         });
 
         // ==========================================
-        // 4. GESTION DU ZOOM ET DÉPLACEMENT (CORRIGÉ & ROBUSTE)
+        // 4. GESTION DU ZOOM ET DÉPLACEMENT
         // ==========================================
         imgPrincipale.addEventListener('click', function(e) {
             if (window.innerWidth <= 768) return; 
