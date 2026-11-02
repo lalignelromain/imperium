@@ -460,6 +460,13 @@ const REGISTRE_SECRET = {
     "Vicky": ["vicky.png"],
 };
 
+const CARTES_ORPHELINES = [
+    "hasard1.jpeg", "hasard2.jpeg", "hasard3.jpeg", "hasard4.jpeg",
+    "hasard5.jpeg", "hasard6.jpeg", "hasard7.jpeg", "hasard8.jpeg",
+    "hasard9.jpeg", "hasard10.jpeg", "hasard11.jpeg", "hasard12.jpeg",
+    "hasard13.jpeg", "hasard14.jpeg", "hasard15.jpeg", "hasard16.jpeg"
+];
+
 // -> Hub (dresseuses.html)
 function renderDresseusesHub() {
     const shelfContainer = document.getElementById('shelf');
