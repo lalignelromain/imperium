@@ -23,11 +23,9 @@
             font-family: 'Montserrat', sans-serif;
             background-color: #000000;
             color: #ffffff;
-            
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             overflow: hidden;
-            
             margin: 0;
             padding: 0;
         }
@@ -66,38 +64,24 @@
         .massive-title {
             font-family: 'Cinzel', serif; 
             font-size: clamp(2.5rem, 6vw, 5.5rem); 
-            font-weight: 700; 
-            line-height: 1.1; 
-            letter-spacing: 2px; 
-            text-transform: uppercase; 
-            margin-bottom: 8px;
+            font-weight: 700; line-height: 1.1; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
             background: linear-gradient(180deg, #9b87b0 0%, #6f548f 50%, #462c66 100%); 
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); 
         }
         
         .hub-subtitle {
-            font-size: clamp(0.7rem, 1.2vw, 1rem); 
-            color: #bfa3ed; 
-            letter-spacing: 6px; 
-            text-transform: uppercase; 
-            font-weight: 400; 
-            margin-top: 15px;
-            border-left: 2px solid #a76cf2; 
-            padding-left: 15px;
-            opacity: 0.9;
+            font-size: clamp(0.7rem, 1.2vw, 1rem); color: #bfa3ed; letter-spacing: 6px; text-transform: uppercase; font-weight: 400; margin-top: 15px;
+            border-left: 2px solid #a76cf2; padding-left: 15px; opacity: 0.9;
         }
 
         .hotesse-container {
-            position: absolute; 
-            top: 58%; left: 50%; transform: translate(-50%, -50%); 
-            height: 85vh; width: auto; 
-            z-index: 10; cursor: pointer; pointer-events: auto;
+            position: absolute; top: 58%; left: 50%; transform: translate(-50%, -50%); 
+            height: 85vh; width: auto; z-index: 10; cursor: pointer; pointer-events: auto;
         }
         
         .model-character {
-            height: 100%; width: auto; 
-            object-fit: contain; object-position: center;
+            height: 100%; width: auto; object-fit: contain; object-position: center;
             filter: drop-shadow(-10px 10px 30px rgba(0,0,0,0.65)) contrast(1.02) saturate(1.05) brightness(0.95);
             transition: filter 0.5s ease;
         }
@@ -110,75 +94,82 @@
         ========================================== */
         .video-container {
             position: absolute; inset: 0; width: 100%; height: 100%;
-            z-index: 50; background-color: #000;
-            opacity: 0; pointer-events: none; transition: opacity 0.5s ease; 
+            z-index: 50; background-color: #000; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; 
         }
         .video-container.playing { opacity: 1; pointer-events: auto; }
         .video-container.fade-out { opacity: 0; pointer-events: none; transition: opacity 0.8s ease; }
         .video-container video { width: 100%; height: 100%; object-fit: cover; }
 
         /* ==========================================
-           DESIGN DE LA GALERIE (SLIDE 2)
+           DESIGN DE LA GALERIE (SLIDE 2) - SANS SCROLL
         ========================================== */
         .slide-gallery {
             background-color: #030105;
-            overflow-y: auto; 
-            -webkit-overflow-scrolling: touch; 
-            align-items: center; justify-content: flex-start;
-            padding-top: 20px;
+            overflow: hidden !important; /* BLOQUE LE SCROLL COMME SUR DRESSEUSES.HTML */
+            align-items: center; justify-content: center;
+            padding: 10px 20px;
         }
 
-        /* Modifié en Flexbox pour le centrage auto de la dernière page */
+        .slide-gallery header.header-main {
+            padding: 10px 20px 5px !important;
+        }
+
+        .collection-workspace {
+            width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1;
+        }
+
+        /* Grille fixe de 5 colonnes sur 2 lignes (10 cartes max par écran) */
         .cards-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-            max-width: 1300px;
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            grid-template-rows: repeat(2, auto);
+            gap: 16px;
+            max-width: 1200px;
             width: 100%;
-            padding: 20px 20px 40px 20px;
+            padding: 10px 20px;
             margin: 0 auto;
+            justify-items: center;
+            align-items: center;
         }
 
         .card-fullart {
-            width: 100%; max-width: 270px; height: 380px; border-radius: 12px; overflow: hidden;
-            position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); 
+            width: 100%; max-width: 210px; height: 300px; border-radius: 10px; overflow: hidden;
+            position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.8); 
             border: none; 
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease, border-color 0.4s ease; 
-            cursor: pointer; display: flex; flex-direction: column; justify-content: flex-end; padding: 25px 20px;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease; 
+            cursor: pointer; display: flex; flex-direction: column; justify-content: flex-end; padding: 18px 15px;
         }
         .card-fullart img { 
             position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; 
-            filter: blur(15px) brightness(0.6); transform: scale(1.1); transition: transform 0.6s ease, filter 0.6s ease; z-index: 1; 
+            filter: blur(15px) brightness(0.6); transform: scale(1.1); transition: transform 0.5s ease, filter 0.5s ease; z-index: 1; 
         }
         .card-fullart::after { 
             content:''; position:absolute; inset:0; 
             background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 40%, transparent 100%); 
-            z-index: 2; transition: opacity 0.4s;
+            z-index: 2;
         }
-        .card-fullart:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(101, 44, 160, 0.5); }
-        .card-fullart:hover img { filter: blur(0px) brightness(1); transform: scale(1.06); }
+        .card-fullart:hover { transform: translateY(-6px); box-shadow: 0 15px 30px rgba(101, 44, 160, 0.5); }
+        .card-fullart:hover img { filter: blur(0px) brightness(1); transform: scale(1.05); }
 
-        .fullart-content { position: relative; z-index: 3; transform: translateY(5px); transition: transform 0.3s ease; }
+        .fullart-content { position: relative; z-index: 3; transform: translateY(3px); transition: transform 0.3s ease; }
         .card-fullart:hover .fullart-content { transform: translateY(0); }
         
-        .fullart-title { font-family: 'Cinzel', serif; font-size: 1.8rem; color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,1); line-height: 1.1; margin-bottom: 5px; }
-        .fullart-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; color: #a76cf2; letter-spacing: 2px; font-weight: 600; text-transform: uppercase; }
+        .fullart-title { font-family: 'Cinzel', serif; font-size: 1.35rem; color: #fff; text-shadow: 0 3px 10px rgba(0,0,0,1); line-height: 1.1; margin-bottom: 3px; }
+        .fullart-subtitle { font-family: 'Montserrat', sans-serif; font-size: 0.6rem; color: #a76cf2; letter-spacing: 1.5px; font-weight: 600; text-transform: uppercase; }
 
-        /* Styles de pagination pour coller au design */
+        /* Pagination intégrée sans dépassement */
         .pagination-container {
-            display: flex; gap: 20px; margin-top: 20px; margin-bottom: 60px; justify-content: center; width: 100%;
+            display: flex; gap: 20px; margin-top: 15px; margin-bottom: 10px; justify-content: center; width: 100%;
         }
         .pagination-container button { 
-            background: transparent; border: 1px solid rgba(167, 108, 242, 0.4); color: #ffffff; padding: 12px 30px; 
-            border-radius: 30px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; 
+            background: transparent; border: 1px solid rgba(167, 108, 242, 0.4); color: #ffffff; padding: 10px 25px; 
+            border-radius: 30px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 0.75rem; 
             letter-spacing: 2px; text-transform: uppercase; transition: all 0.3s ease; backdrop-filter: blur(5px); 
         }
         .pagination-container button:hover:not(:disabled) { 
-            background: #652CA0; color: #fff; border-color: #652CA0; box-shadow: 0 10px 20px rgba(101, 44, 160, 0.4); transform: translateY(-3px); 
+            background: #652CA0; color: #fff; border-color: #652CA0; box-shadow: 0 8px 15px rgba(101, 44, 160, 0.4); transform: translateY(-2px); 
         }
         .pagination-container button:disabled { opacity: 0.3; cursor: not-allowed; border-color: rgba(255, 255, 255, 0.1); }
-
 
         /* ==========================================
            LA MODALE (POP-UP ZOOM)
@@ -209,15 +200,14 @@
             border-radius: 8px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); border: none;
             cursor: zoom-in; will-change: transform;
         }
-
         .modal-main-img.grab { cursor: grab; }
         .modal-main-img.grabbing { cursor: grabbing; }
 
         .modal-thumbnails {
-            display: none; gap: 15px; margin-top: 30px; align-items: center; justify-content: center; flex-wrap: wrap; max-width: 90vw;
+            display: none; gap: 15px; margin-top: 20px; align-items: center; justify-content: center; flex-wrap: wrap; max-width: 90vw;
         }
         .thumb {
-            width: 60px; height: 60px; border-radius: 6px; object-fit: cover;
+            width: 50px; height: 50px; border-radius: 6px; object-fit: cover;
             cursor: pointer; transition: all 0.3s ease;
         }
         .thumb.active { border: 2px solid #a76cf2; box-shadow: 0 0 15px rgba(101, 44, 160, 0.5); opacity: 1; }
@@ -232,19 +222,22 @@
             .hotesse-container { top: 58% !important; left: 50% !important; transform: translate(-50%, -50%) !important; right: auto !important; width: 100vw; height: 80dvh; display: flex; justify-content: center; }
             .model-character { height: 100%; width: auto; object-fit: contain; object-position: center; }
             
-            .slide-gallery header.header-main { padding: 25px 15px 10px !important; }
-            .slide-gallery header.header-main h2 { font-size: 1.8rem !important; letter-spacing: 2px !important; }
-            .slide-gallery header.header-main p { font-size: 0.65rem !important; letter-spacing: 1.5px !important; }
+            .slide-gallery header.header-main { padding: 15px 15px 5px !important; }
+            .slide-gallery header.header-main h2 { font-size: 1.5rem !important; letter-spacing: 2px !important; }
+            .slide-gallery header.header-main p { font-size: 0.6rem !important; letter-spacing: 1px !important; }
             
-            .cards-grid { gap: 15px !important; padding: 10px 10px 40px 10px !important; }
-            /* Sur mobile, on force 2 colonnes même en flexbox */
-            .card-fullart { width: calc(50% - 7.5px) !important; height: auto !important; aspect-ratio: 63/88; padding: 10px !important; max-width: none !important; border-width: 2px !important; }
-            .fullart-title { font-size: 1.2rem !important; margin-bottom: 2px; }
-            .fullart-subtitle { font-size: 0.6rem !important; letter-spacing: 1px !important; }
+            .cards-grid { 
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important; 
+                grid-template-rows: repeat(5, auto) !important;
+                gap: 8px !important; padding: 5px 10px !important; 
+            }
+            .card-fullart { width: 100% !important; height: auto !important; aspect-ratio: 63/88; padding: 8px !important; max-width: none !important; }
+            .fullart-title { font-size: 1rem !important; margin-bottom: 2px; }
+            .fullart-subtitle { font-size: 0.55rem !important; }
 
             .modal-close { top: 15px; right: 20px; font-size: 2.2rem; }
-            .modal-thumbnails { gap: 8px; margin-top: 20px; }
-            .thumb { width: 45px; height: 45px; }
+            .modal-thumbnails { gap: 8px; margin-top: 15px; }
+            .thumb { width: 40px; height: 40px; }
         }
         @media (max-width: 480px) { .massive-title { font-size: 2.5rem; } }
     </style>
@@ -270,18 +263,18 @@
             </div>
         </div>
 
-        <!-- SLIDE 2 : GALERIE PAGINÉE -->
+        <!-- SLIDE 2 : GALERIE FIXE SANS SCROLL -->
         <div id="slide-2" class="slide slide-gallery">
             <header class="header-main" style="text-align: center;">
-                <h2 style="font-family: 'Cinzel', serif; font-size: 2.8rem; color: #fff; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 5px;">
+                <h2 style="font-family: 'Cinzel', serif; font-size: 2.4rem; color: #fff; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 2px;">
                     Archives Privées
                 </h2>
-                <p style="color: #a76cf2; font-weight: bold; letter-spacing: 2px; font-family: 'Montserrat', sans-serif;">
+                <p style="color: #a76cf2; font-weight: bold; letter-spacing: 2px; font-family: 'Montserrat', sans-serif; font-size: 0.8rem;">
                     L'ÉLITE DES DRESSEUSES
                 </p>
             </header>
 
-            <main class="collection-workspace" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            <main class="collection-workspace">
                 <div class="cards-grid" id="private-secret-grid">
                     <!-- Injecté par JavaScript -->
                 </div>
@@ -317,11 +310,6 @@
                 <path d="M7 11V7a5 5 0 0 1 10 0"></path>
             </svg>
         </a>
-        <div class="dock-btn" title="Retour en haut" onclick="remonterEnHaut()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;">
-                <polyline points="18 15 12 9 6 15"></polyline>
-            </svg>
-        </div>
     </div>
 
     <script src="scripts/assets/js/dresseuses-data.js"></script>
@@ -364,7 +352,7 @@
         }
 
         // ==========================================
-        // 2. GÉNÉRATION DE LA GALERIE AVEC PAGINATION
+        // 2. GÉNÉRATION DE LA GALERIE AVEC PAGINATION FIXE
         // ==========================================
         let currentPagePrivate = 0;
         const CARDS_PER_PAGE_PRIVATE = 10;
@@ -374,17 +362,14 @@
             const navContainer = document.getElementById('private-pagination');
             if (!gridContainer || typeof REGISTRE_SECRET === 'undefined') return;
 
-            // Compilation de tous les éléments à afficher
             let allItems = [];
             
-            // A. Les dresseuses connues
             for (const [trainerName, secretImages] of Object.entries(REGISTRE_SECRET)) {
                 if (secretImages && secretImages.length > 0) {
                     allItems.push({ type: 'known', name: trainerName, images: secretImages });
                 }
             }
 
-            // B. La carte mystère (Orphelines)
             if (typeof CARTES_ORPHELINES !== 'undefined' && CARTES_ORPHELINES.length > 0) {
                 allItems.push({ type: 'mystery' });
             }
@@ -393,7 +378,6 @@
             if (currentPagePrivate >= totalPages) currentPagePrivate = Math.max(0, totalPages - 1);
             if (currentPagePrivate < 0) currentPagePrivate = 0;
 
-            // Découpage pour la page actuelle
             const pageItems = allItems.slice(currentPagePrivate * CARDS_PER_PAGE_PRIVATE, (currentPagePrivate + 1) * CARDS_PER_PAGE_PRIVATE);
             
             let htmlContent = '';
@@ -425,7 +409,6 @@
 
             gridContainer.innerHTML = htmlContent;
 
-            // Gestion des boutons de pagination
             navContainer.innerHTML = '';
             if (totalPages > 1) {
                 const btnPrev = document.createElement('button');
@@ -435,7 +418,6 @@
                     if (currentPagePrivate > 0) { 
                         currentPagePrivate--; 
                         renderPrivateGallery(); 
-                        remonterEnHaut();
                     } 
                 };
 
@@ -446,7 +428,6 @@
                     if (currentPagePrivate < totalPages - 1) { 
                         currentPagePrivate++; 
                         renderPrivateGallery(); 
-                        remonterEnHaut();
                     } 
                 };
 
@@ -455,11 +436,9 @@
             }
         }
 
-        // Lancement au chargement
         document.addEventListener("DOMContentLoaded", () => {
             setTimeout(renderPrivateGallery, 100);
         });
-
 
         // ==========================================
         // 3. GESTION DE LA MODALE
@@ -617,17 +596,6 @@
         window.addEventListener('touchmove', drag, { passive: false });
         window.addEventListener('mouseup', dragEnd);
         window.addEventListener('touchend', dragEnd);
-
-        // ==========================================
-        // 5. FONCTION RETOUR EN HAUT
-        // ==========================================
-        function remonterEnHaut() {
-            const slideGallery = document.getElementById('slide-2');
-            if (slideGallery) {
-                slideGallery.scrollTo({ top: 0, behavior: 'smooth' });
-                if (slideGallery.scrollTop > 0) slideGallery.scrollTop = 0; 
-            }
-        }
     </script>
 </body>
 </html>
