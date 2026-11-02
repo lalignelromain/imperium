@@ -472,6 +472,12 @@ function renderDresseusesHub() {
     const shelfContainer = document.getElementById('shelf');
     if (!shelfContainer || typeof dresseusesData === 'undefined') return; 
 
+    // Forçage du Flexbox pour centrer proprement les cartes
+    shelfContainer.style.display = 'flex';
+    shelfContainer.style.flexWrap = 'wrap';
+    shelfContainer.style.justifyContent = 'center';
+    shelfContainer.style.gap = '15px';
+
     const trainers = Object.keys(dresseusesData).sort((a, b) => a.localeCompare(b, 'fr'));
     const CARDS_PER_PAGE = 10; 
     const totalPages = Math.ceil(trainers.length / CARDS_PER_PAGE);
@@ -493,6 +499,10 @@ function renderDresseusesHub() {
         const pocket = document.createElement('div');
         pocket.className = `hub-pocket ${hasSecret ? 'has-secret' : ''}`;
         
+        // Dimensions dynamiques pour s'adapter au centrage
+        pocket.style.width = '18%'; 
+        pocket.style.minWidth = '130px';
+        
         pocket.innerHTML = `
             ${imgFile ? `<img src="${imagePath}" onerror="this.outerHTML='${fallbackHTML}'" loading="lazy" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; background-color: #111;">` : fallbackHTML}
             
@@ -504,14 +514,7 @@ function renderDresseusesHub() {
         shelfContainer.appendChild(pocket);
     });
 
-    const emptySlots = CARDS_PER_PAGE - pageTrainers.length;
-    for (let e = 0; e < emptySlots; e++) {
-        const emptyPocket = document.createElement('div');
-        emptyPocket.className = 'hub-pocket is-empty';
-        emptyPocket.style = 'border: 1px dashed #333; cursor: default;';
-        emptyPocket.innerHTML = `<div style="position:absolute; inset:0; background: repeating-linear-gradient(-45deg, #111, #111 5px, #000 5px, #000 10px);"></div>`;
-        shelfContainer.appendChild(emptyPocket);
-    }
+    // Bords en pointillés (emptySlots) supprimés ici pour un rendu clean.
 
     const navContainer = document.getElementById('dresseuses-pagination');
     if (navContainer) {
