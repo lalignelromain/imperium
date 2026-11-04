@@ -17,14 +17,95 @@
     <!-- Feuilles de style -->
     <link rel="stylesheet" href="./scripts/assets/css/style.css">
 
+    <!-- STYLE DE L'ANIMATION D'INTRODUCTION -->
+    <style>
+        /* ==========================================
+           ÉCRAN D'INTRODUCTION (MEW & MEWTWO)
+        ========================================== */
+        #intro-sequence {
+            position: fixed;
+            inset: 0;
+            background-color: #050608; /* Correspond à ton theme-color */
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.5s ease-in-out, visibility 1.5s;
+        }
+
+        .intro-sprite {
+            position: absolute;
+            max-height: 60vh;
+            max-width: 80vw;
+            object-fit: contain;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+            filter: drop-shadow(0 0 25px rgba(167, 108, 242, 0.4));
+        }
+
+        .intro-sprite.active {
+            opacity: 1;
+            transform: scale(1);
+            animation: levitation 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes levitation {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(-20px) scale(1.02); }
+        }
+
+        .hidden-intro {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none;
+        }
+
+        .skip-btn {
+            position: absolute;
+            bottom: 40px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 2px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .skip-btn:hover {
+            color: #fff;
+            border-color: #a76cf2;
+            background: rgba(167, 108, 242, 0.2);
+        }
+    </style>
+
     <!-- SDK Firebase Compat -->
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 </head>
 
-<!-- AJOUT : La classe .page-index pour le CSS contextuel de la navbar -->
 <body class="page-index">
+
+    <!-- ==========================================
+         ÉCRAN D'INTRODUCTION PURE CSS/JS
+    ========================================== -->
+    <div id="intro-sequence">
+        <!-- Image de Mew -->
+        <img src="mew.png" id="intro-mew" class="intro-sprite" alt="Mew">
+        
+        <!-- Image de Mewtwo -->
+        <img src="mewtwo.png" id="intro-mewtwo" class="intro-sprite" alt="Mewtwo">
+        
+        <!-- Bouton pour passer l'intro -->
+        <button onclick="skipIntro()" class="skip-btn">Passer l'intro</button>
+    </div>
 
     <!-- En-tête Principal -->
     <header class="header-main">
@@ -55,7 +136,7 @@
                 <p>Puissance</p>
             </a>
             
-            <!-- AJOUT : id="title-trainers" et blocage du menu contextuel (oncontextmenu) -->
+            <!-- AJOUT : id="title-trainers" et blocage du menu contextuel -->
             <a href="dresseuses.html" class="hub-card dresseuses-card" id="title-trainers" oncontextmenu="return false;">
                 <h2>TRAINERS</h2>
                 <p>Full Art</p>
@@ -118,7 +199,7 @@
             </svg>
         </div>
 
-        <!-- LE CADENAS DORÉ (DÉCONNEXION / Géré par le CSS) -->
+        <!-- LE CADENAS DORÉ (DÉCONNEXION) -->
         <div id="dock-btn-lock" class="dock-btn" title="Verrouiller (Déconnexion)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -126,7 +207,7 @@
             </svg>
         </div>
 
-        <!-- LE CADENAS VIP SECRETS (Violet, Caché par défaut) -->
+        <!-- LE CADENAS VIP SECRETS (Violet) -->
         <div id="vip-padlock" class="hidden-padlock" title="Accès Club Privé">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -139,15 +220,14 @@
     <script src="./scripts/assets/js/pikachu-data.js"></script>
     <script src="./scripts/assets/js/script.js"></script>
 
-   <!-- SCRIPT DU PASS VIP (APPUI LONG) -->
+    <!-- SCRIPT DU PASS VIP (APPUI LONG) -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const triggerElement = document.getElementById('title-trainers');
             const vipPadlock = document.getElementById('vip-padlock');
             let pressTimer;
-            let isLongPress = false; // Mémorise si on a fait un appui long
+            let isLongPress = false; 
 
-            // Empêcher l'image fantôme de s'afficher au drag
             if(triggerElement) triggerElement.setAttribute('draggable', 'false');
 
             function startPress(e) {
@@ -172,7 +252,6 @@
                 triggerElement.addEventListener('mouseup', cancelPress);
                 triggerElement.addEventListener('mouseleave', cancelPress);
 
-                // La magie est ici : si c'est un appui long, on annule l'ouverture normale de la page
                 triggerElement.addEventListener('click', (e) => {
                     if(isLongPress) {
                         e.preventDefault(); 
@@ -181,7 +260,6 @@
                 });
             }
 
-            // Permet de cacher le cadenas mauve en cliquant n'importe où ailleurs
             document.addEventListener('click', (e) => {
                 if (triggerElement && !triggerElement.contains(e.target) && !vipPadlock.contains(e.target)) {
                     vipPadlock.classList.remove('visible');
@@ -194,6 +272,42 @@
                 });
             }
         });
+    </script>
+
+    <!-- SCRIPT DE L'ANIMATION D'INTRODUCTION -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const mew = document.getElementById("intro-mew");
+            const mewtwo = document.getElementById("intro-mewtwo");
+            const introScreen = document.getElementById("intro-sequence");
+
+            if(mew && mewtwo && introScreen) {
+                // 1. Apparition de Mew après une demi-seconde
+                setTimeout(() => {
+                    mew.classList.add("active");
+                }, 500);
+
+                // 2. Fondu enchaîné : Mew s'efface, Mewtwo apparaît
+                setTimeout(() => {
+                    mew.classList.remove("active");
+                    mewtwo.classList.add("active");
+                }, 3500);
+
+                // 3. Fin de l'intro : l'écran s'efface complètement
+                setTimeout(() => {
+                    mewtwo.classList.remove("active");
+                    introScreen.classList.add("hidden-intro");
+                }, 6500);
+            }
+        });
+
+        // Fonction pour le bouton "Passer l'intro"
+        function skipIntro() {
+            const introScreen = document.getElementById("intro-sequence");
+            if(introScreen) {
+                introScreen.classList.add("hidden-intro");
+            }
+        }
     </script>
 </body>
 </html>
