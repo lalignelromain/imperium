@@ -17,126 +17,139 @@
     <!-- Feuilles de style -->
     <link rel="stylesheet" href="./scripts/assets/css/style.css">
 
-    <!-- STYLE DE L'ANIMATION ULTIME -->
+    <!-- STYLE DE L'ANIMATION IMMERSIVE "TCG POCKET" -->
     <style>
-        /* ==========================================
-           1. CORRECTION DE L'ESPACE SOUS LE TITRE
-        ========================================== */
-        .page-index .header-main {
-            padding-bottom: 0px !important;
-            margin-bottom: 5px !important;
-        }
-        .page-index .header-main h1 {
-            margin-bottom: 0 !important;
-            line-height: 1.1;
-        }
-        .page-index .header-main .subtitle {
-            margin-top: 5px !important;
-            margin-bottom: 15px !important;
-        }
-        .page-index .hub-container {
-            padding-top: 0px !important;
-        }
+        /* Ajustement de l'espace sous le titre */
+        .page-index .header-main { padding-bottom: 0px !important; margin-bottom: 5px !important; }
+        .page-index .header-main h1 { margin-bottom: 0 !important; line-height: 1.1; }
+        .page-index .header-main .subtitle { margin-top: 5px !important; margin-bottom: 15px !important; }
+        .page-index .hub-container { padding-top: 0px !important; }
 
         /* ==========================================
-           2. ÉCRAN D'INTRODUCTION (EFFET TCG POCKET)
+           CONTENEUR PRINCIPAL D'INTRODUCTION
         ========================================== */
         #intro-sequence {
             position: fixed;
             inset: 0;
-            background-color: #050608;
+            background: radial-gradient(circle at center, #1a0b2e 0%, #050608 80%);
             z-index: 99999;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 1.2s ease-in-out, visibility 1.2s;
+            transition: opacity 1s ease-in-out, visibility 1s;
             overflow: hidden;
-            perspective: 1000px; /* Donne de la profondeur 3D */
+            perspective: 1000px;
         }
 
-        /* Aura psychique globale */
-        .intro-bg-glow {
+        /* Tremblement de l'écran (Camera Shake) */
+        .camera-shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-2px, 2px, 0) rotate(-1deg); }
+            20%, 80% { transform: translate3d(4px, -2px, 0) rotate(1deg); }
+            30%, 50%, 70% { transform: translate3d(-6px, 4px, 0) rotate(-2deg); }
+            40%, 60% { transform: translate3d(6px, -4px, 0) rotate(2deg); }
+        }
+
+        /* Flash d'explosion blanc */
+        #flash-overlay {
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at center, rgba(167, 108, 242, 0.15) 0%, transparent 70%);
+            background: #ffffff;
             opacity: 0;
-            transition: opacity 2s ease-in-out;
+            z-index: 20;
+            pointer-events: none;
         }
-        .intro-bg-glow.active {
-            opacity: 1;
-            animation: pulseGlow 4s infinite alternate;
+        .flash-active {
+            animation: psychicFlash 1.5s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
         }
-        @keyframes pulseGlow {
-            0% { transform: scale(0.8); background: radial-gradient(circle at center, rgba(255, 153, 204, 0.15) 0%, transparent 70%); }
-            100% { transform: scale(1.2); background: radial-gradient(circle at center, rgba(167, 108, 242, 0.3) 0%, transparent 70%); }
+        @keyframes psychicFlash {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
         }
 
-        /* Base pour les Sprites */
+        /* ==========================================
+           SYSTÈME DE PARTICULES (AURA)
+        ========================================== */
+        #intro-particles {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+        }
+        .particle {
+            position: absolute;
+            background: #ff99cc;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ff99cc, 0 0 20px #ff99cc;
+            opacity: 0;
+            pointer-events: none;
+            animation: floatUp 4s infinite linear;
+        }
+        /* Mode Mewtwo (violet, plus rapide, plus intense) */
+        .mewtwo-phase .particle {
+            background: #a76cf2;
+            box-shadow: 0 0 15px #a76cf2, 0 0 30px #652ca0;
+            animation: floatUpAggressive 1.5s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-20vh) scale(1.5); opacity: 0; }
+        }
+        @keyframes floatUpAggressive {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(-50vh) scale(2.5); opacity: 0; }
+        }
+
+        /* ==========================================
+           SPRITES (LES PERSONNAGES)
+        ========================================== */
         .intro-sprite {
             position: absolute;
-            max-height: 60vh;
-            max-width: 80vw;
+            max-height: 65vh;
+            max-width: 85vw;
             object-fit: contain;
             opacity: 0;
-            z-index: 5;
+            z-index: 10;
         }
 
-        /* MEW : Entrée douce et onirique */
+        /* MEW : Douceur et lévitation onirique */
         #intro-mew {
-            transform: scale(0.8) translateZ(-100px);
-            filter: drop-shadow(0 0 0 rgba(255, 153, 204, 0)) blur(15px);
-            transition: opacity 2s ease, transform 3s cubic-bezier(0.2, 0.8, 0.2, 1), filter 2s ease;
+            transform: scale(0.9) translateZ(-50px);
+            filter: drop-shadow(0 0 30px rgba(255, 153, 204, 0.4));
+            transition: opacity 2s ease, transform 3s ease-out;
         }
         #intro-mew.active {
             opacity: 1;
             transform: scale(1) translateZ(0);
-            filter: drop-shadow(0 10px 30px rgba(255, 153, 204, 0.6)) blur(0px);
-            animation: floatMew 4s ease-in-out infinite alternate 2s;
+            animation: floatMew 4s ease-in-out infinite alternate 1s;
         }
 
-        /* ONDE DE CHOC PSYCHIQUE (Transition Mew -> Mewtwo) */
-        .shockwave {
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 10px; height: 10px;
-            background: transparent;
-            border: 4px solid rgba(255, 255, 255, 0.9);
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 0;
-            z-index: 4;
-            box-shadow: 0 0 50px #a76cf2, inset 0 0 50px #a76cf2;
-            pointer-events: none;
-        }
-        .shockwave.explode {
-            animation: psychicBlast 1s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
-        }
-        @keyframes psychicBlast {
-            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; border-width: 30px; }
-            100% { transform: translate(-50%, -50%) scale(150); opacity: 0; border-width: 1px; }
-        }
-
-        /* MEWTWO : Entrée fracassante et agressive */
+        /* MEWTWO : Zoom agressif depuis le fond */
         #intro-mewtwo {
-            transform: scale(1.6) translateZ(200px); /* Arrive de très près */
-            filter: drop-shadow(0 0 0 rgba(167, 108, 242, 0)) blur(20px) brightness(2);
-            transition: opacity 0.5s ease-out, transform 0.8s cubic-bezier(0.1, 0.8, 0.3, 1), filter 0.8s ease-out;
+            transform: scale(0.2) translateZ(-300px); /* Part de très loin */
+            filter: drop-shadow(0 0 50px rgba(167, 108, 242, 1)) brightness(2);
+            transition: opacity 0.2s, transform 0.6s cubic-bezier(0.1, 0.8, 0.2, 1.2), filter 0.8s;
         }
         #intro-mewtwo.active {
             opacity: 1;
-            transform: scale(1.05) translateZ(0);
-            filter: drop-shadow(0 15px 50px rgba(167, 108, 242, 1)) blur(0px) brightness(1);
-            animation: floatMewtwo 3s ease-in-out infinite alternate 0.8s;
+            transform: scale(1.1) translateZ(0); /* Arrive fort en premier plan */
+            filter: drop-shadow(0 20px 60px rgba(101, 44, 160, 0.9)) brightness(1);
+            animation: floatMewtwo 2.5s ease-in-out infinite alternate 0.6s;
         }
 
-        /* Animations de lévitation distinctes */
         @keyframes floatMew {
             0% { transform: translateY(0px) rotate(0deg); }
             100% { transform: translateY(-15px) rotate(2deg); }
         }
         @keyframes floatMewtwo {
-            0% { transform: translateY(0px) scale(1.05) rotate(0deg); filter: drop-shadow(0 15px 50px rgba(167, 108, 242, 1)); }
-            100% { transform: translateY(-8px) scale(1.08) rotate(-1.5deg); filter: drop-shadow(0 25px 70px rgba(167, 108, 242, 0.8)); }
+            0% { transform: translateY(0px) scale(1.1) rotate(-1deg); }
+            100% { transform: translateY(-10px) scale(1.12) rotate(1deg); }
         }
 
         .hidden-intro {
@@ -160,14 +173,14 @@
             font-size: 0.75rem;
             text-transform: uppercase;
             backdrop-filter: blur(5px);
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 10;
+            transition: all 0.4s ease;
+            z-index: 30;
         }
         .skip-btn:hover {
             color: #fff;
             border-color: #a76cf2;
             background: rgba(167, 108, 242, 0.4);
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.05);
             box-shadow: 0 10px 20px rgba(101, 44, 160, 0.4);
         }
     </style>
@@ -181,12 +194,13 @@
 <body class="page-index">
 
     <!-- ==========================================
-         ÉCRAN D'INTRODUCTION PURE CSS/JS
+         ÉCRAN D'INTRODUCTION TCG POCKET IMMERSIF
     ========================================== -->
     <div id="intro-sequence">
-        <div class="intro-bg-glow" id="intro-glow"></div>
-        <div class="shockwave" id="shockwave"></div>
+        <div id="intro-particles"></div>
+        <div id="flash-overlay"></div>
         
+        <!-- NOUVEAUX CHEMINS APPLIQUÉS ICI -->
         <img src="./scripts/assets/img/mew.png" id="intro-mew" class="intro-sprite" alt="Mew">
         <img src="./scripts/assets/img/mewtwo.png" id="intro-mewtwo" class="intro-sprite" alt="Mewtwo">
         
@@ -210,7 +224,6 @@
                 <h2>PANTHÉON</h2>
                 <p>Scellés & Gradées</p>
             </a>
-
             <a href="mew.html" class="hub-card mew-card">
                 <h2>MEW</h2>
                 <p>Origine</p>
@@ -219,12 +232,10 @@
                 <h2>MEWTWO</h2>
                 <p>Puissance</p>
             </a>
-            
             <a href="dresseuses.html" class="hub-card dresseuses-card" id="title-trainers" oncontextmenu="return false;">
                 <h2>TRAINERS</h2>
                 <p>Full Art</p>
             </a>
-
             <a href="master-set.html" class="hub-card masterset-card">
                 <div class="hub-card-content">
                     <h2>MASTER SET EV 5</h2>
@@ -237,7 +248,6 @@
                     <span class="hub-progress-text" id="ev5-hub-progress-text">0 / 363 • 0%</span>
                 </div>
             </a>
-
             <a href="pikachu30.html" class="hub-card pikachu-card">
                 <div class="hub-card-content">
                     <h2>PIKACHU 30TH</h2>
@@ -253,9 +263,7 @@
         </nav>
     </main>
 
-    <!-- ==========================================
-         BARRE DE NAVIGATION FLOTTANTE (DOCK)
-    ========================================== -->
+    <!-- BARRE DE NAVIGATION FLOTTANTE (DOCK) -->
     <div class="floating-dock">
         <a href="index.html" id="btn-home" class="dock-btn" title="Accueil">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;">
@@ -263,27 +271,23 @@
                 <polyline points="9 22 9 12 15 12 15 22"></polyline>
             </svg>
         </a>
-
         <div id="btn-edit" class="dock-btn" title="Mode Édition">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
             </svg>
         </div>
-
         <div id="btn-to-top" class="dock-btn" title="Retour en haut" onclick="window.scrollTo({top:0, behavior:'smooth'})">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;">
                 <polyline points="18 15 12 9 6 15"></polyline>
             </svg>
         </div>
-
         <div id="dock-btn-lock" class="dock-btn" title="Verrouiller (Déconnexion)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                 <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
         </div>
-
         <div id="vip-padlock" class="hidden-padlock" title="Accès Club Privé">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -343,38 +347,58 @@
         });
     </script>
 
-    <!-- SCRIPT DE L'ANIMATION D'INTRODUCTION ULTIME -->
+    <!-- SCRIPT DE L'ANIMATION IMMERSIVE -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const mew = document.getElementById("intro-mew");
             const mewtwo = document.getElementById("intro-mewtwo");
-            const glow = document.getElementById("intro-glow");
-            const shockwave = document.getElementById("shockwave");
             const introScreen = document.getElementById("intro-sequence");
+            const flash = document.getElementById("flash-overlay");
+            const particlesContainer = document.getElementById("intro-particles");
 
-            if(mew && mewtwo && introScreen) {
-                // 1. Allumage de l'aura et apparition de Mew (douceur)
-                setTimeout(() => {
-                    if(glow) glow.classList.add("active");
-                    mew.classList.add("active");
-                }, 300);
+            if(!introScreen) return;
 
-                // 2. L'onde de choc et l'arrivée fracassante de Mewtwo
-                setTimeout(() => {
-                    if(shockwave) shockwave.classList.add("explode"); // Déclenche l'explosion
-                    mew.classList.remove("active"); // Mew disparaît
-                    mewtwo.classList.add("active"); // Mewtwo zoome agressivement
-                }, 3800);
-
-                // 3. Fin de l'intro (Disparition vers le menu)
-                setTimeout(() => {
-                    mewtwo.classList.remove("active");
-                    if(glow) glow.classList.remove("active");
-                    introScreen.classList.add("hidden-intro");
-                }, 8000); // Rallongé légèrement pour apprécier Mewtwo
+            // 1. Génération des particules d'aura (30 orbes)
+            for(let i = 0; i < 30; i++) {
+                let p = document.createElement("div");
+                p.classList.add("particle");
+                p.style.left = Math.random() * 100 + "%";
+                p.style.top = Math.random() * 100 + "%";
+                p.style.animationDelay = (Math.random() * 4) + "s";
+                let size = Math.random() * 4 + 2; // Taille entre 2px et 6px
+                p.style.width = size + "px";
+                p.style.height = size + "px";
+                particlesContainer.appendChild(p);
             }
+
+            // 2. Apparition de Mew au lancement
+            setTimeout(() => {
+                mew.classList.add("active");
+            }, 300);
+
+            // 3. L'anomalie : Tremblement de l'écran avant Mewtwo
+            setTimeout(() => {
+                introScreen.classList.add("camera-shake");
+            }, 3800);
+
+            // 4. Explosion psychique : Le Flash et l'apparition de Mewtwo
+            setTimeout(() => {
+                flash.classList.add("flash-active"); // Écran blanc
+                introScreen.classList.remove("camera-shake");
+                particlesContainer.classList.add("mewtwo-phase"); // Particules violettes rapides
+                
+                mew.classList.remove("active");
+                mewtwo.classList.add("active"); // Mewtwo zoome agressivement depuis le fond
+            }, 4300);
+
+            // 5. Fin de la cinématique, accès au site
+            setTimeout(() => {
+                mewtwo.classList.remove("active");
+                introScreen.classList.add("hidden-intro");
+            }, 8500); // Laisse le temps de voir Mewtwo stabilisé
         });
 
+        // Fonction pour le bouton "Passer l'intro"
         function skipIntro() {
             const introScreen = document.getElementById("intro-sequence");
             if(introScreen) introScreen.classList.add("hidden-intro");
