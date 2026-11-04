@@ -17,7 +17,7 @@
     <!-- Feuilles de style -->
     <link rel="stylesheet" href="./scripts/assets/css/style.css">
 
-    <!-- STYLE AJUSTÉ : ANIMATION PREMIUM & CORRECTION DES ESPACEMENTS -->
+    <!-- STYLE DE L'ANIMATION ULTIME -->
     <style>
         /* ==========================================
            1. CORRECTION DE L'ESPACE SOUS LE TITRE
@@ -32,14 +32,14 @@
         }
         .page-index .header-main .subtitle {
             margin-top: 5px !important;
-            margin-bottom: 15px !important; /* Ajuste cette valeur pour rapprocher les boutons */
+            margin-bottom: 15px !important;
         }
         .page-index .hub-container {
-            padding-top: 0px !important; /* Remonte la grille des boutons */
+            padding-top: 0px !important;
         }
 
         /* ==========================================
-           2. ÉCRAN D'INTRODUCTION (MEW & MEWTWO PREMIUM)
+           2. ÉCRAN D'INTRODUCTION (EFFET TCG POCKET)
         ========================================== */
         #intro-sequence {
             position: fixed;
@@ -51,66 +51,92 @@
             justify-content: center;
             transition: opacity 1.2s ease-in-out, visibility 1.2s;
             overflow: hidden;
+            perspective: 1000px; /* Donne de la profondeur 3D */
         }
 
-        /* Aura psychique en arrière-plan */
+        /* Aura psychique globale */
         .intro-bg-glow {
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at center, rgba(167, 108, 242, 0.25) 0%, transparent 65%);
+            background: radial-gradient(circle at center, rgba(167, 108, 242, 0.15) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 2s ease-in-out;
-            transform: scale(0.8);
         }
         .intro-bg-glow.active {
             opacity: 1;
-            transform: scale(1.2);
-            transition: opacity 2s ease, transform 4s ease-out;
+            animation: pulseGlow 4s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { transform: scale(0.8); background: radial-gradient(circle at center, rgba(255, 153, 204, 0.15) 0%, transparent 70%); }
+            100% { transform: scale(1.2); background: radial-gradient(circle at center, rgba(167, 108, 242, 0.3) 0%, transparent 70%); }
         }
 
-        /* Base pour les Pokémon (Apparition type "Matérialisation") */
+        /* Base pour les Sprites */
         .intro-sprite {
             position: absolute;
             max-height: 60vh;
             max-width: 80vw;
             object-fit: contain;
             opacity: 0;
-            /* Effet de flou et de zoom arrière au départ */
-            transform: scale(0.85) translateY(20px);
-            filter: drop-shadow(0 0 0px rgba(167, 108, 242, 0)) blur(10px);
-            transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), 
-                        transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), 
-                        filter 1.2s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 2;
+            z-index: 5;
         }
 
-        /* Activation de Mew (Aura douce) */
+        /* MEW : Entrée douce et onirique */
+        #intro-mew {
+            transform: scale(0.8) translateZ(-100px);
+            filter: drop-shadow(0 0 0 rgba(255, 153, 204, 0)) blur(15px);
+            transition: opacity 2s ease, transform 3s cubic-bezier(0.2, 0.8, 0.2, 1), filter 2s ease;
+        }
         #intro-mew.active {
             opacity: 1;
-            transform: scale(1) translateY(0);
-            filter: drop-shadow(0 10px 25px rgba(255, 153, 204, 0.5)) blur(0px);
-            animation: floatOrganic 4s ease-in-out infinite alternate 1.2s;
+            transform: scale(1) translateZ(0);
+            filter: drop-shadow(0 10px 30px rgba(255, 153, 204, 0.6)) blur(0px);
+            animation: floatMew 4s ease-in-out infinite alternate 2s;
         }
 
-        /* Activation de Mewtwo (Aura puissante) */
+        /* ONDE DE CHOC PSYCHIQUE (Transition Mew -> Mewtwo) */
+        .shockwave {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 10px; height: 10px;
+            background: transparent;
+            border: 4px solid rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0;
+            z-index: 4;
+            box-shadow: 0 0 50px #a76cf2, inset 0 0 50px #a76cf2;
+            pointer-events: none;
+        }
+        .shockwave.explode {
+            animation: psychicBlast 1s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+        }
+        @keyframes psychicBlast {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; border-width: 30px; }
+            100% { transform: translate(-50%, -50%) scale(150); opacity: 0; border-width: 1px; }
+        }
+
+        /* MEWTWO : Entrée fracassante et agressive */
+        #intro-mewtwo {
+            transform: scale(1.6) translateZ(200px); /* Arrive de très près */
+            filter: drop-shadow(0 0 0 rgba(167, 108, 242, 0)) blur(20px) brightness(2);
+            transition: opacity 0.5s ease-out, transform 0.8s cubic-bezier(0.1, 0.8, 0.3, 1), filter 0.8s ease-out;
+        }
         #intro-mewtwo.active {
             opacity: 1;
-            transform: scale(1.05) translateY(0);
-            filter: drop-shadow(0 15px 40px rgba(167, 108, 242, 0.8)) blur(0px);
-            animation: floatOrganicMewtwo 3.5s ease-in-out infinite alternate 1.2s;
+            transform: scale(1.05) translateZ(0);
+            filter: drop-shadow(0 15px 50px rgba(167, 108, 242, 1)) blur(0px) brightness(1);
+            animation: floatMewtwo 3s ease-in-out infinite alternate 0.8s;
         }
 
-        /* Lévitation fluide avec légère rotation */
-        @keyframes floatOrganic {
-            0% { transform: translateY(0px) scale(1) rotate(0deg); }
-            50% { transform: translateY(-15px) scale(1.02) rotate(1.5deg); }
-            100% { transform: translateY(5px) scale(0.98) rotate(-1deg); }
+        /* Animations de lévitation distinctes */
+        @keyframes floatMew {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-15px) rotate(2deg); }
         }
-
-        @keyframes floatOrganicMewtwo {
-            0% { transform: translateY(0px) scale(1.05) rotate(0deg); }
-            50% { transform: translateY(-10px) scale(1.07) rotate(-1deg); filter: drop-shadow(0 15px 50px rgba(167, 108, 242, 1)); }
-            100% { transform: translateY(10px) scale(1.03) rotate(1deg); }
+        @keyframes floatMewtwo {
+            0% { transform: translateY(0px) scale(1.05) rotate(0deg); filter: drop-shadow(0 15px 50px rgba(167, 108, 242, 1)); }
+            100% { transform: translateY(-8px) scale(1.08) rotate(-1.5deg); filter: drop-shadow(0 25px 70px rgba(167, 108, 242, 0.8)); }
         }
 
         .hidden-intro {
@@ -119,7 +145,7 @@
             pointer-events: none;
         }
 
-        /* Bouton Skip modernisé */
+        /* Bouton Skip */
         .skip-btn {
             position: absolute;
             bottom: 40px;
@@ -137,7 +163,6 @@
             transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             z-index: 10;
         }
-
         .skip-btn:hover {
             color: #fff;
             border-color: #a76cf2;
@@ -160,14 +185,11 @@
     ========================================== -->
     <div id="intro-sequence">
         <div class="intro-bg-glow" id="intro-glow"></div>
+        <div class="shockwave" id="shockwave"></div>
         
-        <!-- Image de Mew -->
         <img src="./scripts/assets/img/mew.png" id="intro-mew" class="intro-sprite" alt="Mew">
-        
-        <!-- Image de Mewtwo -->
         <img src="./scripts/assets/img/mewtwo.png" id="intro-mewtwo" class="intro-sprite" alt="Mewtwo">
         
-        <!-- Bouton pour passer l'intro -->
         <button onclick="skipIntro()" class="skip-btn">Passer l'intro</button>
     </div>
 
@@ -180,7 +202,6 @@
     <!-- Hub de Navigation -->
     <main class="hub-container">
         <nav class="hub-grid" aria-label="Navigation principale">
-            <!-- LIGNE 1 : ARCHIVES & PRESTIGE -->
             <a href="pokedex.html" class="hub-card pokedex-card">
                 <h2>POKÉDEX</h2>
                 <p>Quête Absolue</p>
@@ -190,7 +211,6 @@
                 <p>Scellés & Gradées</p>
             </a>
 
-            <!-- LIGNE 2 : COLLECTIONS THÉMATIQUES -->
             <a href="mew.html" class="hub-card mew-card">
                 <h2>MEW</h2>
                 <p>Origine</p>
@@ -200,13 +220,11 @@
                 <p>Puissance</p>
             </a>
             
-            <!-- TRAINERS (Blocage clic droit & Appui long VIP) -->
             <a href="dresseuses.html" class="hub-card dresseuses-card" id="title-trainers" oncontextmenu="return false;">
                 <h2>TRAINERS</h2>
                 <p>Full Art</p>
             </a>
 
-            <!-- LIGNE 3 : MASTER SET EV5 -->
             <a href="master-set.html" class="hub-card masterset-card">
                 <div class="hub-card-content">
                     <h2>MASTER SET EV 5</h2>
@@ -220,7 +238,6 @@
                 </div>
             </a>
 
-            <!-- LIGNE 4 : PIKACHU 30 ANS -->
             <a href="pikachu30.html" class="hub-card pikachu-card">
                 <div class="hub-card-content">
                     <h2>PIKACHU 30TH</h2>
@@ -279,7 +296,7 @@
     <script src="./scripts/assets/js/pikachu-data.js"></script>
     <script src="./scripts/assets/js/script.js"></script>
 
-    <!-- SCRIPT DU PASS VIP (APPUI LONG) -->
+    <!-- SCRIPT DU PASS VIP -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const triggerElement = document.getElementById('title-trainers');
@@ -298,9 +315,7 @@
                 }, 800); 
             }
 
-            function cancelPress() {
-                clearTimeout(pressTimer);
-            }
+            function cancelPress() { clearTimeout(pressTimer); }
 
             if(triggerElement) {
                 triggerElement.addEventListener('touchstart', startPress, { passive: true });
@@ -310,10 +325,7 @@
                 triggerElement.addEventListener('mouseup', cancelPress);
                 triggerElement.addEventListener('mouseleave', cancelPress);
                 triggerElement.addEventListener('click', (e) => {
-                    if(isLongPress) {
-                        e.preventDefault(); 
-                        isLongPress = false;
-                    }
+                    if(isLongPress) { e.preventDefault(); isLongPress = false; }
                 });
             }
 
@@ -331,42 +343,41 @@
         });
     </script>
 
-    <!-- SCRIPT DE L'ANIMATION D'INTRODUCTION -->
+    <!-- SCRIPT DE L'ANIMATION D'INTRODUCTION ULTIME -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const mew = document.getElementById("intro-mew");
             const mewtwo = document.getElementById("intro-mewtwo");
             const glow = document.getElementById("intro-glow");
+            const shockwave = document.getElementById("shockwave");
             const introScreen = document.getElementById("intro-sequence");
 
             if(mew && mewtwo && introScreen) {
-                // 1. Allumage de l'aura psychique et apparition de Mew (matérialisation)
+                // 1. Allumage de l'aura et apparition de Mew (douceur)
                 setTimeout(() => {
                     if(glow) glow.classList.add("active");
                     mew.classList.add("active");
                 }, 300);
 
-                // 2. Transition vers Mewtwo (Fondu enchaîné)
+                // 2. L'onde de choc et l'arrivée fracassante de Mewtwo
                 setTimeout(() => {
-                    mew.classList.remove("active");
-                    mewtwo.classList.add("active");
+                    if(shockwave) shockwave.classList.add("explode"); // Déclenche l'explosion
+                    mew.classList.remove("active"); // Mew disparaît
+                    mewtwo.classList.add("active"); // Mewtwo zoome agressivement
                 }, 3800);
 
-                // 3. Fin de l'intro (Disparition douce vers le site)
+                // 3. Fin de l'intro (Disparition vers le menu)
                 setTimeout(() => {
                     mewtwo.classList.remove("active");
                     if(glow) glow.classList.remove("active");
                     introScreen.classList.add("hidden-intro");
-                }, 7500);
+                }, 8000); // Rallongé légèrement pour apprécier Mewtwo
             }
         });
 
-        // Fonction pour le bouton "Passer l'intro"
         function skipIntro() {
             const introScreen = document.getElementById("intro-sequence");
-            if(introScreen) {
-                introScreen.classList.add("hidden-intro");
-            }
+            if(introScreen) introScreen.classList.add("hidden-intro");
         }
     </script>
 </body>
