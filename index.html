@@ -7,7 +7,7 @@
 
     <!-- PWA & Métadonnées Mobiles -->
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#050608">
+    <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Mewthology">
@@ -17,7 +17,7 @@
     <!-- Feuilles de style -->
     <link rel="stylesheet" href="./scripts/assets/css/style.css">
 
-    <!-- STYLE DE L'ANIMATION "GOD TIER" IMMERSIVE -->
+    <!-- STYLE DE L'ANIMATION CINÉMATOGRAPHIQUE -->
     <style>
         .page-index .header-main { padding-bottom: 0px !important; margin-bottom: 5px !important; }
         .page-index .header-main h1 { margin-bottom: 0 !important; line-height: 1.1; }
@@ -25,170 +25,88 @@
         .page-index .hub-container { padding-top: 0px !important; }
 
         /* ==========================================
-           1. LE VORTEX (FOND DYNAMIQUE)
+           1. CONTENEUR CINÉMA
         ========================================== */
-        #intro-sequence {
+        #cine-sequence {
             position: fixed;
             inset: 0;
-            background-color: #050608;
+            background-color: #000;
             z-index: 99999;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: opacity 1.5s ease-in-out, visibility 1.5s;
             overflow: hidden;
-            perspective: 1200px;
         }
 
-        #vortex-bg {
+        /* Arrière-plan subtil pour détacher les PNG noirs */
+        #cine-ambient-bg {
             position: absolute;
-            width: 200vw;
-            height: 200vh;
-            background: conic-gradient(from 0deg at 50% 50%, #050608, #1a0b2e, #2a1147, #1a0b2e, #050608);
+            inset: 0;
+            background: radial-gradient(circle at center, #111424 0%, #000 60%);
             opacity: 0;
-            animation: spinVortex 20s linear infinite;
-            transition: opacity 3s ease;
+            transition: opacity 2s ease;
             z-index: 1;
         }
-        #vortex-bg.active { opacity: 0.6; }
-        #vortex-bg.mewtwo-phase { 
-            background: conic-gradient(from 0deg at 50% 50%, #050608, #401060, #7a20c0, #401060, #050608);
-            animation: spinVortex 5s linear infinite reverse; 
-            opacity: 0.8;
-        }
-
-        @keyframes spinVortex {
-            100% { transform: rotate(360deg); }
-        }
 
         /* ==========================================
-           2. COUCHE PARALLAXE (Pour l'effet 3D)
+           2. LES BANDES NOIRES (LETTERBOX 2.35:1)
         ========================================== */
-        #parallax-layer {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform-style: preserve-3d;
-            z-index: 10;
-            transition: transform 0.1s ease-out; /* Fluidité du suivi souris */
-        }
-
-        /* ==========================================
-           3. LES PERSONNAGES ET LEURS AURAS
-        ========================================== */
-        .intro-sprite {
+        .cine-bar {
             position: absolute;
-            max-height: 70vh;
-            max-width: 90vw;
+            left: 0;
+            width: 100%;
+            height: 12vh; /* Hauteur des bandes cinéma */
+            background: #000;
+            z-index: 20;
+            transition: transform 1.5s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+        .cine-bar.top { top: 0; transform: translateY(-100%); }
+        .cine-bar.bottom { bottom: 0; transform: translateY(100%); }
+
+        /* Classe d'activation des bandes */
+        #cine-sequence.playing .cine-bar.top { transform: translateY(0); }
+        #cine-sequence.playing .cine-bar.bottom { transform: translateY(0); }
+
+        /* ==========================================
+           3. GESTION DES CAMÉRAS (SPRITES)
+        ========================================== */
+        .cine-sprite {
+            position: absolute;
+            max-height: 60vh;
+            max-width: 80vw;
             object-fit: contain;
             opacity: 0;
-            pointer-events: none;
+            z-index: 10;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
         }
 
-        /* MEW : Onirique et mystique */
-        #intro-mew {
-            transform: scale(0.8) translateZ(-100px);
-            filter: drop-shadow(0 0 10px rgba(255, 153, 204, 0)) blur(10px);
-            transition: opacity 2.5s ease, transform 4s cubic-bezier(0.2, 0.8, 0.2, 1), filter 2.5s;
+        /* Travelling avant sur Mew (l'Origine) */
+        .cine-zoom-in {
+            animation: cameraZoomIn 5s linear forwards;
         }
-        #intro-mew.active {
-            opacity: 1;
-            transform: scale(1) translateZ(50px);
-            filter: drop-shadow(0 0 40px rgba(255, 153, 204, 0.5)) blur(0px);
-            animation: floatOrganic 5s ease-in-out infinite alternate;
+        @keyframes cameraZoomIn {
+            0% { opacity: 0; transform: scale(0.9); }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; transform: scale(1.1); }
         }
 
-        /* MEWTWO : Ultra agressif avec aberration chromatique au départ */
-        #intro-mewtwo {
-            transform: scale(2) translateZ(300px);
-            filter: drop-shadow(0 0 0 rgba(167, 108, 242, 0)) brightness(3) blur(20px);
-            transition: opacity 0.1s, transform 0.5s cubic-bezier(0.1, 0.9, 0.2, 1), filter 0.8s;
+        /* Travelling arrière sur Mewtwo (la Puissance Révélée) */
+        .cine-zoom-out {
+            animation: cameraZoomOut 4.5s linear forwards;
         }
-        #intro-mewtwo.active {
-            opacity: 1;
-            transform: scale(1.1) translateZ(80px);
-            filter: drop-shadow(0 20px 80px rgba(167, 108, 242, 1)) brightness(1) blur(0px);
-            animation: floatAggressive 3s ease-in-out infinite alternate 0.5s;
-        }
-
-        @keyframes floatOrganic {
-            0% { transform: scale(1) translateZ(50px) translateY(0px) rotate(0deg); }
-            100% { transform: scale(1.02) translateZ(50px) translateY(-20px) rotate(2deg); }
-        }
-        @keyframes floatAggressive {
-            0% { transform: scale(1.1) translateZ(80px) translateY(0px) rotate(-1deg); }
-            100% { transform: scale(1.12) translateZ(80px) translateY(-15px) rotate(1deg); }
+        @keyframes cameraZoomOut {
+            0% { opacity: 0; transform: scale(1.2); }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { opacity: 0; transform: scale(1); }
         }
 
         /* ==========================================
-           4. L'ANOMALIE (GLITCH & DÉCHIRURE)
+           4. FIN DE SCÈNE & BOUTON
         ========================================== */
-        .glitch-effect {
-            animation: glitchTear 0.4s cubic-bezier(.25, .46, .45, .94) both;
-            filter: drop-shadow(8px 0 0 rgba(255,0,0,0.8)) drop-shadow(-8px 0 0 rgba(0,255,255,0.8)) contrast(150%) !important;
-        }
-        @keyframes glitchTear {
-            0% { transform: translate(0) scale(1) skew(0deg); }
-            20% { transform: translate(-15px, 10px) scale(1.05) skew(10deg); }
-            40% { transform: translate(15px, -15px) scale(0.95) skew(-10deg); }
-            60% { transform: translate(-10px, 20px) scale(1.1) skew(5deg); }
-            80% { transform: translate(20px, -5px) scale(1) skew(-5deg); }
-            100% { transform: translate(0) scale(1.2) skew(0deg); } /* Prépare la place pour Mewtwo */
-        }
-
-        #flash-overlay {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, #ffffff 0%, #a76cf2 100%);
-            opacity: 0;
-            z-index: 20;
-            pointer-events: none;
-            mix-blend-mode: screen;
-        }
-        .flash-active {
-            animation: psychicBlast 1s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
-        }
-        @keyframes psychicBlast {
-            0% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(1.5); }
-        }
-
-        /* ==========================================
-           5. PARTICULES 3D
-        ========================================== */
-        #intro-particles {
-            position: absolute;
-            inset: 0;
-            z-index: 5;
-            transform-style: preserve-3d;
-        }
-        .particle {
-            position: absolute;
-            background: #ff99cc;
-            border-radius: 50%;
-            opacity: 0;
-            animation: floatParticle 4s infinite linear;
-        }
-        .mewtwo-phase .particle {
-            background: #d4a5ff;
-            box-shadow: 0 0 10px #d4a5ff, 0 0 20px #a76cf2;
-            animation: floatParticleAggressive 1.2s infinite linear;
-        }
-        @keyframes floatParticle {
-            0% { transform: translate3d(0, 100vh, -100px) scale(0); opacity: 0; }
-            20% { opacity: 0.8; }
-            100% { transform: translate3d(0, -20vh, 200px) scale(1.5); opacity: 0; }
-        }
-        @keyframes floatParticleAggressive {
-            0% { transform: translate3d(0, 100vh, 0px) scale(0); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translate3d(0, -50vh, 300px) scale(3); opacity: 0; }
-        }
-
-        .hidden-intro {
+        .hidden-cine {
             opacity: 0 !important;
             visibility: hidden !important;
             pointer-events: none;
@@ -196,28 +114,20 @@
 
         .skip-btn {
             position: absolute;
-            bottom: 40px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(167, 108, 242, 0.3);
-            color: rgba(255, 255, 255, 0.6);
-            padding: 10px 25px;
-            border-radius: 30px;
+            bottom: 3vh; /* Placé discrètement sur la bande noire */
+            right: 5vw;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
             cursor: pointer;
             font-family: 'Montserrat', sans-serif;
-            letter-spacing: 3px;
-            font-size: 0.75rem;
+            letter-spacing: 2px;
+            font-size: 0.7rem;
             text-transform: uppercase;
-            backdrop-filter: blur(5px);
-            transition: all 0.4s ease;
+            transition: color 0.3s;
             z-index: 30;
         }
-        .skip-btn:hover {
-            color: #fff;
-            border-color: #a76cf2;
-            background: rgba(167, 108, 242, 0.4);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 10px 20px rgba(101, 44, 160, 0.4);
-        }
+        .skip-btn:hover { color: #fff; }
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -228,20 +138,22 @@
 <body class="page-index">
 
     <!-- ==========================================
-         ÉCRAN D'INTRODUCTION GOD TIER
+         ÉCRAN D'INTRODUCTION CINÉMATOGRAPHIQUE
     ========================================== -->
-    <div id="intro-sequence">
-        <div id="vortex-bg"></div>
-        <div id="intro-particles"></div>
-        <div id="flash-overlay"></div>
+    <div id="cine-sequence">
+        <!-- Fond ambiant -->
+        <div id="cine-ambient-bg"></div>
         
-        <!-- Couche Parallaxe pour l'immersion 3D -->
-        <div id="parallax-layer">
-            <img src="./scripts/assets/img/mew.png" id="intro-mew" class="intro-sprite" alt="Mew">
-            <img src="./scripts/assets/img/mewtwo.png" id="intro-mewtwo" class="intro-sprite" alt="Mewtwo">
-        </div>
+        <!-- Bandes Cinéma -->
+        <div class="cine-bar top"></div>
+        <div class="cine-bar bottom"></div>
         
-        <button onclick="skipIntro()" class="skip-btn">Passer l'intro</button>
+        <!-- Les personnages avec les bons chemins -->
+        <img src="./scripts/assets/img/mew.png" id="cine-mew" class="cine-sprite" alt="Mew">
+        <img src="./scripts/assets/img/mewtwo.png" id="cine-mewtwo" class="cine-sprite" alt="Mewtwo">
+        
+        <!-- Bouton Passer -->
+        <button onclick="skipCine()" class="skip-btn">Passer</button>
     </div>
 
     <!-- En-tête Principal -->
@@ -310,7 +222,6 @@
                     if (navigator.vibrate) navigator.vibrate(50);
                 }, 800); 
             }
-
             function cancelPress() { clearTimeout(pressTimer); }
 
             if(triggerElement) {
@@ -337,77 +248,50 @@
         });
     </script>
 
-    <!-- SCRIPT DE L'ANIMATION IMMERSIVE GOD TIER -->
+    <!-- SCRIPT DE L'ANIMATION CINÉMATOGRAPHIQUE -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const introScreen = document.getElementById("intro-sequence");
-            if(!introScreen) return;
+            const cineScreen = document.getElementById("cine-sequence");
+            if(!cineScreen) return;
 
-            const mew = document.getElementById("intro-mew");
-            const mewtwo = document.getElementById("intro-mewtwo");
-            const flash = document.getElementById("flash-overlay");
-            const particlesContainer = document.getElementById("intro-particles");
-            const vortex = document.getElementById("vortex-bg");
-            const parallaxLayer = document.getElementById("parallax-layer");
+            const bg = document.getElementById("cine-ambient-bg");
+            const mew = document.getElementById("cine-mew");
+            const mewtwo = document.getElementById("cine-mewtwo");
 
-            // 1. GÉNÉRATION DES PARTICULES 3D
-            for(let i = 0; i < 40; i++) {
-                let p = document.createElement("div");
-                p.classList.add("particle");
-                p.style.left = (Math.random() * 120 - 10) + "%"; // Dépasse un peu des bords
-                p.style.animationDelay = (Math.random() * 4) + "s";
-                let size = Math.random() * 5 + 2;
-                p.style.width = size + "px";
-                p.style.height = size + "px";
-                particlesContainer.appendChild(p);
-            }
-
-            // 2. EFFET PARALLAXE (Suivi de la souris / inclinaison)
-            document.addEventListener("mousemove", (e) => {
-                if(introScreen.classList.contains("hidden-intro")) return;
-                let xAxis = (window.innerWidth / 2 - e.pageX) / 20; // Ajuster le /20 pour l'intensité
-                let yAxis = (window.innerHeight / 2 - e.pageY) / 20;
-                parallaxLayer.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) translateZ(30px)`;
-            });
-
-            // 3. LA CINÉMATIQUE
-            
-            // Apparition de Mew et du Vortex
+            // 1. Démarrage : Les bandes noires se ferment, l'ambiance s'allume
             setTimeout(() => {
-                vortex.classList.add("active");
-                mew.classList.add("active");
-            }, 300);
+                cineScreen.classList.add("playing");
+                bg.style.opacity = "1";
+            }, 100);
 
-            // L'Anomalie (Le glitch chromatique violent de Mew)
+            // 2. Travelling sur Mew (S'approche lentement)
             setTimeout(() => {
-                mew.classList.add("glitch-effect");
-                vortex.style.opacity = "0"; // Le vortex s'éteint pour le suspense
-            }, 4500);
+                mew.classList.add("cine-zoom-in");
+            }, 600);
 
-            // L'Explosion et l'arrivée de Mewtwo
+            // 3. Transition croisée vers Mewtwo (Recule lentement)
             setTimeout(() => {
-                flash.classList.add("flash-active");
+                mewtwo.classList.add("cine-zoom-out");
+            }, 4200);
+
+            // 4. Fin de la séquence (Les bandes s'ouvrent, fondu au noir vers le site)
+            setTimeout(() => {
+                cineScreen.classList.remove("playing"); // Ouvre les bandes noires
+                bg.style.opacity = "0"; // Éteint le fond
                 
-                mew.classList.remove("active", "glitch-effect"); // Supprime Mew
-                mewtwo.classList.add("active"); // Fait exploser Mewtwo
-                
-                particlesContainer.classList.add("mewtwo-phase"); // Particules deviennent violettes/rapides
-                vortex.classList.add("mewtwo-phase"); // Le vortex tourne à l'envers, couleur sombre
-            }, 4900); // 400ms après le début du glitch
-
-            // Fin et retour à la réalité (interface)
-            setTimeout(() => {
-                mewtwo.classList.remove("active");
-                introScreen.style.opacity = "0";
-                setTimeout(() => introScreen.classList.add("hidden-intro"), 1500); // Nettoyage final
-            }, 9000);
+                setTimeout(() => {
+                    cineScreen.classList.add("hidden-cine"); // Révèle le menu principal
+                }, 1000);
+            }, 7800);
         });
 
-        function skipIntro() {
-            const introScreen = document.getElementById("intro-sequence");
-            if(introScreen) {
-                introScreen.style.opacity = "0";
-                setTimeout(() => introScreen.classList.add("hidden-intro"), 1000);
+        // Fonction Skip (Fermeture propre et rapide)
+        function skipCine() {
+            const cineScreen = document.getElementById("cine-sequence");
+            if(cineScreen) {
+                cineScreen.classList.remove("playing");
+                cineScreen.style.opacity = "0";
+                setTimeout(() => cineScreen.classList.add("hidden-cine"), 1000);
             }
         }
     </script>
