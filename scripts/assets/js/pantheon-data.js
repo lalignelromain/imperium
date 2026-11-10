@@ -114,6 +114,7 @@ const pantheonDatabase = {
             image: "./scripts/assets/img/etb-reg.png"
         }
     ],
+   
 
     // ----------------------------------------------------------------
     // 2. CARTES GRADÉES (Double face & retournement tactile / survol)
