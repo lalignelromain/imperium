@@ -91,7 +91,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-coffret-mew-ex",
-            nom: "#11# Coffret Mew ex",
+            nom: "#12# Coffret Mew ex",
             extension: "À PRÉCISER",
             annee: 2026,
             langue: "fr",
@@ -99,7 +99,7 @@ const pantheonDatabase = {
         },
         {
             id: "scelle-coffret-metamorphe",
-            nom: "#12# Coffret Métamorphe",
+            nom: "#11# Coffret Métamorphe",
             extension: "À PRÉCISER",
             annee: 2026,
             langue: "fr",
