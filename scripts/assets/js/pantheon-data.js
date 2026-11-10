@@ -88,6 +88,30 @@ const pantheonDatabase = {
             annee: 2025,
             langue: "fr",
             image: "./scripts/assets/img/etb-riv.png"
+        },
+        {
+            id: "scelle-coffret-mew-ex",
+            nom: "#11# Coffret Mew ex",
+            extension: "À PRÉCISER",
+            annee: 2026,
+            langue: "fr",
+            image: "./scripts/assets/img/coffret-mew.png" 
+        },
+        {
+            id: "scelle-coffret-metamorphe",
+            nom: "#12# Coffret Métamorphe",
+            extension: "À PRÉCISER",
+            annee: 2026,
+            langue: "fr",
+            image: "./scripts/assets/img/coffret-met.png" 
+        },
+        {
+            id: "scelle-etb-regne-delta",
+            nom: "#13# Coffret Dresseur D'Élite (ETB)",
+            extension: "Règne delta (ME 06)",
+            annee: 2026,
+            langue: "fr",
+            image: "./scripts/assets/img/etb-reg.png"
         }
     ],
 
