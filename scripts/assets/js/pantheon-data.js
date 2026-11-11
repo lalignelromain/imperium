@@ -92,7 +92,7 @@ const pantheonDatabase = {
         {
             id: "scelle-coffret-mew-ex",
             nom: "#12# Coffret Mew ex",
-            extension: "À PRÉCISER",
+            extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
             image: "./scripts/assets/img/coffret-mew.png" 
@@ -100,7 +100,7 @@ const pantheonDatabase = {
         {
             id: "scelle-coffret-metamorphe",
             nom: "#11# Coffret Métamorphe",
-            extension: "À PRÉCISER",
+            extension: "Collection Anniversaire 30 ans",
             annee: 2026,
             langue: "fr",
             image: "./scripts/assets/img/coffret-met.png" 
