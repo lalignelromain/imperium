@@ -254,6 +254,17 @@
             const cineScreen = document.getElementById("cine-sequence");
             if(!cineScreen) return;
 
+            // --- VÉRIFICATION DU CACHE DE SESSION ---
+            if (sessionStorage.getItem("cinePlayed") === "true") {
+                // L'animation a déjà été vue, on la masque instantanément
+                cineScreen.style.display = "none";
+                return; // On arrête le reste du script ici
+            } else {
+                // Première visite : on enregistre que l'intro va être jouée
+                sessionStorage.setItem("cinePlayed", "true");
+            }
+            // ----------------------------------------
+
             const bg = document.getElementById("cine-ambient-bg");
             const mew = document.getElementById("cine-mew");
             const mewtwo = document.getElementById("cine-mewtwo");
@@ -292,10 +303,10 @@
                 cineScreen.classList.remove("playing");
                 cineScreen.style.opacity = "0";
                 setTimeout(() => cineScreen.classList.add("hidden-cine"), 1000);
+                // Si on passe l'intro, on veut aussi s'assurer qu'elle ne revienne pas
+                sessionStorage.setItem("cinePlayed", "true"); 
             }
         }
     </script>
 </body>
 </html>
-
-
