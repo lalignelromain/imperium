@@ -120,7 +120,8 @@ body.mode-edition .card-item:hover { transform: translateY(-4px); }
 .psa-slab.is-empty .psa-card-chamber { color: #64748b; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; }
 
 .binder-deck { display: flex; flex-direction: column; gap: 30px; max-width: 860px; margin: 0 auto; }
-.vaultx-page { background: radial-gradient(circle at 50% 50%, #111724 0%, var(--bg-binder) 100%); border: 2px solid var(--border-weld); border-radius: 12px; padding: 14px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 0, 0, 0.6); display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+/* PASSAGE EN 5 COLONNES ICI */
+.vaultx-page { background: radial-gradient(circle at 50% 50%, #111724 0%, var(--bg-binder) 100%); border: 2px solid var(--border-weld); border-radius: 12px; padding: 14px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 0, 0, 0.6); display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
 .vaultx-pocket { aspect-ratio: 734 / 1024; background: var(--bg-pocket); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 5px; overflow: hidden; position: relative; box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8); transition: transform 0.2s ease, border-color 0.2s ease; perspective: 1000px; }
 .vaultx-pocket:hover { border-color: rgba(244, 114, 182, 0.4); transform: scale(1.02); z-index: 5; }
 .vaultx-pocket img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -214,22 +215,13 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned { pointer-event
 .pikachu-binder .vaultx-pocket.is-owned .sleeve-matte { filter: none; opacity: 1; border: 1px solid #facc15; box-shadow: 0 0 10px rgba(250, 204, 21, 0.3); }
 .pikachu-binder .vaultx-pocket.is-owned:hover .sleeve-matte { border-color: #fef08a; box-shadow: 0 0 15px rgba(250, 204, 21, 0.6); }
 
+/* BARRE DE NAVIGATION (Simplifiée) */
 .floating-dock { position: fixed; bottom: 25px; right: 25px; left: auto; transform: none; display: flex; gap: 15px; background: rgba(10, 10, 12, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 10px 25px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8); z-index: 9999; }
 .dock-btn { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); text-decoration: none; }
 .dock-btn:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-4px); }
-#dock-btn-private { color: #a76cf2 !important; border-color: rgba(167, 108, 242, 0.4); }
-#dock-btn-private:hover { background: rgba(101, 44, 160, 0.2); border-color: #a76cf2; box-shadow: 0 5px 20px rgba(101, 44, 160, 0.5); }
-#dock-btn-lock { color: #d4af37 !important; border-color: rgba(212, 175, 55, 0.4); }
-#dock-btn-lock:hover { background: rgba(212, 175, 55, 0.2); border-color: #d4af37; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.5); }
 
-/* ==========================================
-   GESTION INTELLIGENTE DE LA NAVBAR 
-========================================== */
-.page-index #btn-home, .page-index #btn-to-top { display: none !important; }
-#btn-edit, #dock-btn-lock { display: none; }
-.page-pokedex #btn-edit, .page-masterset #btn-edit, .page-pikachu #btn-edit, .page-mew #btn-edit { display: flex; }
-body.mode-edition #dock-btn-lock { display: flex !important; }
-#btn-back-history { display: none !important; }
+/* Masquer le bouton de retour en haut uniquement sur la page d'accueil si nécessaire */
+.page-index #btn-to-top { display: none !important; }
 
 /* ==========================================
    MÉCANIQUE SECRÈTE VIP (Appui Long)
