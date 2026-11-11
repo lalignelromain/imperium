@@ -215,13 +215,34 @@ body:not(.mode-edition) .pikachu-binder .vaultx-pocket.not-owned { pointer-event
 .pikachu-binder .vaultx-pocket.is-owned .sleeve-matte { filter: none; opacity: 1; border: 1px solid #facc15; box-shadow: 0 0 10px rgba(250, 204, 21, 0.3); }
 .pikachu-binder .vaultx-pocket.is-owned:hover .sleeve-matte { border-color: #fef08a; box-shadow: 0 0 15px rgba(250, 204, 21, 0.6); }
 
-/* BARRE DE NAVIGATION (Simplifiée) */
+/* ==========================================
+   BARRE DE NAVIGATION FLOTTANTE (DOCK)
+========================================== */
 .floating-dock { position: fixed; bottom: 25px; right: 25px; left: auto; transform: none; display: flex; gap: 15px; background: rgba(10, 10, 12, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 10px 25px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8); z-index: 9999; }
 .dock-btn { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); text-decoration: none; }
 .dock-btn:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-4px); }
+#dock-btn-private { color: #a76cf2 !important; border-color: rgba(167, 108, 242, 0.4); }
+#dock-btn-private:hover { background: rgba(101, 44, 160, 0.2); border-color: #a76cf2; box-shadow: 0 5px 20px rgba(101, 44, 160, 0.5); }
+#dock-btn-lock { color: #d4af37 !important; border-color: rgba(212, 175, 55, 0.4); }
+#dock-btn-lock:hover { background: rgba(212, 175, 55, 0.2); border-color: #d4af37; box-shadow: 0 5px 20px rgba(212, 175, 55, 0.5); }
 
-/* Masquer le bouton de retour en haut uniquement sur la page d'accueil si nécessaire */
-.page-index #btn-to-top { display: none !important; }
+/* ==========================================
+   GESTION INTELLIGENTE DE LA NAVBAR 
+========================================== */
+/* Sur l'accueil : on cache Home et Retour en haut */
+.page-index #btn-home, .page-index #btn-to-top { display: none !important; }
+
+/* Par défaut, on cache Édition et le Cadenas partout ailleurs */
+#btn-edit, #dock-btn-lock { display: none; }
+
+/* On affiche l'édition uniquement sur les pages de collection */
+.page-pokedex #btn-edit, .page-masterset #btn-edit, .page-pikachu #btn-edit, .page-mew #btn-edit { display: flex; }
+
+/* Quand on est connecté (mode édition), on affiche le cadenas pour se déconnecter */
+body.mode-edition #dock-btn-lock { display: flex !important; }
+
+/* Masquer la navbar complètement sur l'accueil si aucun bouton n'est actif */
+.page-index:not(.mode-edition) .floating-dock { display: none; }
 
 /* ==========================================
    MÉCANIQUE SECRÈTE VIP (Appui Long)
