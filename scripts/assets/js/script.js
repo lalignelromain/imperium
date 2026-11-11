@@ -166,7 +166,8 @@ function renderBinderView(pokemonName) {
     }
 
     binderContainer.innerHTML = '';
-    const CARDS_PER_PAGE = 12;
+    // Ajusté à 15 cartes par page (3 lignes de 5 colonnes)
+    const CARDS_PER_PAGE = 15; 
     const totalPages = Math.ceil(cartesPossedees.length / CARDS_PER_PAGE);
 
     for (let p = 0; p < totalPages; p++) {
@@ -699,7 +700,8 @@ function renderPikachuBinder() {
     const pikaCards = pika30Data[0].cartes;
     container.innerHTML = '';
     
-    const CARDS_PER_PAGE = 12;
+    // Ajusté à 15 cartes par page (3 lignes de 5 colonnes)
+    const CARDS_PER_PAGE = 15;
     const totalPages = Math.ceil(pikaCards.length / CARDS_PER_PAGE);
 
     for (let p = 0; p < totalPages; p++) {
