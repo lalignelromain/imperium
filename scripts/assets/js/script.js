@@ -441,7 +441,7 @@ const REGISTRE_SECRET = {
     "Marcia": ["marcia.png"],
     "Margie": ["margie.png"],
     "Mars": ["mars.png"],
-    "Mashynn": ["mashynn.png", "mashynn1.png", "mashynn2.png", "mashynn3.png"],
+    "Mashynn": ["mashynn.png", "mashynn1.png", "mashynn2.png", "mashynn3.png", "mashynn4.jpg", "mashynn5.jpg"],
     "Menzi": ["menzi.png"],
     "Morgane": ["morgane.png"],
     "Nacchara": ["nacchara.png", "nacchara1.png"],
@@ -462,10 +462,7 @@ const REGISTRE_SECRET = {
 };
 
 const CARTES_ORPHELINES = [
-    "hasard1.jpg", "hasard2.jpg", "hasard3.jpg", "hasard4.jpg",
-    "hasard5.jpg", "hasard6.jpg", "hasard7.jpg", "hasard8.jpg",
-    "hasard9.jpg", "hasard10.jpg", "hasard11.jpg", "hasard12.jpg",
-    "hasard13.jpg", "hasard14.jpg", "hasard15.jpg", "hasard16.jpg"
+    ""hasard4.jpg", "hasard15.jpg"
 ];
 
 // -> Hub (dresseuses.html)
