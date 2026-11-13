@@ -462,7 +462,7 @@ const REGISTRE_SECRET = {
 };
 
 const CARTES_ORPHELINES = [
-    ""hasard4.jpg", "hasard15.jpg"
+    "hasard4.jpg", "hasard15.jpg"
 ];
 
 // -> Hub (dresseuses.html)
