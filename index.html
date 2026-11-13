@@ -269,31 +269,31 @@
             const mew = document.getElementById("cine-mew");
             const mewtwo = document.getElementById("cine-mewtwo");
 
-            // 1. Démarrage : Les bandes noires se ferment, l'ambiance s'allume
+        // 1. Démarrage
             setTimeout(() => {
                 cineScreen.classList.add("playing");
                 bg.style.opacity = "1";
             }, 100);
 
-            // 2. Travelling sur Mew (S'approche lentement)
+            // 2. Travelling sur Mew (S'approche rapidement)
             setTimeout(() => {
                 mew.classList.add("cine-zoom-in");
-            }, 600);
+            }, 300);
 
-            // 3. Transition croisée vers Mewtwo (Recule lentement)
+            // 3. Transition croisée vers Mewtwo
             setTimeout(() => {
                 mewtwo.classList.add("cine-zoom-out");
-            }, 4200);
+            }, 2000); // 2 secondes (au lieu de 4.2s)
 
-            // 4. Fin de la séquence (Les bandes s'ouvrent, fondu au noir vers le site)
+            // 4. Fin de la séquence (Fermeture accélérée)
             setTimeout(() => {
-                cineScreen.classList.remove("playing"); // Ouvre les bandes noires
-                bg.style.opacity = "0"; // Éteint le fond
+                cineScreen.classList.remove("playing"); 
+                bg.style.opacity = "0"; 
                 
                 setTimeout(() => {
-                    cineScreen.classList.add("hidden-cine"); // Révèle le menu principal
-                }, 1000);
-            }, 7800);
+                    cineScreen.classList.add("hidden-cine"); 
+                }, 800);
+            }, 4000); // Intro totale : 4 secondes (au lieu de 7.8s);
         });
 
         // Fonction Skip (Fermeture propre et rapide)
