@@ -17,117 +17,12 @@
     <!-- Feuilles de style -->
     <link rel="stylesheet" href="./scripts/assets/css/style.css">
 
-    <!-- STYLE DE L'ANIMATION CINÉMATOGRAPHIQUE -->
+    <!-- Ajustements spécifiques à l'accueil -->
     <style>
         .page-index .header-main { padding-bottom: 0px !important; margin-bottom: 5px !important; }
         .page-index .header-main h1 { margin-bottom: 0 !important; line-height: 1.1; }
         .page-index .header-main .subtitle { margin-top: 5px !important; margin-bottom: 15px !important; }
         .page-index .hub-container { padding-top: 0px !important; }
-
-        /* ==========================================
-           1. CONTENEUR CINÉMA
-        ========================================== */
-        #cine-sequence {
-            position: fixed;
-            inset: 0;
-            background-color: #000;
-            z-index: 99999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 1.5s ease-in-out, visibility 1.5s;
-            overflow: hidden;
-        }
-
-        /* Arrière-plan subtil pour détacher les PNG noirs */
-        #cine-ambient-bg {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, #111424 0%, #000 60%);
-            opacity: 0;
-            transition: opacity 2s ease;
-            z-index: 1;
-        }
-
-        /* ==========================================
-           2. LES BANDES NOIRES (LETTERBOX 2.35:1)
-        ========================================== */
-        .cine-bar {
-            position: absolute;
-            left: 0;
-            width: 100%;
-            height: 12vh; /* Hauteur des bandes cinéma */
-            background: #000;
-            z-index: 20;
-            transition: transform 1.5s cubic-bezier(0.65, 0, 0.35, 1);
-        }
-        .cine-bar.top { top: 0; transform: translateY(-100%); }
-        .cine-bar.bottom { bottom: 0; transform: translateY(100%); }
-
-        /* Classe d'activation des bandes */
-        #cine-sequence.playing .cine-bar.top { transform: translateY(0); }
-        #cine-sequence.playing .cine-bar.bottom { transform: translateY(0); }
-
-        /* ==========================================
-           3. GESTION DES CAMÉRAS (SPRITES)
-        ========================================== */
-        .cine-sprite {
-            position: absolute;
-            max-height: 60vh;
-            max-width: 80vw;
-            object-fit: contain;
-            opacity: 0;
-            z-index: 10;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
-        }
-
-        /* Travelling avant sur Mew (l'Origine) */
-        .cine-zoom-in {
-            animation: cameraZoomIn 5s linear forwards;
-        }
-        @keyframes cameraZoomIn {
-            0% { opacity: 0; transform: scale(0.9); }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { opacity: 0; transform: scale(1.1); }
-        }
-
-        /* Travelling arrière sur Mewtwo (la Puissance Révélée) */
-        .cine-zoom-out {
-            animation: cameraZoomOut 4.5s linear forwards;
-        }
-        @keyframes cameraZoomOut {
-            0% { opacity: 0; transform: scale(1.2); }
-            15% { opacity: 1; }
-            85% { opacity: 1; }
-            100% { opacity: 0; transform: scale(1); }
-        }
-
-        /* ==========================================
-           4. FIN DE SCÈNE & BOUTON
-        ========================================== */
-        .hidden-cine {
-            opacity: 0 !important;
-            visibility: hidden !important;
-            pointer-events: none;
-        }
-
-        .skip-btn {
-            position: absolute;
-            bottom: 3vh; /* Placé discrètement sur la bande noire */
-            right: 5vw;
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            font-family: 'Montserrat', sans-serif;
-            letter-spacing: 2px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            transition: color 0.3s;
-            z-index: 30;
-        }
-        .skip-btn:hover { color: #fff; }
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -136,25 +31,6 @@
 </head>
 
 <body class="page-index">
-
-    <!-- ==========================================
-         ÉCRAN D'INTRODUCTION CINÉMATOGRAPHIQUE
-    ========================================== -->
-    <div id="cine-sequence">
-        <!-- Fond ambiant -->
-        <div id="cine-ambient-bg"></div>
-        
-        <!-- Bandes Cinéma -->
-        <div class="cine-bar top"></div>
-        <div class="cine-bar bottom"></div>
-        
-        <!-- Les personnages avec les bons chemins -->
-        <img src="./scripts/assets/img/mew.png" id="cine-mew" class="cine-sprite" alt="Mew">
-        <img src="./scripts/assets/img/mewtwo.png" id="cine-mewtwo" class="cine-sprite" alt="Mewtwo">
-        
-        <!-- Bouton Passer -->
-        <button onclick="skipCine()" class="skip-btn">Passer</button>
-    </div>
 
     <!-- En-tête Principal -->
     <header class="header-main">
@@ -246,67 +122,6 @@
                 vipPadlock.addEventListener('click', () => window.location.href = 'dresseuses-private.html');
             }
         });
-    </script>
-
-    <!-- SCRIPT DE L'ANIMATION CINÉMATOGRAPHIQUE -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const cineScreen = document.getElementById("cine-sequence");
-            if(!cineScreen) return;
-
-            // --- VÉRIFICATION DU CACHE DE SESSION ---
-            if (sessionStorage.getItem("cinePlayed") === "true") {
-                // L'animation a déjà été vue, on la masque instantanément
-                cineScreen.style.display = "none";
-                return; // On arrête le reste du script ici
-            } else {
-                // Première visite : on enregistre que l'intro va être jouée
-                sessionStorage.setItem("cinePlayed", "true");
-            }
-            // ----------------------------------------
-
-            const bg = document.getElementById("cine-ambient-bg");
-            const mew = document.getElementById("cine-mew");
-            const mewtwo = document.getElementById("cine-mewtwo");
-
-        // 1. Démarrage
-            setTimeout(() => {
-                cineScreen.classList.add("playing");
-                bg.style.opacity = "1";
-            }, 100);
-
-            // 2. Travelling sur Mew (S'approche rapidement)
-            setTimeout(() => {
-                mew.classList.add("cine-zoom-in");
-            }, 300);
-
-            // 3. Transition croisée vers Mewtwo
-            setTimeout(() => {
-                mewtwo.classList.add("cine-zoom-out");
-            }, 2000); // 2 secondes (au lieu de 4.2s)
-
-            // 4. Fin de la séquence (Fermeture accélérée)
-            setTimeout(() => {
-                cineScreen.classList.remove("playing"); 
-                bg.style.opacity = "0"; 
-                
-                setTimeout(() => {
-                    cineScreen.classList.add("hidden-cine"); 
-                }, 800);
-            }, 4000); // Intro totale : 4 secondes (au lieu de 7.8s);
-        });
-
-        // Fonction Skip (Fermeture propre et rapide)
-        function skipCine() {
-            const cineScreen = document.getElementById("cine-sequence");
-            if(cineScreen) {
-                cineScreen.classList.remove("playing");
-                cineScreen.style.opacity = "0";
-                setTimeout(() => cineScreen.classList.add("hidden-cine"), 1000);
-                // Si on passe l'intro, on veut aussi s'assurer qu'elle ne revienne pas
-                sessionStorage.setItem("cinePlayed", "true"); 
-            }
-        }
     </script>
 </body>
 </html>
