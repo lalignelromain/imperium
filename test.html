@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mewthology - Laboratoire 15 Styles Galerie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #030105;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ==========================================
+           BARRE DE CONTRÔLE (SWITCHER 15 STYLES)
+        ========================================== */
+        .lab-toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 5000;
+            background: rgba(8, 4, 14, 0.94);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(167, 108, 242, 0.25);
+            padding: 12px 16px;
+        }
+        .lab-top {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            max-width: 1400px;
+            margin: 0 auto 10px;
+        }
+        .lab-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.05rem;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+        .lab-title span { color: #a76cf2; }
+        .lab-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toggle-blur-btn {
+            background: rgba(167, 108, 242, 0.15);
+            border: 1px solid #a76cf2;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.72rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .toggle-blur-btn.off {
+            background: transparent;
+            border-color: rgba(255,255,255,0.2);
+            color: #888;
+        }
+
+        .style-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .style-btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #cbd5e1;
+            padding: 6px 11px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .style-btn:hover {
+            border-color: #a76cf2;
+            color: #fff;
+        }
+        .style-btn.active {
+            background: #652CA0;
+            border-color: #a76cf2;
+            color: #fff;
+            box-shadow: 0 0 12px rgba(167, 108, 242, 0.5);
+        }
+
+        /* Zone principale de rendu */
+        #stage {
+            max-width: 1350px;
+            margin: 0 auto;
+            padding: 25px 20px 60px;
+            min-height: calc(100vh - 110px);
+        }
+
+        /* Gestion globale du flou au repos */
+        .blur-enabled .blur-target {
+            filter: blur(14px) brightness(0.6);
+            transform: scale(1.08);
+            transition: filter 0.4s ease, transform 0.4s ease;
+        }
+        .blur-enabled .hover-reveal:hover .blur-target {
+            filter: blur(0px) brightness(1);
+            transform: scale(1.03);
+        }
+        .blur-disabled .blur-target {
+            filter: none;
+            transform: scale(1);
+            transition: transform 0.4s ease;
+        }
+        .blur-disabled .hover-reveal:hover .blur-target {
+            transform: scale(1.04);
+        }
+
+        .count-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 5;
+            background: rgba(10, 5, 20, 0.85);
+            border: 1px solid #a76cf2;
+            color: #d8b4fe;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 12px;
+        }
+
+        /* ==========================================
+           STYLE 1 : MUR COMPLET + RECHERCHE
+        ========================================== */
+        .s1-search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 22px;
+        }
+        .s1-search-bar input {
+            width: 100%;
+            max-width: 420px;
+            padding: 11px 20px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(167, 108, 242, 0.4);
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+        }
+        .s1-search-bar input:focus { border-color: #a76cf2; box-shadow: 0 0 15px rgba(167,108,242,0.3); }
+        .s1-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+            gap: 16px;
+        }
+        .s1-card {
+            aspect-ratio: 63 / 88;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            background: #0d0814;
+            border: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            align-items: flex-end;
+            padding: 12px;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .s1-card:hover { transform: translateY(-6px); box-shadow: 0 12px 25px rgba(101, 44, 160, 0.45); border-color: #a76cf2; }
+        .s1-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .s1-card::after { content:''; position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, transparent 50%); z-index: 2; }
+        .s1-info { position: relative; z-index: 3; }
+        .s1-info h3 { font-family: 'Cinzel', serif; font-size: 1rem; }
+
+        /* ==========================================
+           STYLE 2 : CARROUSEL 3D COVERFLOW
+        ========================================== */
+        .s2-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 0;
+        }
+        .s2-stage {
+            position: relative;
+            width: 100%;
+            height: 440px;
+            perspective: 1200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .s2-card {
+            position: absolute;
+            width: 250px;
+            aspect-ratio: 63 / 88;
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.85);
+            border: 1px solid rgba(167,108,242,0.3);
+            background: #111;
+        }
+        .s2-card img { width: 100%; height: 100%; object-fit: cover; }
+        .s2-card.is-center {
+            border: 2px solid #a76cf2;
+            box-shadow: 0 0 40px rgba(167, 108, 242, 0.55);
+        }
+        .s2-card.is-center .blur-target { filter: none !important; transform: scale(1) !important; }
+        .s2-caption {
+            margin-top: 16px;
+            text-align: center;
+        }
+        .s2-caption h2 { font-family: 'Cinzel', serif; font-size: 1.8rem; letter-spacing: 3px; }
+        .s2-nav { display: flex; gap: 15px; margin-top: 15px; }
+        .s2-nav button {
+            background: transparent; border: 1px solid #a76cf2; color: #fff;
+            padding: 10px 24px; border-radius: 30px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .s2-nav button:hover { background: #652CA0; }
+
+        /* ==========================================
+           STYLE 3 : MENU VIP (LISTE + APERÇU LIVE)
+        ========================================== */
+        .s3-split {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 30px;
+            height: 75vh;
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+        .s3-list {
+            overflow-y: auto;
+            border-right: 1px solid rgba(167, 108, 242, 0.2);
+            padding-right: 15px;
+        }
+        .s3-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            font-size: 1.05rem;
+            color: #94a3b8;
+            transition: 0.2s;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .s3-item:hover, .s3-item.active {
+            background: rgba(167, 108, 242, 0.14);
+            color: #fff;
+            padding-left: 22px;
+        }
+        .s3-item span { font-family: 'Montserrat', sans-serif; font-size: 0.7rem; color: #a76cf2; }
+        .s3-preview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, rgba(101,44,160,0.18) 0%, transparent 70%);
+            border-radius: 16px;
+            padding: 20px;
+        }
+        .s3-preview-frame {
+            height: 55vh;
+            aspect-ratio: 63 / 88;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+            border: 2px solid rgba(167,108,242,0.5);
+        }
+        .s3-preview-frame img { width: 100%; height: 100%; object-fit: cover; }
+        .s3-preview h2 { font-family: 'Cinzel', serif; margin-top: 15px; letter-spacing: 3px; }
+
+        /* ==========================================
+           STYLE 4 : RANGÉES THÉMATIQUES (NETFLIX)
+        ========================================== */
+        .s4-row { margin-bottom: 34px; }
+        .s4-row h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            color: #d8b4fe;
+            border-left: 3px solid #a76cf2;
+            padding-left: 12px;
+        }
+        .s4-track {
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            padding: 8px 4px 16px;
+            scroll-snap-type: x proximity;
+        }
+        .s4-track::-webkit-scrollbar { height: 6px; }
+        .s4-track::-webkit-scrollbar-thumb { background: rgba(167,108,242,0.4); border-radius: 3px; }
+        .s4-card {
+            flex: 0 0 175px;
+            aspect-ratio: 63 / 88;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            scroll-snap-align: start;
+            background: #111;
+            display: flex;
+            align-items: flex-end;
+            padding: 10px;
+            transition: transform 0.25s;
+        }
+        .s4-card:hover { transform: scale(1.06); z-index: 4; box-shadow: 0 10px 25px rgba(167,108,242,0.45); }
+        .s4-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .s4-card::after { content:''; position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent 50%); z-index: 2; }
+        .s4-card span.name { position: relative; z-index: 3; font-family: 'Cinzel', serif; font-size: 0.95rem; }
+
+        /* ==========================================
+           STYLE 5 : MASONRY / PINTEREST DÉCALÉ
+        ========================================== */
+        .s5-masonry {
+            column-count: 5;
+            column-gap: 16px;
+        }
+        .s5-card {
+            break-inside: avoid;
+            margin-bottom: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            background: #111;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .s5-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .s5-card.tall { height: 340px; }
+        .s5-card.med { height: 260px; }
+        .s5-card.short { height: 210px; }
+        .s5-label {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 25px 12px 10px;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+            font-family: 'Cinzel', serif; font-size: 1rem; z-index: 3;
+        }
+
+        /* ==========================================
+           STYLE 6 : PELLICULE CINÉMA (FILMSTRIP)
+        ========================================== */
+        .s6-wrap { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .s6-main {
+            position: relative;
+            height: 54vh;
+            aspect-ratio: 63 / 88;
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid rgba(167,108,242,0.5);
+            box-shadow: 0 0 50px rgba(101, 44, 160, 0.35);
+        }
+        .s6-main img { width: 100%; height: 100%; object-fit: cover; }
+        .s6-title { font-family: 'Cinzel', serif; font-size: 1.7rem; letter-spacing: 3px; }
+        .s6-strip {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border-top: 2px dashed rgba(167,108,242,0.3);
+            border-bottom: 2px dashed rgba(167,108,242,0.3);
+        }
+        .s6-thumb {
+            flex: 0 0 72px;
+            aspect-ratio: 63 / 88;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: 0.2s;
+            border: 2px solid transparent;
+        }
+        .s6-thumb.active, .s6-thumb:hover { opacity: 1; border-color: #a76cf2; transform: translateY(-4px); }
+        .s6-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* ==========================================
+           STYLE 7 : GRILLE BENTO (MULTI = GRAND FORMAT)
+        ========================================== */
+        .s7-bento {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-auto-rows: 170px;
+            grid-auto-flow: dense;
+            gap: 14px;
+        }
+        .s7-card {
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            background: #100918;
+            border: 1px solid rgba(167,108,242,0.18);
+            display: flex;
+            align-items: flex-end;
+            padding: 14px;
+        }
+        .s7-card.featured {
+            grid-column: span 2;
+            grid-row: span 2;
+            border-color: rgba(167,108,242,0.5);
+        }
+        .s7-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .s7-card::after { content:''; position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent 55%); z-index: 2; }
+        .s7-info { position: relative; z-index: 3; }
+        .s7-info h3 { font-family: 'Cinzel', serif; font-size: 1rem; }
+        .s7-card.featured .s7-info h3 { font-size: 1.5rem; }
+
+        /* ==========================================
+           STYLE 8 : ACCORDÉON HORIZONTAL (LAMES)
+        ========================================== */
+        .s8-accordion {
+            display: flex;
+            gap: 8px;
+            height: 62vh;
+            width: 100%;
+            max-width: 1150px;
+            margin: 0 auto;
+        }
+        .s8-slice {
+            flex: 1;
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: flex 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border: 1px solid rgba(167,108,242,0.25);
+            background: #111;
+        }
+        .s8-slice:hover { flex: 3.5; border-color: #a76cf2; box-shadow: 0 0 30px rgba(167,108,242,0.4); }
+        .s8-slice img { width: 100%; height: 100%; object-fit: cover; }
+        .s8-slice .s8-name {
+            position: absolute;
+            bottom: 18px;
+            left: 16px;
+            z-index: 4;
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            text-shadow: 0 4px 12px #000;
+            white-space: nowrap;
+        }
+        .s8-slice::after { content:''; position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent 45%); z-index: 2; }
+        .s8-pager { display: flex; justify-content: center; gap: 15px; margin-top: 20px; align-items: center; }
+        .s8-pager button { background: transparent; border: 1px solid #a76cf2; color: #fff; padding: 8px 20px; border-radius: 25px; cursor: pointer; }
+        .s8-pager button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        /* ==========================================
+           STYLE 9 : TABLE DE CARTES (POLAROID DISPERSÉ)
+        ========================================== */
+        .s9-table {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 28px;
+            padding: 20px;
+        }
+        .s9-polaroid {
+            width: 185px;
+            background: #14101d;
+            padding: 10px 10px 28px;
+            border-radius: 4px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.85);
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s;
+            position: relative;
+        }
+        .s9-polaroid:hover {
+            transform: rotate(0deg) scale(1.12) translateY(-10px) !important;
+            z-index: 20;
+            box-shadow: 0 25px 50px rgba(101, 44, 160, 0.6);
+            border-color: #a76cf2;
+        }
+        .s9-photo {
+            width: 100%;
+            aspect-ratio: 63 / 88;
+            overflow: hidden;
+            border-radius: 2px;
+            position: relative;
+        }
+        .s9-photo img { width: 100%; height: 100%; object-fit: cover; }
+        .s9-caption {
+            text-align: center;
+            margin-top: 10px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            color: #e2d4f0;
+        }
+
+        /* ==========================================
+           STYLE 10 : INDEX ALPHABÉTIQUE (A-Z)
+        ========================================== */
+        .s10-letters {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 25px;
+        }
+        .s10-letters a {
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 6px;
+            background: rgba(167,108,242,0.12);
+            border: 1px solid rgba(167,108,242,0.3);
+            color: #fff; text-decoration: none; font-size: 0.78rem; font-weight: 700;
+        }
+        .s10-letters a:hover { background: #a76cf2; }
+        .s10-group { margin-bottom: 30px; scroll-margin-top: 130px; }
+        .s10-group-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            color: #a76cf2;
+            border-bottom: 1px solid rgba(167,108,242,0.25);
+            margin-bottom: 14px;
+            padding-bottom: 4px;
+        }
+        .s10-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+
+        /* ==========================================
+           STYLE 11 : VUE ÉDITORIALE / MAGAZINE
+        ========================================== */
+        .s11-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .s11-card {
+            display: flex;
+            background: linear-gradient(135deg, #120c1c 0%, #07050b 100%);
+            border: 1px solid rgba(167,108,242,0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            height: 220px;
+            transition: 0.3s;
+        }
+        .s11-card:hover { border-color: #a76cf2; transform: translateY(-4px); box-shadow: 0 15px 35px rgba(101,44,160,0.35); }
+        .s11-img { width: 160px; flex-shrink: 0; overflow: hidden; position: relative; }
+        .s11-img img { width: 100%; height: 100%; object-fit: cover; }
+        .s11-body { padding: 22px; display: flex; flex-direction: column; justify-content: center; }
+        .s11-tag { font-size: 0.65rem; letter-spacing: 2px; color: #a76cf2; text-transform: uppercase; margin-bottom: 6px; }
+        .s11-body h3 { font-family: 'Cinzel', serif; font-size: 1.6rem; margin-bottom: 8px; }
+        .s11-body p { font-size: 0.8rem; color: #94a3b8; }
+
+        /* ==========================================
+           STYLE 12 : PILES DE CARTES 3D (STACKS)
+        ========================================== */
+        .s12-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+            gap: 32px 24px;
+            padding-top: 15px;
+        }
+        .s12-stack {
+            position: relative;
+            aspect-ratio: 63 / 88;
+            cursor: pointer;
+        }
+        .s12-layer {
+            position: absolute;
+            inset: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #140d1e;
+            border: 1px solid rgba(167,108,242,0.3);
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+        }
+        .s12-layer img { width: 100%; height: 100%; object-fit: cover; }
+        .s12-layer.back-2 { transform: rotate(-6deg) translate(-6px, 4px); opacity: 0.6; }
+        .s12-layer.back-1 { transform: rotate(5deg) translate(6px, 2px); opacity: 0.8; }
+        .s12-stack:hover .s12-layer.back-2 { transform: rotate(-14deg) translate(-18px, -4px); }
+        .s12-stack:hover .s12-layer.back-1 { transform: rotate(12deg) translate(18px, -4px); }
+        .s12-stack:hover .s12-layer.front { transform: translateY(-8px); border-color: #a76cf2; }
+        .s12-title {
+            position: absolute; bottom: 0; left: 0; right: 0; padding: 24px 10px 10px;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+            font-family: 'Cinzel', serif; text-align: center; z-index: 4;
+        }
+
+        /* ==========================================
+           STYLE 13 : MÉDAILLONS CIRCULAIRES (SOCIÉTÉ SECRÈTE)
+        ========================================== */
+        .s13-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 28px 18px;
+            justify-items: center;
+        }
+        .s13-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            gap: 10px;
+        }
+        .s13-circle {
+            width: 135px;
+            height: 135px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            border: 3px solid rgba(167,108,242,0.4);
+            box-shadow: 0 0 20px rgba(0,0,0,0.9);
+            transition: 0.3s;
+        }
+        .s13-item:hover .s13-circle {
+            border-color: #a76cf2;
+            box-shadow: 0 0 25px rgba(167, 108, 242, 0.7);
+            transform: scale(1.06);
+        }
+        .s13-circle img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+        .s13-item span { font-family: 'Cinzel', serif; font-size: 0.95rem; letter-spacing: 1px; }
+
+        /* ==========================================
+           STYLE 14 : PLEIN ÉCRAN VERTICAL (SNAP / REELS)
+        ========================================== */
+        .s14-feed {
+            height: 76vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            max-width: 440px;
+            margin: 0 auto;
+            border-radius: 18px;
+            border: 1px solid rgba(167,108,242,0.3);
+        }
+        .s14-slide {
+            height: 76vh;
+            scroll-snap-align: start;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            padding: 28px;
+        }
+        .s14-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .s14-slide::after { content:''; position:absolute; inset:0; background: linear-gradient(to top, rgba(0,0,0,0.92), transparent 45%); z-index: 2; }
+        .s14-meta { position: relative; z-index: 3; }
+        .s14-meta h2 { font-family: 'Cinzel', serif; font-size: 2rem; }
+        .s14-meta p { font-size: 0.75rem; color: #a76cf2; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* ==========================================
+           STYLE 15 : ARCHIVES / DOSSIERS CONFIDENTIELS
+        ========================================== */
+        .s15-list {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .s15-row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        .s15-row:hover {
+            background: rgba(167, 108, 242, 0.12);
+            border-color: #a76cf2;
+            transform: translateX(8px);
+        }
+        .s15-thumb {
+            width: 48px;
+            height: 66px;
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .s15-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .s15-name { font-family: 'Cinzel', serif; font-size: 1.15rem; flex: 1; }
+        .s15-count {
+            font-size: 0.75rem;
+            color: #d8b4fe;
+            background: rgba(167,108,242,0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(167,108,242,0.35);
+        }
+
+        /* ==========================================
+           MODALE DE PRÉVISUALISATION
+        ========================================== */
+        .modal {
+            position: fixed; inset: 0; z-index: 9999;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(12px);
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .modal.active { display: flex; }
+        .modal-close {
+            position: absolute; top: 20px; right: 28px;
+            font-size: 2.6rem; color: #fff; cursor: pointer;
+        }
+        .modal-img {
+            max-width: 90vw; max-height: 75vh;
+            border-radius: 10px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+        }
+        .modal-thumbs {
+            display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; justify-content: center;
+        }
+        .modal-thumbs img {
+            width: 48px; height: 48px; object-fit: cover; border-radius: 6px; cursor: pointer; opacity: 0.6; border: 2px solid transparent;
+        }
+        .modal-thumbs img.active { opacity: 1; border-color: #a76cf2; }
+
+        /* Responsive rapide */
+        @media (max-width: 900px) {
+            .s3-split { grid-template-columns: 1fr; height: auto; }
+            .s3-list { max-height: 220px; border-right: none; border-bottom: 1px solid rgba(167,108,242,0.2); }
+            .s5-masonry { column-count: 2; }
+            .s7-bento { grid-template-columns: repeat(2, 1fr); }
+            .s11-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="blur-enabled">
+
+    <div class="lab-toolbar">
+        <div class="lab-top">
+            <div class="lab-title">ARCHIVES PRIVÉES — <span id="current-style-label">1. Mur + Recherche</span></div>
+            <div class="lab-controls">
+                <button class="toggle-blur-btn" id="btn-blur-toggle" onclick="toggleBlur()">Flou au repos : ON</button>
+            </div>
+        </div>
+        <div class="style-buttons" id="style-buttons"></div>
+    </div>
+
+    <main id="stage"></main>
+
+    <!-- Modale -->
+    <div class="modal" id="modal" onclick="if(event.target===this) closeModal()">
+        <span class="modal-close" onclick="closeModal()">×</span>
+        <img id="modal-img" class="modal-img" src="" alt="">
+        <div class="modal-thumbs" id="modal-thumbs"></div>
+    </div>
+
+    <script>
+        /* ==========================================
+           DONNÉES (TES VRAIES CARTES)
+        ========================================== */
+        const REGISTRE_SECRET = {
+            "Alizée": ["alizee.png"],
+            "Alyxia": ["alyxia.png"],
+            "Anis": ["anis.png"],
+            "Apia": ["apia.png"],
+            "Atalante": ["atalante.png"],
+            "Aurore": ["aurore.png"],
+            "Barbara": ["barbara.png", "barbara1.png", "barbara2.png"],
+            "Blanche": ["blanche.png"],
+            "Carolina": ["carolina.png", "carolina1.jpg"],
+            "Cayenn": ["cayenn.png"],
+            "Célesta": ["celesta.png", "celesta1.png"],
+            "Cornélia": ["cornelia.png"],
+            "Cynthia": ["cynthia.png"],
+            "Dianthéa": ["dianthea.png"],
+            "Donna": ["donna.png"],
+            "Dracéna": ["dracena.png"],
+            "Écho": ["echo.png", "echo1.png", "echo2.png"],
+            "Élige": ["elige.png"],
+            "Elsa-Mina": ["elsamina.png"],
+            "Erika": ["erika.png"],
+            "Faïza": ["faiza.png"],
+            "Flo": ["flo.png", "flo1.png", "flo2.png"],
+            "Flora": ["flora.png"],
+            "Gladys": ["gladys.png"],
+            "Gloria": ["gloria.png"],
+            "Inezia": ["inezia.png"],
+            "Iris": ["iris.png"],
+            "Jasmine": ["jasmine.png"],
+            "Juliana": ["juliana.png"],
+            "Kahili": ["kahili.png"],
+            "Ketel": ["ketel.png"],
+            "Leaf": ["leaf.png"],
+            "Lillie": ["lillie.png"],
+            "Liv": ["liv.png"],
+            "Ludvina": ["ludvina.png", "ludvina1.png", "ludvina2.png", "ludvina3.png", "ludvina4.png", "ludvina5.png", "ludvina6.png", "ludvina7.png"],
+            "Marcia": ["marcia.png"],
+            "Margie": ["margie.png"],
+            "Mars": ["mars.png"],
+            "Mashynn": ["mashynn.png", "mashynn1.png", "mashynn2.png", "mashynn3.png", "mashynn4.jpg", "mashynn5.jpg"],
+            "Menzi": ["menzi.png"],
+            "Morgane": ["morgane.png"],
+            "Nacchara": ["nacchara.png", "nacchara1.png"],
+            "Néphie": ["nephie.png"],
+            "Olim": ["olim.png"],
+            "Ondine": ["ondine.png"],
+            "Oryse": ["oryse.png"],
+            "Pania": ["pania.png"],
+            "Rose": ["rose.png"],
+            "Rosemary": ["rosemary.png"],
+            "Roxanne": ["roxanne.png"],
+            "Sérena": ["serena.png", "serena1.png"],
+            "Sophora": ["sophora.png"],
+            "Spectra": ["spectra.png"],
+            "Strykna": ["strykna.png"],
+            "Tully": ["tully.png"],
+            "Vicky": ["vicky.png"]
+        };
+        const CARTES_ORPHELINES = ["hasard4.jpg", "hasard15.jpg"];
+
+        const ALL_ITEMS = [
+            ...Object.entries(REGISTRE_SECRET).map(([name, images]) => ({
+                name,
+                images: images.map(f => `./assets/cards/dresseuses/${f}`),
+                mystery: false
+            })),
+            {
+                name: "? ? ?",
+                images: CARTES_ORPHELINES.map(f => `./assets/cards/dresseuses/${f}`),
+                mystery: true
+            }
+        ];
+
+        const FALLBACK_IMG = "./scripts/assets/img/back-fr.png";
+
+        const STYLES = [
+            { id: 1, name: "1. Mur + Recherche", render: renderStyle1 },
+            { id: 2, name: "2. Carrousel 3D", render: renderStyle2 },
+            { id: 3, name: "3. Menu VIP Split", render: renderStyle3 },
+            { id: 4, name: "4. Rangées Netflix", render: renderStyle4 },
+            { id: 5, name: "5. Masonry Décalé", render: renderStyle5 },
+            { id: 6, name: "6. Pellicule Cinéma", render: renderStyle6 },
+            { id: 7, name: "7. Grille Bento", render: renderStyle7 },
+            { id: 8, name: "8. Accordéon Lames", render: renderStyle8 },
+            { id: 9, name: "9. Table Polaroid", render: renderStyle9 },
+            { id: 10, name: "10. Index A–Z", render: renderStyle10 },
+            { id: 11, name: "11. Magazine", render: renderStyle11 },
+            { id: 12, name: "12. Piles 3D", render: renderStyle12 },
+            { id: 13, name: "13. Médaillons", render: renderStyle13 },
+            { id: 14, name: "14. Vertical Snap", render: renderStyle14 },
+            { id: 15, name: "15. Dossiers Liste", render: renderStyle15 }
+        ];
+
+        const stage = document.getElementById('stage');
+        let activeStyle = 1;
+
+        function initButtons() {
+            const box = document.getElementById('style-buttons');
+            box.innerHTML = STYLES.map(s => `
+                <button class="style-btn ${s.id === activeStyle ? 'active' : ''}" onclick="selectStyle(${s.id})">${s.name}</button>
+            `).join('');
+        }
+
+        function selectStyle(id) {
+            activeStyle = id;
+            const st = STYLES.find(s => s.id === id);
+            document.getElementById('current-style-label').textContent = st.name;
+            initButtons();
+            stage.innerHTML = '';
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            st.render();
+        }
+
+        function toggleBlur() {
+            const btn = document.getElementById('btn-blur-toggle');
+            const isOn = document.body.classList.contains('blur-enabled');
+            document.body.classList.toggle('blur-enabled', !isOn);
+            document.body.classList.toggle('blur-disabled', isOn);
+            btn.textContent = isOn ? "Flou au repos : OFF" : "Flou au repos : ON";
+            btn.classList.toggle('off', isOn);
+        }
+
+        function openModalByIndex(idx) {
+            const item = ALL_ITEMS[idx];
+            if (!item) return;
+            const modal = document.getElementById('modal');
+            const img = document.getElementById('modal-img');
+            const thumbs = document.getElementById('modal-thumbs');
+            img.src = item.images[0];
+            img.onerror = () => img.src = FALLBACK_IMG;
+            if (item.images.length > 1) {
+                thumbs.innerHTML = item.images.map((src, i) => `
+                    <img src="${src}" class="${i===0 ? 'active' : ''}" onerror="this.src='${FALLBACK_IMG}'" onclick="switchModalImg(this, '${src}')">
+                `).join('');
+            } else {
+                thumbs.innerHTML = '';
+            }
+            modal.classList.add('active');
+        }
+
+        function switchModalImg(el, src) {
+            document.getElementById('modal-img').src = src;
+            document.querySelectorAll('#modal-thumbs img').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function badge(item) {
+            return item.images.length > 1 ? `<span class="count-badge">×${item.images.length}</span>` : '';
+        }
+
+        /* ================= 1. MUR COMPLET + RECHERCHE ================= */
+        function renderStyle1() {
+            stage.innerHTML = `
+                <div class="s1-search-bar">
+                    <input type="text" id="s1-input" placeholder="Rechercher une dresseuse..." oninput="filterStyle1(this.value)">
+                </div>
+                <div class="s1-grid" id="s1-grid"></div>
+            `;
+            filterStyle1('');
+        }
+        function filterStyle1(q) {
+            const grid = document.getElementById('s1-grid');
+            const norm = q.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            grid.innerHTML = ALL_ITEMS.map((item, idx) => {
+                const nameNorm = item.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                if (norm && !nameNorm.includes(norm)) return '';
+                return `
+                    <div class="s1-card hover-reveal" onclick="openModalByIndex(${idx})">
+                        ${badge(item)}
+                        <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy">
+                        <div class="s1-info"><h3>${item.name}</h3></div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /* ================= 2. CARROUSEL 3D COVERFLOW ================= */
+        let s2Idx = 34; // Démarre sur Ludvina
+        function renderStyle2() {
+            stage.innerHTML = `
+                <div class="s2-wrap">
+                    <div class="s2-stage" id="s2-stage"></div>
+                    <div class="s2-caption"><h2 id="s2-name"></h2></div>
+                    <div class="s2-nav">
+                        <button onclick="moveS2(-1)">◀ Précédent</button>
+                        <button onclick="openModalByIndex(s2Idx)">Ouvrir</button>
+                        <button onclick="moveS2(1)">Suivant ▶</button>
+                    </div>
+                </div>
+            `;
+            updateS2();
+        }
+        function moveS2(dir) {
+            s2Idx = (s2Idx + dir + ALL_ITEMS.length) % ALL_ITEMS.length;
+            updateS2();
+        }
+        function updateS2() {
+            const box = document.getElementById('s2-stage');
+            let html = '';
+            for (let offset = -3; offset <= 3; offset++) {
+                const i = (s2Idx + offset + ALL_ITEMS.length) % ALL_ITEMS.length;
+                const item = ALL_ITEMS[i];
+                const abs = Math.abs(offset);
+                const tx = offset * 175;
+                const tz = -abs * 140;
+                const ry = offset * -32;
+                const op = 1 - abs * 0.22;
+                const z = 10 - abs;
+                const click = offset === 0 ? `openModalByIndex(${i})` : `s2Idx=${i};updateS2()`;
+                html += `
+                    <div class="s2-card ${offset===0 ? 'is-center' : ''}" onclick="${click}"
+                         style="transform: translateX(${tx}px) translateZ(${tz}px) rotateY(${ry}deg); opacity:${op}; z-index:${z};">
+                        ${badge(item)}
+                        <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'">
+                    </div>
+                `;
+            }
+            box.innerHTML = html;
+            document.getElementById('s2-name').textContent = ALL_ITEMS[s2Idx].name;
+        }
+
+        /* ================= 3. MENU VIP SPLIT ================= */
+        let s3Idx = 0;
+        function renderStyle3() {
+            stage.innerHTML = `
+                <div class="s3-split">
+                    <div class="s3-list" id="s3-list">
+                        ${ALL_ITEMS.map((item, idx) => `
+                            <div class="s3-item ${idx===s3Idx ? 'active' : ''}" onmouseenter="setS3(${idx})" onclick="openModalByIndex(${idx})">
+                                ${item.name} <span>${item.images.length} img</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="s3-preview">
+                        <div class="s3-preview-frame hover-reveal" onclick="openModalByIndex(s3Idx)">
+                            <img id="s3-img" class="blur-target" src="">
+                        </div>
+                        <h2 id="s3-title"></h2>
+                    </div>
+                </div>
+            `;
+            setS3(s3Idx);
+        }
+        function setS3(idx) {
+            s3Idx = idx;
+            const item = ALL_ITEMS[idx];
+            const img = document.getElementById('s3-img');
+            img.src = item.mystery ? FALLBACK_IMG : item.images[0];
+            img.onerror = () => img.src = FALLBACK_IMG;
+            document.getElementById('s3-title').textContent = item.name;
+            document.querySelectorAll('.s3-item').forEach((el, i) => el.classList.toggle('active', i === idx));
+        }
+
+        /* ================= 4. RANGÉES NETFLIX ================= */
+        function renderStyle4() {
+            const multi = ALL_ITEMS.map((item, idx) => ({ item, idx })).filter(x => !x.item.mystery && x.item.images.length > 1);
+            const uniquesA = ALL_ITEMS.map((item, idx) => ({ item, idx })).filter(x => !x.item.mystery && x.item.images.length === 1).slice(0, 24);
+            const uniquesB = ALL_ITEMS.map((item, idx) => ({ item, idx })).filter(x => !x.item.mystery && x.item.images.length === 1).slice(24);
+            const mystery = ALL_ITEMS.map((item, idx) => ({ item, idx })).filter(x => x.item.mystery);
+
+            const makeRow = (title, arr) => `
+                <div class="s4-row">
+                    <h2>${title} (${arr.length})</h2>
+                    <div class="s4-track">
+                        ${arr.map(({ item, idx }) => `
+                            <div class="s4-card hover-reveal" onclick="openModalByIndex(${idx})">
+                                ${badge(item)}
+                                <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy">
+                                <span class="name">${item.name}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            stage.innerHTML = makeRow("Galeries Multiples", multi) + makeRow("Éditions Uniques — Partie 1", uniquesA) + makeRow("Éditions Uniques — Partie 2", uniquesB) + makeRow("Inconnues", mystery);
+        }
+
+        /* ================= 5. MASONRY DÉCALÉ ================= */
+        function renderStyle5() {
+            const heights = ['tall', 'med', 'short', 'med', 'tall'];
+            stage.innerHTML = `<div class="s5-masonry">${ALL_ITEMS.map((item, idx) => `
+                <div class="s5-card hover-reveal ${heights[idx % heights.length]}" onclick="openModalByIndex(${idx})">
+                    ${badge(item)}
+                    <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy">
+                    <div class="s5-label">${item.name}</div>
+                </div>
+            `).join('')}</div>`;
+        }
+
+        /* ================= 6. PELLICULE CINÉMA ================= */
+        let s6Idx = 0;
+        function renderStyle6() {
+            stage.innerHTML = `
+                <div class="s6-wrap">
+                    <div class="s6-main hover-reveal" onclick="openModalByIndex(s6Idx)">
+                        <img id="s6-img" class="blur-target" src="">
+                    </div>
+                    <div class="s6-title" id="s6-title"></div>
+                    <div class="s6-strip" id="s6-strip">
+                        ${ALL_ITEMS.map((item, idx) => `
+                            <div class="s6-thumb ${idx===s6Idx ? 'active' : ''}" onclick="setS6(${idx})">
+                                <img src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy">
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            setS6(s6Idx);
+        }
+        function setS6(idx) {
+            s6Idx = idx;
+            const item = ALL_ITEMS[idx];
+            const img = document.getElementById('s6-img');
+            img.src = item.mystery ? FALLBACK_IMG : item.images[0];
+            img.onerror = () => img.src = FALLBACK_IMG;
+            document.getElementById('s6-title').textContent = `${item.name} (${item.images.length})`;
+            document.querySelectorAll('.s6-thumb').forEach((el, i) => el.classList.toggle('active', i === idx));
+        }
+
+        /* ================= 7. GRILLE BENTO ================= */
+        function renderStyle7() {
+            stage.innerHTML = `<div class="s7-bento">${ALL_ITEMS.map((item, idx) => `
+                <div class="s7-card hover-reveal ${item.images.length > 1 ? 'featured' : ''}" onclick="openModalByIndex(${idx})">
+                    ${badge(item)}
+                    <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy">
+                    <div class="s7-info"><h3>${item.name}</h3></div>
+                </div>
+            `).join('')}</div>`;
+        }
+
+        /* ================= 8. ACCORDÉON LAMES ================= */
+        let s8Page = 0;
+        const S8_PER_PAGE = 7;
+        function renderStyle8() {
+            const total = Math.ceil(ALL_ITEMS.length / S8_PER_PAGE);
+            const slice = ALL_ITEMS.slice(s8Page * S8_PER_PAGE, (s8Page + 1) * S8_PER_PAGE);
+            stage.innerHTML = `
+                <div class="s8-accordion">
+                    ${slice.map((item, i) => {
+                        const realIdx = s8Page * S8_PER_PAGE + i;
+                        return `
+                            <div class="s8-slice hover-reveal" onclick="openModalByIndex(${realIdx})">
+                                ${badge(item)}
+                                <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'">
+                                <div class="s8-name">${item.name}</div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                <div class="s8-pager">
+                    <button ${s8Page===0?'disabled':''} onclick="s8Page--;renderStyle8()">◀ Précédent</button>
+                    <span>Page ${s8Page+1} / ${total}</span>
+                    <button ${s8Page>=total-1?'disabled':''} onclick="s8Page++;renderStyle8()">Suivant ▶</button>
+                </div>
+            `;
+        }
+
+        /* ================= 9. TABLE POLAROID ================= */
+        function renderStyle9() {
+            const angles = [-4, 3, -2, 5, -3, 2, -5, 4];
+            stage.innerHTML = `<div class="s9-table">${ALL_ITEMS.map((item, idx) => `
+                <div class="s9-polaroid hover-reveal" style="transform: rotate(${angles[idx % angles.length]}deg)" onclick="openModalByIndex(${idx})">
+                    ${badge(item)}
+                    <div class="s9-photo">
+                        <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy">
+                    </div>
+                    <div class="s9-caption">${item.name}</div>
+                </div>
+            `).join('')}</div>`;
+        }
+
+        /* ================= 10. INDEX ALPHABÉTIQUE A–Z ================= */
+        function renderStyle10() {
+            const groups = {};
+            ALL_ITEMS.forEach((item, idx) => {
+                const letter = item.mystery ? '?' : item.name[0].normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+                if (!groups[letter]) groups[letter] = [];
+                groups[letter].push({ item, idx });
+            });
+            const letters = Object.keys(groups);
+            stage.innerHTML = `
+                <div class="s10-letters">${letters.map(l => `<a href="#grp-${l}">${l}</a>`).join('')}</div>
+                ${letters.map(l => `
+                    <div class="s10-group" id="grp-${l}">
+                        <div class="s10-group-title">${l}</div>
+                        <div class="s10-grid">
+                            ${groups[l].map(({ item, idx }) => `
+                                <div class="s1-card hover-reveal" onclick="openModalByIndex(${idx})">
+                                    ${badge(item)}
+                                    <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy">
+                                    <div class="s1-info"><h3>${item.name}</h3></div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        /* ================= 11. VUE ÉDITORIALE / MAGAZINE ================= */
+        function renderStyle11() {
+            stage.innerHTML = `<div class="s11-grid">${ALL_ITEMS.map((item, idx) => `
+                <div class="s11-card hover-reveal" onclick="openModalByIndex(${idx})">
+                    <div class="s11-img">
+                        <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy">
+                    </div>
+                    <div class="s11-body">
+                        <div class="s11-tag">${item.mystery ? 'Archives Inconnues' : 'Édition Secrète'}</div>
+                        <h3>${item.name}</h3>
+                        <p>${item.images.length} visuel${item.images.length > 1 ? 's' : ''} disponible${item.images.length > 1 ? 's' : ''} dans le coffre.</p>
+                    </div>
+                </div>
+            `).join('')}</div>`;
+        }
+
+        /* ================= 12. PILES DE CARTES 3D (STACKS) ================= */
+        function renderStyle12() {
+            stage.innerHTML = `<div class="s12-grid">${ALL_ITEMS.map((item, idx) => `
+                <div class="s12-stack hover-reveal" onclick="openModalByIndex(${idx})">
+                    ${item.images.length > 2 ? `<div class="s12-layer back-2"><img src="${item.images[2]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy"></div>` : ''}
+                    ${item.images.length > 1 ? `<div class="s12-layer back-1"><img src="${item.images[1]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy"></div>` : ''}
+                    <div class="s12-layer front">
+                        ${badge(item)}
+                        <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy">
+                        <div class="s12-title">${item.name}</div>
+                    </div>
+                </div>
+            `).join('')}</div>`;
+        }
+
+        /* ================= 13. MÉDAILLONS CIRCULAIRES ================= */
+        function renderStyle13() {
+            stage.innerHTML = `<div class="s13-grid">${ALL_ITEMS.map((item, idx) => `
+                <div class="s13-item hover-reveal" onclick="openModalByIndex(${idx})">
+                    <div class="s13-circle">
+                        ${badge(item)}
+                        <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy">
+                    </div>
+                    <span>${item.name}</span>
+                </div>
+            `).join('')}</div>`;
+        }
+
+        /* ================= 14. PLEIN ÉCRAN VERTICAL (SNAP) ================= */
+        function renderStyle14() {
+            stage.innerHTML = `<div class="s14-feed">${ALL_ITEMS.map((item, idx) => `
+                <div class="s14-slide hover-reveal" onclick="openModalByIndex(${idx})">
+                    ${badge(item)}
+                    <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy">
+                    <div class="s14-meta">
+                        <p>Archive ${idx + 1} / ${ALL_ITEMS.length}</p>
+                        <h2>${item.name}</h2>
+                    </div>
+                </div>
+            `).join('')}</div>`;
+        }
+
+        /* ================= 15. ARCHIVES / DOSSIERS LISTE ================= */
+        function renderStyle15() {
+            stage.innerHTML = `<div class="s15-list">${ALL_ITEMS.map((item, idx) => `
+                <div class="s15-row hover-reveal" onclick="openModalByIndex(${idx})">
+                    <div class="s15-thumb">
+                        <img class="blur-target" src="${item.mystery ? FALLBACK_IMG : item.images[0]}" onerror="this.src='${FALLBACK_IMG}'" loading="lazy">
+                    </div>
+                    <div class="s15-name">${item.name}</div>
+                    <div class="s15-count">${item.images.length} visuel${item.images.length > 1 ? 's' : ''}</div>
+                </div>
+            `).join('')}</div>`;
+        }
+
+        // Lancement
+        initButtons();
+        selectStyle(1);
+    </script>
+</body>
+</html>
