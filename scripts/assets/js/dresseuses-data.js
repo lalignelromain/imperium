@@ -109,6 +109,17 @@ const dresseusesData = {
         "elsamina-01.jpg",
         "elsamina-02.jpg"
     ],
+    "Emma": [
+        "emma-01.png",
+        "emma-02.png"
+    ],
+    "Éra": [
+        "era-01.png",
+        "era-02.png"
+    ],
+    "Eri": [
+        "eri-01.png"
+    ],
     "Erika": [
         "erika-01.jpg",
         "erika-02.jpg",
@@ -151,6 +162,12 @@ const dresseusesData = {
         "jasmine-02.jpg",
         "jasmine-03.jpg"
     ],
+    "Jeannine": [
+        "jeannine-01.png",
+        "jeannine-02.png",
+        "jeannine-03.png",
+        "jeannine-04.png"
+    ],
     "Juliana": [
         "juliana-01.png",
         "juliana-02.png"
@@ -158,6 +175,16 @@ const dresseusesData = {
     "Kahili": [
         "kahili-01.jpg",
         "kahili-02.jpg"
+    ],
+    "Kiméra": [
+        "kimera-01.png",
+        "kimera-02.png",
+        "kimera-03.png",
+        "kimera-04.png"
+    ],
+    "Laïm": [
+        "laim-01.png",
+        "laim-02.png"
     ],
     "Leaf": [
         "leaf-01.png",
@@ -171,8 +198,17 @@ const dresseusesData = {
         "lillie-05.jpg",
         "lillie-06.jpg"
     ],
+    "Lithia": [
+        "lithia-01.png",
+        "lithia-02.png"
+    ],
     "Liv": [
         "liv-01.jpg"
+    ],
+    "Lona": [
+        "lona-01.png",
+        "lona-02.png",
+        "lona-03.png"
     ],
     "Ludvina": [
         "ludvina-01.jpg",
@@ -190,6 +226,11 @@ const dresseusesData = {
         "margie-04.jpg",
         "margie-05.jpg"
     ],
+    "Marion": [
+        "marion-01.png",
+        "marion-02.png",
+        "marion-03.png"
+    ],
     "Mars": [
         "mars-01.jpg",
         "mars-02.jpg"
@@ -200,10 +241,20 @@ const dresseusesData = {
         "mashyn-03.jpg",
         "mashyn-04.jpg"
     ],
+    "Meloco": [
+        "meloco-01.png",
+        "meloco-02.png",
+        "meloco-03.png"
+    ],
     "Menzi": [
         "menzi-01.jpg",
         "menzi-02.jpg",
         "menzi-03.jpg"
+    ],
+    "Mimosa": [
+        "mimosa-01.png",
+        "mimosa-02.png",
+        "mimosa-03.png"
     ],
     "Morgane": [
         "morgane-02.jpg",
@@ -218,6 +269,25 @@ const dresseusesData = {
         "nephie-02.jpg",
         "nephie-03.jpg",
         "nephie-04.jpg"
+    ],
+    "Nérine": [
+        "nerine-01.png"
+    ],
+    "Nina": [
+        "nina-01.png"
+    ],
+    "Nix": [
+        "nix-01.png",
+        "nix-02.png"
+    ],
+    "Oléa": [
+        "olea-01.png",
+        "olea-02.png",
+        "olea-03.png"
+    ],
+    "Olga": [
+        "olga-01.png",
+        "olga-02.png"
     ],
     "Ondine": [
         "ondine-01.jpg",
@@ -237,8 +307,15 @@ const dresseusesData = {
         "pania-05.jpg",
         "pania-06.jpg"
     ],
+    "Pimprenelle": [
+        "pimprenelle-01.png"
+    ],
     "Rose": [
         "rose-01.jpg"
+    ],
+    "Roseille": [
+        "roseille-01.png",
+        "roseille-02.png"
     ],
     "Rosemary": [
         "rosemary-01.jpg",
@@ -249,10 +326,20 @@ const dresseusesData = {
         "roxanne-01.jpg",
         "roxanne-02.jpg"
     ],
+    "Sannah": [
+        "sannah-01.png",
+        "sannah-02.png"
+    ],
+    "Sara": [
+        "sara-01.png"
+    ],
     "Seréna": [
         "serena-01.png",
         "serena-02.jpg",
         "serena-03.png"
+    ],
+    "Sonya": [
+        "sonya-01.png"
     ],
     "Sophora": [
         "sophora-01.jpg",
@@ -273,6 +360,10 @@ const dresseusesData = {
     "Vénus": [
         "venus-01.png",
         "venus-02.png"
+    ],
+    "Vesper": [
+        "vesper-01.png",
+        "vesper-02.png"
     ],
     "Vicky": [
         "vicky-01.jpg"
