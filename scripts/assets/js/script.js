@@ -444,7 +444,7 @@ const REGISTRE_SECRET = {
     "Mars": ["mars.png"],
     "Mashynn": ["mashynn.png", "mashynn1.png"],
     "Menzi": ["menzi.png"],
-    "Mimosa": ["mimosa.png", "mimosa1.png", "mimosa2.png"],
+    "Mimosa": ["mimosa.png", "mimosa1.png"],
     "Morgane": ["morgane.png"],
     "Nacchara": ["nacchara.png", "nacchara1.png"],
     "Néphie": ["nephie.png"],
