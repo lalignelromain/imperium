@@ -7,316 +7,22 @@
 
     <!-- PWA & Métadonnées Mobiles -->
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#030105">
+    <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Mewthology">
     <link rel="apple-touch-icon" href="./favicon.png">
     <link rel="icon" type="image/png" href="./favicon.png">
 
-    <!-- Polices -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Montserrat:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-
-    <!-- Feuille de style principale (dock flottant, cadenas VIP, mode édition) -->
+    <!-- Feuilles de style -->
     <link rel="stylesheet" href="./scripts/assets/css/style.css">
 
-    <!-- Refonte Hub Structuré — Accueil -->
+    <!-- Ajustements spécifiques à l'accueil -->
     <style>
-        body.page-index {
-            --bg-black: #030105;
-            --surface-dark: #0d0814;
-            --mauve-shadow: #462c66;
-            --mauve-royal: #652CA0;
-            --mauve-muted: #9b87b0;
-            --mauve-glow: #a76cf2;
-            --mauve-soft: #bfa3ed;
-
-            background-color: var(--bg-black);
-            background-image:
-                radial-gradient(ellipse 65% 35% at 50% -5%, rgba(101, 44, 160, 0.22), transparent 72%),
-                linear-gradient(180deg, #07030e 0%, #030105 45%, #010002 100%);
-            color: #ffffff;
-            font-family: 'Montserrat', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* En-tête */
-        .page-index .header-main {
-            text-align: center;
-            padding: 46px 20px 26px !important;
-            margin: 0 !important;
-        }
-
-        .page-index .header-main h1 {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(2.2rem, 5.5vw, 4rem);
-            font-weight: 700;
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            line-height: 1.1;
-            margin: 0 !important;
-            background: linear-gradient(180deg, #ffffff 0%, #d8c4f7 38%, #8f6bb8 75%, #4e3170 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.95));
-        }
-
-        .page-index .header-main .subtitle {
-            margin: 8px 0 0 !important;
-            font-size: 0.76rem;
-            letter-spacing: 5px;
-            color: var(--mauve-muted);
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .page-index .hero-divider {
-            width: 110px;
-            height: 1px;
-            margin: 18px auto 0;
-            background: linear-gradient(90deg, transparent, var(--mauve-glow), transparent);
-            opacity: 0.7;
-        }
-
-        /* Conteneur principal */
-        .page-index .hub-container {
-            max-width: 1040px;
-            margin: 0 auto;
-            padding: 12px 20px 110px !important;
-        }
-
-        .sections-wrap {
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        .section-heading {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 14px;
-        }
-
-        .section-heading span {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.68rem;
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            color: var(--mauve-glow);
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        .section-heading::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, rgba(167, 108, 242, 0.35), transparent);
-        }
-
-        .sec-grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-        }
-
-        .sec-grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-        }
-
-        /* Cartes du Hub */
-        .sec-card {
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            overflow: hidden;
-            padding: 20px 22px;
-            border-radius: 12px;
-            background: rgba(13, 8, 20, 0.88);
-            border: 1px solid rgba(167, 108, 242, 0.16);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        .sec-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--mauve-glow);
-            background: rgba(20, 12, 32, 0.96);
-            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.85), 0 0 22px rgba(101, 44, 160, 0.28);
-        }
-
-        .sec-card > *:not(.tile-glow) {
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Halo souris */
-        .tile-glow {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(167, 108, 242, 0.16), transparent 70%);
-            z-index: 1;
-        }
-
-        .sec-card:hover .tile-glow {
-            opacity: 1;
-        }
-
-        .sec-card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .sec-title {
-            font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            letter-spacing: 1.8px;
-            color: #ffffff;
-            margin: 0;
-        }
-
-        .sec-sub {
-            margin: 4px 0 0;
-            font-size: 0.74rem;
-            color: var(--mauve-muted);
-        }
-
-        .sec-arrow {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 1px solid rgba(167, 108, 242, 0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--mauve-soft);
-            font-size: 0.85rem;
-            flex-shrink: 0;
-            transition: all 0.25s ease;
-        }
-
-        .sec-card:hover .sec-arrow {
-            background: var(--mauve-royal);
-            border-color: var(--mauve-glow);
-            color: #ffffff;
-            transform: translateX(3px);
-        }
-
-        /* Progression dynamique EV 5 */
-        .ev5-progress-wrap {
-            width: 100%;
-            margin-top: 14px;
-        }
-
-        .ev5-progress-meta {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 6px;
-        }
-
-        .ev5-progress-text {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.72rem;
-            color: var(--mauve-soft);
-        }
-
-        .ev5-progress-track {
-            width: 100%;
-            height: 6px;
-            border-radius: 99px;
-            background: rgba(255, 255, 255, 0.08);
-            overflow: hidden;
-        }
-
-        .ev5-progress-fill {
-            width: 0%;
-            height: 100%;
-            border-radius: 99px;
-            background: linear-gradient(90deg, #38bdf8 0%, #a76cf2 55%, #ec4899 100%);
-            box-shadow: 0 0 12px rgba(167, 108, 242, 0.65);
-            transition: width 0.6s ease;
-        }
-
-        /* Carte Pikachu 30th (Complète) */
-        .sec-card-pika {
-            background: linear-gradient(155deg, rgba(36, 26, 12, 0.55) 0%, rgba(12, 7, 18, 0.96) 65%);
-            border-color: rgba(250, 204, 21, 0.24);
-        }
-
-        .sec-card-pika:hover {
-            border-color: rgba(250, 204, 21, 0.65);
-            background: linear-gradient(155deg, rgba(46, 33, 14, 0.65) 0%, rgba(16, 10, 24, 0.98) 65%);
-            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.85), 0 0 26px rgba(250, 204, 21, 0.16);
-        }
-
-        .sec-card-pika:hover .sec-arrow {
-            background: rgba(250, 204, 21, 0.2);
-            border-color: rgba(250, 204, 21, 0.65);
-            color: #fde68a;
-        }
-
-        .badge-complete {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 14px;
-            padding: 4px 11px;
-            border-radius: 99px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.66rem;
-            font-weight: 700;
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            color: #fde68a;
-            background: rgba(250, 204, 21, 0.12);
-            border: 1px solid rgba(250, 204, 21, 0.4);
-            width: fit-content;
-        }
-
-        .badge-complete::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #facc15;
-            box-shadow: 0 0 8px #facc15;
-        }
-
-        /* Responsive Mobile */
-        @media (max-width: 768px) {
-            .page-index .header-main {
-                padding: 32px 16px 20px !important;
-            }
-            .page-index .header-main h1 {
-                letter-spacing: 4px;
-            }
-            .page-index .hub-container {
-                padding: 8px 16px 110px !important;
-            }
-            .sections-wrap {
-                gap: 24px;
-            }
-            .sec-grid-2,
-            .sec-grid-3 {
-                grid-template-columns: 1fr;
-            }
-        }
+        .page-index .header-main { padding-bottom: 0px !important; margin-bottom: 5px !important; }
+        .page-index .header-main h1 { margin-bottom: 0 !important; line-height: 1.1; }
+        .page-index .header-main .subtitle { margin-top: 5px !important; margin-bottom: 15px !important; }
+        .page-index .hub-container { padding-top: 0px !important; }
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -330,121 +36,24 @@
     <header class="header-main">
         <h1>Mewthology</h1>
         <p class="subtitle">Archives & Collections</p>
-        <div class="hero-divider"></div>
     </header>
 
-    <!-- Hub de Navigation Structuré -->
+    <!-- Hub de Navigation -->
     <main class="hub-container">
-        <nav class="sections-wrap" aria-label="Navigation principale">
-
-            <!-- Section 1 : Archives Principales -->
-            <section>
-                <div class="section-heading"><span>Archives Principales</span></div>
-                <div class="sec-grid-2">
-                    <a href="pokedex.html" class="sec-card">
-                        <div class="tile-glow"></div>
-                        <div class="sec-card-top">
-                            <div>
-                                <h2 class="sec-title">POKÉDEX</h2>
-                                <p class="sec-sub">Quête Absolue</p>
-                            </div>
-                            <span class="sec-arrow">→</span>
-                        </div>
-                    </a>
-
-                    <a href="pantheon.html" class="sec-card">
-                        <div class="tile-glow"></div>
-                        <div class="sec-card-top">
-                            <div>
-                                <h2 class="sec-title">PANTHÉON</h2>
-                                <p class="sec-sub">Scellés & Gradées</p>
-                            </div>
-                            <span class="sec-arrow">→</span>
-                        </div>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Section 2 : Collections Dédiées -->
-            <section>
-                <div class="section-heading"><span>Collections Dédiées</span></div>
-                <div class="sec-grid-3">
-                    <a href="mew.html" class="sec-card">
-                        <div class="tile-glow"></div>
-                        <div class="sec-card-top">
-                            <div>
-                                <h2 class="sec-title">MEW</h2>
-                                <p class="sec-sub">Origine</p>
-                            </div>
-                            <span class="sec-arrow">→</span>
-                        </div>
-                    </a>
-
-                    <a href="mewtwo.html" class="sec-card">
-                        <div class="tile-glow"></div>
-                        <div class="sec-card-top">
-                            <div>
-                                <h2 class="sec-title">MEWTWO</h2>
-                                <p class="sec-sub">Puissance</p>
-                            </div>
-                            <span class="sec-arrow">→</span>
-                        </div>
-                    </a>
-
-                    <a href="dresseuses.html" class="sec-card" id="title-trainers" oncontextmenu="return false;">
-                        <div class="tile-glow"></div>
-                        <div class="sec-card-top">
-                            <div>
-                                <h2 class="sec-title">TRAINERS</h2>
-                                <p class="sec-sub">Full Art</p>
-                            </div>
-                            <span class="sec-arrow">→</span>
-                        </div>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Section 3 : Sets & Séries -->
-            <section>
-                <div class="section-heading"><span>Sets & Séries</span></div>
-                <div class="sec-grid-2">
-                    <a href="master-set.html" class="sec-card">
-                        <div class="tile-glow"></div>
-                        <div class="sec-card-top">
-                            <div>
-                                <h2 class="sec-title">MASTER SET EV 5</h2>
-                                <p class="sec-sub">Forces Temporelles</p>
-                            </div>
-                            <span class="sec-arrow">→</span>
-                        </div>
-                        <div class="ev5-progress-wrap">
-                            <div class="ev5-progress-meta">
-                                <span class="ev5-progress-text" id="ev5-hub-progress-text">0 / 363 • 0%</span>
-                            </div>
-                            <div class="ev5-progress-track">
-                                <div class="ev5-progress-fill" id="ev5-hub-progress-fill"></div>
-                            </div>
-                        </div>
-                    </a>
-
-                    <a href="pikachu30.html" class="sec-card sec-card-pika">
-                        <div class="tile-glow"></div>
-                        <div class="sec-card-top">
-                            <div>
-                                <h2 class="sec-title">PIKACHU 30TH</h2>
-                                <p class="sec-sub">Set Commémoratif</p>
-                            </div>
-                            <span class="sec-arrow">→</span>
-                        </div>
-                        <span class="badge-complete">Complet • 30 / 30</span>
-                        <div style="display:none;" aria-hidden="true">
-                            <div id="pika30-hub-progress-fill"></div>
-                            <span id="pika30-hub-progress-text"></span>
-                        </div>
-                    </a>
-                </div>
-            </section>
-
+        <nav class="hub-grid" aria-label="Navigation principale">
+            <a href="pokedex.html" class="hub-card pokedex-card"><h2>POKÉDEX</h2><p>Quête Absolue</p></a>
+            <a href="pantheon.html" class="hub-card pantheon-card"><h2>PANTHÉON</h2><p>Scellés & Gradées</p></a>
+            <a href="mew.html" class="hub-card mew-card"><h2>MEW</h2><p>Origine</p></a>
+            <a href="mewtwo.html" class="hub-card mewtwo-card"><h2>MEWTWO</h2><p>Puissance</p></a>
+            <a href="dresseuses.html" class="hub-card dresseuses-card" id="title-trainers" oncontextmenu="return false;"><h2>TRAINERS</h2><p>Full Art</p></a>
+            <a href="master-set.html" class="hub-card masterset-card">
+                <div class="hub-card-content"><h2>MASTER SET EV 5</h2><p>Forces Temporelles</p></div>
+                <div class="hub-progress-wrapper"><div class="hub-progress-bar"><div class="hub-progress-fill" id="ev5-hub-progress-fill"></div></div><span class="hub-progress-text" id="ev5-hub-progress-text">0 / 363 • 0%</span></div>
+            </a>
+            <a href="pikachu30.html" class="hub-card pikachu-card">
+                <div class="hub-card-content"><h2>PIKACHU 30TH</h2><p>Set Commémoratif</p></div>
+                <div class="hub-progress-wrapper"><div class="hub-progress-bar"><div class="hub-progress-fill" id="pika30-hub-progress-fill" style="width: 0%;"></div></div><span class="hub-progress-text" id="pika30-hub-progress-text">0 / 30 • 0%</span></div>
+            </a>
         </nav>
     </main>
 
@@ -471,37 +80,27 @@
     <script src="./scripts/assets/js/pikachu-data.js"></script>
     <script src="./scripts/assets/js/script.js"></script>
 
-    <!-- SCRIPT DU PASS VIP + HALO SOURIS -->
+    <!-- SCRIPT DU PASS VIP -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Effet halo souris sur les tuiles
-            document.querySelectorAll('.sec-card').forEach(card => {
-                card.addEventListener('mousemove', e => {
-                    const rect = card.getBoundingClientRect();
-                    card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
-                    card.style.setProperty('--my', `${e.clientY - rect.top}px`);
-                });
-            });
-
-            // Pass VIP (appui long sur TRAINERS)
             const triggerElement = document.getElementById('title-trainers');
             const vipPadlock = document.getElementById('vip-padlock');
             let pressTimer;
-            let isLongPress = false;
+            let isLongPress = false; 
 
-            if (triggerElement) triggerElement.setAttribute('draggable', 'false');
+            if(triggerElement) triggerElement.setAttribute('draggable', 'false');
 
-            function startPress() {
+            function startPress(e) {
                 isLongPress = false;
                 pressTimer = window.setTimeout(() => {
                     isLongPress = true;
                     vipPadlock.classList.add('visible');
                     if (navigator.vibrate) navigator.vibrate(50);
-                }, 800);
+                }, 800); 
             }
             function cancelPress() { clearTimeout(pressTimer); }
 
-            if (triggerElement) {
+            if(triggerElement) {
                 triggerElement.addEventListener('touchstart', startPress, { passive: true });
                 triggerElement.addEventListener('touchend', cancelPress);
                 triggerElement.addEventListener('touchmove', cancelPress);
@@ -509,7 +108,7 @@
                 triggerElement.addEventListener('mouseup', cancelPress);
                 triggerElement.addEventListener('mouseleave', cancelPress);
                 triggerElement.addEventListener('click', (e) => {
-                    if (isLongPress) { e.preventDefault(); isLongPress = false; }
+                    if(isLongPress) { e.preventDefault(); isLongPress = false; }
                 });
             }
 
@@ -519,7 +118,7 @@
                 }
             });
 
-            if (vipPadlock) {
+            if(vipPadlock) {
                 vipPadlock.addEventListener('click', () => window.location.href = 'dresseuses-private.html');
             }
         });
